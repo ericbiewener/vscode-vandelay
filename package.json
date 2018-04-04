@@ -12,30 +12,48 @@
     ],
     "activationEvents": [
         "onLanguage:javascript",
-        "onCommand:extension.sayHello"
+        "onLanguage:python",
+        "onCommand:vandelay.cacheProject",
+        "onCommand:vandelay.selectImport"
     ],
     "main": "./src/index.js",
     "contributes": {
         "commands": [
             {
-                "command": "extension.sayHello",
-                "title": "Hello World"
+                "title": "Cache Project Exports",
+                "command": "vandelay.cacheProject"
+            },
+            {
+                "title": "Import...",
+                "command": "vandelay.selectImport"
             }
         ]
     },
     "scripts": {
         "build": "babel ./src --out-dir=./build --source-maps",
         "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
+        "test": "jest"
     },
     "devDependencies": {
         "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
         "eslint": "^4.11.0",
         "eslint-config-ericbiewener": "^1.0.1",
+        "jest": "^22.4.3",
         "lodash": "^4.17.5",
         "typescript": "^2.6.1",
         "vscode": "^1.1.6"
     },
-    "dependencies": {}
+    "dependencies": {
+        "fs-extra": "^5.0.0"
+    },
+    "jest": {
+        "roots": [
+            "<rootDir>/src"
+        ],
+        "setupFiles": [
+            "<rootDir>/config/jest.js"
+        ],
+        "clearMocks": true
+    }
 }

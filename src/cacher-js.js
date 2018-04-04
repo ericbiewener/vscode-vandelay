@@ -1,94 +1,91 @@
 const fs = require('fs-extra')
 const path = require('path')
 const _ = require('lodash')
-const {getSettings} = require('./settings')
-const {INDEX_JS} = require('./constants')
-const babylonParse = require('./babylonParse')
-const {trimPath} = require('./utils')
-const {getFilepathKey} = require('./cacher')
+const {SETTINGS} = require('./settings')
+const {trimPath, parseLineImportPath, strUntil} = require('./utils')
 
-const S = getSettings('js')
 
 function cacheJsFile(filepath, data = {}) {
-  const ats = babylonParse(fs.readFileSync(filepath, 'utf8'), filepath)
-  if (!ats) return
-  const exp = {}
+  const {getFilepathKey} = require('./cacher')
 
-  ats.program.body.forEach(node => {
+  const S = SETTINGS.js
+  const fileExports = {}
+  const lines = fs.readFileSync(filepath, 'utf8').split('\n')
 
-    if (node.type === 'ExportDefaultDeclaration') {
-      if (filepath.endsWith(INDEX_JS)) {
-        exp.default = trimPath(path.dirname(filepath), true)
-      } else {
-        if (S.processDefaultName) {
-          const name = S.processDefaultName(filepath)
-          if (name) exp.default = name
-        }
-        if (!exp.default) exp.default = trimPath(filepath, true)
-      }
-    }
-    // NAMED OR TYPES
-    else if (node.type === 'ExportNamedDeclaration') {
-      const dec = node.declaration
+  lines.forEach(line => {
+    if (!line.startsWith('export')) return
 
-      // NAMED
-      if (node.exportKind === 'value') {
-        if (!exp.named) exp.named = []
-        if (dec) {
-          // export const a = 1
-          if (dec.id) {
-            exp.named.push(dec.id.name)
-          }
-          // export const a = 1, b = 2
-          else {
-            exp.named.push(...dec.declarations.map(n => n.id.name))
-          }
-        }
-        // export { default as someName, otherName } from ".."
-        else {
-          processReexportNode(exp, exp.named, node)
-        }
-      }
-      // TYPES
-      else {
-        if (!exp.types) exp.types = []
-        if (dec) {
-          exp.types.push(dec.id.name)
+    const words = line.trim().split(/ +/)
+    switch (words[1]) {
+      case 'default':
+        if (filepath.endsWith('index.js')) {
+          fileExports.default = trimPath(path.dirname(filepath), true)
         } else {
-          processReexportNode(exp, exp.types, node)
+          if (S.processDefaultName) {
+            const name = S.processDefaultName(filepath)
+            if (name) fileExports.default = name
+          }
+          if (!fileExports.default) fileExports.default = trimPath(filepath, true)
         }
-      }
-    }
-    // export * from ".."
-    else if (node.type === 'ExportAllDeclaration') {
-      if (!exp.all) exp.all = []
-      exp.all.push(node.source.value)
+        return
+
+      case 'type':
+        fileExports.types = fileExports.types || []
+        fileExports.types.push(words[2])
+        return
+
+      case 'const':
+      case 'let':
+      case 'var':
+      case 'function':
+      case 'class':
+        fileExports.named = fileExports.named || []
+        fileExports.named.push(strUntil(words[2], /\W/))
+        return
+
+      case '*':
+        fileExports.all = fileExports.all || []
+        fileExports.all.push(parseLineImportPath(words[3]))
+        return
+
+      case '{':
+        processReexportNode(fileExports, fileExports.named, line)
+        return
+
+      default:
+        fileExports.named = fileExports.named || []
+        fileExports.named.push(strUntil(words[1], /\W/))
+        return
     }
   })
 
-  if (!_.isEmpty(exp)) data[getFilepathKey(filepath)] = exp
+  if (!_.isEmpty(fileExports)) data[getFilepathKey(filepath)] = fileExports
 
   return data
 }
 
-function processReexportNode(exp, exportArray, node) {
-  exportArray.push(...node.specifiers.map(n => n.exported.name))
+function processReexportNode(fileExports, exportArray, line) {
+  const end = line.indexOf('}')
+  if (end < 0) return
+  
+  if (!fileExports.reexports) fileExports.reexports = {}
+  const subfilepath = parseLineImportPath(line)
+  if (!fileExports.reexports[subfilepath]) fileExports.reexports[subfilepath] = []
+  const reexports = fileExports.reexports[subfilepath]
 
-  if (!exp.reexports) exp.reexports = {}
-  const subfilepath = node.source.value
-  if (!exp.reexports[subfilepath]) exp.reexports[subfilepath] = []
-  // `local.name` is the name of the export in the subfile. e.g. `{ default as something }` will be `default`,
-  // { something as somethingElse } will be `something`.
-  exp.reexports[subfilepath].push(...node.specifiers.map(n => n.local.name))
+  const exportText = line.slice(line.indexOf('{') + 1, end)
+  exportText.split(',').forEach(exp => {
+    const words = exp.trim().split(/ +/)
+    reexports.push(words[0])
+    exportArray.push(_.last(words))
+  })
 }
 
 function processReexports(data) {
-  const indexChecks = {}
-
   _.each(data, (fileData, mainFilepath) => {
     if (fileData.all) {
-      fileData.all.forEach(filename => {
-        const subfileExports = getSubfileData(mainFilepath, filename, data)
+      fileData.all.forEach(subfilePath => {
+        const subfileExports = getSubfileData(mainFilepath, subfilePath, data)
         if (!subfileExports || !subfileExports.named) return
         if (fileData.named) {
           fileData.named.push(...subfileExports.named)
@@ -102,8 +99,8 @@ function processReexports(data) {
     }
 
     if (fileData.reexports) {
-      _.each(fileData.reexports, (exportNames, filename) => {
-        const subfileExports = getSubfileData(mainFilepath, filename, data)
+      _.each(fileData.reexports, (exportNames, subfilePath) => {
+        const subfileExports = getSubfileData(mainFilepath, subfilePath, data)
         if (subfileExports) {
           if (!subfileExports.reexported) subfileExports.reexported = []
           subfileExports.reexported.push(...exportNames)
@@ -112,31 +109,15 @@ function processReexports(data) {
 
       delete fileData.reexports
     }
-
-    /**
-     * Track whether index file exports have subfiles with valid exports. For example, an index file that exports things
-     * only from files with ignored filename patterns will need to be deleted from `data`
-     */
-    const dir = path.dirname(mainFilepath)
-
-    if (mainFilepath.endsWith(INDEX_JS)) {
-      if (!indexChecks[dir]) indexChecks[dir] = false
-    } else {
-      indexChecks[dir] = true
-    }
-  })
-
-  _.each(indexChecks, (hasExports, dir) => {
-    if (!hasExports) delete data[path.join(dir, INDEX_JS)]
   })
 
   return data
 }
 
 function getSubfileData(mainFilepath, filename, data) {
-  const filepathNoExt = path.resolve(path.dirname(mainFilepath), filename)
-  for (const ext of ['js', 'jsx']) {
-    const subfileExports = data[filepathNoExt + ext]
+  const filepathWithoutExt = path.join(path.dirname(mainFilepath), filename)
+  for (const ext of ['.js', '.jsx']) {
+    const subfileExports = data[filepathWithoutExt + ext]
     if (subfileExports) return subfileExports
   }
 }
@@ -144,4 +125,8 @@ function getSubfileData(mainFilepath, filename, data) {
 module.exports = {
   cacheJsFile,
   processReexports,
+  _test: {
+    processReexportNode,
+    getSubfileData,
+  }
 }

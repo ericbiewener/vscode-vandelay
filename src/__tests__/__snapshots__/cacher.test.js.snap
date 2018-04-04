@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cacheProject 1`] = `
+Array [
+  Array [
+    "js",
+    Object {
+      "/other-src/file1.js": Object {
+        "default": "file1",
+        "named": Array [
+          "var1",
+          "var2",
+          "var3",
+          "Something",
+        ],
+      },
+      "/other-src/subdir/file2.js": Object {
+        "named": Array [
+          "file2var",
+        ],
+      },
+      "/src/file1.js": Object {
+        "default": "file1",
+        "named": Array [
+          "var1",
+          "var2",
+          "var3",
+          "fn",
+          "Something",
+          "varDeclaredEarlier",
+          "varDeclaredEarlierWithSemiColon",
+          "subdir2_file1_var1",
+          "subdir2_file1_var2_renamed",
+          "subdir2_file2_var1_renamed",
+          "subdir1_file1_var1",
+          "subdir1_file1_var2",
+          "subdir1_file2_var1",
+          "subdir1_file2_var2",
+        ],
+        "types": Array [
+          "MyType1",
+          "MyType2",
+        ],
+      },
+      "/src/subdir1/file1.js": Object {
+        "named": Array [
+          "subdir1_file1_var1",
+          "subdir1_file1_var2",
+        ],
+        "reexported": Array [
+          "subdir1_file1_var1",
+          "subdir1_file1_var2",
+        ],
+      },
+      "/src/subdir1/file2.js": Object {
+        "named": Array [
+          "subdir1_file2_var1",
+          "subdir1_file2_var2",
+        ],
+        "reexported": Array [
+          "subdir1_file2_var1",
+          "subdir1_file2_var2",
+        ],
+      },
+      "/src/subdir2/file1.js": Object {
+        "named": Array [
+          "subdir2_file1_var1",
+          "subdir2_file1_var2",
+        ],
+        "reexported": Array [
+          "subdir2_file1_var1",
+          "subdir2_file1_var2",
+        ],
+      },
+      "/src/subdir2/file2.js": Object {
+        "named": Array [
+          "subdir2_file2_var1",
+          "subdir2_file2_var2",
+        ],
+        "reexported": Array [
+          "subdir2_file2_var1",
+        ],
+      },
+    },
+  ],
+]
+`;

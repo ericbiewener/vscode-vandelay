@@ -11,6 +11,8 @@
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
+                "${workspaceFolder}/test-project",
+                "${workspaceFolder}/test-project/import-test.js",
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ]
         },
