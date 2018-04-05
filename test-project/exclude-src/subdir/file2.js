@@ -1,1 +1,1 @@
-export const file2var = "file2var"
+export const file2var = 'file2var'

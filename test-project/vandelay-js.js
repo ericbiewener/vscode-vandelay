@@ -1,6 +1,8 @@
 const path = require('path')
 
 module.exports = {
+  multilineImportStyle: 'single',
+  commaDangle: true,
   importOrder: ['react', 'react-dom'],
   includePaths: [
     path.join(__dirname, 'src'),

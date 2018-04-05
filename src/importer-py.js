@@ -148,7 +148,7 @@ function insertImportPy({label: exportName, detail: importPath}) {
   imports.push(exportName)
   imports = imports.map(i => i.trim())
 
-  let newLineStart = 'from ' + importPath + ' import '
+  const newLineStart = 'from ' + importPath + ' import '
   const importText = imports.join(', ')
   newLine = newLineStart + importText
 
