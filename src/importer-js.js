@@ -82,7 +82,7 @@ function getFinalImportPath(importPath, isExtraImport) {
   if (isExtraImport) return importPath
 
   const S = SETTINGS.js
-  const activeFilepath = window.editor.document.fileName
+  const activeFilepath = window.activeTextEditor.document.fileName
   const absImportPath = path.join(S.projectRoot, importPath)
   importPath = getRelativeImportPath(activeFilepath, absImportPath)
 
@@ -138,21 +138,24 @@ function getLinePosition(importPath, lines) {
 
   // If isFirstImportLine, find the first non-comment line.
   if (isFirstImportLine) {
-    lineIndexModifier = 0
-    lineIndex = 0
+    // If there is no line that doesn't start with a comment, we need lineIndexModifier to be 1.
+    // It will get set back to 0 if a line without a comment is encountered (see end of for loop)
+    lineIndexModifier = 1
     let isMultilineComment
+    
     for (let i = 0; i < lines.length; i++) {
+      // Don't use lineIndex as incrementor in for-loop declaration because it will get incremented one time too many
+      lineIndex = i
       const line = lines[i]
       if (isMultilineComment) {
-        lineIndex++
         if (line.includes('*/')) isMultilineComment = false
         continue
       }
       if (line.startsWith('/')) {
-        lineIndex++
         if (line[1] === '*') isMultilineComment = true
         continue
       }
+      lineIndexModifier = 0
       break
     }
   }
