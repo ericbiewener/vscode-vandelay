@@ -2,6 +2,7 @@ const {window, workspace} = require('vscode')
 const path = require('path')
 const fs = require('fs-extra')
 const _ = require('lodash')
+const anymatch = require('anymatch')
 const {isFile, writeCacheFile, parseCacheFile} = require('./utils')
 const {cacheJsFile, processReexports} = require('./cacher-js')
 const {cachePyFile} = require('./cacher-py')
@@ -12,21 +13,30 @@ const cacheFn = {
   py: cachePyFile,
 }
 
-function cacheDir(dir, lang, recursive=true, data={}, checkMatch=true) {
+function getLangFromFilePath(filePath) {
+  const ext = path.extname(filePath).slice(1)
+  return ext === 'jsx' ? 'jsx' : ext
+}
+
+function shouldIgnore(lang, filePath) {
+  const S = SETTINGS[lang]
+  return anymatch(S.excludePatterns, filePath)
+}
+
+function cacheDir(dir, lang, recursive=true, data={}) {
   const S = SETTINGS[lang]
   return fs.readdir(dir).then(items => {
     const readDirPromises = []
 
     for (const item of items) {
       const fullPath = path.join(dir, item)
-      if (checkMatch && anymatch(S.excludePatterns, fullPath)) continue
+      if (shouldIgnore(lang, fullPath)) continue
 
       readDirPromises.push(
         fs.lstat(fullPath).then(stats => {
           if (stats.isFile()) {
             if (item === S.settingsFile) return
-            const ext = path.extname(item).slice(1)
-            if (!S.supportedExtensions.includes(ext)) return
+            if (lang !== getLangFromFilePath(item)) return
             cacheFn[lang](fullPath, data)
           }
           else if (recursive) {
@@ -77,13 +87,32 @@ function onWatchedFileChange(filepath, lang, wasDeleted=false) {
   })
 }
 
-function watchDirectoryTree(lang) {
-  const S = SETTINGS[lang]
+function onChangeOrCreate(doc) {
+  const lang = getLangFromFilePath(doc.path)
+  if (!SETTINGS[lang] || shouldIgnore(lang, doc.path)) return
+  
+  const data = cacheFn[lang](doc.path)
+  if (!Object.keys(data).length) return
 
-  return chokidar.watch(S.includePaths, {ignored: S.excludePatterns})
-    .on('change', filepath => onWatchedFileChange(filepath, lang))
-    .on('unlink', filepath => onWatchedFileChange(filepath, lang, true))
-    .on('error', error => console.log('chokidar error: ' + error))
+  // include initial {} in Object.assign in case parseCacheFile returns undefined
+  writeCacheFile(lang, Object.assign({}, parseCacheFile(lang), data))
+}
+
+function watchForChanges() {
+  // TODO: kill on deactivate?
+  const watcher = workspace.createFileSystemWatcher('**/*.*')
+
+  watcher.onDidChange(onChangeOrCreate)
+  watcher.onDidCreate(onChangeOrCreate)
+  
+  watcher.onDidDelete(doc => {
+    const lang = getLangFromFilePath(doc.path)
+    const data = parseCacheFile(lang) || {}
+    const key = getFilepathKey(doc.path)
+    if (!data[key]) return
+    delete data[key]
+    writeCacheFile(lang, data)
+  })
 }
 
 function getFilepathKey(filepath) {
@@ -92,7 +121,7 @@ function getFilepathKey(filepath) {
 
 module.exports = {
   cacheProject,
-  watchDirectoryTree,
+  watchForChanges,
   getFilepathKey,
   _test: {
     cacheDir,

@@ -5,7 +5,6 @@ const path = require('path')
 const _ = require('lodash')
 const {parseCacheFile, trimPath, parseLineImportPath, strBetween} = require('./utils')
 const {SETTINGS} = require('./settings')
-const {MultilineImportStyle, LineModifier} = require('./constants')
 
 
 const ExportType = {
@@ -42,8 +41,6 @@ function readCacheFileJs() {
     }
 
     if (defaultExport) {
-      const exportName = defaultExport
-
       items.push({
         label: defaultExport,
         description: importPath,
@@ -87,7 +84,7 @@ function getFinalImportPath(importPath, isExtraImport) {
   importPath = getRelativeImportPath(activeFilepath, absImportPath)
 
   return S.processImportPath
-    ? S.processImportPath(importPath, absImportPath, activeFilepath, S.projectRoot)
+    ? S.processImportPath(importPath, absImportPath, activeFilepath, S.projectRoot) || importPath
     : path.basename(importPath).startsWith('index.js')
       ? path.dirname(importPath)
       : trimPath(importPath)
@@ -98,7 +95,12 @@ function getFinalImportPath(importPath, isExtraImport) {
  * (resulting in lineIndexModifier = 0), or inserted as an entirely new import line before or after
  * (lineIndexModifier = -1 or 1)
  **/
-function getLinePosition(importPath, lines) {
+function getLinePosition(importPath, isExtraImport, lines) {
+  const S = SETTINGS.js
+
+  const settingsPos = S.importOrderMap[importPath]
+  const nonModulePathStarts = (S.absolutePaths || []).concat(['.', '/'])
+  
   let lineIndex
   let lineIndexModifier = 1
 
@@ -125,6 +127,43 @@ function getLinePosition(importPath, lines) {
       break
     }
 
+    const lineSettingsPos = S.importOrderMap[linePath]
+    
+    // If import exists in SETTINGS.importOrder
+    if (
+      settingsPos != null
+      && (lineSettingsPos == null || lineSettingsPos > settingsPos)
+    ) {
+      lineIndex = i
+      lineIndexModifier = -1
+      break
+    }
+
+    // If node module
+    if (
+      isExtraImport
+      && lineSettingsPos == null
+      && nonModulePathStarts.some(p => importPath.startsWith(p))
+    ) {
+      lineIndex = i
+      lineIndexModifier = -1
+      break
+    }
+
+    // If line path is in SETTINGS.importOrder
+    if (lineSettingsPos != null) {
+      lineIndex = i
+      lineIndexModifier = 1
+      break
+    }
+
+    // If import is absolute path
+    if (!importPath.startsWith('.') && linePath.startsWith('.')) {
+      lineIndex = i
+      lineIndexModifier = -1
+    }
+
+    // No special sorting
     if (linePath > importPath) {
       lineIndex = i
       lineIndexModifier = -1
@@ -163,7 +202,8 @@ function getLinePosition(importPath, lines) {
   return {lineIndex, lineIndexModifier, isFirstImportLine, multiLineStart}
 }
 
-function getNewLineImports(lines, exportName, exportType, lineIndex, lineIndexModifier, isFirstImportLine, multiLineStart) {
+function getNewLineImports(lines, exportName, exportType, linePosition) {
+  const {lineIndex, lineIndexModifier, isFirstImportLine, multiLineStart} = linePosition
   let defaultImport = exportType === ExportType.default ? exportName : null
   const namedImports = exportType === ExportType.named ? [exportName] : []
   const typeImports = exportType === ExportType.type ? ['type ' + exportName] : []
@@ -203,11 +243,12 @@ async function insertImportJs({label: exportName, description: importPath, expor
 
   importPath = getFinalImportPath(importPath, isExtraImport)
   const lines = editor.document.getText().split('\n')
-  const {lineIndex, lineIndexModifier, isFirstImportLine, multiLineStart} = getLinePosition(importPath, lines)
-  const {defaultImport, namedImports, typeImports} = getNewLineImports(
-    lines, exportName, exportType, lineIndex, lineIndexModifier, isFirstImportLine, multiLineStart
-  )
+  
+  const linePosition = getLinePosition(importPath, isExtraImport, lines)
+  const {defaultImport, namedImports, typeImports} = getNewLineImports(lines, exportName, exportType, linePosition)
   const newLine = getNewLine(importPath, defaultImport, namedImports, typeImports)
+  
+  const {lineIndex, lineIndexModifier, multiLineStart} = linePosition
   
   await editor.edit(builder => {
     if (!lineIndexModifier) {

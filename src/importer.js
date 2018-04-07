@@ -2,7 +2,6 @@ const path = require('path')
 const {window} = require('vscode')
 const {readCacheFileJs, insertImportJs} = require('./importer-js')
 const {readCacheFilePy, insertImportPy} = require('./importer-py')
-const {SETTINGS} = require('./settings')
 
 const readCacheFile = {
   js: readCacheFileJs,
@@ -20,7 +19,7 @@ async function selectImport() {
   const readFn = readCacheFile[lang]
   if (!readFn) return
   
-  const selection = await window.showQuickPick(readFn())
+  const selection = await window.showQuickPick(readFn(), {matchOnDescription: true})
   if (!selection) return
 
   insertImport[lang](selection)

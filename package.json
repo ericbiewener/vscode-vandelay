@@ -10,12 +10,7 @@
     "categories": [
         "Other"
     ],
-    "activationEvents": [
-        "onLanguage:javascript",
-        "onLanguage:python",
-        "onCommand:vandelay.cacheProject",
-        "onCommand:vandelay.selectImport"
-    ],
+    "activationEvents": ["*"],
     "main": "./src/index.js",
     "contributes": {
         "commands": [
@@ -27,7 +22,21 @@
                 "title": "Import...",
                 "command": "vandelay.selectImport"
             }
-        ]
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Vandelay Configuration",
+            "properties": {
+                "vandelay.configLocation": {
+                    "type": "string",
+                    "description": "Absolute path to the folder containing your Vandelay configuration files."
+                },
+                "vandelay.projectRoot": {
+                    "type": "string",
+                    "description": "Absolute path to the folder that Vandelay should consider the root of your project."
+                }
+            }
+        }
     },
     "scripts": {
         "build": "babel ./src --out-dir=./build --source-maps",
@@ -45,7 +54,9 @@
         "vscode": "^1.1.6"
     },
     "dependencies": {
-        "fs-extra": "^5.0.0"
+        "anymatch": "^2.0.0",
+        "fs-extra": "^5.0.0",
+        "make-dir": "^1.2.0"
     },
     "jest": {
         "roots": [

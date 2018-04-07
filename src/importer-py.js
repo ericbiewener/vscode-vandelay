@@ -12,7 +12,7 @@ function readCacheFilePy() {
 
   const items = []
 
-  for (let importPath of Object.keys(exportData).sort()) {
+  for (const importPath of Object.keys(exportData).sort()) {
     if (S.shouldIncludeImport && !S.shouldIncludeImport(path.join(S.projectRoot, importPath), activeFilepath)) {
       continue
     }

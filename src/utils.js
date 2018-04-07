@@ -1,15 +1,11 @@
 const fs = require('fs')
+const makeDir = require('make-dir');
 const path = require('path')
 const {SETTINGS} = require('./settings')
 
 function writeCacheFile(lang, data) {
   const S = SETTINGS[lang]
-  if (S.debug) console.log(data)
-  
-  fs.writeFileSync(
-    S.cacheFile,
-    JSON.stringify(data, null, S.debug ? 4 : null)
-  )
+  return makeDir(S.cacheDir).then(() => fs.writeFileSync(S.cacheFile, JSON.stringify(data)))
 }
 
 function parseCacheFile(lang, includeExtraImports) {

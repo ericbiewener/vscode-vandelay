@@ -1,30 +1,22 @@
 const {window, workspace} = require('vscode')
 const path = require('path')
-const _ = require('lodash')
 const {SUPPORTED_LANGS} = require('./constants')
 
 const SETTINGS = {}
 
 const LANG_PROCESSOR = {
   js(S) {
-    S.supportedExtensions = ['js', 'jsx']
     S.excludePatterns.push(/.*\/node_modules(\/.*)?/)
-  },
-  py(S) {
-    S.supportedExtensions = ['py']
   },
 }
 
-function initializeSettings() {
-  const {workspaceFolders} = workspace
-  // TODO: need to respond to some event where workspace folders are added in order to reinitialize settings
+function initializeSettings(context) {
+  const {workspaceFolders, getConfiguration} = workspace
   if (!workspaceFolders) return
-  
-  const vandelayDir = workspaceFolders.length > 1
-    ? workspaceFolders.find(f => f.name === '.vandelay')
-    : workspaceFolders[0].uri.path
 
-  if (!vandelayDir) return // could occur if multiple workspace folders but no `.vandelay` folder
+  const config = getConfiguration('vandelay')
+  const configLocation = config.configLocation || workspaceFolders[0].uri.path
+  const projectRoot = config.projectRoot || workspaceFolders[0].uri.path
 
   const defaultSettings = {
     quoteType: 'single',
@@ -33,19 +25,19 @@ function initializeSettings() {
     multilineImportStyle: 'multi',
     useSemicolons: true,
     commaDangle: false,
-    debug: false,
   }
 
   SUPPORTED_LANGS.forEach(lang => {
     const settingsFile = 'vandelay-' + lang + '.js'
-    const userSettings = getProjectSettings(lang, settingsFile, vandelayDir)
+    const userSettings = getProjectSettings(lang, settingsFile, configLocation)
     if (!userSettings) return
 
     SETTINGS[lang] = Object.assign({}, defaultSettings, userSettings)
     const S = SETTINGS[lang]
 
-    S.cacheFile = path.join(vandelayDir, '.vandelay-' + lang)
-    S.projectRoot = path.dirname(vandelayDir)
+    S.cacheDir = context.storagePath
+    S.cacheFile = path.join(S.cacheDir, 'vandelay-' + lang + '.json')
+    S.projectRoot = projectRoot
     S.settingsFile = settingsFile
 
     if (S.ignorePaths) S.ignorePaths = S.ignorePaths.map(p => path.join(S.projectRoot, p))
@@ -58,14 +50,14 @@ function initializeSettings() {
     S.excludePatterns = S.excludePatterns || []
     S.excludePatterns.push(/.*\/\.git(\/.*)?/)
 
-    // Computed values, not really settings
-    // TODO should this just be computed as-needed rather than saved?
-    if (!S.importOrder || typeof S.importOrder !== 'function') {
-      S.importOrderMap = Array.isArray(S.importOrder) ? _.invert(S.importOrder) : {}
+    // Computed value, not a setting
+    S.importOrderMap = {}
+    if (Array.isArray(S.importOrder)) {
+      S.importOrder.forEach((importName, i) => S.importOrderMap[importName] = i)
     }
 
-    LANG_PROCESSOR[lang](S)
-    if (S.debug) console.log(S)
+    const langProcessor = LANG_PROCESSOR[lang]
+    if (langProcessor) langProcessor(S)
   })
 }
 
