@@ -1,10 +1,10 @@
 const path = require('path')
 const {parseCacheFile} = require('./utils')
-const {SETTINGS} = require('./settings')
+const {PLUGINS} = require('./plugins')
 const {LineModifier} = require('./constants')
 
 function readCacheFilePy() {
-  const S = SETTINGS.py
+  const S = PLUGINplugin.py
   const exportData = parseCacheFile('py', true)
   if (!exportData) return
 
@@ -13,12 +13,12 @@ function readCacheFilePy() {
   const items = []
 
   for (const importPath of Object.keys(exportData).sort()) {
-    if (S.shouldIncludeImport && !S.shouldIncludeImport(path.join(S.projectRoot, importPath), activeFilepath)) {
+    if (plugin.shouldIncludeImport && !plugin.shouldIncludeImport(path.join(plugin.projectRoot, importPath), activeFilepath)) {
       continue
     }
 
     const data = exportData[importPath]
-    if (S.processImportPath) importPath = S.processImportPath(importPath)
+    if (plugin.processImportPath) importPath = plugin.processImportPath(importPath)
 
     for (const exportName of data) {
       const fullText = importPath !== '_' ? exportName + ' ' + importPath : exportName
@@ -39,9 +39,9 @@ function insertImportPy({label: exportName, detail: importPath}) {
   const activeFilepath = editor.getPath()
   const hasFrom = importPath !== '_'
 
-  if (hasFrom && S.processImportPath) {
-    const absImportPath = path.join(S.projectRoot, importPath)
-    importPath = S.processImportPath(importPath, absImportPath, activeFilepath, S.projectRoot)
+  if (hasFrom && plugin.processImportPath) {
+    const absImportPath = path.join(plugin.projectRoot, importPath)
+    importPath = plugin.processImportPath(importPath, absImportPath, activeFilepath, plugin.projectRoot)
   }
 
   const lines = editor.getText().split('\n')
@@ -51,7 +51,7 @@ function insertImportPy({label: exportName, detail: importPath}) {
   let lastImportLineNum
 
   // TODO custom sorting
-  // if (S.getImportLineNumber) importPos = S.getImportLineNumber(lines, importPath)
+  // if (plugin.getImportLineNumber) importPos = plugin.getImportLineNumber(lines, importPath)
   // if (importPos != null) {
   //   const linePath = lines[0].split(' ')[1]
   // }
@@ -153,7 +153,7 @@ function insertImportPy({label: exportName, detail: importPath}) {
   newLine = newLineStart + importText
 
   // Single line
-  if (newLine.length <= S.maxImportLineLength) {
+  if (newLine.length <= plugin.maxImportLineLength) {
     editor.setTextInBufferRange([[importPos, 0], [importPos, lines[importPos].length]], newLine)
   }
 
@@ -164,7 +164,7 @@ function insertImportPy({label: exportName, detail: importPath}) {
   const items = importText.split(' ')
   items.forEach((item, i) => {
     const closingParenModifier = i === items.length ? 1 : 0 // last item will have a parentheses, thus increasing the length by one
-    if (currLine.length + item.length + 1 + closingParenModifier > S.maxImportLineLength) { // 1 = space
+    if (currLine.length + item.length + 1 + closingParenModifier > plugin.maxImportLineLength) { // 1 = space
       currLine = tabChar + item
       newLine += '\n' + currLine
     } else {

@@ -1,20 +1,16 @@
 const fs = require('fs')
 const makeDir = require('make-dir');
 const path = require('path')
-const {SETTINGS} = require('./settings')
 
-function writeCacheFile(lang, data) {
-  const S = SETTINGS[lang]
-  return makeDir(S.cacheDir).then(() => fs.writeFileSync(S.cacheFile, JSON.stringify(data)))
+function writeCacheFile(plugin, data) {
+  return makeDir(plugin.cacheDirPath).then(() => fs.writeFileSync(plugin.cacheFilePath, JSON.stringify(data)))
 }
 
-function parseCacheFile(lang, includeExtraImports) {
-  const S = SETTINGS[lang]
+function parseCacheFile(plugin, includeExtraImports) {
+  if (!isFile(plugin.cacheFilePath)) return
 
-  if (!isFile(S.cacheFile)) return
-
-  const exportData = JSON.parse(fs.readFileSync(S.cacheFile, 'utf-8'))
-  if (includeExtraImports && S.extraImports) Object.assign(exportData, S.extraImports)
+  const exportData = JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
+  if (includeExtraImports && plugin.extraImports) Object.assign(exportData, plugin.extraImports)
 
   return exportData
 }
@@ -54,6 +50,11 @@ function strUntil(str, endChar) {
   return index < 0 ? str : str.slice(0, index)
 }
 
+function getLangFromFilePath(filePath) {
+  const ext = path.extname(filePath).slice(1)
+  return ext === 'jsx' ? 'js' : ext
+}
+
 module.exports = {
   writeCacheFile,
   parseCacheFile,
@@ -62,4 +63,5 @@ module.exports = {
   strBetween,
   parseLineImportPath,
   strUntil,
+  getLangFromFilePath,
 }

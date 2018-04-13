@@ -10,7 +10,9 @@
     "categories": [
         "Other"
     ],
-    "activationEvents": ["*"],
+    "activationEvents": [
+        "*"
+    ],
     "main": "./src/index.js",
     "contributes": {
         "commands": [
@@ -53,18 +55,15 @@
         "test": "jest"
     },
     "devDependencies": {
-        "@types/mocha": "^2.2.42",
-        "@types/node": "^7.0.43",
         "eslint": "^4.11.0",
         "eslint-config-ericbiewener": "^1.0.1",
         "jest": "^22.4.3",
-        "lodash": "^4.17.5",
-        "typescript": "^2.6.1",
         "vscode": "^1.1.6"
     },
     "dependencies": {
         "anymatch": "^2.0.0",
         "fs-extra": "^5.0.0",
+        "lodash": "^4.17.5",
         "make-dir": "^1.2.0"
     },
     "jest": {

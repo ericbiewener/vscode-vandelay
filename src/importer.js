@@ -1,27 +1,17 @@
-const path = require('path')
 const {window, workspace} = require('vscode')
-const {readCacheFileJs, insertImportJs} = require('./importer-js')
-const {readCacheFilePy, insertImportPy} = require('./importer-py')
-
-const readCacheFile = {
-  js: readCacheFileJs,
-  py: readCacheFilePy,
-}
-
-const insertImport = {
-  js: insertImportJs,
-  py: insertImportPy,
-}
+const {PLUGINS} = require('./plugins')
+const {getLangFromFilePath, parseCacheFile} = require('./utils')
 
 async function selectImport(word) {
   if (!window.activeTextEditor) return
   
-  let lang = path.extname(window.activeTextEditor.document.fileName).slice(1)
-  if (lang === 'jsx') lang = 'js'
-  const readFn = readCacheFile[lang]
-  if (!readFn) return
+  const plugin = PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)]
+  if (!plugin) return
   
-  let items = readFn()
+  const exportData = parseCacheFile(plugin)
+  if (!exportData) return
+  
+  let items = plugin.buildImportItems(plugin, exportData)
   if (word) items = items.filter(item => item.label === word)
 
   const selection = !word || items.length > 1 || !workspace.getConfiguration('vandelay').autoImportSingleResult
@@ -29,7 +19,7 @@ async function selectImport(word) {
     : items[0]
   
   if (!selection) return
-  insertImport[lang](selection)
+  plugin.insertImport(plugin, selection)
 }
 
 async function selectImportForActiveWord() {

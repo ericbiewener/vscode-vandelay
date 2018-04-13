@@ -1,35 +1,34 @@
 const {commands, workspace} = require('vscode')
-const {SETTINGS, initializeSettings} = require('./settings')
+const {PLUGINS, initializePlugin} = require('./plugins')
 const {cacheProject, watchForChanges} = require('./cacher')
 const {selectImport, selectImportForActiveWord} = require('./importer')
-const {isFile} = require('./utils')
 
 function activate(context) {
-  initializeSettings(context)
-  
-  // Cache project on launch if not already caches
-  for (const lang in SETTINGS) {
-    if (isFile(SETTINGS[lang].cacheFile)) continue
-    cacheProject(true)
-    break
-  }
+  context.subscriptions.push(
+    commands.registerCommand('vandelay.cacheProject', cacheProject),
+    commands.registerCommand('vandelay.selectImport', selectImport),
+    commands.registerCommand('vandelay.selectImportForActiveWord', selectImportForActiveWord),
+  )
+
+  const pluginConfigs = []
   
   workspace.onDidChangeConfiguration(e => {
     if (
       e.affectsConfiguration('vandelay.configLocation') ||
       e.affectsConfiguration('vandelay.projectRoot')
-    ) initializeSettings(context)
+    ) {
+      pluginConfigs.forEach(config => initializePlugin(context, config))
+    }
   })
   
   watchForChanges()
 
-  context.subscriptions.push(
-    commands.registerCommand('vandelay.cacheProject', cacheProject),
-    // TODO: this command should only be available for included languages... possible to do that dynamically based
-    // on SETTINGS?
-    commands.registerCommand('vandelay.selectImport', selectImport),
-    commands.registerCommand('vandelay.selectImportForActiveWord', selectImportForActiveWord),
-  )
+  return {
+    registerPlugin(pluginConfig) {
+      pluginConfigs.push(pluginConfig)
+      initializePlugin(context, pluginConfig)
+    }
+  }
 }
 exports.activate = activate
 

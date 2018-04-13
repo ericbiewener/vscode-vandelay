@@ -15,3 +15,17 @@ Absolute path to the folder that Vandelay should consider the root of your proje
 
 
 ### vandelay.autoImportSingleResult
+
+## Contributing Plugins
+
+### vandelay.registerPlugin
+    language: 'js',
+    finalizePlugin(plugin) {
+      plugin.excludePatterns.push(/.*\/node_modules(\/.*)?/)
+    },
+    processCachedData,
+    buildImportItems,
+    insertImport,
+
+### package.json
+    
