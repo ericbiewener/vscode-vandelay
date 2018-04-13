@@ -12,3 +12,6 @@ Absolute path to the folder containing your Vandelay configuration files. If not
 ### vandelay.projectRoot
 TODO: how is this being used exactly?
 Absolute path to the folder that Vandelay should consider the root of your project. It will only pay attention to files and folders 
+
+
+### vandelay.autoImportSingleResult

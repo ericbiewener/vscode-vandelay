@@ -36,11 +36,6 @@ function trimPath(filepath, removeDirs) {
     : ext ? filepath.slice(0, -ext.length) : filepath
 }
 
-
-function getCacheFilename(lang) {
-  return '.vandelay-' + lang
-}
-
 function strBetween(str, startChar, endChar) {
   const start = str.search(startChar)
   if (start < 0) return
@@ -64,7 +59,6 @@ module.exports = {
   parseCacheFile,
   isFile,
   trimPath,
-  getCacheFilename,
   strBetween,
   parseLineImportPath,
   strUntil,

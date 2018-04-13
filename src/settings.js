@@ -11,12 +11,12 @@ const LANG_PROCESSOR = {
 }
 
 function initializeSettings(context) {
-  const {workspaceFolders, getConfiguration} = workspace
-  if (!workspaceFolders) return
+  if (!workspace.workspaceFolders) return
 
-  const config = getConfiguration('vandelay')
-  const configLocation = config.configLocation || workspaceFolders[0].uri.path
-  const projectRoot = config.projectRoot || workspaceFolders[0].uri.path
+  const config = workspace.getConfiguration('vandelay')
+  const firstWorkspaceFolder = workspace.workspaceFolders[0].uri.path
+  const configLocation = config.configLocation || firstWorkspaceFolder
+  const projectRoot = config.projectRoot || firstWorkspaceFolder
 
   const defaultSettings = {
     quoteType: 'single',

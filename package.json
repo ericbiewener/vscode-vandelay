@@ -21,6 +21,10 @@
             {
                 "title": "Import...",
                 "command": "vandelay.selectImport"
+            },
+            {
+                "title": "Import active word...",
+                "command": "vandelay.selectImportForActiveWord"
             }
         ],
         "configuration": {
@@ -34,6 +38,11 @@
                 "vandelay.projectRoot": {
                     "type": "string",
                     "description": "Absolute path to the folder that Vandelay should consider the root of your project."
+                },
+                "vandelay.autoImportSingleResult": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "If only a single import name matches when importing the word on the cursor, automatically import it rather than showing the import picker."
                 }
             }
         }

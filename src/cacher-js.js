@@ -59,12 +59,12 @@ function cacheJsFile(filepath, data = {}) {
     }
   })
 
-  if (!_.isEmpty(fileExports)) data[getFilepathKey(filepath)] = fileExports
+  if (!_.isEmpty(fileExports)) data[getFilepathKey('js', filepath)] = fileExports
 
   return data
 }
 
-function processReexportNode(fileExports, exportArray, line) {
+function processReexportNode(fileExports, exportArray = [], line) {
   const end = line.indexOf('}')
   if (end < 0) return
   

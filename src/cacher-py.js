@@ -39,7 +39,7 @@ function cachePyFile(filepath, data = {}) {
 }
 
 function getDotFilepathKey(filepath) {
-  return getFilepathKey(filepath).replace(/\//g, '.').slice(1, -3) // remove preceding dot and file extension
+  return getFilepathKey('py', filepath).replace(/\//g, '.').slice(1, -3) // remove preceding dot and file extension
 }
 
 module.exports = {

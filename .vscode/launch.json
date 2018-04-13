@@ -11,8 +11,7 @@
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
-                "${workspaceFolder}/test-project",
-                "${workspaceFolder}/test-project/import-test.js",
+                "${workspaceFolder}/_tp-fe.code-workspace",
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ]
         },

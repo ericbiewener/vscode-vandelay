@@ -15,7 +15,7 @@ const cacheFn = {
 
 function getLangFromFilePath(filePath) {
   const ext = path.extname(filePath).slice(1)
-  return ext === 'jsx' ? 'jsx' : ext
+  return ext === 'jsx' ? 'js' : ext
 }
 
 function shouldIgnore(lang, filePath) {
@@ -51,7 +51,7 @@ function cacheDir(dir, lang, recursive=true, data={}) {
     .then(() => data)
 }
 
-function cacheProject() {
+function cacheProject(silent) {
   return Promise.all(
     // Map over SETTINGS keys because it will contain only the languages for which a vandealy-*.js file exists
     _.map(SETTINGS, (S, lang) => {
@@ -63,9 +63,15 @@ function cacheProject() {
       if (lang === 'js') cacher = cacher.then(processReexports)
       return cacher.then(data => writeCacheFile(lang, data))
     })
-  ).then(() => {
-    window.showInformationMessage('Project exports have been cached.')
-  })
+  )
+    .then(() => {
+      if (!silent) window.showInformationMessage('Project exports have been cached.')
+    })
+    .catch(e => {
+      // Errors keep getting swallowed. This seems to fix it.
+      console.error(e)
+      throw e
+    })
 }
 
 function onWatchedFileChange(filepath, lang, wasDeleted=false) {
@@ -79,7 +85,7 @@ function onWatchedFileChange(filepath, lang, wasDeleted=false) {
     : Promise.resolve(!wasDeleted && cacheFn[S.lang](filepath))
 
   const exportData = parseCacheFile() || {}
-  if (wasDeleted) delete exportData[getFilepathKey(filepath)]
+  if (wasDeleted) delete exportData[getFilepathKey(lang, filepath)]
 
   cacher.then(data => {
     Object.assign(exportData, data)
@@ -94,8 +100,7 @@ function onChangeOrCreate(doc) {
   const data = cacheFn[lang](doc.path)
   if (!Object.keys(data).length) return
 
-  // include initial {} in Object.assign in case parseCacheFile returns undefined
-  writeCacheFile(lang, Object.assign({}, parseCacheFile(lang), data))
+  writeCacheFile(lang, Object.assign(parseCacheFile(lang) || {}, data))
 }
 
 function watchForChanges() {
@@ -108,15 +113,15 @@ function watchForChanges() {
   watcher.onDidDelete(doc => {
     const lang = getLangFromFilePath(doc.path)
     const data = parseCacheFile(lang) || {}
-    const key = getFilepathKey(doc.path)
+    const key = getFilepathKey(lang, doc.path)
     if (!data[key]) return
     delete data[key]
     writeCacheFile(lang, data)
   })
 }
 
-function getFilepathKey(filepath) {
-  return filepath.slice(workspace.workspaceFolders[0].uri.path.length)
+function getFilepathKey(lang, filepath) {
+  return filepath.slice(SETTINGS[lang].projectRoot.length + 1)
 }
 
 module.exports = {

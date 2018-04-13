@@ -13,7 +13,7 @@ const ExportType = {
   type: 2,
 }
 
-function readCacheFileJs() {
+function readCacheFileJs(word) {
   const exportData = parseCacheFile('js', true)
   if (!exportData) return
 
@@ -22,9 +22,12 @@ function readCacheFileJs() {
   const items = []
 
   for (const importPath of Object.keys(exportData).sort()) {
+    const absImportPath = path.join(S.projectRoot, importPath)
+    if (absImportPath === activeFilepath) continue
     if (S.shouldIncludeImport && !S.shouldIncludeImport(path.join(S.projectRoot, importPath), activeFilepath)) {
       continue
     }
+    
     const data = exportData[importPath]
     let defaultExport
     let namedExports
@@ -40,12 +43,16 @@ function readCacheFileJs() {
       typeExports = data.types
     }
 
+    const ext = path.extname(importPath)
+    const importPathNoExt = ext ? importPath.slice(0, -ext.length) : importPath
+
     if (defaultExport) {
       items.push({
         label: defaultExport,
-        description: importPath,
+        description: importPathNoExt,
         exportType: ExportType.default,
         isExtraImport: data.isExtraImport,
+        absImportPath,
       })
     }
 
@@ -53,9 +60,10 @@ function readCacheFileJs() {
       namedExports.forEach(exportName => {
         items.push({
           label: exportName,
-          description: importPath,
+          description: importPathNoExt,
           exportType: ExportType.named,
           isExtraImport: data.isExtraImport,
+          absImportPath,
         })
       })
     }
@@ -64,30 +72,16 @@ function readCacheFileJs() {
       typeExports.forEach(exportName => {
         items.push({
           label: exportName,
-          description: importPath,
+          description: importPathNoExt,
           exportType: ExportType.type,
           isExtraImport: data.isExtraImport,
+          absImportPath,
         })
       })
     }
   }
 
   return items
-}
-
-function getFinalImportPath(importPath, isExtraImport) {
-  if (isExtraImport) return importPath
-
-  const S = SETTINGS.js
-  const activeFilepath = window.activeTextEditor.document.fileName
-  const absImportPath = path.join(S.projectRoot, importPath)
-  importPath = getRelativeImportPath(activeFilepath, absImportPath)
-
-  return S.processImportPath
-    ? S.processImportPath(importPath, absImportPath, activeFilepath, S.projectRoot) || importPath
-    : path.basename(importPath).startsWith('index.js')
-      ? path.dirname(importPath)
-      : trimPath(importPath)
 }
 
 /**
@@ -99,7 +93,7 @@ function getLinePosition(importPath, isExtraImport, lines) {
   const S = SETTINGS.js
 
   const settingsPos = S.importOrderMap[importPath]
-  const nonModulePathStarts = (S.absolutePaths || []).concat(['.', '/'])
+  const nonModulePathStarts = (S.absolutePaths || []).concat('.')
   
   let lineIndex
   let lineIndexModifier = 1
@@ -128,39 +122,60 @@ function getLinePosition(importPath, isExtraImport, lines) {
     }
 
     const lineSettingsPos = S.importOrderMap[linePath]
-    
+
     // If import exists in SETTINGS.importOrder
-    if (
-      settingsPos != null
-      && (lineSettingsPos == null || lineSettingsPos > settingsPos)
-    ) {
-      lineIndex = i
-      lineIndexModifier = -1
-      break
+    if (settingsPos != null) {
+      if (lineSettingsPos == null || lineSettingsPos > settingsPos) {
+        lineIndex = i
+        lineIndexModifier = -1
+        break
+      }
+      else {
+        lineIndex = i
+        lineIndexModifier = 1
+        continue
+      }
     }
-
-    // If node module
-    if (
-      isExtraImport
-      && lineSettingsPos == null
-      && nonModulePathStarts.some(p => importPath.startsWith(p))
-    ) {
-      lineIndex = i
-      lineIndexModifier = -1
-      break
-    }
-
-    // If line path is in SETTINGS.importOrder
+    
+    // If import does not exist in SETTINGS.importOrder but line does
     if (lineSettingsPos != null) {
       lineIndex = i
       lineIndexModifier = 1
-      break
+      continue
     }
 
-    // If import is absolute path
-    if (!importPath.startsWith('.') && linePath.startsWith('.')) {
+    const lineIsNodeModule = !nonModulePathStarts.some(p => linePath.startsWith(p))
+
+    // If import is a node module
+    if (
+      isExtraImport
+      && (!lineIsNodeModule || importPath < linePath)
+    ) {
       lineIndex = i
       lineIndexModifier = -1
+      break
+    }
+    // If line is a node module but we didn't break above, then import must come after it
+    if (lineIsNodeModule) {
+      lineIndex = i
+      lineIndexModifier = 1
+      continue
+    }
+
+    const lineIsAbsolute = !linePath.startsWith('.')
+
+    // If import is absolute path
+    if (!importPath.startsWith('.')) {
+      if (!lineIsAbsolute) {
+        lineIndex = i
+        lineIndexModifier = -1
+        break
+      }
+    }
+    else if (lineIsAbsolute) {
+      lineIndex = i
+      lineIndexModifier = 1
+      continue
     }
 
     // No special sorting
@@ -202,6 +217,43 @@ function getLinePosition(importPath, isExtraImport, lines) {
   return {lineIndex, lineIndexModifier, isFirstImportLine, multiLineStart}
 }
 
+async function insertImportJs({label: exportName, description: importPath, absImportPath, exportType, isExtraImport}) {
+  const editor = window.activeTextEditor
+
+  importPath = getFinalImportPath(importPath, absImportPath, isExtraImport)
+  const lines = editor.document.getText().split('\n')
+  
+  const linePosition = getLinePosition(importPath, isExtraImport, lines)
+  const {defaultImport, namedImports, typeImports} = getNewLineImports(lines, exportName, exportType, linePosition)
+  const newLine = getNewLine(importPath, defaultImport, namedImports, typeImports)
+  
+  const {lineIndex, lineIndexModifier, multiLineStart} = linePosition
+  
+  await editor.edit(builder => {
+    if (!lineIndexModifier) {
+      builder.replace(new Range(multiLineStart || lineIndex, 0, lineIndex, lines[lineIndex].length), newLine)
+    } else if (lineIndexModifier === 1) {
+      builder.insert(new Position(lineIndex, lines[lineIndex].length), '\n' + newLine)
+    } else {
+      builder.insert(new Position(lineIndex, 0), newLine + '\n')
+    }
+  })
+}
+
+function getFinalImportPath(importPath, absImportPath, isExtraImport) {
+  if (isExtraImport) return importPath
+
+  const S = SETTINGS.js
+  const activeFilepath = window.activeTextEditor.document.fileName
+  importPath = getRelativeImportPath(activeFilepath, absImportPath)
+
+  return S.processImportPath
+    ? trimPath(S.processImportPath(importPath, absImportPath, activeFilepath, S.projectRoot) || importPath)
+    : path.basename(importPath) === 'index.js'
+      ? path.dirname(importPath)
+      : trimPath(importPath)
+}
+
 function getNewLineImports(lines, exportName, exportType, linePosition) {
   const {lineIndex, lineIndexModifier, isFirstImportLine, multiLineStart} = linePosition
   let defaultImport = exportType === ExportType.default ? exportName : null
@@ -236,29 +288,6 @@ function getNewLineImports(lines, exportName, exportType, linePosition) {
   }
 
   return {defaultImport, namedImports, typeImports}
-}
-
-async function insertImportJs({label: exportName, description: importPath, exportType, isExtraImport}) {
-  const editor = window.activeTextEditor
-
-  importPath = getFinalImportPath(importPath, isExtraImport)
-  const lines = editor.document.getText().split('\n')
-  
-  const linePosition = getLinePosition(importPath, isExtraImport, lines)
-  const {defaultImport, namedImports, typeImports} = getNewLineImports(lines, exportName, exportType, linePosition)
-  const newLine = getNewLine(importPath, defaultImport, namedImports, typeImports)
-  
-  const {lineIndex, lineIndexModifier, multiLineStart} = linePosition
-  
-  await editor.edit(builder => {
-    if (!lineIndexModifier) {
-      builder.replace(new Range(multiLineStart || lineIndex, 0, lineIndex, lines[lineIndex].length), newLine)
-    } else if (lineIndexModifier === 1) {
-      builder.insert(new Position(lineIndex, lines[lineIndex].length), '\n' + newLine)
-    } else {
-      builder.insert(new Position(lineIndex, 0), newLine + '\n')
-    }
-  })
 }
 
 function getNewLine(importPath, defaultImport, namedImports, typeImports) {
