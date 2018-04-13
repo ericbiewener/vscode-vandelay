@@ -3,6 +3,8 @@ const {PLUGINS} = require('./plugins')
 const {getLangFromFilePath, parseCacheFile} = require('./utils')
 
 async function selectImport(word) {
+  debugger
+
   if (!window.activeTextEditor) return
   
   const plugin = PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)]

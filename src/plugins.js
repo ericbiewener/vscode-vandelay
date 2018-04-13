@@ -22,7 +22,7 @@ function initializePlugin(context, pluginConfig) {
   const configLocation = config.configLocation || firstWorkspaceFolder
   const projectRoot = config.projectRoot || firstWorkspaceFolder
 
-  const { language } = pluginConfig.language
+  const { language } = pluginConfig
   const configFile = 'vandelay-' + language + '.js'
   const configSettings = getProjectSettings(configLocation, configFile)
   if (!configSettings) return
