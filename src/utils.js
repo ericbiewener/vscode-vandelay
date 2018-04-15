@@ -1,18 +1,14 @@
 const fs = require('fs')
-const makeDir = require('make-dir');
+const makeDir = require('make-dir')
 const path = require('path')
 
 function writeCacheFile(plugin, data) {
   return makeDir(plugin.cacheDirPath).then(() => fs.writeFileSync(plugin.cacheFilePath, JSON.stringify(data)))
 }
 
-function parseCacheFile(plugin, includeExtraImports) {
+function parseCacheFile(plugin) {
   if (!isFile(plugin.cacheFilePath)) return
-
-  const exportData = JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
-  if (includeExtraImports && plugin.extraImports) Object.assign(exportData, plugin.extraImports)
-
-  return exportData
+  return JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
 }
 
 function isFile(file) {

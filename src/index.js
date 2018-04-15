@@ -1,9 +1,10 @@
 const {commands, workspace} = require('vscode')
-const {PLUGINS, initializePlugin} = require('./plugins')
+const {initializePlugin} = require('./plugins')
 const {cacheProject, watchForChanges} = require('./cacher')
 const {selectImport, selectImportForActiveWord} = require('./importer')
 
 function activate(context) {
+
   context.subscriptions.push(
     commands.registerCommand('vandelay.cacheProject', cacheProject),
     commands.registerCommand('vandelay.selectImport', selectImport),

@@ -3,7 +3,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const _ = require('lodash')
 const anymatch = require('anymatch')
-const {isFile, writeCacheFile, parseCacheFile, getLangFromFilePath} = require('./utils')
+const {writeCacheFile, parseCacheFile, getLangFromFilePath} = require('./utils')
 const {PLUGINS} = require('./plugins')
 
 function shouldIgnore(plugin, filePath) {
@@ -50,11 +50,6 @@ function cacheProjectLanguage(plugin) {
 function cacheProject() {
   return Promise.all(_.map(PLUGINS, cacheProjectLanguage))
     .then(() => window.showInformationMessage('Project exports have been cached.'))
-    .catch(e => {
-      // VS Code is failing to log uncaught rejected promises to the console. This seems to fix it.
-      console.error(e)
-      throw e
-    })
 }
 
 function onChangeOrCreate(doc) {
