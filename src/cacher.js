@@ -10,7 +10,7 @@ function shouldIgnore(plugin, filePath) {
   return anymatch(plugin.excludePatterns, filePath)
 }
 
-function cacheDir(plugin, dir, recursive=true, data={}) {
+function cacheDir(plugin, dir, recursive=true, data={_extraImports: {} }) {
   return fs.readdir(dir).then(items => {
     const readDirPromises = []
 
