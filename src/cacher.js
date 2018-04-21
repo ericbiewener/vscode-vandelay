@@ -3,7 +3,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const _ = require('lodash')
 const anymatch = require('anymatch')
-const {writeCacheFile, parseCacheFile, getLangFromFilePath} = require('./utils')
+const {writeCacheFile, parseCacheFile, getLangFromFilePath, getFilepathKey} = require('./utils')
 const {PLUGINS} = require('./plugins')
 
 function shouldIgnore(plugin, filePath) {
@@ -57,7 +57,7 @@ function onChangeOrCreate(doc) {
   if (!plugin || shouldIgnore(plugin, doc.path)) return
   
   const data = plugin.cacheFile(plugin, doc.path)
-  if (!Object.keys(data).length) return
+  if (_.isEmpty(data)) return
 
   writeCacheFile(plugin, Object.assign(parseCacheFile(plugin) || {}, data))
 }
@@ -77,10 +77,6 @@ function watchForChanges() {
     delete data[key]
     writeCacheFile(plugin, data)
   })
-}
-
-function getFilepathKey(plugin, filepath) {
-  return filepath.slice(plugin.projectRoot.length + 1)
 }
 
 module.exports = {
