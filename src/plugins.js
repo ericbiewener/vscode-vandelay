@@ -36,11 +36,6 @@ function initializePlugin(context, pluginConfig) {
 
   if (plugin.ignorePaths) plugin.ignorePaths = plugin.ignorePaths.map(p => path.join(plugin.projectRoot, p))
 
-  // Add `isExtraImport` property for use by importer
-  if (plugin.extraImports) {
-    for (const k in plugin.extraImports) plugin.extraImports[k].isExtraImport = true
-  }
-
   plugin.excludePatterns = plugin.excludePatterns || []
   plugin.excludePatterns.push(/.*\/\.git(\/.*)?/)
 
