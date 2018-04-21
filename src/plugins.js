@@ -1,7 +1,6 @@
 const {window, workspace} = require('vscode')
 const path = require('path')
-const {cacheProjectLanguage} = require('./cacher')
-const {isFile} = require('./utils')
+const {isFile, getFilepathKey} = require('./utils')
 
 const PLUGINS = {}
 
@@ -52,7 +51,16 @@ function initializePlugin(context, pluginConfig) {
   }
 
   if (plugin.finalizePlugin) plugin.finalizePlugin(plugin)
-  if (!isFile(plugin.cacheFilePath)) cacheProjectLanguage(plugin)
+  
+  if (!isFile(plugin.cacheFilePath)) {
+    const {cacheProjectLanguage} = require('./cacher')
+    cacheProjectLanguage(plugin)
+  }
+
+  // Share some core utils with the plugin argument already provided
+  plugin.utils = {
+    getFilepathKey: filePath => getFilepathKey(plugin, filePath),
+  }
 }
 
 function getProjectSettings(vandelayDir, vandelayFile) {

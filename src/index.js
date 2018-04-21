@@ -7,7 +7,7 @@ function activate(context) {
 
   context.subscriptions.push(
     commands.registerCommand('vandelay.cacheProject', cacheProject),
-    commands.registerCommand('vandelay.selectImport', selectImport),
+    commands.registerCommand('vandelay.selectImport', () => selectImport()),
     commands.registerCommand('vandelay.selectImportForActiveWord', selectImportForActiveWord),
   )
 

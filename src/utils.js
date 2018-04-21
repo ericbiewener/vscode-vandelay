@@ -15,6 +15,7 @@ function isFile(file) {
   try {
     return fs.statSync(file).isFile()
   } catch (e) {
+    if (e.code !== 'ENOENT') throw e // File might exist, but something else went wrong (e.g. permissions error)
     return false
   }
 }
@@ -51,6 +52,10 @@ function getLangFromFilePath(filePath) {
   return ext === 'jsx' ? 'js' : ext
 }
 
+function getFilepathKey(plugin, filepath) {
+  return filepath.slice(plugin.projectRoot.length + 1)
+}
+
 module.exports = {
   writeCacheFile,
   parseCacheFile,
@@ -60,4 +65,5 @@ module.exports = {
   parseLineImportPath,
   strUntil,
   getLangFromFilePath,
+  getFilepathKey,
 }
