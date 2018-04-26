@@ -35,7 +35,7 @@
             "properties": {
                 "vandelay.configLocation": {
                     "type": "string",
-                    "description": "Absolute path to the folder containing your Vandelay configuration files."
+                    "description": "Absolute path to the folder containing your Vandelay configuration files. Defaults to the first folder in your workspace."
                 },
                 "vandelay.projectRoot": {
                     "type": "string",
