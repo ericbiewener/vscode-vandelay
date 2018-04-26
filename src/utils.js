@@ -7,8 +7,9 @@ function writeCacheFile(plugin, data) {
 }
 
 function parseCacheFile(plugin) {
-  if (!isFile(plugin.cacheFilePath)) return
-  return JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
+  return isFile(plugin.cacheFilePath)
+    ? JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
+    : {}
 }
 
 function isFile(file) {

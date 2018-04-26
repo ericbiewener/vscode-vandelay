@@ -8,7 +8,7 @@ function activate(context) {
   context.subscriptions.push(
     commands.registerCommand('vandelay.cacheProject', cacheProject),
     commands.registerCommand('vandelay.selectImport', () => selectImport()),
-    commands.registerCommand('vandelay.selectImportForActiveWord', selectImportForActiveWord),
+    commands.registerCommand('vandelay.selectImportForActiveWord', () => selectImportForActiveWord()),
   )
 
   const pluginConfigs = []
@@ -28,7 +28,11 @@ function activate(context) {
     registerPlugin(pluginConfig) {
       pluginConfigs.push(pluginConfig)
       initializePlugin(context, pluginConfig)
-    }
+    },
+    commands: {
+      selectImport,
+      selectImportForActiveWord,
+    },
   }
 }
 exports.activate = activate

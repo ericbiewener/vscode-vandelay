@@ -10,7 +10,7 @@ function shouldIgnore(plugin, filePath) {
   return anymatch(plugin.excludePatterns, filePath)
 }
 
-function cacheDir(plugin, dir, recursive=true, data={_extraImports: {} }) {
+function cacheDir(plugin, dir, recursive=true, data={_extraImports: {}}) {
   return fs.readdir(dir).then(items => {
     const readDirPromises = []
 
@@ -59,7 +59,14 @@ function onChangeOrCreate(doc) {
   const data = plugin.cacheFile(plugin, doc.path)
   if (_.isEmpty(data)) return
 
-  writeCacheFile(plugin, Object.assign(parseCacheFile(plugin) || {}, data))
+  const cachedData = parseCacheFile(plugin)
+  // Concatenate & dedupe named/types arrays. Merge them into data._extraImports since that will in turn get
+  // merged back into cachedData
+  _.mergeWith(data._extraImports, cachedData._extraImports, (a, b) => {
+    if (_.isArray(a)) return _.union(a, b)
+  })
+
+  writeCacheFile(plugin, Object.assign(cachedData, data))
 }
 
 function watchForChanges() {
@@ -71,7 +78,7 @@ function watchForChanges() {
   
   watcher.onDidDelete(doc => {
     const plugin = PLUGINS[getLangFromFilePath(doc.path)]
-    const data = parseCacheFile(plugin) || {}
+    const data = parseCacheFile(plugin)
     const key = getFilepathKey(plugin, doc.path)
     if (!data[key]) return
     delete data[key]

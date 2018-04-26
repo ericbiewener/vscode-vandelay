@@ -2,7 +2,7 @@ const {window, workspace} = require('vscode')
 const {PLUGINS} = require('./plugins')
 const {getLangFromFilePath, parseCacheFile} = require('./utils')
 
-async function selectImport(word) {
+async function selectImport(word, buildImportItems) {
   if (!window.activeTextEditor) return
   
   const plugin = PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)]
@@ -13,7 +13,7 @@ async function selectImport(word) {
   
   if (!exportData) return
   
-  let items = plugin.buildImportItems(plugin, exportData)
+  let items = (buildImportItems || plugin.buildImportItems)(plugin, exportData)
   if (word) items = items.filter(item => item.label === word)
 
   const selection = !word || items.length > 1 || !workspace.getConfiguration('vandelay').autoImportSingleResult
@@ -24,13 +24,13 @@ async function selectImport(word) {
   plugin.insertImport(plugin, selection)
 }
 
-async function selectImportForActiveWord() {
+async function selectImportForActiveWord(buildImportItems) {
   const editor = window.activeTextEditor
   if (!editor) return
 
   const range = editor.document.getWordRangeAtPosition(editor.selection.active)
   const activeWord = range ? editor.document.getText(range) : null
-  selectImport(activeWord)
+  selectImport(activeWord, buildImportItems)
 }
 
 module.exports = {

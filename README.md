@@ -27,5 +27,6 @@ Absolute path to the folder that Vandelay should consider the root of your proje
     buildImportItems,
     insertImport,
 
-### package.json
+### vandelay.commands
+
     
