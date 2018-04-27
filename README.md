@@ -29,4 +29,9 @@ Absolute path to the folder that Vandelay should consider the root of your proje
 
 ### vandelay.commands
 
+
+# vandelay.js file
+
+**extraImports**
+Makes sure they follow the same structure as expected by the corresponding plugin.
     
