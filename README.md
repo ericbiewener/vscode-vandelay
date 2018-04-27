@@ -33,5 +33,11 @@ Absolute path to the folder that Vandelay should consider the root of your proje
 # vandelay.js file
 
 **extraImports**
-Makes sure they follow the same structure as expected by the corresponding plugin.
+Makes sure they follow the same structure as expected by the corresponding plugin. For example, could be used to achieve "import * as utils from 'src/utils'" by doing:
+
+    extraImports: {
+      'src/utils': {
+        default: '* as utils'
+      }
+    }
     
