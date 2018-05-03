@@ -6,12 +6,22 @@
 	"version": "0.2.0",
     "configurations": [
         {
-            "name": "Extension",
+            "name": "FE Extension",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
                 "${workspaceFolder}/_tp-fe.code-workspace",
+                "--extensionDevelopmentPath=${workspaceFolder}"
+            ]
+        },
+        {
+            "name": "BE Extension",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "${workspaceFolder}/_tp-be.code-workspace",
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ]
         },

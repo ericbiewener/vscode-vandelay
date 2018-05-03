@@ -26,8 +26,8 @@ function activate(context) {
 
   return {
     registerPlugin(pluginConfig) {
-      pluginConfigs.push(pluginConfig)
       initializePlugin(context, pluginConfig)
+      pluginConfigs.push(pluginConfig)
     },
     commands: {
       selectImport,
