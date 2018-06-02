@@ -10,6 +10,7 @@ async function selectImport(word, buildImportItems) {
   
   const exportData = parseCacheFile(plugin)
   Object.assign(exportData, exportData._extraImports, plugin.extraImports)
+  delete exportData._extraImports
   
   if (!exportData) return
   
