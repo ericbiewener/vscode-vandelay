@@ -10,8 +10,7 @@ function shouldIgnore(plugin, filePath) {
   return anymatch(plugin.excludePatterns, filePath)
 }
 
-function cacheDir(plugin, dir, recursive=true, data) {
-  if (!data) data = { _extraImports: plugin.importsAreArrays ? [] : {} }
+function cacheDir(plugin, dir, recursive=true, data={_extraImports: {}}) {
   return fs.readdir(dir).then(items => {
     const readDirPromises = []
 
@@ -61,16 +60,11 @@ function onChangeOrCreate(doc) {
   if (_.isEmpty(data)) return
 
   const cachedData = parseCacheFile(plugin)
-  
-  if (plugin.importsAreArrays) {
-    data._extraImports = _.union(data._extraImports, cachedData._extraImports)
-  } else {
-    // Concatenate & dedupe named/types arrays. Merge them into data._extraImports since that will in turn get
-    // merged back into cachedData
-    _.mergeWith(data._extraImports, cachedData._extraImports, (a, b) => {
-      if (_.isArray(a)) return _.union(a, b)
-    })
-  }
+  // Concatenate & dedupe named/types arrays. Merge them into data._extraImports since that will in turn get
+  // merged back into cachedData
+  _.mergeWith(data._extraImports, cachedData._extraImports, (a, b) => {
+    if (_.isArray(a)) return _.union(a, b)
+  })
 
   writeCacheFile(plugin, Object.assign(cachedData, data))
 }

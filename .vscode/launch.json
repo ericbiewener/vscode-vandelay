@@ -6,22 +6,32 @@
 	"version": "0.2.0",
     "configurations": [
         {
-            "name": "FE Extension",
+            "name": "JS - Single Root Workspace Extension",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
-                "${workspaceFolder}/_tp-fe.code-workspace",
+                "${workspaceFolder}/test-workspaces/single-root-js.code-workspace",
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ]
         },
         {
-            "name": "BE Extension",
+            "name": "JS - Multi Root Workspace Extension",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
-                "${workspaceFolder}/_tp-be.code-workspace",
+                "${workspaceFolder}/test-workspaces/multi-root-js.code-workspace",
+                "--extensionDevelopmentPath=${workspaceFolder}"
+            ]
+        },
+        {
+            "name": "PY - Multi Root Workspace Extension",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "${workspaceFolder}/test-workspaces/multi-root-py.code-workspace",
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ]
         },
