@@ -3,7 +3,8 @@ const path = require('path')
 const fs = require('fs-extra')
 const _ = require('lodash')
 const anymatch = require('anymatch')
-const {writeCacheFile, parseCacheFile, getLangFromFilePath, getFilepathKey} = require('./utils')
+const {writeCacheFile, getLangFromFilePath, getFilepathKey} = require('./utils')
+const {cacheFileManager} = require('./cacheFileManager')
 const {PLUGINS} = require('./plugins')
 
 function shouldIgnore(plugin, filePath) {
@@ -60,15 +61,15 @@ function onChangeOrCreate(doc) {
   if (_.isEmpty(data)) return
 
   _.find(data, (v, k) => k !== '_extraImports').cached = Date.now()
-  
-  const cachedData = parseCacheFile(plugin)
-  // Concatenate & dedupe named/types arrays. Merge them into data._extraImports since that will in turn get
-  // merged back into cachedData
-  _.mergeWith(data._extraImports, cachedData._extraImports, (a, b) => {
-    if (_.isArray(a)) return _.union(a, b)
-  })
 
-  writeCacheFile(plugin, Object.assign(cachedData, data))
+  cacheFileManager(plugin, cachedData => {
+    // Concatenate & dedupe named/types arrays. Merge them into data._extraImports since that will in turn get
+    // merged back into cachedData
+    _.mergeWith(data._extraImports, cachedData._extraImports, (a, b) => {
+      if (_.isArray(a)) return _.union(a, b)
+    })
+    return writeCacheFile(plugin, Object.assign(cachedData, data))
+  })
 }
 
 function watchForChanges() {
@@ -80,11 +81,14 @@ function watchForChanges() {
   
   watcher.onDidDelete(doc => {
     const plugin = PLUGINS[getLangFromFilePath(doc.path)]
-    const data = parseCacheFile(plugin)
-    const key = getFilepathKey(plugin, doc.path)
-    if (!data[key]) return
-    delete data[key]
-    writeCacheFile(plugin, data)
+    if (!plugin) return
+    
+    cacheFileManager(plugin, cachedData => {
+      const key = getFilepathKey(plugin, doc.path)
+      if (!cachedData[key]) return
+      delete cachedData[key]
+      return writeCacheFile(plugin, cachedData)
+    })
   })
 }
 

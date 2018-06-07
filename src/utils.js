@@ -6,12 +6,6 @@ function writeCacheFile(plugin, data) {
   return makeDir(plugin.cacheDirPath).then(() => fs.writeFileSync(plugin.cacheFilePath, JSON.stringify(data)))
 }
 
-function parseCacheFile(plugin) {
-  return isFile(plugin.cacheFilePath)
-    ? JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
-    : {}
-}
-
 function isFile(file) {
   try {
     return fs.statSync(file).isFile()
@@ -59,7 +53,6 @@ function getFilepathKey(plugin, filepath) {
 
 module.exports = {
   writeCacheFile,
-  parseCacheFile,
   isFile,
   trimPath,
   strBetween,

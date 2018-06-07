@@ -1,6 +1,7 @@
 const {window, workspace} = require('vscode')
 const {PLUGINS} = require('./plugins')
-const {getLangFromFilePath, parseCacheFile} = require('./utils')
+const {getLangFromFilePath} = require('./utils')
+const {cacheFileManager} = require('./cacheFileManager')
 
 async function selectImport(word, buildImportItems) {
   if (!window.activeTextEditor) return
@@ -8,21 +9,22 @@ async function selectImport(word, buildImportItems) {
   const plugin = PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)]
   if (!plugin) return
   
-  const exportData = parseCacheFile(plugin)
-  Object.assign(exportData, exportData._extraImports, plugin.extraImports)
-  delete exportData._extraImports
-  
-  if (!exportData) return
-  
-  let items = (buildImportItems || plugin.buildImportItems)(plugin, exportData)
-  if (word) items = items.filter(item => item.label === word)
+  await cacheFileManager(plugin, async exportData => {
+    Object.assign(exportData, exportData._extraImports, plugin.extraImports)
+    delete exportData._extraImports
+    
+    if (!exportData) return
+    
+    let items = (buildImportItems || plugin.buildImportItems)(plugin, exportData)
+    if (word) items = items.filter(item => item.label === word)
 
-  const selection = !word || items.length > 1 || !workspace.getConfiguration('vandelay').autoImportSingleResult
-    ? await window.showQuickPick(items, {matchOnDescription: true})
-    : items[0]
-  
-  if (!selection) return
-  plugin.insertImport(plugin, selection)
+    const selection = !word || items.length > 1 || !workspace.getConfiguration('vandelay').autoImportSingleResult
+      ? await window.showQuickPick(items, {matchOnDescription: true})
+      : items[0]
+    
+    if (!selection) return
+    plugin.insertImport(plugin, selection)
+  })
 }
 
 async function selectImportForActiveWord(buildImportItems) {
