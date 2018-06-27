@@ -15,33 +15,6 @@ function isFile(file) {
   }
 }
 
-// TODO: rename. and does it make sense to have removeDirs be a part of this? that's a very different thing
-// than just removing a file extension.
-function trimPath(filepath, removeDirs) {
-  const ext = path.extname(filepath)
-  return removeDirs
-    ? path.basename(filepath, ext)
-    : ext ? filepath.slice(0, -ext.length) : filepath
-}
-
-function strBetween(str, startChar, endChar) {
-  const start = str.search(startChar)
-  if (start < 0) return
-  const substr = str.slice(start + 1)
-  const end = substr.search(endChar || startChar)
-  if (end < 0) return
-  return substr.slice(0, end)
-}
-
-function parseLineImportPath(line) {
-  return strBetween(line, /['"]/)
-}
-
-function strUntil(str, endChar) {
-  const index = str.search(endChar)
-  return index < 0 ? str : str.slice(0, index)
-}
-
 function getLangFromFilePath(filePath) {
   const ext = path.extname(filePath).slice(1)
   return ext === 'jsx' ? 'js' : ext
@@ -54,10 +27,6 @@ function getFilepathKey(plugin, filepath) {
 module.exports = {
   writeCacheFile,
   isFile,
-  trimPath,
-  strBetween,
-  parseLineImportPath,
-  strUntil,
   getLangFromFilePath,
   getFilepathKey,
 }

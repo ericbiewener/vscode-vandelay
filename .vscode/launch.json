@@ -6,22 +6,42 @@
 	"version": "0.2.0",
     "configurations": [
         {
-            "name": "Single Root Workspace Extension",
+            "name": "JS - Single Root Workspace Extension",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
-                "${workspaceFolder}/../test-workspaces/single-root.code-workspace",
+                "${workspaceFolder}/../test-workspaces/js",
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ]
         },
         {
-            "name": "Multi Root Workspace Extension",
+            "name": "JS - Multi Root Workspace Extension",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
-                "${workspaceFolder}/../test-workspaces/multi-root.code-workspace",
+                "${workspaceFolder}/../test-workspaces/js-multi-root.code-workspace",
+                "--extensionDevelopmentPath=${workspaceFolder}"
+            ]
+        },
+        {
+            "name": "PY - Single Root Workspace Extension",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "${workspaceFolder}/../test-workspaces/py",
+                "--extensionDevelopmentPath=${workspaceFolder}"
+            ]
+        },
+        {
+            "name": "PY - Multi Root Workspace Extension",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "${workspaceFolder}/../test-workspaces/py-multi-root.code-workspace",
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ]
         },

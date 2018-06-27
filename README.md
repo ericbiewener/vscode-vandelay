@@ -43,3 +43,6 @@ Makes sure they follow the same structure as expected by the corresponding plugi
     
 # Organize imports
 Although VS Code has this for JavaScript, it works purely via alphabetizing them. If you have your build tools set up to allow you to use absolute imports, this won't allow you to sort them below node modules, or any other kind of custom sorting you may want
+
+# UTILS
+- insertImport -> returns a promise (must be awaited?)

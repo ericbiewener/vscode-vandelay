@@ -22,8 +22,7 @@ function cacheDir(plugin, dir, recursive=true, data={_extraImports: {}}) {
       readDirPromises.push(
         fs.lstat(fullPath).then(stats => {
           if (stats.isFile()) {
-            if (item === plugin.configFile) return
-            if (plugin.language !== getLangFromFilePath(item)) return
+            if (plugin.language !== getLangFromFilePath(item) || item === plugin.configFile) return
             plugin.cacheFile(plugin, fullPath, data)
           }
           else if (recursive) {
@@ -50,7 +49,7 @@ function cacheProjectLanguage(plugin) {
 
 function cacheProject() {
   return Promise.all(_.map(PLUGINS, cacheProjectLanguage))
-    .then(() => window.showInformationMessage('Project exports have been cached.'))
+    .then(() => window.showInformationMessage('Project exports have been cached. 🦄'))
 }
 
 function onChangeOrCreate(doc) {
@@ -61,6 +60,7 @@ function onChangeOrCreate(doc) {
   if (_.isEmpty(data)) return
 
   _.find(data, (v, k) => k !== '_extraImports').cached = Date.now()
+  _.each(data._extraImports, data => data.isExtraImport = true);
 
   cacheFileManager(plugin, cachedData => {
     // Concatenate & dedupe named/types arrays. Merge them into data._extraImports since that will in turn get

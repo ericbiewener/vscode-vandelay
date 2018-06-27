@@ -1,16 +1,12 @@
 const {window, workspace} = require('vscode')
 const path = require('path')
 const {isFile, getFilepathKey} = require('./utils')
+const sharedUtils = require('./sharedUtils')
 
 const PLUGINS = {}
 
 const defaultSettings = {
-  quoteType: 'single',
-  padCurlyBraces: true,
-  maxImportLineLength: 100,
-  multilineImportStyle: 'multi',
-  useSemicolons: true,
-  commaDangle: false,
+  maxImportLineLength: 100, 
 }
 
 function initializePlugin(context, pluginConfig) {
@@ -53,9 +49,9 @@ function initializePlugin(context, pluginConfig) {
   }
 
   // Share some core utils with the plugin argument already provided
-  plugin.utils = {
+  plugin.utils = Object.assign({
     getFilepathKey: filePath => getFilepathKey(plugin, filePath),
-  }
+  }, sharedUtils)
 }
 
 function getProjectSettings(vandelayDir, vandelayFile) {

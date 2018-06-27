@@ -1,14 +1,29 @@
-const {commands, workspace} = require('vscode')
+const {window, commands, workspace} = require('vscode')
 const {initializePlugin} = require('./plugins')
 const {cacheProject, watchForChanges} = require('./cacher')
 const {selectImport, selectImportForActiveWord} = require('./importer')
 
+/*
+ * VS Code has an error swallowing problem, so we catch and manually log.
+ */
+function catchError(fn) {
+  return async function() {
+    try {
+      await fn(arguments)
+    } catch(e) {
+      console.error(e)
+      window.showErrorMessage('Vandelay extension error! Please run the "Toggle Developer Tools" VS Code command and post the stacktrace at https://github.com/ericbiewener/vscode-vandelay.')
+      throw e
+    }
+  }
+}
+
 function activate(context) {
 
   context.subscriptions.push(
-    commands.registerCommand('vandelay.cacheProject', cacheProject),
-    commands.registerCommand('vandelay.selectImport', () => selectImport()),
-    commands.registerCommand('vandelay.selectImportForActiveWord', () => selectImportForActiveWord()),
+    commands.registerCommand('vandelay.cacheProject', catchError(cacheProject)),
+    commands.registerCommand('vandelay.selectImport', catchError(() => selectImport())),
+    commands.registerCommand('vandelay.selectImportForActiveWord', catchError(() => selectImportForActiveWord())),
   )
 
   const pluginConfigs = []
@@ -30,8 +45,8 @@ function activate(context) {
       pluginConfigs.push(pluginConfig)
     },
     commands: {
-      selectImport,
-      selectImportForActiveWord,
+      selectImport: catchError(selectImport),
+      selectImportForActiveWord: catchError(selectImportForActiveWord),
     },
   }
 }
