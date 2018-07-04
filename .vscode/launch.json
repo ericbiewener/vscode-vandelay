@@ -6,6 +6,16 @@
 	"version": "0.2.0",
     "configurations": [
         {
+            "name": "Gatsby",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "${workspaceFolder}/../test-workspaces/gatsby",
+                "--extensionDevelopmentPath=${workspaceFolder}"
+            ]
+        },
+        {
             "name": "JS - Single Root Workspace Extension",
             "type": "extensionHost",
             "request": "launch",
