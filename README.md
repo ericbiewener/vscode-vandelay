@@ -1,5 +1,8 @@
-# Vandelay
-VS Code extension for automating imports. Currently supports JavaScript & Python.
+<p align="center">
+    <img src="https://raw.githubusercontent.com/ericbiewener/vscode-vandelay/master/artwork/logo.png" />
+</p>
+
+VS Code extension for automating imports. Languages supported via plugins. Official plugins currently exist for [JavaScript](https://github.com/ericbiewener/vscode-vandelay-js) & [Python](https://github.com/ericbiewener/vscode-vandelay-py).
 
 ## Configuration
 Vandelay allows extensive customization for how imports are processed and inserted into your project. This is accomplished via language-specific `vandelay-<lang>.js` files.
