@@ -1,68 +1,94 @@
 {
-    "name": "vandelay",
-    "displayName": "Vandelay",
-    "description": "Importer/Exporter",
-    "version": "0.0.1",
-    "publisher": "edb",
-    "engines": {
-        "vscode": "^1.21.0"
-    },
-    "categories": [
-        "Other"
+  "name": "vandelay",
+  "displayName": "Vandelay",
+  "description": "Automatically generate import statements.",
+  "version": "0.0.1",
+  "publisher": "edb",
+  "author": "Eric Biewener",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ericbiewener/vscode-vandelay"
+  },
+  "homepage": "https://github.com/ericbiewener/vscode-vandelay/blob/master/README.md",
+  "bugs": {
+    "url": "https://github.com/ericbiewener/vscode-vandelay/issues"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Formatters",
+    "Other"
+  ],
+  "keywords": [
+    "multi-root ready",
+    "import",
+    "export",
+    "javascript",
+    "python",
+    "generator"
+  ],
+  "icon": "artwork/logo.svg",
+  "galleryBanner": {
+    "color": "#01263F",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.21.0"
+  },
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./src/index.js",
+  "contributes": {
+    "commands": [
+      {
+        "title": "Cache Project Exports",
+        "command": "vandelay.cacheProject"
+      },
+      {
+        "title": "Import...",
+        "command": "vandelay.selectImport"
+      },
+      {
+        "title": "Import active word...",
+        "command": "vandelay.selectImportForActiveWord"
+      }
     ],
-    "activationEvents": [
-        "*"
-    ],
-    "main": "./src/index.js",
-    "contributes": {
-        "commands": [
-            {
-                "title": "Cache Project Exports",
-                "command": "vandelay.cacheProject"
-            },
-            {
-                "title": "Import...",
-                "command": "vandelay.selectImport"
-            },
-            {
-                "title": "Import active word...",
-                "command": "vandelay.selectImportForActiveWord"
-            }
-        ],
-        "configuration": {
-            "type": "object",
-            "title": "Vandelay Configuration",
-            "properties": {
-                "vandelay.configLocation": {
-                    "type": "string",
-                    "description": "Absolute path to the folder containing your Vandelay configuration files. Defaults to the first folder in your workspace."
-                },
-                "vandelay.projectRoot": {
-                    "type": "string",
-                    "description": "Absolute path to the folder that Vandelay should consider the root of your project."
-                },
-                "vandelay.autoImportSingleResult": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "If only a single import name matches when importing the word on the cursor, automatically import it rather than showing the import picker."
-                }
-            }
+    "configuration": {
+      "type": "object",
+      "title": "Vandelay Configuration",
+      "properties": {
+        "vandelay.configLocation": {
+          "type": "string",
+          "description": "Absolute path to the folder containing your Vandelay configuration files. Defaults to the first folder in your workspace."
+        },
+        "vandelay.projectRoot": {
+          "type": "string",
+          "description": "Absolute path to the folder that Vandelay should consider the root of your project."
+        },
+        "vandelay.autoImportSingleResult": {
+          "type": "boolean",
+          "default": true,
+          "description": "If only a single import name matches when importing the word on the cursor, automatically import it rather than showing the import picker."
         }
-    },
-    "scripts": {
-        "build": "babel ./src --out-dir=./build --source-maps",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "jest"
-    },
-    "devDependencies": {
-        "eslint": "^4.11.0",
-        "eslint-config-ericbiewener": "^1.0.1",
-        "vscode": "^1.1.6"
-    },
-    "dependencies": {
-        "anymatch": "^2.0.0",
-        "fs-extra": "^5.0.0",
-        "lodash": "^4.17.5",
-        "make-dir": "^1.2.0"
+      }
     }
+  },
+  "scripts": {
+    "build": "babel ./src --out-dir=./build --source-maps",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "eslint": "^4.11.0",
+    "eslint-config-ericbiewener": "^1.0.1",
+    "vscode": "^1.1.6"
+  },
+  "dependencies": {
+    "anymatch": "^2.0.0",
+    "fs-extra": "^5.0.0",
+    "lodash": "^4.17.5",
+    "make-dir": "^1.2.0"
+  }
 }
