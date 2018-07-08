@@ -1,11 +1,11 @@
 const path = require('path')
-const {window, Range, Position} = require('vscode')
+const { window, Range, Position } = require('vscode')
 const _ = require('lodash')
 
 async function insertLine(newLine, importPosition) {
-  const {match, indexModifier} = importPosition
+  const { match, indexModifier } = importPosition
   const editor = window.activeTextEditor
-  const {document} = editor
+  const { document } = editor
 
   await editor.edit(builder => {
     if (!match) {
@@ -28,26 +28,8 @@ async function insertLine(newLine, importPosition) {
 }
 
 function getTabChar() {
-  const {options} = window.activeTextEditor
+  const { options } = window.activeTextEditor
   return options.insertSpaces ? _.repeat(' ', options.tabSize) : '\t'
-}
-
-function strBetween(str, startChar, endChar) {
-  const start =
-    typeof startChar === 'string'
-      ? str.indexOf(startChar)
-      : str.search(startChar)
-  if (start < 0) return
-
-  const substr = str.slice(start + 1)
-
-  endChar = endChar || startChar
-  const end =
-    typeof endChar === 'string'
-      ? substr.indexOf(endChar || startChar)
-      : substr.search(endChar || startChar)
-
-  return end < 0 ? substr : substr.slice(0, end)
 }
 
 function strUntil(str, endChar) {
@@ -61,10 +43,25 @@ function removeExt(filepath) {
   return ext ? filepath.slice(0, -ext.length) : filepath
 }
 
+function getLastInitialComment(text, commentRegex) {
+  // Iterates over comment line matches. If one doesn't begin where the previous one left off, this means
+  // a non comment line came between them.
+  let expectedNextIndex = 0
+  let match
+  let prevMatch
+  while ((match = commentRegex.exec(text))) {
+    if (match.index !== expectedNextIndex) break
+    expectedNextIndex = commentRegex.lastIndex + 1
+    prevMatch = match
+  }
+
+  return prevMatch
+}
+
 module.exports = {
   insertLine,
   getTabChar,
-  strBetween,
   strUntil,
-  removeExt
+  removeExt,
+  getLastInitialComment,
 }
