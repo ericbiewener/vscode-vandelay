@@ -14,12 +14,12 @@ async function insertLine(newLine, importPosition) {
       builder.replace(
         new Range(
           document.positionAt(match.start),
-          document.positionAt(match.end - 1)
+          document.positionAt(match.end)
         ),
         newLine
       )
     } else if (indexModifier === 1) {
-      builder.insert(document.positionAt(match.end - 1), '\n' + newLine)
+      builder.insert(document.positionAt(match.end), '\n' + newLine)
     } else {
       // -1
       builder.insert(document.positionAt(match.start), newLine + '\n')
