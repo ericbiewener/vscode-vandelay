@@ -77,6 +77,17 @@ function getImportOrderPosition(importPath) {
   return index > -1 ? index : undefined
 }
 
+function getExportDataKeysByCachedDate(exportData) {
+  return Object.keys(exportData).sort((a, b) => {
+    const createdA = exportData[a].cached
+    const createdB = exportData[b].cached
+    if (!createdA && !createdB) return a < b ? -1 : 1 // alphabetical
+    if (createdA && !createdB) return -1
+    if (createdB && !createdA) return 1
+    return createdA < createdB ? 1 : -1
+  })
+}
+
 module.exports = {
   insertLine,
   getTabChar,
@@ -84,4 +95,5 @@ module.exports = {
   removeExt,
   getLastInitialComment,
   getImportOrderPosition,
+  getExportDataKeysByCachedDate,
 }
