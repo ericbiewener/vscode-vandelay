@@ -4,8 +4,10 @@ const path = require('path')
 const _ = require('lodash')
 
 function writeCacheFile(plugin, data) {
-  _.each(data._extraImports, d => d.isExtraImport = true);
-  return makeDir(plugin.cacheDirPath).then(() => fs.writeFileSync(plugin.cacheFilePath, JSON.stringify(data)))
+  _.each(data._extraImports, d => (d.isExtraImport = true))
+  return makeDir(plugin.cacheDirPath).then(() =>
+    fs.writeFileSync(plugin.cacheFilePath, JSON.stringify(data))
+  )
 }
 
 function isFile(file) {

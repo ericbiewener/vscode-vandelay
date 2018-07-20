@@ -65,9 +65,9 @@ function getLastInitialComment(text, commentRegex) {
 
   return lastMatch
     ? {
-      start: lastMatch.index,
-      end: lastMatch.index + lastMatch[0].length,
-    }
+        start: lastMatch.index,
+        end: lastMatch.index + lastMatch[0].length,
+      }
     : null
 }
 
