@@ -46,6 +46,16 @@
             ]
         },
         {
+            "name": "Require",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "${workspaceFolder}/../test-workspaces/js-require",
+                "--extensionDevelopmentPath=${workspaceFolder}"
+            ]
+        },
+        {
             "name": "Extension Tests",
             "type": "extensionHost",
             "request": "launch",
