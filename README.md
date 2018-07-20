@@ -49,3 +49,9 @@ Although VS Code has this for JavaScript, it works purely via alphabetizing them
 
 # UTILS
 - insertImport -> returns a promise (must be awaited?)
+
+# other plugin info
+  importPosition that is passed to sharedUtils.insertImport must have the following properties:
+  match: (should have a start & end properties)
+  indexModifier: 0, 1, -1,
+  isFirstImport?: boolean. if true, will add extra line break after import

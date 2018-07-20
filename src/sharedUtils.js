@@ -3,9 +3,17 @@ const { window, Range, Position } = require('vscode')
 const _ = require('lodash')
 
 async function insertLine(newLine, importPosition) {
-  const { match, indexModifier } = importPosition
+  const { match, indexModifier, isFirstImport } = importPosition
   const editor = window.activeTextEditor
   const { document } = editor
+
+  // If this is the first import and the line after where we're inserting it has content, add an extra line break
+  if (
+    isFirstImport &&
+    document.lineAt(document.positionAt(match ? match.end + 1 : 0)).text
+  ) {
+    newLine += '\n'
+  }
 
   await editor.edit(builder => {
     if (!match) {
@@ -48,14 +56,25 @@ function getLastInitialComment(text, commentRegex) {
   // a non comment line came between them.
   let expectedNextIndex = 0
   let match
-  let prevMatch
+  let lastMatch
   while ((match = commentRegex.exec(text))) {
     if (match.index !== expectedNextIndex) break
     expectedNextIndex = commentRegex.lastIndex + 1
-    prevMatch = match
+    lastMatch = match
   }
 
-  return prevMatch
+  return lastMatch
+    ? {
+      start: lastMatch.index,
+      end: lastMatch.index + lastMatch[0].length,
+    }
+    : null
+}
+
+function getImportOrderPosition(importPath) {
+  if (!this.plugin.importGroups) return
+  const index = _.flatten(this.plugin.importGroups).indexOf(importPath)
+  return index > -1 ? index : undefined
 }
 
 module.exports = {
@@ -64,4 +83,5 @@ module.exports = {
   strUntil,
   removeExt,
   getLastInitialComment,
+  getImportOrderPosition,
 }
