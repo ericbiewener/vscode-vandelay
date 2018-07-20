@@ -78,11 +78,15 @@
   "scripts": {
     "build": "babel ./src --out-dir=./build --source-maps",
     "postinstall": "node ./node_modules/vscode/bin/install",
+    "prettier": "prettier-eslint --prettier-last --write \"**/*.js\"",
     "test": "jest"
   },
   "devDependencies": {
     "eslint": "^4.11.0",
     "eslint-config-ericbiewener": "^1.0.1",
+    "husky": "^1.0.0-rc.13",
+    "lint-staged": "^7.2.0",
+    "prettier-eslint": "^8.8.2",
     "vscode": "^1.1.6"
   },
   "dependencies": {
@@ -90,5 +94,16 @@
     "fs-extra": "^5.0.0",
     "lodash": "^4.17.5",
     "make-dir": "^1.2.0"
+  },
+  "lint-staged": {
+    "**/*.js": [
+      "prettier-eslint --prettier-last --write",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
