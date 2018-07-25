@@ -49,18 +49,29 @@ function cacheDir(plugin, dir, recursive = true, data = { _extraImports: {} }) {
 function cacheProjectLanguage(plugin) {
   let cacher = Promise.all(
     plugin.includePaths.map(p => cacheDir(plugin, p))
-  ).then(exportObjArrays =>
-    exportObjArrays.reduce((acc, obj) => Object.assign(acc, obj), {})
-  )
+  ).then(exportObjArrays => {
+    const finalData = {}
+    const extraImports = {}
+    for (const data of exportObjArrays) {
+      Object.assign(finalData, data)
+      // Merge extra import arrays
+      _.mergeWith(extraImports, data._extraImports, (obj, src) => {
+        if (!Array.isArray(obj)) return
+        return _.uniq(obj.concat(src))
+      })
+    }
+    return Object.assign(finalData, { _extraImports: extraImports })
+  })
 
   if (plugin.processCachedData) cacher = cacher.then(plugin.processCachedData)
   return cacher.then(data => writeCacheFile(plugin, data))
 }
 
 function cacheProject() {
-  return Promise.all(_.map(PLUGINS, cacheProjectLanguage)).then(() =>
+  return Promise.all(_.map(PLUGINS, cacheProjectLanguage)).then(() => {
+    // Don't return this because that will return a promise that doesn't resolve until the message gets dismissed
     window.showInformationMessage('Project exports have been cached. 🏖️')
-  )
+  })
 }
 
 function onChangeOrCreate(doc) {

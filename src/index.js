@@ -9,7 +9,8 @@ const { selectImport, selectImportForActiveWord } = require('./importer')
 function catchError(fn) {
   return async function() {
     try {
-      await fn(arguments)
+      const result = await fn(arguments)
+      return result
     } catch (e) {
       console.error(e)
       window.showErrorMessage(
@@ -22,7 +23,7 @@ function catchError(fn) {
 
 function activate(context) {
   context.subscriptions.push(
-    commands.registerCommand('vandelay.cacheProject', catchError(cacheProject)),
+    commands.registerCommand('vandelay.cacheProject', cacheProject),
     commands.registerCommand(
       'vandelay.selectImport',
       catchError(() => selectImport())
