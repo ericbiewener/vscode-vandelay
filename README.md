@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/ericbiewener/vscode-vandelay/master/artwork/logo.png" />
+    <img src="https://raw.githubusercontent.com/ericbiewener/vscode-vandelay/master/artwork/logo.svg" width="112" height="128" />
 </p>
 
 VS Code extension for automating imports. Languages supported via plugins. Official plugins currently exist for [JavaScript](https://github.com/ericbiewener/vscode-vandelay-js) & [Python](https://github.com/ericbiewener/vscode-vandelay-py).

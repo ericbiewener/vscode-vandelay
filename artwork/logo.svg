@@ -1,1 +1,9 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 519.62"><defs><style>.cls-1{fill:#0cbf14;}.cls-2{fill:#008ad9;}.cls-3{fill:#cc3000;}</style></defs><title>logo</title><polygon class="cls-1" points="300 519.62 600 0 0 0 300 519.62"/><polygon class="cls-2" points="400 346.41 600 0 200 0 400 346.41"/><polygon class="cls-3" points="500 173.21 600 0 400 0 500 173.21"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 110.85">
+  <g data-name="Layer 2">
+    <g data-name="Layer 1">
+      <path d="M64 110.85L128 0H0l64 110.85z"/>
+      <path fill="#0e990e" d="M64 70l40.42-70H23.59L64 70z"/>
+      <path fill="#0cbf14" d="M64 33L83.05 0h-38.1L64 33z"/>
+    </g>
+  </g>
+</svg>
