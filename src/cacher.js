@@ -23,17 +23,14 @@ function cacheDir(plugin, dir, recursive = true, data = { _extraImports: {} }) {
 
       for (const item of items) {
         const fullPath = path.join(dir, item)
-        if (shouldIgnore(plugin, fullPath)) continue
+        if (item === plugin.configFile || shouldIgnore(plugin, fullPath))
+          continue
 
         readDirPromises.push(
           fs.lstat(fullPath).then(stats => {
             if (stats.isFile()) {
-              if (
-                plugin.language !== getLangFromFilePath(item) ||
-                item === plugin.configFile
-              )
-                return
-              plugin.cacheFile(plugin, fullPath, data)
+              if (plugin.language === getLangFromFilePath(item))
+                plugin.cacheFile(plugin, fullPath, data)
             } else if (recursive) {
               return cacheDir(plugin, fullPath, true, data)
             }

@@ -28,7 +28,7 @@
     "python",
     "generator"
   ],
-  "icon": "artwork/logo.svg",
+  "icon": "artwork/logo.png",
   "galleryBanner": {
     "color": "#01263F",
     "theme": "dark"

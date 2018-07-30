@@ -28,9 +28,18 @@ function getFilepathKey(plugin, filepath) {
   return filepath.slice(plugin.projectRoot.length + 1)
 }
 
+// Extracted for sharing with plugins for testing
+function getImportItems(plugin, exportData, buildImportItems) {
+  Object.assign(exportData, exportData._extraImports)
+  delete exportData._extraImports
+  if (exportData)
+    return (buildImportItems || plugin.buildImportItems)(plugin, exportData)
+}
+
 module.exports = {
   writeCacheFile,
   isFile,
   getLangFromFilePath,
   getFilepathKey,
+  getImportItems,
 }

@@ -46,13 +46,6 @@ function initializePlugin(context, pluginConfig) {
   plugin.excludePatterns = plugin.excludePatterns || []
   plugin.excludePatterns.push(/.*\/\.git(\/.*)?/)
 
-  if (plugin.finalizePlugin) plugin.finalizePlugin(plugin)
-
-  if (!isFile(plugin.cacheFilePath)) {
-    const { cacheProjectLanguage } = require('./cacher')
-    cacheProjectLanguage(plugin)
-  }
-
   // Share some core utils with the plugin argument already provided
   plugin.utils = Object.assign(
     {
@@ -61,6 +54,13 @@ function initializePlugin(context, pluginConfig) {
     },
     sharedUtils
   )
+
+  if (plugin.finalizePlugin) plugin.finalizePlugin(plugin)
+
+  if (!isFile(plugin.cacheFilePath)) {
+    const { cacheProjectLanguage } = require('./cacher')
+    cacheProjectLanguage(plugin)
+  }
 }
 
 function getProjectSettings(vandelayDir, vandelayFile) {

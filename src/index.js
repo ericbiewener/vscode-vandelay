@@ -2,6 +2,7 @@ const { window, commands, workspace } = require('vscode')
 const { initializePlugin } = require('./plugins')
 const { cacheProject, watchForChanges } = require('./cacher')
 const { selectImport, selectImportForActiveWord } = require('./importer')
+const { getImportItems } = require('./utils')
 
 /*
  * VS Code has an error swallowing problem, so we catch and manually log.
@@ -55,6 +56,10 @@ function activate(context) {
     commands: {
       selectImport: catchError(selectImport),
       selectImportForActiveWord: catchError(selectImportForActiveWord),
+    },
+    _test: {
+      pluginConfigs,
+      getImportItems,
     },
   }
 }

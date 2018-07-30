@@ -1,6 +1,6 @@
 const { window, workspace } = require('vscode')
 const { PLUGINS } = require('./plugins')
-const { getLangFromFilePath } = require('./utils')
+const { getImportItems, getLangFromFilePath } = require('./utils')
 const { cacheFileManager } = require('./cacheFileManager')
 
 async function selectImport(word, buildImportItems) {
@@ -11,15 +11,8 @@ async function selectImport(word, buildImportItems) {
   if (!plugin) return
 
   await cacheFileManager(plugin, async exportData => {
-    Object.assign(exportData, exportData._extraImports, plugin.extraImports)
-    delete exportData._extraImports
-
-    if (!exportData) return
-
-    let items = (buildImportItems || plugin.buildImportItems)(
-      plugin,
-      exportData
-    )
+    let items = getImportItems(plugin, exportData, buildImportItems)
+    if (!items) return
     if (word) items = items.filter(item => item.label === word)
 
     const selection =

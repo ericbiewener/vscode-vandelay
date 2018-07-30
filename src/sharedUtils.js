@@ -15,7 +15,7 @@ async function insertLine(newLine, importPosition) {
     newLine += '\n'
   }
 
-  await editor.edit(builder => {
+  return await editor.edit(builder => {
     if (!match) {
       builder.insert(new Position(0, 0), newLine + '\n')
     } else if (!indexModifier) {
