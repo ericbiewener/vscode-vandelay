@@ -12,7 +12,7 @@
 
 <p align="center">
     <br />
-    <a href="https://www.youtube.com/embed/W4AN8Eb2LL0?rel=0&amp;start=129">
+    <a href="https://www.youtube.com/watch?v=W4AN8Eb2LL0&t=2m10s" target="_blank">
         <img src="https://raw.githubusercontent.com/ericbiewener/vscode-vandelay/master/artwork/video.jpg" alt="He's an importer exporter" width="240" />
     </a>
 </p>
