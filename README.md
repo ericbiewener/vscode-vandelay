@@ -8,6 +8,18 @@
   Official plugins currently exist for <a href="https://github.com/ericbiewener/vscode-vandelay-js">JavaScript</a> &amp; <a href="https://github.com/ericbiewener/vscode-vandelay-py">Python</a>.
 </p>
 
+##
+
+<p align="center">
+    <br />
+    <a href="https://www.youtube.com/embed/W4AN8Eb2LL0?rel=0&amp;start=129">
+        <img src="https://raw.githubusercontent.com/ericbiewener/vscode-vandelay/master/artwork/video.jpg" alt="He's an importer exporter" width="240" />
+    </a>
+</p>
+
+
+
+
 ## Configuration
 
 Vandelay allows extensive customization for how imports are processed and inserted into your project. This is accomplished via language-specific `vandelay-<lang>.js` files.
