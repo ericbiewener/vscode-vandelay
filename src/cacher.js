@@ -44,6 +44,14 @@ function cacheDir(plugin, dir, recursive = true, data = { _extraImports: {} }) {
 }
 
 function cacheProjectLanguage(plugin) {
+  if (!plugin.includePaths || !plugin.includePaths.length) {
+    window.showErrorMessage(
+      `You must specify the "includePaths" configuration option in your vandelay-${
+        plugin.language
+      }.js file.`
+    )
+    return false
+  }
   let cacher = Promise.all(
     plugin.includePaths.map(p => cacheDir(plugin, p))
   ).then(exportObjArrays => {
@@ -65,8 +73,15 @@ function cacheProjectLanguage(plugin) {
 }
 
 function cacheProject() {
-  return Promise.all(_.map(PLUGINS, cacheProjectLanguage)).then(() => {
-    // Don't return this because that will return a promise that doesn't resolve until the message gets dismissed
+  if (_.isEmpty(PLUGINS)) {
+    window.showErrorMessage(
+      'No Vandelay configuration files found. If you just added one, reload the window.'
+    )
+    return
+  }
+  return Promise.all(_.map(PLUGINS, cacheProjectLanguage)).then(results => {
+    if (results.includes(false)) return // Weren't able to cache all languages. Don't display success message.
+    // Don't return this because that will return a promise that doesn't resolve until the message gets dismissed.
     window.showInformationMessage('Project exports have been cached. 🏖️')
   })
 }

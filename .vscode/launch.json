@@ -16,6 +16,16 @@
             ]
         },
         {
+            "name": "JS - TP",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "/Users/ericbiewener/dev/mumbai",
+                "--extensionDevelopmentPath=${workspaceFolder}"
+            ]
+        },
+        {
             "name": "JS - Multi Root Workspace Extension",
             "type": "extensionHost",
             "request": "launch",

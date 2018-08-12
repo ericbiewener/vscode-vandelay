@@ -8,9 +8,9 @@ const { getImportItems } = require('./utils')
  * VS Code has an error swallowing problem, so we catch and manually log.
  */
 function catchError(fn) {
-  return async function() {
+  return async function(...args) {
     try {
-      const result = await fn(arguments)
+      const result = await fn(...args)
       return result
     } catch (e) {
       console.error(e)

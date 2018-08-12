@@ -38,11 +38,6 @@ function initializePlugin(context, pluginConfig) {
   plugin.projectRoot = projectRoot
   plugin.configFile = configFile
 
-  if (plugin.ignorePaths)
-    plugin.ignorePaths = plugin.ignorePaths.map(p =>
-      path.join(plugin.projectRoot, p)
-    )
-
   plugin.excludePatterns = plugin.excludePatterns || []
   plugin.excludePatterns.push(/.*\/\.git(\/.*)?/)
 

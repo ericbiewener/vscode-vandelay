@@ -49,18 +49,6 @@ Absolute path to the folder that Vandelay should consider the root of your proje
     buildImportItems,
     insertImport,
 
-### vandelay.commands
-
-# vandelay.js file
-
-**extraImports**
-Makes sure they follow the same structure as expected by the corresponding plugin. For example, could be used to achieve "import \* as utils from 'src/utils'" by doing:
-
-    extraImports: {
-      'src/utils': {
-        default: '* as utils'
-      }
-    }
 
 # Organize imports
 
@@ -76,3 +64,6 @@ importPosition that is passed to sharedUtils.insertImport must have the followin
 match: (should have a start & end properties)
 indexModifier: 0, 1, -1,
 isFirstImport?: boolean. if true, will add extra line break after import
+
+
+## Configuration
