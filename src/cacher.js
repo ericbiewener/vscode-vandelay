@@ -103,7 +103,8 @@ function onChangeOrCreate(doc) {
   const data = plugin.cacheFile(plugin, doc.path)
   if (_.isEmpty(data)) return
 
-  _.find(data, (v, k) => k !== '_extraImports').cached = Date.now()
+  const changedData = _.find(data, (v, k) => k !== '_extraImports')
+  if (changedData) changedData.cached = Date.now()
 
   cacheFileManager(plugin, cachedData => {
     // Concatenate & dedupe named/types arrays. Merge them into data._extraImports since that will in turn get

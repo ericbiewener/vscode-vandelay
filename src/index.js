@@ -24,7 +24,7 @@ function catchError(fn) {
 
 function activate(context) {
   context.subscriptions.push(
-    commands.registerCommand('vandelay.cacheProject', cacheProject),
+    commands.registerCommand('vandelay.cacheProject', catchError(cacheProject)),
     commands.registerCommand(
       'vandelay.selectImport',
       catchError(() => selectImport())
