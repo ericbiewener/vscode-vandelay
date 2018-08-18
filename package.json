@@ -2,7 +2,7 @@
   "name": "vandelay",
   "displayName": "Vandelay",
   "description": "Automatically generate import statements for JavaScript and Python.",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0",
   "publisher": "edb",
   "author": "Eric Biewener",
   "license": "MIT",
@@ -27,7 +27,7 @@
     "javascript",
     "python"
   ],
-  "icon": "./logo.png",
+  "icon": "logo.png",
   "galleryBanner": {
     "color": "#01263F",
     "theme": "dark"
