@@ -25,8 +25,7 @@
     "import",
     "export",
     "javascript",
-    "python",
-    "generator"
+    "python"
   ],
   "icon": "./logo.png",
   "galleryBanner": {
