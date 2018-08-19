@@ -75,10 +75,9 @@
     }
   },
   "scripts": {
-    "build": "babel ./src --out-dir=./build --source-maps",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "prettier": "prettier-eslint --prettier-last --write \"**/*.js\"",
-    "test": "jest"
+    "publish": "vsce publish --yarn"
   },
   "devDependencies": {
     "eslint": "^4.11.0",
