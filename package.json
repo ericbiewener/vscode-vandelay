@@ -33,7 +33,8 @@
     "theme": "dark"
   },
   "activationEvents": [
-    "*"
+    "workspaceContains:vandelay-*.js",
+    "workspaceContains:.vandelay/vandelay-*.js"
   ],
   "engines": {
     "vscode": "^1.21.0"
@@ -58,14 +59,6 @@
       "type": "object",
       "title": "Vandelay Configuration",
       "properties": {
-        "vandelay.configLocation": {
-          "type": "string",
-          "description": "Absolute path to the folder containing your Vandelay configuration files. Defaults to the first folder in your workspace."
-        },
-        "vandelay.projectRoot": {
-          "type": "string",
-          "description": "Absolute path to the folder that Vandelay should consider the root of your project."
-        },
         "vandelay.autoImportSingleResult": {
           "type": "boolean",
           "default": true,

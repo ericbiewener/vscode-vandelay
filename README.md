@@ -21,10 +21,11 @@ whatever style guide your project requires for how import statements get written
 [Configuration](#configuration)). Multi-root workspaces are supported.
 
 ## How to Use
-By itself, Vandelay doesn't do anything. You need to download a specific language plugin for
-Vandelay, such as [JavaScript](https://github.com/ericbiewener/vscode-vandelay-js) or
+By itself, Vandelay doesn't do anything. You need to download a specific Vandelay language plugin, such as [JavaScript](https://github.com/ericbiewener/vscode-vandelay-js) or
 [Python](https://github.com/ericbiewener/vscode-vandelay-py). Installing one of those plugins will
 automatically install this core Vandelay plugin as a dependency.
+
+See the documentation for those plugins.
 
 ## Writing Your Own Plugin
 Plugins may be written for any language. I'd be happy to flesh out some documentation if there is interest.
