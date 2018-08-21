@@ -23,6 +23,7 @@ function catchError(fn) {
 }
 
 function activate(context) {
+  console.log('Vandelay Core activating')
   context.subscriptions.push(
     commands.registerCommand('vandelay.cacheProject', catchError(cacheProject)),
     commands.registerCommand(
@@ -50,6 +51,7 @@ function activate(context) {
 
   return {
     registerPlugin(pluginConfig) {
+      console.log('Vandelay plugin being registered', pluginConfig)
       initializePlugin(context, pluginConfig)
       pluginConfigs.push(pluginConfig)
     },

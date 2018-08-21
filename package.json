@@ -2,7 +2,7 @@
   "name": "vandelay",
   "displayName": "Vandelay",
   "description": "Automatically generate import statements for JavaScript and Python.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "edb",
   "author": "Eric Biewener",
   "license": "MIT",
@@ -32,12 +32,12 @@
     "color": "#01263F",
     "theme": "dark"
   },
-  "engines": {
-    "vscode": "^1.21.0"
-  },
   "activationEvents": [
     "*"
   ],
+  "engines": {
+    "vscode": "^1.21.0"
+  },
   "main": "./src/index.js",
   "contributes": {
     "commands": [
@@ -77,6 +77,8 @@
   "scripts": {
     "postinstall": "node ./node_modules/vscode/bin/install",
     "prettier": "prettier-eslint --prettier-last --write \"**/*.js\"",
+    "package": "vsce package --yarn",
+    "install": "yarn run package && code --install-extension *.vsix",
     "publish": "vsce publish --yarn"
   },
   "devDependencies": {

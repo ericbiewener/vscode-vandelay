@@ -60,7 +60,9 @@ function initializePlugin(context, pluginConfig) {
 
 function getProjectSettings(vandelayDir, vandelayFile) {
   try {
-    return require(path.join(vandelayDir, vandelayFile))
+    const absPath = path.join(vandelayDir, vandelayFile)
+    console.log(`Loading vandelay config file from ${absPath}`)
+    return require(absPath)
   } catch (e) {
     if (e.code !== 'MODULE_NOT_FOUND') {
       window.showErrorMessage(
