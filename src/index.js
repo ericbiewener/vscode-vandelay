@@ -51,7 +51,11 @@ function activate(context) {
 
   return {
     registerPlugin(pluginConfig) {
-      console.log('Vandelay plugin being registered', pluginConfig)
+      console.log(
+        `Vandelay plugin being registered for language: ${
+          pluginConfig.language
+        }`
+      )
       initializePlugin(context, pluginConfig)
       pluginConfigs.push(pluginConfig)
     },

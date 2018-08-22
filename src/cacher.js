@@ -82,7 +82,7 @@ function cacheProject() {
   return Promise.all(_.map(PLUGINS, cacheProjectLanguage)).then(results => {
     if (results.includes(false)) return // Weren't able to cache all languages. Don't display success message.
     // Don't return this because that will return a promise that doesn't resolve until the message gets dismissed.
-    window.showInformationMessage('Project exports have been cached. 🏖️')
+    window.showInformationMessage('Project exports have been cached. 🐔')
   })
 }
 
@@ -117,7 +117,6 @@ function onChangeOrCreate(doc) {
 }
 
 function watchForChanges() {
-  // TODO: kill on deactivate?
   const watcher = workspace.createFileSystemWatcher('**/*.*')
 
   watcher.onDidChange(onChangeOrCreate)

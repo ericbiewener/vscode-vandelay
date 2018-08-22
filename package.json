@@ -71,7 +71,7 @@
     "postinstall": "node ./node_modules/vscode/bin/install",
     "prettier": "prettier-eslint --prettier-last --write \"**/*.js\"",
     "package": "vsce package --yarn",
-    "install": "yarn run package && code --install-extension *.vsix",
+    "ext": "rm -f *.vsix && yarn run package && code --install-extension *.vsix",
     "publish": "vsce publish --yarn"
   },
   "devDependencies": {
