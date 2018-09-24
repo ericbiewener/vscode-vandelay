@@ -16,16 +16,18 @@
 ## Overview
 <a href="https://www.youtube.com/watch?v=W4AN8Eb2LL0&t=2m10s" target="_blank"><img src="https://raw.githubusercontent.com/ericbiewener/vscode-vandelay/master/artwork/video.jpg" alt="He's an importer exporter" width="240" align="right" /></a>
 Importing code is annoying and the current VS Code tooling around it isn't good enough.
-This plugin keeps track of all available imports and allows you to quickly import them following
+This extension keeps track of all available imports and allows you to quickly import them following
 whatever style guide your project requires for how import statements get written (see
 [Configuration](#configuration)). Multi-root workspaces are supported.
 
 ## How to Use
-By itself, Vandelay doesn't do anything. You need to download a specific Vandelay language plugin, such as [JavaScript](https://github.com/ericbiewener/vscode-vandelay-js) or
-[Python](https://github.com/ericbiewener/vscode-vandelay-py). Installing one of those plugins will
-automatically install this core Vandelay plugin as a dependency.
+**By itself, Vandelay doesn't do anything**. You need to download a specific Vandelay language plugin. Two official ones currently exist:
+- [JavaScript](https://github.com/ericbiewener/vscode-vandelay-js)
+- [Python](https://github.com/ericbiewener/vscode-vandelay-py)
 
-See the documentation for those plugins.
+Installing one of those plugins will automatically install this core Vandelay extension as a dependency.
+
+**See the documentation for the language plugins for further information on how to use this extension.**
 
 ## Writing Your Own Plugin
 Plugins may be written for any language. I'd be happy to flesh out some documentation if there is interest.
