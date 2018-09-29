@@ -2,6 +2,7 @@ const fs = require('fs')
 const makeDir = require('make-dir')
 const path = require('path')
 const _ = require('lodash')
+const { window } = require('vscode')
 
 function writeCacheFile(plugin, data) {
   _.each(data._extraImports, d => (d.isExtraImport = true))
@@ -24,6 +25,11 @@ function getLangFromFilePath(filePath) {
   return ext === 'jsx' ? 'js' : ext
 }
 
+function getPluginForActiveFile() {
+  const { PLUGINS } = require('./plugins')
+  return PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)]
+}
+
 function getFilepathKey(plugin, filepath) {
   return filepath.slice(plugin.projectRoot.length + 1)
 }
@@ -40,6 +46,7 @@ module.exports = {
   writeCacheFile,
   isFile,
   getLangFromFilePath,
+  getPluginForActiveFile,
   getFilepathKey,
   getImportItems,
 }

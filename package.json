@@ -53,6 +53,10 @@
       {
         "title": "Import active word...",
         "command": "vandelay.selectImportForActiveWord"
+      },
+      {
+        "title": "Import undefined variables",
+        "command": "vandelay.importUndefinedVariables"
       }
     ],
     "configuration": {
@@ -63,6 +67,11 @@
           "type": "boolean",
           "default": true,
           "description": "If only a single import name matches when importing the word on the cursor, automatically import it rather than showing the import picker."
+        },
+        "vandelay.showNewVersionAlert": {
+          "type": "boolean",
+          "default": true,
+          "description": "Get notified when a new version has been installed so that you can see what has changed."
         }
       }
     }
@@ -71,7 +80,7 @@
     "postinstall": "node ./node_modules/vscode/bin/install",
     "prettier": "prettier-eslint --prettier-last --write \"**/*.js\"",
     "package": "vsce package --yarn",
-    "ext": "rm -f *.vsix && yarn run package && code --install-extension *.vsix"
+    "ext": "rm -rf ~/.vscode/extensions/edb.vandelay-core* && rm -f *.vsix && yarn run package && code --install-extension *.vsix"
   },
   "devDependencies": {
     "eslint": "^4.11.0",
@@ -85,7 +94,8 @@
     "anymatch": "^2.0.0",
     "fs-extra": "^5.0.0",
     "lodash": "^4.17.5",
-    "make-dir": "^1.2.0"
+    "make-dir": "^1.2.0",
+    "opn": "^5.4.0"
   },
   "lint-staged": {
     "**/*.js": [

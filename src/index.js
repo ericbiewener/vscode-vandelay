@@ -1,7 +1,12 @@
 const { window, commands, workspace } = require('vscode')
 const { initializePlugin } = require('./plugins')
 const { cacheProject, watchForChanges } = require('./cacher')
-const { selectImport, selectImportForActiveWord } = require('./importer')
+const {
+  importUndefinedVariables,
+  selectImport,
+  selectImportForActiveWord,
+} = require('./importer')
+const { showNewVersionAlert } = require('./showNewVersionMessage')
 const { getImportItems } = require('./utils')
 
 /*
@@ -24,6 +29,9 @@ function catchError(fn) {
 
 function activate(context) {
   console.log('Vandelay Core activating')
+
+  showNewVersionAlert(context)
+
   context.subscriptions.push(
     commands.registerCommand('vandelay.cacheProject', catchError(cacheProject)),
     commands.registerCommand(
@@ -33,6 +41,10 @@ function activate(context) {
     commands.registerCommand(
       'vandelay.selectImportForActiveWord',
       catchError(() => selectImportForActiveWord())
+    ),
+    commands.registerCommand(
+      'vandelay.importUndefinedVariables',
+      catchError(() => importUndefinedVariables())
     )
   )
 
