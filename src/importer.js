@@ -8,7 +8,10 @@ async function selectImport(word, buildImportItems) {
 
   const plugin =
     PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)]
-  if (!plugin) return
+  if (!plugin) { 
+    window.showErrorMessage('No Vandelay plugin found for current file.')
+    return 
+  }
 
   await cacheFileManager(plugin, async exportData => {
     let items = getImportItems(plugin, exportData, buildImportItems)
