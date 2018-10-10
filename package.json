@@ -51,12 +51,16 @@
         "command": "vandelay.selectImport"
       },
       {
-        "title": "Import active word...",
+        "title": "Import Active Word...",
         "command": "vandelay.selectImportForActiveWord"
       },
       {
-        "title": "Import undefined variables",
+        "title": "Import Undefined Variables",
         "command": "vandelay.importUndefinedVariables"
+      },
+      {
+        "title": "Remove Unused Imports",
+        "command": "vandelay.removeUnusedImports"
       }
     ],
     "configuration": {

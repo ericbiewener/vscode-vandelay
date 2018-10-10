@@ -26,8 +26,13 @@ function getLangFromFilePath(filePath) {
 }
 
 function getPluginForActiveFile() {
+  if (!window.activeTextEditor) return
   const { PLUGINS } = require('./plugins')
-  return PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)]
+  const plugin =
+    PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)]
+  if (!plugin)
+    window.showErrorMessage('No Vandelay plugin found for current file type.')
+  return plugin
 }
 
 function getFilepathKey(plugin, filepath) {

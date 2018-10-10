@@ -1,11 +1,10 @@
 const _ = require('lodash')
-const { window, workspace, languages } = require('vscode')
+const { window, workspace } = require('vscode')
+const { getDiagnosticsForCodes } = require('./sharedUtils')
 const { getImportItems, getPluginForActiveFile } = require('./utils')
 const { cacheFileManager } = require('./cacheFileManager')
 
 async function selectImport(word, buildImportItems) {
-  if (!window.activeTextEditor) return
-
   const plugin = getPluginForActiveFile()
   if (!plugin) return
 
@@ -36,23 +35,21 @@ async function selectImportForActiveWord(buildImportItems) {
 }
 
 async function importUndefinedVariables() {
-  const editor = window.activeTextEditor
-  if (!editor) return
-  const { document } = editor
+  const codes = _.get(getPluginForActiveFile(), 'undefinedVariableCodes')
+  if (!codes) return []
 
-  const plugin = getPluginForActiveFile()
-  if (!plugin || !plugin.undefinedVariableCodes) return
+  const diagnostics = getDiagnosticsForCodes(codes, true)
+  if (!diagnostics.length) return
 
+  const { document } = window.activeTextEditor
   // Must collect all words before inserting any because insertions will cause the diagnostic ranges
   // to no longer be correct, thus not allowing us to get subsequent words
-  const words = languages.getDiagnostics(document.uri).reduce((acc, d) => {
-    if (plugin.undefinedVariableCodes.includes(d.code)) {
-      // Flake8 is returning a collapsed range, so expand it to the entire word
-      const range = _.isEqual(d.range.start, d.range.end)
-        ? document.getWordRangeAtPosition(d.range.start)
-        : d.range
-      acc.push(document.getText(range))
-    }
+  const words = diagnostics.reduce((acc, d) => {
+    // Flake8 is returning a collapsed range, so expand it to the entire word
+    const range = _.isEqual(d.range.start, d.range.end)
+      ? document.getWordRangeAtPosition(d.range.start)
+      : d.range
+    acc.push(document.getText(range))
     return acc
   }, [])
 
