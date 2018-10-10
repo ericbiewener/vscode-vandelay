@@ -1,7 +1,5 @@
 ### 1.1.0
-- Update README.md
-- Add support for mjs files
-- Show error when plugin is not found
-- Merge pull request #2 from IlianYotov/master
-- Import missing vars (#3)
-
+- New feature: "Import Undefined Variables" command
+- New feature: "Remove Unused Imports" command
+- Add extension update notification
+- Support *.mjs file extension
