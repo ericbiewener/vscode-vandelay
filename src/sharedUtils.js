@@ -1,6 +1,7 @@
 const path = require('path')
-const { window, Range, Position } = require('vscode')
+const { languages, Position, Range, window } = require('vscode')
 const _ = require('lodash')
+const { getPluginForActiveFile } = require('./utils')
 
 async function insertLine(newLine, importPosition) {
   const { match, indexModifier, isFirstImport } = importPosition
@@ -88,6 +89,21 @@ function getExportDataKeysByCachedDate(exportData) {
   })
 }
 
+function getDiagnosticsForCodes(codes, forActiveEditor) {
+  if (forActiveEditor) {
+    return languages
+      .getDiagnostics(window.activeTextEditor.document.uri)
+      .filter(d => codes.includes(d.code))
+  }
+
+  const diagnosticsByFile = {}
+  for (const [file, diagnostics] of languages.getDiagnostics()) {
+    const remaining = diagnostics.filter(d => codes.includes(d.code))
+    if (remaining.length) diagnosticsByFile[file.fsPath] = remaining
+  }
+  return diagnosticsByFile
+}
+
 module.exports = {
   insertLine,
   getTabChar,
@@ -96,4 +112,5 @@ module.exports = {
   getLastInitialComment,
   getImportOrderPosition,
   getExportDataKeysByCachedDate,
+  getDiagnosticsForCodes,
 }

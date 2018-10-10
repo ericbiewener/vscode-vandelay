@@ -2,10 +2,11 @@ const fs = require('fs')
 const makeDir = require('make-dir')
 const path = require('path')
 const _ = require('lodash')
+const { window } = require('vscode')
 
 const extensionToLang = {
-  'jsx': 'js',
-  'mjs': 'js'
+  jsx: 'js',
+  mjs: 'js',
 }
 
 function writeCacheFile(plugin, data) {
@@ -29,6 +30,16 @@ function getLangFromFilePath(filePath) {
   return extensionToLang[ext] || ext
 }
 
+function getPluginForActiveFile() {
+  if (!window.activeTextEditor) return
+  const { PLUGINS } = require('./plugins')
+  const plugin =
+    PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)]
+  if (!plugin)
+    window.showErrorMessage('No Vandelay plugin found for current file type.')
+  return plugin
+}
+
 function getFilepathKey(plugin, filepath) {
   return filepath.slice(plugin.projectRoot.length + 1)
 }
@@ -45,6 +56,7 @@ module.exports = {
   writeCacheFile,
   isFile,
   getLangFromFilePath,
+  getPluginForActiveFile,
   getFilepathKey,
   getImportItems,
 }

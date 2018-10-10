@@ -1,19 +1,14 @@
+const _ = require('lodash')
 const { window, workspace } = require('vscode')
-const { PLUGINS } = require('./plugins')
-const { getImportItems, getLangFromFilePath } = require('./utils')
+const { getDiagnosticsForCodes } = require('./sharedUtils')
+const { getImportItems, getPluginForActiveFile } = require('./utils')
 const { cacheFileManager } = require('./cacheFileManager')
 
 async function selectImport(word, buildImportItems) {
-  if (!window.activeTextEditor) return
+  const plugin = getPluginForActiveFile()
+  if (!plugin) return
 
-  const plugin =
-    PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)]
-  if (!plugin) { 
-    window.showErrorMessage('No Vandelay plugin found for current file.')
-    return 
-  }
-
-  await cacheFileManager(plugin, async exportData => {
+  return await cacheFileManager(plugin, async exportData => {
     let items = getImportItems(plugin, exportData, buildImportItems)
     if (!items) return
     if (word) items = items.filter(item => item.label === word)
@@ -26,7 +21,7 @@ async function selectImport(word, buildImportItems) {
         : items[0]
 
     if (!selection) return
-    plugin.insertImport(plugin, selection)
+    return plugin.insertImport(plugin, selection)
   })
 }
 
@@ -39,7 +34,30 @@ async function selectImportForActiveWord(buildImportItems) {
   selectImport(activeWord, buildImportItems)
 }
 
+async function importUndefinedVariables() {
+  const codes = _.get(getPluginForActiveFile(), 'undefinedVariableCodes')
+  if (!codes) return []
+
+  const diagnostics = getDiagnosticsForCodes(codes, true)
+  if (!diagnostics.length) return
+
+  const { document } = window.activeTextEditor
+  // Must collect all words before inserting any because insertions will cause the diagnostic ranges
+  // to no longer be correct, thus not allowing us to get subsequent words
+  const words = diagnostics.reduce((acc, d) => {
+    // Flake8 is returning a collapsed range, so expand it to the entire word
+    const range = _.isEqual(d.range.start, d.range.end)
+      ? document.getWordRangeAtPosition(d.range.start)
+      : d.range
+    acc.push(document.getText(range))
+    return acc
+  }, [])
+
+  for (const word of _.uniq(words)) await selectImport(word)
+}
+
 module.exports = {
   selectImport,
   selectImportForActiveWord,
+  importUndefinedVariables,
 }
