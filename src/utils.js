@@ -3,6 +3,11 @@ const makeDir = require('make-dir')
 const path = require('path')
 const _ = require('lodash')
 
+const extensionToLang = {
+  'jsx': 'js',
+  'mjs': 'js'
+}
+
 function writeCacheFile(plugin, data) {
   _.each(data._extraImports, d => (d.isExtraImport = true))
   return makeDir(plugin.cacheDirPath).then(() =>
@@ -21,7 +26,7 @@ function isFile(file) {
 
 function getLangFromFilePath(filePath) {
   const ext = path.extname(filePath).slice(1)
-  return ext === 'jsx' ? 'js' : ext
+  return extensionToLang[ext] || ext
 }
 
 function getFilepathKey(plugin, filepath) {
