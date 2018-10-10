@@ -4,6 +4,11 @@ const path = require('path')
 const _ = require('lodash')
 const { window } = require('vscode')
 
+const extensionToLang = {
+  jsx: 'js',
+  mjs: 'js',
+}
+
 function writeCacheFile(plugin, data) {
   _.each(data._extraImports, d => (d.isExtraImport = true))
   return makeDir(plugin.cacheDirPath).then(() =>
@@ -22,7 +27,7 @@ function isFile(file) {
 
 function getLangFromFilePath(filePath) {
   const ext = path.extname(filePath).slice(1)
-  return ext === 'jsx' ? 'js' : ext
+  return extensionToLang[ext] || ext
 }
 
 function getPluginForActiveFile() {

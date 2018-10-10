@@ -2,7 +2,7 @@
 <h1 align="center">Vandelay</h1>
 
 <p align="center">
-  <strong>VS Code extension for automating imports. Languages supported via plugins.</strong>.
+  <strong>VS Code extension for automating imports. Languages supported via plugins.</strong>
   <br />
   Official plugins currently exist for <a href="https://github.com/ericbiewener/vscode-vandelay-js">JavaScript</a> &amp; <a href="https://github.com/ericbiewener/vscode-vandelay-py">Python</a>.
 </p>
