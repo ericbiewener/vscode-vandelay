@@ -1,7 +1,6 @@
 const path = require('path')
 const { languages, Position, Range, window } = require('vscode')
 const _ = require('lodash')
-const { getPluginForActiveFile } = require('./utils')
 
 async function insertLine(newLine, importPosition) {
   const { match, indexModifier, isFirstImport } = importPosition
