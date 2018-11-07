@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const { window, workspace } = require('vscode')
-const { getDiagnosticsForCodes } = require('./sharedUtils')
+const { getDiagnostics } = require('./sharedUtils')
 const { getImportItems, getPluginForActiveFile } = require('./utils')
 const { cacheFileManager } = require('./cacheFileManager')
 
@@ -35,10 +35,10 @@ async function selectImportForActiveWord(buildImportItems) {
 }
 
 async function importUndefinedVariables() {
-  const codes = _.get(getPluginForActiveFile(), 'undefinedVariableCodes')
-  if (!codes) return []
+  const filter = _.get(getPluginForActiveFile(), 'shouldIncludeDisgnostic')
+  if (!filter) return []
 
-  const diagnostics = getDiagnosticsForCodes(codes, true)
+  const diagnostics = getDiagnostics(filter, true)
   if (!diagnostics.length) return
 
   const { document } = window.activeTextEditor

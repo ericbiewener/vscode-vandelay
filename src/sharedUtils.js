@@ -88,16 +88,16 @@ function getExportDataKeysByCachedDate(exportData) {
   })
 }
 
-function getDiagnosticsForCodes(codes, forActiveEditor) {
+function getDiagnostics(filter, forActiveEditor) {
   if (forActiveEditor) {
     return languages
       .getDiagnostics(window.activeTextEditor.document.uri)
-      .filter(d => codes.includes(d.code))
+      .filter(filter)
   }
 
   const diagnosticsByFile = {}
   for (const [file, diagnostics] of languages.getDiagnostics()) {
-    const remaining = diagnostics.filter(d => codes.includes(d.code))
+    const remaining = diagnostics.filter(filter)
     if (remaining.length) diagnosticsByFile[file.fsPath] = remaining
   }
   return diagnosticsByFile
@@ -111,5 +111,5 @@ module.exports = {
   getLastInitialComment,
   getImportOrderPosition,
   getExportDataKeysByCachedDate,
-  getDiagnosticsForCodes,
+  getDiagnostics,
 }
