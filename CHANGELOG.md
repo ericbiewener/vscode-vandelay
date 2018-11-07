@@ -1,3 +1,6 @@
+### 1.2.1
+- More flexible diagnostic filtering API
+
 ### 1.2.0
 - Focus back to original editor after removing unused imports
 
