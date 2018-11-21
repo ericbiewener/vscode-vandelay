@@ -55,16 +55,18 @@ function activate(context) {
 
   const pluginConfigs = []
 
-  workspace.onDidChangeConfiguration(e => {
-    if (
-      e.affectsConfiguration('vandelay.configLocation') ||
-      e.affectsConfiguration('vandelay.projectRoot')
-    ) {
-      pluginConfigs.forEach(config => initializePlugin(context, config))
-    }
-  })
+  context.subscriptions.push(
+    workspace.onDidChangeConfiguration(e => {
+      if (
+        e.affectsConfiguration('vandelay.configLocation') ||
+        e.affectsConfiguration('vandelay.projectRoot')
+      ) {
+        pluginConfigs.forEach(config => initializePlugin(context, config))
+      }
+    }),
 
-  watchForChanges()
+    watchForChanges()
+  )
 
   return {
     registerPlugin(pluginConfig) {

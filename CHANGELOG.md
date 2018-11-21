@@ -1,3 +1,9 @@
+### 1.2.3
+- Dispose the disposables
+
+### 1.2.2
+- Suppress alert
+
 ### 1.2.1
 - More flexible diagnostic filtering API
 

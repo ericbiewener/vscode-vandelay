@@ -133,6 +133,8 @@ function watchForChanges() {
       return writeCacheFile(plugin, cachedData)
     })
   })
+
+  return watcher
 }
 
 module.exports = {
