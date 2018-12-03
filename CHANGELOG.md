@@ -1,3 +1,6 @@
+### 1.3.0
+- Add Fix Imports command
+
 ### 1.2.3
 - Dispose the disposables
 

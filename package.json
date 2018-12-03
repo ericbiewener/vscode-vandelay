@@ -2,7 +2,7 @@
   "name": "vandelay",
   "displayName": "Vandelay",
   "description": "Automatically generate import statements for JavaScript and Python.",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "publisher": "edb",
   "author": "Eric Biewener",
   "license": "MIT",
