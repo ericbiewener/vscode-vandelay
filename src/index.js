@@ -50,6 +50,13 @@ function activate(context) {
     commands.registerCommand(
       'vandelay.removeUnusedImports',
       catchError(removeUnusedImports)
+    ),
+    commands.registerCommand(
+      'vandelay.fixImports',
+      catchError(() => {
+        removeUnusedImports()
+        importUndefinedVariables()
+      })
     )
   )
 

@@ -6,7 +6,7 @@ function showNewVersionAlert(context, extConfig = {}) {
     name = 'Vandelay',
     changelogUrl = 'https://github.com/ericbiewener/vscode-vandelay/blob/master/CHANGELOG.md',
     extensionIdentifier = 'edb.vandelay',
-    suppressAlert = true,
+    suppressAlert = false,
   } = extConfig
 
   const { globalState } = context

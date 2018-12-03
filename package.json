@@ -61,6 +61,10 @@
       {
         "title": "Remove Unused Imports",
         "command": "vandelay.removeUnusedImports"
+      },
+      {
+        "title": "Fix Imports",
+        "command": "vandelay.fixImports"
       }
     ],
     "configuration": {
