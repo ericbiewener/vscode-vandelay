@@ -87,20 +87,20 @@ function cacheProject() {
 }
 
 function onChangeOrCreate(doc) {
-  const plugin = PLUGINS[getLangFromFilePath(doc.path)]
+  const plugin = PLUGINS[getLangFromFilePath(doc.fsPath)]
   if (
     !plugin ||
-    shouldIgnore(plugin, doc.path) ||
+    shouldIgnore(plugin, doc.fsPath) ||
     // TODO: Since we are watching all files in the workspace, not just those in plugin.includePaths,
     // we need to make sure that it is actually in that array. Can this be changed so that we only
     // watch files in plugin.includePaths to begin with? Not sure if this can be accomplished with
     // a single glob. If not, we'd need multiple watchers. Would either case be more efficient than
     // what we're currently doing?
-    !plugin.includePaths.some(p => doc.path.startsWith(p))
+    !plugin.includePaths.some(p => doc.fsPath.startsWith(p))
   )
     return
 
-  const data = plugin.cacheFile(plugin, doc.path)
+  const data = plugin.cacheFile(plugin, doc.fsPath)
   if (_.isEmpty(data)) return
 
   const changedData = _.find(data, (v, k) => k !== '_extraImports')
@@ -123,11 +123,11 @@ function watchForChanges() {
   watcher.onDidCreate(onChangeOrCreate)
 
   watcher.onDidDelete(doc => {
-    const plugin = PLUGINS[getLangFromFilePath(doc.path)]
+    const plugin = PLUGINS[getLangFromFilePath(doc.fsPath)]
     if (!plugin) return
 
     cacheFileManager(plugin, cachedData => {
-      const key = getFilepathKey(plugin, doc.path)
+      const key = getFilepathKey(plugin, doc.fsPath)
       if (!cachedData[key]) return
       delete cachedData[key]
       return writeCacheFile(plugin, cachedData)

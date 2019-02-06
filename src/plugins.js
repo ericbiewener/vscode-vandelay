@@ -15,7 +15,7 @@ function initializePlugin(context, pluginConfig) {
   let configLocation = workspace.workspaceFolders.find(
     f => path.basename(f.uri.path) === '.vandelay'
   )
-  configLocation = (configLocation || workspace.workspaceFolders[0]).uri.path
+  configLocation = (configLocation || workspace.workspaceFolders[0]).uri.fsPath
 
   const { language } = pluginConfig
   const configFile = 'vandelay-' + language + '.js'

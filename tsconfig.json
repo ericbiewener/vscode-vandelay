@@ -1,4 +1,6 @@
 {
+    "allowJS": true,
+    "checkJS": true,
     "compilerOptions": {
         "module": "commonjs",
         "target": "es6",
