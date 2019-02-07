@@ -13,9 +13,9 @@ function initializePlugin(context, pluginConfig) {
   if (!workspace.workspaceFolders) return
 
   let configLocation = workspace.workspaceFolders.find(
-    f => path.basename(f.uri.path) === '.vandelay'
+    f => path.basename(f.uri.fsPath) === '.vandelay'
   )
-  configLocation = (configLocation || workspace.workspaceFolders[0]).uri.path
+  configLocation = (configLocation || workspace.workspaceFolders[0]).uri.fsPath
 
   const { language } = pluginConfig
   const configFile = 'vandelay-' + language + '.js'
@@ -36,7 +36,7 @@ function initializePlugin(context, pluginConfig) {
     'vandelay-' + language + '.json'
   )
   plugin.projectRoot =
-    configSettings.projectRoot || workspace.workspaceFolders[0].uri.path
+    configSettings.projectRoot || workspace.workspaceFolders[0].uri.fsPath
   plugin.configFile = configFile
 
   plugin.excludePatterns = plugin.excludePatterns || []
