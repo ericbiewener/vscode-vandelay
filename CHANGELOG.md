@@ -1,3 +1,7 @@
+### Version 1.3.1
+- Fix for windows
+- Downgrade event-stream because of security vulnerability
+
 ### 1.3.0
 - Add Fix Imports command
 
