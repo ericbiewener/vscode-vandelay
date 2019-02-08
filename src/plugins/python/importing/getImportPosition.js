@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const { getLastInitialComment, strUntil } = require("../../../utils");
 const { commentRegex } = require("../regex");
 const { isPathPackage } = require("../utils");
 
@@ -25,7 +26,7 @@ function getImportPosition(plugin, importPath, isExtraImport, imports, text) {
     return { match: exactMatch, indexModifier: 0 };
   }
 
-  const importPos = getImportOrderPosition(strUntil(importPath, "."));
+  const importPos = getImportOrderPosition(plugin, strUntil(importPath, "."));
   const importIsAbsolute = !importPath.startsWith(".");
 
   for (const importData of imports) {
@@ -34,6 +35,7 @@ function getImportPosition(plugin, importPath, isExtraImport, imports, text) {
     if (lineIsPackage && !isExtraImport) continue;
 
     const lineImportPos = getImportOrderPosition(
+      plugin,
       strUntil(importData.path, ".")
     );
 

@@ -36,7 +36,7 @@ function getPluginForActiveFile() {
   const plugin =
     PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)];
   if (!plugin)
-    window.showErrorMessage("No Vandelay plugin found for current file type.");
+    window.showErrorMessage("Vandelay doesn't support the current language.");
   return plugin;
 }
 
@@ -126,9 +126,9 @@ function getLastInitialComment(text, commentRegex) {
     : null;
 }
 
-function getImportOrderPosition(importPath) {
-  if (!this.plugin.importGroups) return;
-  const index = _.flatten(this.plugin.importGroups).indexOf(importPath);
+function getImportOrderPosition(plugin, importPath) {
+  if (!plugin.importGroups) return;
+  const index = _.flatten(plugin.importGroups).indexOf(importPath);
   return index > -1 ? index : undefined;
 }
 

@@ -45,12 +45,12 @@ function getImportPosition(
     };
   }
 
-  const importPos = getImportOrderPosition(importPath);
+  const importPos = getImportOrderPosition(plugin, importPath);
   const importIsAbsolute = !importPath.startsWith(".");
 
   for (const importData of imports) {
     // plugin.importOrder check
-    const lineImportPos = getImportOrderPosition(importData.path);
+    const lineImportPos = getImportOrderPosition(plugin, importData.path);
     if (importPos != null && (!lineImportPos || importPos < lineImportPos)) {
       return { match: importData, indexModifier: -1 };
     } else if (lineImportPos != null) {

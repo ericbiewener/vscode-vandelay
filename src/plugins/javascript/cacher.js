@@ -1,8 +1,8 @@
 const fs = require("fs-extra");
 const path = require("path");
 const _ = require("lodash");
-const { getFilepathKey } = require("../../utils");
-const { basename, isPathNodeModule } = require("./utils");
+const { basename, getFilepathKey } = require("../../utils");
+const { isPathNodeModule } = require("./utils");
 const { parseImports, exportRegex } = require("./regex");
 
 function processDefaultName(plugin, defaultName, importPath) {

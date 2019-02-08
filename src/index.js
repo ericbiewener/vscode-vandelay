@@ -76,6 +76,17 @@ function activate(context) {
 
     watchForChanges()
   );
+
+  return {
+    registerPlugin: async ({ language }) => {
+      window.showErrorMessage(
+        `Please uninstall extension Vandelay ${language.toUpperCase()}. Vandelay no longer requires langauge extensions to be installed separately.`
+      );
+      await commands.executeCommand(
+        "workbench.extensions.action.listEnabledExtensions"
+      );
+    }
+  };
 }
 
 exports.activate = activate;

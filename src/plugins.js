@@ -40,8 +40,7 @@ function initializePlugin(context, pluginConfig) {
   plugin.configFile = configFile;
 
   plugin.excludePatterns = plugin.excludePatterns || [];
-  // TODO: exclude all folders starting with dot
-  plugin.excludePatterns.push(/.*\/\.git(\/.*)?/);
+  plugin.excludePatterns.push(/.*\/\..*/); // exclude all folders starting with dot
 
   console.info(`Vandelay language registered: ${language}`);
 
