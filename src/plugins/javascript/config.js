@@ -10,7 +10,7 @@ function shouldIncludeDisgnostic({ code, source, message }) {
   );
 }
 
-// TODO: name space settings vs utils?
+// TODO: namespace settings vs utils?
 const config = {
   language: "js",
   cacheFile,
@@ -18,20 +18,12 @@ const config = {
   buildImportItems,
   insertImport,
   removeUnusedImports,
+  shouldIncludeDisgnostic,
   useSingleQuotes: true,
   padCurlyBraces: true,
   useSemicolons: true,
   trailingComma: true,
   multilineImportStyle: "multi",
-  shouldIncludeDisgnostic,
-  context,
-  newVersionAlert: {
-    name: "Vandelay JS",
-    changelogUrl:
-      "https://github.com/ericbiewener/vscode-vandelay-js/blob/master/CHANGELOG.md",
-    extensionIdentifier: "edb.vandelay-js",
-    suppressAlert: true
-  },
   excludePatterns: [/.*\/node_modules(\/.*)?/]
 };
 

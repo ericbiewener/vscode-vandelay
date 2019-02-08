@@ -1,4 +1,8 @@
 const _ = require("lodash");
+const {
+  getImportOrderPosition,
+  getLastInitialComment
+} = require("../../../utils");
 const { commentRegex } = require("../regex");
 const { isPathNodeModule } = require("../utils");
 const { ExportType } = require("./buildImportItems");
@@ -20,7 +24,7 @@ function getImportPosition(
   // If no imports, find first non-comment line
   if (!imports.length) {
     return {
-      match: plugin.utils.getLastInitialComment(text, commentRegex),
+      match: getLastInitialComment(text, commentRegex),
       indexModifier: 1,
       isFirstImport: true
     };
@@ -41,12 +45,12 @@ function getImportPosition(
     };
   }
 
-  const importPos = plugin.utils.getImportOrderPosition(importPath);
+  const importPos = getImportOrderPosition(importPath);
   const importIsAbsolute = !importPath.startsWith(".");
 
   for (const importData of imports) {
     // plugin.importOrder check
-    const lineImportPos = plugin.utils.getImportOrderPosition(importData.path);
+    const lineImportPos = getImportOrderPosition(importData.path);
     if (importPos != null && (!lineImportPos || importPos < lineImportPos)) {
       return { match: importData, indexModifier: -1 };
     } else if (lineImportPos != null) {

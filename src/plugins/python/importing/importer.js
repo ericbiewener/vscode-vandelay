@@ -1,5 +1,6 @@
 const { window, Range } = require("vscode");
 const path = require("path");
+const { getTabChar } = require("../../../utils");
 const { commentRegex, parseImports } = require("../regex");
 const { getImportPosition } = require("./getImportPosition");
 
@@ -8,7 +9,7 @@ function buildImportItems(plugin, exportData) {
   const activeFilepath = window.activeTextEditor.document.fileName;
   const items = [];
 
-  const sortedKeys = plugin.utils.getExportDataKeysByCachedDate(exportData);
+  const sortedKeys = getExportDataKeysByCachedDate(exportData);
   for (const importPath of sortedKeys) {
     const data = exportData[importPath];
     const absImportPath = data.isExtraImport
@@ -26,7 +27,7 @@ function buildImportItems(plugin, exportData) {
     if (data.isExtraImport) {
       dotPath = importPath;
     } else {
-      dotPath = plugin.utils.removeExt(importPath).replace(/\//g, ".");
+      dotPath = removeExt(importPath).replace(/\//g, ".");
       if (plugin.processImportPath) dotPath = plugin.processImportPath(dotPath);
     }
 
@@ -121,7 +122,7 @@ function insertImport(plugin, importSelection) {
         : "";
       return editor.edit(builder => {
         const beforeMatch =
-          before || plugin.utils.getLastInitialComment(fileText, commentRegex);
+          before || getLastInitialComment(fileText, commentRegex);
 
         builder.replace(
           new Range(
@@ -138,11 +139,11 @@ function insertImport(plugin, importSelection) {
     }
   }
 
-  return plugin.utils.insertLine(newLine, importPosition);
+  return insertLine(newLine, importPosition);
 }
 
 function findImportPathGroup(plugin, importPath) {
-  const importPathPrefix = plugin.utils.strUntil(importPath, ".");
+  const importPathPrefix = strUntil(importPath, ".");
 
   for (const group of plugin.importGroups) {
     if (group.includes(importPathPrefix)) {
@@ -182,7 +183,7 @@ function getNewLine(plugin, importPath, imports) {
   const newLineStart = "from " + importPath + " import ";
   const newLineEnd = imports.join(", ");
 
-  const tabChar = plugin.utils.getTabChar();
+  const tabChar = getTabChar();
   const newLineLength = newLineStart.length + newLineEnd.length;
 
   if (newLineLength <= maxImportLineLength) {

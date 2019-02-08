@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const { strUntil } = require("../../utils");
 
 /**
  * Regex must end with `.*` after last capturing group to ensure that we capture the full line. This
@@ -32,9 +33,7 @@ function parseImports(plugin, text) {
       start: match.index,
       end: match.index + match[0].length,
       default:
-        isTypeOutside || !match[1]
-          ? null
-          : plugin.utils.strUntil(match[1], ",").trim(),
+        isTypeOutside || !match[1] ? null : strUntil(match[1], ",").trim(),
       isTypeOutside
     };
     if (match[2]) {

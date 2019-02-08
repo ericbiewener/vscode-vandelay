@@ -1,12 +1,11 @@
 const _ = require("lodash");
 const { Range, Uri, window } = require("vscode");
+const { getDiagnostics } = require("../../utils");
 const { getNewLine } = require("./importing/getNewLine");
 const { parseImports } = require("./regex");
 
 async function removeUnusedImports(plugin) {
-  const diagnostics = plugin.utils.getDiagnostics(
-    d => d.code === "no-unused-vars"
-  );
+  const diagnostics = getDiagnostics(d => d.code === "no-unused-vars");
 
   for (const filepath in diagnostics) {
     const editor = await window.showTextDocument(Uri.file(filepath), {

@@ -1,5 +1,6 @@
 const { window } = require("vscode");
 const path = require("path");
+const { insertLine, removeExt } = require("../../../utils");
 const { parseImports } = require("../regex");
 const { getImportPosition } = require("./getImportPosition");
 const { ExportType } = require("./buildImportItems");
@@ -36,7 +37,7 @@ function insertImport(plugin, importSelection) {
   if (!lineImports) return;
   const newLine = getNewLine(plugin, finalImportPath, lineImports);
 
-  return plugin.utils.insertLine(newLine, importPosition);
+  return insertLine(newLine, importPosition);
 }
 
 function getFinalImportPath(plugin, importPath, absImportPath, isExtraImport) {
@@ -52,12 +53,12 @@ function getFinalImportPath(plugin, importPath, absImportPath, isExtraImport) {
       activeFilepath,
       plugin.projectRoot
     );
-    return plugin.utils.removeExt(processedPath || importPath);
+    return removeExt(processedPath || importPath);
   }
 
   return path.basename(importPath) === "index.js"
     ? path.dirname(importPath)
-    : plugin.utils.removeExt(importPath);
+    : removeExt(importPath);
 }
 
 function getNewLineImports(importPosition, exportName, exportType) {

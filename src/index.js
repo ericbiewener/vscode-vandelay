@@ -6,6 +6,8 @@ const {
   selectImport,
   selectImportForActiveWord
 } = require("./importer");
+const jsConfig = require("./plugins/javascript/config");
+const pyConfig = require("./plugins/python/config");
 const { removeUnusedImports } = require("./removeUnusedImports");
 const { showNewVersionAlert } = require("./showNewVersionMessage");
 const { getImportItems } = require("./utils");
@@ -58,7 +60,9 @@ function activate(context) {
     )
   );
 
-  const pluginConfigs = [];
+  const pluginConfigs = [jsConfig.config, pyConfig.config];
+
+  for (const config of pluginConfigs) initializePlugin(context, config);
 
   context.subscriptions.push(
     workspace.onDidChangeConfiguration(e => {
@@ -72,27 +76,6 @@ function activate(context) {
 
     watchForChanges()
   );
-
-  return {
-    registerPlugin(pluginConfig) {
-      console.log(
-        `Vandelay plugin being registered for language: ${
-          pluginConfig.language
-        }`
-      );
-      if (pluginConfig.newVersionAlert)
-        showNewVersionAlert(pluginConfig.context, pluginConfig.newVersionAlert);
-      initializePlugin(context, pluginConfig);
-      pluginConfigs.push(pluginConfig);
-    },
-    commands: {
-      selectImport: catchError(selectImport),
-      selectImportForActiveWord: catchError(selectImportForActiveWord)
-    },
-    _test: {
-      pluginConfigs,
-      getImportItems
-    }
-  };
 }
+
 exports.activate = activate;

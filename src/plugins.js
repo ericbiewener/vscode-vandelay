@@ -1,7 +1,7 @@
 const { window, workspace } = require("vscode");
 const path = require("path");
 const { isFile, getFilepathKey } = require("./utils");
-const sharedUtils = require("./sharedUtils");
+const utils = require("./utils");
 
 const PLUGINS = {};
 
@@ -40,16 +40,8 @@ function initializePlugin(context, pluginConfig) {
   plugin.configFile = configFile;
 
   plugin.excludePatterns = plugin.excludePatterns || [];
+  // TODO: exclude all folders starting with dot
   plugin.excludePatterns.push(/.*\/\.git(\/.*)?/);
-
-  // Share some core utils with the plugin argument already provided
-  plugin.utils = Object.assign(
-    {
-      plugin, // add reference on `utils` so that when a util method is called, the main plugin can be accessed via this.plugin
-      getFilepathKey: filePath => getFilepathKey(plugin, filePath)
-    },
-    sharedUtils
-  );
 
   console.info(`Vandelay language registered: ${language}`);
 

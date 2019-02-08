@@ -12,7 +12,7 @@ function getImportPosition(plugin, importPath, isExtraImport, imports, text) {
   // If no imports, find first non-comment line
   if (!imports.length) {
     return {
-      match: plugin.utils.getLastInitialComment(text, commentRegex),
+      match: getLastInitialComment(text, commentRegex),
       indexModifier: 1,
       isFirstImport: true
     };
@@ -25,9 +25,7 @@ function getImportPosition(plugin, importPath, isExtraImport, imports, text) {
     return { match: exactMatch, indexModifier: 0 };
   }
 
-  const importPos = plugin.utils.getImportOrderPosition(
-    plugin.utils.strUntil(importPath, ".")
-  );
+  const importPos = getImportOrderPosition(strUntil(importPath, "."));
   const importIsAbsolute = !importPath.startsWith(".");
 
   for (const importData of imports) {
@@ -35,8 +33,8 @@ function getImportPosition(plugin, importPath, isExtraImport, imports, text) {
     const lineIsPackage = isPathPackage(plugin, importData.path);
     if (lineIsPackage && !isExtraImport) continue;
 
-    const lineImportPos = plugin.utils.getImportOrderPosition(
-      plugin.utils.strUntil(importData.path, ".")
+    const lineImportPos = getImportOrderPosition(
+      strUntil(importData.path, ".")
     );
 
     // Both have import orders

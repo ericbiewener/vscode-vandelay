@@ -1,5 +1,6 @@
 const fs = require("fs-extra");
 const _ = require("lodash");
+const { getFilepathKey } = require("../../utils");
 const { isPathPackage } = require("./utils");
 const { parseImports } = require("./regex");
 
@@ -45,8 +46,7 @@ function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
 
   // This order of class, function, constant will be maintained when picking an import from the list
   const exp = [...classes, ...functions, ...constants];
-  if (exp.length)
-    data[plugin.utils.getFilepathKey(filepath)] = { exports: exp };
+  if (exp.length) data[getFilepathKey(plugin, filepath)] = { exports: exp };
 
   return data;
 }

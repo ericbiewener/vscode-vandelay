@@ -1,6 +1,7 @@
 const fs = require("fs-extra");
 const path = require("path");
 const _ = require("lodash");
+const { getFilepathKey } = require("../../utils");
 const { basename, isPathNodeModule } = require("./utils");
 const { parseImports, exportRegex } = require("./regex");
 
@@ -31,7 +32,8 @@ function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
         existing.types = _.union(existing.types, importData.types);
     } else if (importData.default && importData.default.startsWith("* as")) {
       // import * as Foo from...
-      const pathKey = plugin.utils.getFilepathKey(
+      const pathKey = getFilepathKey(
+        plugin,
         path.resolve(path.dirname(filepath), `${importData.path}.js`) // Just guess at the file extension. Doesn't actually matter if it's right.
       );
       const existing = data[pathKey] || {};
@@ -116,7 +118,7 @@ function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
   }
 
   if (!_.isEmpty(fileExports)) {
-    const pathKey = plugin.utils.getFilepathKey(filepath);
+    const pathKey = getFilepathKey(plugin, filepath);
     const existing = data[pathKey];
     // An existing default could be there from an earlier processed "import * as Foo from.." See https://goo.gl/JXXskw
     if (existing && existing.default && !fileExports.default)

@@ -1,3 +1,5 @@
+const { getTabChar } = require("../../../utils");
+
 function getNewLine(plugin, importPath, imports) {
   const {
     padCurlyBraces,
@@ -41,7 +43,7 @@ function getNewLine(plugin, importPath, imports) {
 
   // Split up line if necessary
 
-  const tabChar = plugin.utils.getTabChar();
+  const tabChar = getTabChar();
   const newLineLength =
     newLineStart.length + newLineMiddle.length + newLineEnd.length;
 
