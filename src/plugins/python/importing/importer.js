@@ -1,6 +1,6 @@
 const { window, Range } = require("vscode");
 const path = require("path");
-const { getTabChar } = require("../../../utils");
+const { getTabChar, strUntil } = require("../../../utils");
 const { commentRegex, parseImports } = require("../regex");
 const { getImportPosition } = require("./getImportPosition");
 

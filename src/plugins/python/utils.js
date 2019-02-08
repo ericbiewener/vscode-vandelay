@@ -1,3 +1,5 @@
+const { strUntil } = require("../../utils");
+
 function isPathPackage(plugin, importPath) {
   if (importPath.startsWith(".")) return false;
   const pathStart = strUntil(importPath, ".");
