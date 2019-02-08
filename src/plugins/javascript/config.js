@@ -1,4 +1,4 @@
-const { removeUnusedImports } = require("../../removeUnusedImports");
+const { removeUnusedImports } = require("./removeUnusedImports");
 const { cacheFile, processCachedData } = require("./cacher");
 const { buildImportItems } = require("./importing/buildImportItems");
 const { insertImport } = require("./importing/importer");

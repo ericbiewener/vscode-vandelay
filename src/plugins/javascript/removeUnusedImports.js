@@ -5,6 +5,7 @@ const { getNewLine } = require("./importing/getNewLine");
 const { parseImports } = require("./regex");
 
 async function removeUnusedImports(plugin) {
+  console.log("js removeUnused");
   const diagnostics = getDiagnostics(d => d.code === "no-unused-vars");
 
   for (const filepath in diagnostics) {
