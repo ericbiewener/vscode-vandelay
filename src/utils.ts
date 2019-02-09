@@ -1,8 +1,8 @@
-const fs = require("fs");
-const makeDir = require("make-dir");
-const path = require("path");
-const _ = require("lodash");
-const { languages, Position, Range, window } = require("vscode");
+import fs from "fs"
+import makeDir from "make-dir"
+import path from "path"
+import _ from "lodash"
+import { languages, Position, Range, window } from "vscode"
 
 const extensionToLang = {
   jsx: "js",

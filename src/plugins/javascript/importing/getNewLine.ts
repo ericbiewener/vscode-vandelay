@@ -1,6 +1,6 @@
-const { getTabChar } = require("../../../utils");
+import { getTabChar } from "../../../utils"
 
-function getNewLine(plugin, importPath, imports) {
+export function getNewLine(plugin, importPath, imports) {
   const {
     padCurlyBraces,
     useSingleQuotes,
@@ -90,7 +90,3 @@ function getNewLine(plugin, importPath, imports) {
 
   return fullText + line + newLineEnd;
 }
-
-module.exports = {
-  getNewLine
-};

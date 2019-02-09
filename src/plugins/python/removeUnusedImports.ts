@@ -1,10 +1,10 @@
-const _ = require("lodash");
-const { Range, Uri, window } = require("vscode");
-const { strUntil } = require("../../utils");
-const { getNewLine } = require("./importing/importer");
-const { importRegex, parseImports } = require("./regex");
+import _ from "lodash"
+import { Range, Uri, window } from "vscode"
+import { strUntil } from "../../utils"
+import { getNewLine } from "./importing/importer"
+import { importRegex, parseImports } from "./regex"
 
-async function removeUnusedImports(plugin) {
+export async function removeUnusedImports(plugin) {
   const diagnostics = getDiagnostics(d => d.code === "F401");
   for (const filepath in diagnostics) {
     const editor = await window.showTextDocument(Uri.file(filepath), {
@@ -72,7 +72,3 @@ async function removeUnusedImports(plugin) {
     await document.save();
   }
 }
-
-module.exports = {
-  removeUnusedImports
-};

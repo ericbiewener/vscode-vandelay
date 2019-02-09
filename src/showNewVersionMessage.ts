@@ -1,5 +1,5 @@
-const opn = require("opn");
-const { extensions, window, workspace } = require("vscode");
+import opn from "opn"
+import { extensions, window, workspace } from "vscode"
 
 function showNewVersionAlert(context, extConfig = {}) {
   const {

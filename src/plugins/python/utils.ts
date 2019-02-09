@@ -1,6 +1,6 @@
-const { strUntil } = require("../../utils");
+import { strUntil } from "../../utils"
 
-function isPathPackage(plugin, importPath) {
+export function isPathPackage(plugin, importPath) {
   if (importPath.startsWith(".")) return false;
   const pathStart = strUntil(importPath, ".");
   return !plugin.includePaths.some(p => {
@@ -8,7 +8,3 @@ function isPathPackage(plugin, importPath) {
     return strUntil(relativePath, "/") === pathStart;
   });
 }
-
-module.exports = {
-  isPathPackage
-};

@@ -1,16 +1,16 @@
-const { window, commands, workspace } = require("vscode");
-const { initializePlugin } = require("./plugins");
-const { cacheProject, watchForChanges } = require("./cacher");
-const {
+import { window, commands, workspace } from "vscode";
+import { initializePlugin } from "./plugins";
+import { cacheProject, watchForChanges } from "./cacher";
+import {
   importUndefinedVariables,
   selectImport,
   selectImportForActiveWord
-} = require("./importer");
-const jsConfig = require("./plugins/javascript/config");
-const pyConfig = require("./plugins/python/config");
-const { removeUnusedImports } = require("./removeUnusedImports");
-const { showNewVersionAlert } = require("./showNewVersionMessage");
-const { getImportItems } = require("./utils");
+} from "./importer";
+import jsConfig from "./plugins/javascript/config";
+import pyConfig from "./plugins/python/config";
+import { removeUnusedImports } from "./removeUnusedImports";
+import { showNewVersionAlert } from "./showNewVersionMessage";
+import { getImportItems } from "./utils";
 
 /*
  * VS Code has an error swallowing problem, so we catch and manually log.

@@ -1,10 +1,12 @@
-const { window, Range } = require("vscode");
-const path = require("path");
-const { getTabChar, strUntil } = require("../../../utils");
-const { commentRegex, parseImports } = require("../regex");
-const { getImportPosition } = require("./getImportPosition");
+import { window, Range } from "vscode"
+import path from "path"
+import { getTabChar, strUntil } from "../../../utils"
+import { commentRegex, parseImports } from "../regex"
+import { getImportPosition } from "./getImportPosition"
 
-function buildImportItems(plugin, exportData) {
+// TODO: split into separate files like JS?
+
+export function buildImportItems(plugin, exportData) {
   const { projectRoot, shouldIncludeImport } = plugin;
   const activeFilepath = window.activeTextEditor.document.fileName;
   const items = [];
@@ -52,7 +54,7 @@ function buildImportItems(plugin, exportData) {
   return items;
 }
 
-function insertImport(plugin, importSelection) {
+export function insertImport(plugin, importSelection) {
   const { label: exportName, isExtraImport } = importSelection;
   const isPackageImport = !importSelection.description;
   const importPath = importSelection.description || exportName;
@@ -174,7 +176,7 @@ function getNewLineImports(importPosition, exportName) {
   return [...match.imports, exportName];
 }
 
-function getNewLine(plugin, importPath, imports) {
+export function getNewLine(plugin, importPath, imports) {
   const { maxImportLineLength } = plugin;
 
   const sensitivity = { sensitivity: "base" };
@@ -214,9 +216,3 @@ function getNewLine(plugin, importPath, imports) {
 
   return fullText + ")";
 }
-
-module.exports = {
-  buildImportItems,
-  insertImport,
-  getNewLine
-};

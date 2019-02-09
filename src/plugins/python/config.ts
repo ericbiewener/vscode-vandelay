@@ -1,12 +1,12 @@
-const { cacheFile, processCachedData } = require("./cacher");
-const { buildImportItems, insertImport } = require("./importing/importer");
-const { removeUnusedImports } = require("./removeUnusedImports");
+import { cacheFile, processCachedData } from "./cacher"
+import { buildImportItems, insertImport } from "./importing/importer"
+import { removeUnusedImports } from "./removeUnusedImports"
 
 function shouldIncludeDisgnostic({ code }) {
   return code === "F821";
 }
 
-const config = {
+export const config = {
   language: "py",
   cacheFile,
   processCachedData,
@@ -16,5 +16,3 @@ const config = {
   shouldIncludeDisgnostic,
   multilineImportParentheses: true
 };
-
-module.exports = { config };

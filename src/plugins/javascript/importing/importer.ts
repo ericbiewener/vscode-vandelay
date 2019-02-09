@@ -1,12 +1,12 @@
-const { window } = require("vscode");
-const path = require("path");
-const { insertLine, removeExt } = require("../../../utils");
-const { parseImports } = require("../regex");
-const { getImportPosition } = require("./getImportPosition");
-const { ExportType } = require("./buildImportItems");
-const { getNewLine } = require("./getNewLine");
+import { window } from "vscode"
+import path from "path"
+import { insertLine, removeExt } from "../../../utils"
+import { parseImports } from "../regex"
+import { getImportPosition } from "./getImportPosition"
+import { ExportType } from "./buildImportItems"
+import { getNewLine } from "./getNewLine"
 
-function insertImport(plugin, importSelection) {
+export function insertImport(plugin, importSelection) {
   const {
     label: exportName,
     description: importPath,
@@ -88,7 +88,3 @@ function getRelativeImportPath(file, absImportPath) {
   const relativePath = path.relative(path.dirname(file), absImportPath);
   return relativePath[0] === "." ? relativePath : "." + path.sep + relativePath;
 }
-
-module.exports = {
-  insertImport
-};

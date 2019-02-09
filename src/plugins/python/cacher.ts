@@ -1,10 +1,10 @@
-const fs = require("fs-extra");
-const _ = require("lodash");
-const { getFilepathKey } = require("../../utils");
-const { isPathPackage } = require("./utils");
-const { parseImports } = require("./regex");
+import fs from "fs-extra"
+import _ from "lodash"
+import { getFilepathKey } from "../../utils"
+import { isPathPackage } from "./utils"
+import { parseImports } from "./regex"
 
-function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
+export function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
   const fileText = fs.readFileSync(filepath, "utf8");
   const imports = parseImports(fileText);
 
@@ -54,7 +54,3 @@ function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
 function trimClassOrFn(str) {
   return str.slice(0, str.indexOf("("));
 }
-
-module.exports = {
-  cacheFile
-};

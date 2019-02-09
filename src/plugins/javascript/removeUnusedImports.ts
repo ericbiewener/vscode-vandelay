@@ -1,11 +1,10 @@
-const _ = require("lodash");
-const { Range, Uri, window } = require("vscode");
-const { getDiagnostics } = require("../../utils");
-const { getNewLine } = require("./importing/getNewLine");
-const { parseImports } = require("./regex");
+import _ from "lodash"
+import { Range, Uri, window } from "vscode"
+import { getDiagnostics } from "../../utils"
+import { getNewLine } from "./importing/getNewLine"
+import { parseImports } from "./regex"
 
-async function removeUnusedImports(plugin) {
-  console.log("js removeUnused");
+export async function removeUnusedImports(plugin) {
   const diagnostics = getDiagnostics(d => d.code === "no-unused-vars");
 
   for (const filepath in diagnostics) {
@@ -61,7 +60,3 @@ async function removeUnusedImports(plugin) {
     await document.save();
   }
 }
-
-module.exports = {
-  removeUnusedImports
-};

@@ -1,4 +1,4 @@
-function isPathNodeModule(plugin, importPath) {
+export function isPathNodeModule(plugin, importPath) {
   if (importPath.startsWith(".")) return false;
   return (
     !plugin.nonModulePaths ||
@@ -7,7 +7,3 @@ function isPathNodeModule(plugin, importPath) {
     )
   );
 }
-
-module.exports = {
-  isPathNodeModule
-};

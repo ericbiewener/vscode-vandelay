@@ -1,5 +1,5 @@
-const fs = require('fs')
-const { isFile } = require('./utils')
+import fs from 'fs'
+import { isFile } from './utils'
 
 let fileAccess
 

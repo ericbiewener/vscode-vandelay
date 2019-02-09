@@ -1,7 +1,7 @@
-const { window, workspace } = require("vscode");
-const path = require("path");
-const { isFile, getFilepathKey } = require("./utils");
-const utils = require("./utils");
+import { window, workspace } from "vscode"
+import path from "path"
+import { isFile, getFilepathKey } from "./utils"
+import utils from "./utils"
 
 const PLUGINS = {};
 

@@ -1,7 +1,7 @@
-const { removeUnusedImports } = require("./removeUnusedImports");
-const { cacheFile, processCachedData } = require("./cacher");
-const { buildImportItems } = require("./importing/buildImportItems");
-const { insertImport } = require("./importing/importer");
+import { removeUnusedImports } from "./removeUnusedImports"
+import { cacheFile, processCachedData } from "./cacher"
+import { buildImportItems } from "./importing/buildImportItems"
+import { insertImport } from "./importing/importer"
 
 function shouldIncludeDisgnostic({ code, source, message }) {
   return (
@@ -11,7 +11,7 @@ function shouldIncludeDisgnostic({ code, source, message }) {
 }
 
 // TODO: namespace settings vs utils?
-const config = {
+export const config = {
   language: "js",
   cacheFile,
   processCachedData,
@@ -26,5 +26,3 @@ const config = {
   multilineImportStyle: "multi",
   excludePatterns: [/.*\/node_modules(\/.*)?/]
 };
-
-module.exports = { config };

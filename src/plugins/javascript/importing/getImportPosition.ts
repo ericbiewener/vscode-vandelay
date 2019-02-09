@@ -1,11 +1,11 @@
-const _ = require("lodash");
-const {
+import _ from "lodash"
+import {
   getImportOrderPosition,
   getLastInitialComment
-} = require("../../../utils");
-const { commentRegex } = require("../regex");
-const { isPathNodeModule } = require("../utils");
-const { ExportType } = require("./buildImportItems");
+} from "../../../utils"
+import { commentRegex } from "../regex"
+import { isPathNodeModule } from "../utils"
+import { ExportType } from "./buildImportItems"
 
 /**
  * Determine which line number should get the import. This could be merged into that line
@@ -13,7 +13,7 @@ const { ExportType } = require("./buildImportItems");
  * new import line before or after (indexModifier = -1 or 1)
  **/
 
-function getImportPosition(
+export function getImportPosition(
   plugin,
   exportType,
   importPath,
@@ -85,7 +85,3 @@ function getImportPosition(
     indexModifier: 1
   };
 }
-
-module.exports = {
-  getImportPosition
-};

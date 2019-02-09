@@ -1,14 +1,14 @@
-const { window } = require("vscode");
-const path = require("path");
-const { getExportDataKeysByCachedDate } = require("../../../utils");
+import { window } from "vscode"
+import path from "path"
+import { getExportDataKeysByCachedDate } from "../../../utils"
 
-const ExportType = {
+export const ExportType = {
   default: 0,
   named: 1,
   type: 2
 };
 
-function buildImportItems(plugin, exportData) {
+export function buildImportItems(plugin, exportData) {
   const { projectRoot, shouldIncludeImport } = plugin;
   const activeFilepath = window.activeTextEditor.document.fileName;
   const items = [];
@@ -121,15 +121,3 @@ function buildImportItems(plugin, exportData) {
 
   return items;
 }
-
-function buildTypeImportItems(plugin, exportData) {
-  return buildImportItems(plugin, exportData).filter(
-    e => e.exportType === ExportType.type
-  );
-}
-
-module.exports = {
-  buildImportItems,
-  buildTypeImportItems,
-  ExportType
-};

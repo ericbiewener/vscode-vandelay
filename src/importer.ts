@@ -1,8 +1,8 @@
-const _ = require("lodash");
-const { window, workspace } = require("vscode");
-const { getDiagnostics } = require("./utils");
-const { getImportItems, getPluginForActiveFile } = require("./utils");
-const { cacheFileManager } = require("./cacheFileManager");
+import _ from "lodash"
+import { window, workspace } from "vscode"
+import { getDiagnostics } from "./utils"
+import { getImportItems, getPluginForActiveFile } from "./utils"
+import { cacheFileManager } from "./cacheFileManager"
 
 async function selectImport(word, buildImportItems) {
   const plugin = getPluginForActiveFile();

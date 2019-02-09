@@ -1,9 +1,20 @@
-const _ = require("lodash");
-const { strUntil } = require("../../utils");
+import _ from "lodash"
+import { strUntil } from "../../utils"
+
+export const commentRegex = /^(?:[ \t]*\/\/.*|[ \t]*\/\*[^]*?\*\/)/gm;
+
+export const exportRegex = {
+  // `standard` also captures selective reexports that include a default reexport. It is the
+  // responsibility of `cacheFile` to handle this when processing these improts.
+  standard: /^export +(\w+,?)(?: +(\w+))?/gm,
+  fullRexport: /^export +\*.+?['"](.+)['"]/gm,
+  selectiveRexport: /^export +(\w*),* *{([^]+?)}.+?['"](.+)['"]/gm,
+  moduleExports: /^module\.exports *= *(\w+)?(?:{([^]*?)})?.*/gm
+};
 
 /**
- * Regex must end with `.*` after last capturing group to ensure that we capture the full line. This
- * is necessary so that the `end` property in the results is the correct character.
+ * Import regexex must end with `.*` after last capturing group to ensure that we capture the full
+ * line. This is necessary so that the `end` property in the results is the correct character.
  *
  * Matching groups:
  *    1. default import OR outside `type` declaration
@@ -13,7 +24,7 @@ const { strUntil } = require("../../utils");
 const importRegex = /^import +?([^{]+?[, ])? *(?:{([^]*?)} +)?from +["'](.*)["'].*/gm;
 const requireRegex = /^(?:const|let|var) +(\w+)?(?:{([^]*?)})? *= *require\( *['"](.*?)['"].*/gm;
 
-function parseImports(plugin, text) {
+export function parseImports(plugin, text) {
   const regex = plugin.useES5 ? requireRegex : importRegex;
   const imports = [];
   let match;
@@ -59,20 +70,3 @@ function parseImports(plugin, text) {
   regex.lastIndex = 0;
   return imports;
 }
-
-const commentRegex = /^(?:[ \t]*\/\/.*|[ \t]*\/\*[^]*?\*\/)/gm;
-
-const exportRegex = {
-  // `standard` also captures selective reexports that include a default reexport. It is the
-  // responsibility of `cacheFile` to handle this when processing these improts.
-  standard: /^export +(\w+,?)(?: +(\w+))?/gm,
-  fullRexport: /^export +\*.+?['"](.+)['"]/gm,
-  selectiveRexport: /^export +(\w*),* *{([^]+?)}.+?['"](.+)['"]/gm,
-  moduleExports: /^module\.exports *= *(\w+)?(?:{([^]*?)})?.*/gm
-};
-
-module.exports = {
-  parseImports,
-  exportRegex,
-  commentRegex
-};

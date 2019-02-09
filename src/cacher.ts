@@ -1,15 +1,15 @@
-const { window, workspace } = require("vscode");
-const path = require("path");
-const fs = require("fs-extra");
-const _ = require("lodash");
-const anymatch = require("anymatch");
-const {
+import { window, workspace } from "vscode";
+import path from "path";
+import fs from "fs-extra";
+import _ from "lodash";
+import anymatch from "anymatch";
+import {
   writeCacheFile,
   getLangFromFilePath,
   getFilepathKey
-} = require("./utils");
-const { cacheFileManager } = require("./cacheFileManager");
-const { PLUGINS } = require("./plugins");
+ } from "./utils";
+import { cacheFileManager } from "./cacheFileManager";
+import { PLUGINS } from "./plugins";
 
 function shouldIgnore(plugin, filePath) {
   return anymatch(plugin.excludePatterns, filePath);

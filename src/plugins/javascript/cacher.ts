@@ -1,16 +1,11 @@
-const fs = require("fs-extra");
-const path = require("path");
-const _ = require("lodash");
-const { basename, getFilepathKey } = require("../../utils");
-const { isPathNodeModule } = require("./utils");
-const { parseImports, exportRegex } = require("./regex");
+import fs from "fs-extra"
+import path from "path"
+import _ from "lodash"
+import { basename, getFilepathKey } from "../../utils"
+import { isPathNodeModule } from "./utils"
+import { parseImports, exportRegex } from "./regex"
 
-function processDefaultName(plugin, defaultName, importPath) {
-  if (!plugin.processDefaultName) return defaultName;
-  return plugin.processDefaultName(importPath) || defaultName;
-}
-
-function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
+export function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
   const fileExports = {};
   const fileText = fs.readFileSync(filepath, "utf8");
   const imports = parseImports(plugin, fileText);
@@ -143,7 +138,7 @@ function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
  * importing from an adjacent/subfile. While solveable, this is probably an edge case to be ignored
  * (not to mention an undesireable API being created by the developer)
  */
-function processCachedData(data) {
+export function processCachedData(data) {
   _.each(data, (fileData, mainFilepath) => {
     const reexportNames = [];
 
@@ -194,6 +189,11 @@ function processCachedData(data) {
   return data;
 }
 
+function processDefaultName(plugin, defaultName, importPath) {
+  if (!plugin.processDefaultName) return defaultName;
+  return plugin.processDefaultName(importPath) || defaultName;
+}
+
 function getSubfileData(mainFilepath, filename, data) {
   const filepathWithoutExt = path.join(path.dirname(mainFilepath), filename);
   for (const ext of [".js", ".jsx"]) {
@@ -201,8 +201,3 @@ function getSubfileData(mainFilepath, filename, data) {
     if (subfileExports) return subfileExports;
   }
 }
-
-module.exports = {
-  cacheFile,
-  processCachedData
-};

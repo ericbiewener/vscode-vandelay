@@ -1,7 +1,7 @@
-const _ = require("lodash");
-const { getLastInitialComment, strUntil } = require("../../../utils");
-const { commentRegex } = require("../regex");
-const { isPathPackage } = require("../utils");
+import _ from "lodash"
+import { getLastInitialComment, strUntil } from "../../../utils"
+import { commentRegex } from "../regex"
+import { isPathPackage } from "../utils"
 
 /**
  * Determine which line number should get the import. This could be merged into that line
@@ -9,7 +9,7 @@ const { isPathPackage } = require("../utils");
  * new import line before or after (lineIndexModifier = -1 or 1)
  **/
 
-function getImportPosition(plugin, importPath, isExtraImport, imports, text) {
+export function getImportPosition(plugin, importPath, isExtraImport, imports, text) {
   // If no imports, find first non-comment line
   if (!imports.length) {
     return {
@@ -93,7 +93,3 @@ function getImportPosition(plugin, importPath, isExtraImport, imports, text) {
     indexModifier: 1
   };
 }
-
-module.exports = {
-  getImportPosition
-};

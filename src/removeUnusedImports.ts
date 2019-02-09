@@ -1,5 +1,5 @@
-const { window } = require("vscode");
-const { getPluginForActiveFile } = require("./utils");
+import { window } from "vscode"
+import { getPluginForActiveFile } from "./utils"
 
 async function removeUnusedImports() {
   const plugin = getPluginForActiveFile();
