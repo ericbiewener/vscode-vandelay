@@ -1,14 +1,16 @@
-const { window, commands, workspace } = require('vscode')
-const { initializePlugin } = require('./plugins')
-const { cacheProject, watchForChanges } = require('./cacher')
+const { window, commands, workspace } = require("vscode");
+const { initializePlugin } = require("./plugins");
+const { cacheProject, watchForChanges } = require("./cacher");
 const {
   importUndefinedVariables,
   selectImport,
-  selectImportForActiveWord,
-} = require('./importer')
-const { removeUnusedImports } = require('./removeUnusedImports')
-const { showNewVersionAlert } = require('./showNewVersionMessage')
-const { getImportItems } = require('./utils')
+  selectImportForActiveWord
+} = require("./importer");
+const jsConfig = require("./plugins/javascript/config");
+const pyConfig = require("./plugins/python/config");
+const { removeUnusedImports } = require("./removeUnusedImports");
+const { showNewVersionAlert } = require("./showNewVersionMessage");
+const { getImportItems } = require("./utils");
 
 /*
  * VS Code has an error swallowing problem, so we catch and manually log.
@@ -16,85 +18,75 @@ const { getImportItems } = require('./utils')
 function catchError(fn) {
   return async function(...args) {
     try {
-      const result = await fn(...args)
-      return result
+      const result = await fn(...args);
+      return result;
     } catch (e) {
-      console.error(e)
+      console.error(e);
       window.showErrorMessage(
         'Vandelay extension error! Please run the "Toggle Developer Tools" VS Code command and post the stacktrace at https://github.com/ericbiewener/vscode-vandelay.'
-      )
-      throw e
+      );
+      throw e;
     }
-  }
+  };
 }
 
 function activate(context) {
-  console.log('Vandelay Core activating')
-
-  showNewVersionAlert(context)
+  showNewVersionAlert(context);
 
   context.subscriptions.push(
-    commands.registerCommand('vandelay.cacheProject', catchError(cacheProject)),
+    commands.registerCommand("vandelay.cacheProject", catchError(cacheProject)),
     commands.registerCommand(
-      'vandelay.selectImport',
+      "vandelay.selectImport",
       catchError(() => selectImport())
     ),
     commands.registerCommand(
-      'vandelay.selectImportForActiveWord',
+      "vandelay.selectImportForActiveWord",
       catchError(() => selectImportForActiveWord())
     ),
     commands.registerCommand(
-      'vandelay.importUndefinedVariables',
+      "vandelay.importUndefinedVariables",
       catchError(() => importUndefinedVariables())
     ),
     commands.registerCommand(
-      'vandelay.removeUnusedImports',
+      "vandelay.removeUnusedImports",
       catchError(removeUnusedImports)
     ),
     commands.registerCommand(
-      'vandelay.fixImports',
+      "vandelay.fixImports",
       catchError(() => {
-        removeUnusedImports()
-        importUndefinedVariables()
+        removeUnusedImports();
+        importUndefinedVariables();
       })
     )
-  )
+  );
 
-  const pluginConfigs = []
+  const pluginConfigs = [jsConfig.config, pyConfig.config];
+
+  for (const config of pluginConfigs) initializePlugin(context, config);
 
   context.subscriptions.push(
     workspace.onDidChangeConfiguration(e => {
       if (
-        e.affectsConfiguration('vandelay.configLocation') ||
-        e.affectsConfiguration('vandelay.projectRoot')
+        e.affectsConfiguration("vandelay.configLocation") ||
+        e.affectsConfiguration("vandelay.projectRoot")
       ) {
-        pluginConfigs.forEach(config => initializePlugin(context, config))
+        pluginConfigs.forEach(config => initializePlugin(context, config));
       }
     }),
 
     watchForChanges()
-  )
+  );
 
   return {
-    registerPlugin(pluginConfig) {
-      console.log(
-        `Vandelay plugin being registered for language: ${
-          pluginConfig.language
-        }`
-      )
-      if (pluginConfig.newVersionAlert)
-        showNewVersionAlert(pluginConfig.context, pluginConfig.newVersionAlert)
-      initializePlugin(context, pluginConfig)
-      pluginConfigs.push(pluginConfig)
-    },
-    commands: {
-      selectImport: catchError(selectImport),
-      selectImportForActiveWord: catchError(selectImportForActiveWord),
-    },
-    _test: {
-      pluginConfigs,
-      getImportItems,
-    },
-  }
+    registerPlugin: async ({ language }) => {
+      window.showErrorMessage(
+        `Please uninstall extension Vandelay ${language.toUpperCase()}. Vandelay no longer requires langauge extensions to be installed separately.`
+      );
+      await commands.executeCommand(
+        "workbench.extensions.action.listEnabledExtensions"
+      );
+    }
+  };
 }
-exports.activate = activate
+
+exports.activate = activate;
