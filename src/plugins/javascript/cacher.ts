@@ -2,11 +2,13 @@ import fs from "fs-extra"
 import path from "path"
 import _ from "lodash"
 import { basename, getFilepathKey } from "../../utils"
+import { PluginJs, NonFinalExportDataJs, NonFinalExportDatumJs, FileExports } from "./types"
 import { isPathNodeModule } from "./utils"
 import { parseImports, exportRegex } from "./regex"
 
-export function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
-  const fileExports = {};
+export function cacheFile(plugin: PluginJs, filepath: string, data: NonFinalExportDataJs = { _extraImports: {} }) {
+  // @ts-ignore
+  const fileExports: NonFinalExportDatumJs = { named: [], types: [], all: [], reexports: {} };
   const fileText = fs.readFileSync(filepath, "utf8");
   const imports = parseImports(plugin, fileText);
 
@@ -53,10 +55,8 @@ export function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
     } else if (!plugin.useES5 && !match[2] && !match[1].endsWith(",")) {
       // endsWith(',') — it's actually a reexport
       // export myVar  |  export myVar from ...
-      fileExports.named = fileExports.named || [];
       fileExports.named.push(match[1]);
     } else if (plugin.useES5 && match[2]) {
-      fileExports.named = fileExports.named || [];
       // If any array or object exports were defined inline, strip those out so that our comm-based
       // string splitting will correctly split after each export
       const text = match[2]
@@ -84,7 +84,6 @@ export function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
     // match[2] = export names
     // match[3] = path
     while ((match = exportRegex.selectiveRexport.exec(fileText))) {
-      if (!fileExports.reexports) fileExports.reexports = {};
       const subPath = match[3];
       if (!fileExports.reexports[subPath]) fileExports.reexports[subPath] = [];
       const reexports = fileExports.reexports[subPath];
@@ -107,7 +106,8 @@ export function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
         const key = isType ? "types" : "named";
         reexports.push(words[isType ? 1 : 0]);
         fileExports[key] = fileExports[key] || [];
-        fileExports[key].push(_.last(words));
+        const word = _.last(words)
+        if (word) fileExports[key].push(word);
       }
     }
   }
@@ -116,8 +116,9 @@ export function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
     const pathKey = getFilepathKey(plugin, filepath);
     const existing = data[pathKey];
     // An existing default could be there from an earlier processed "import * as Foo from.." See https://goo.gl/JXXskw
-    if (existing && existing.default && !fileExports.default)
+    if (existing && existing.default && !fileExports.default) {
       fileExports.default = existing.default;
+    }
     data[pathKey] = fileExports;
   }
 

@@ -3,13 +3,13 @@ import path from "path"
 import { isFile, getFilepathKey } from "./utils"
 import utils from "./utils"
 
-const PLUGINS = {};
+export const PLUGINS = {};
 
 const defaultSettings = {
   maxImportLineLength: 100
 };
 
-function initializePlugin(context, pluginConfig) {
+export function initializePlugin(context, pluginConfig) {
   if (!workspace.workspaceFolders) return;
 
   let configLocation = workspace.workspaceFolders.find(
@@ -64,8 +64,3 @@ function getProjectSettings(vandelayDir, vandelayFile) {
     }
   }
 }
-
-module.exports = {
-  PLUGINS,
-  initializePlugin
-};

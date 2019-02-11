@@ -43,7 +43,7 @@ function cacheDir(plugin, dir, recursive = true, data = { _extraImports: {} }) {
     .then(() => data);
 }
 
-function cacheProjectLanguage(plugin) {
+export function cacheProjectLanguage(plugin) {
   if (!plugin.includePaths || !plugin.includePaths.length) {
     window.showErrorMessage(
       `You must specify the "includePaths" configuration option in your vandelay-${
@@ -72,7 +72,7 @@ function cacheProjectLanguage(plugin) {
   return cacher.then(data => writeCacheFile(plugin, data));
 }
 
-function cacheProject() {
+export function cacheProject() {
   if (_.isEmpty(PLUGINS)) {
     window.showErrorMessage(
       "No Vandelay configuration files found. If you just added one, reload the window."
@@ -116,7 +116,7 @@ function onChangeOrCreate(doc) {
   });
 }
 
-function watchForChanges() {
+export function watchForChanges() {
   const watcher = workspace.createFileSystemWatcher("**/*.*");
 
   watcher.onDidChange(onChangeOrCreate);
@@ -136,9 +136,3 @@ function watchForChanges() {
 
   return watcher;
 }
-
-module.exports = {
-  cacheProject,
-  cacheProjectLanguage,
-  watchForChanges
-};

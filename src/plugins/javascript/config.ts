@@ -10,6 +10,8 @@ function shouldIncludeDisgnostic({ code, source, message }) {
   );
 }
 
+export const JS_EXTENSIONS = ['js', 'jsx', 'ts', 'tsx', 'mjs']
+
 // TODO: namespace settings vs utils?
 export const config = {
   language: "js",

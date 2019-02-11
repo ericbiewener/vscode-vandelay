@@ -3,20 +3,20 @@ import makeDir from "make-dir"
 import path from "path"
 import _ from "lodash"
 import { languages, Position, Range, window } from "vscode"
+import { JS_EXTENSIONS } from './plugins/javascript/config'
+import { Obj } from './types'
 
-const extensionToLang = {
-  jsx: "js",
-  mjs: "js"
-};
+const extensionToLang: Obj = {}
+for (const ext of JS_EXTENSIONS) extensionToLang[ext] = 'js'
 
-function writeCacheFile(plugin, data) {
+export function writeCacheFile(plugin, data) {
   _.each(data._extraImports, d => (d.isExtraImport = true));
   return makeDir(plugin.cacheDirPath).then(() =>
     fs.writeFileSync(plugin.cacheFilePath, JSON.stringify(data))
   );
 }
 
-function isFile(file) {
+export function isFile(file) {
   try {
     return fs.statSync(file).isFile();
   } catch (e) {
@@ -25,12 +25,12 @@ function isFile(file) {
   }
 }
 
-function getLangFromFilePath(filePath) {
+export function getLangFromFilePath(filePath) {
   const ext = path.extname(filePath).slice(1);
   return extensionToLang[ext] || ext;
 }
 
-function getPluginForActiveFile() {
+export function getPluginForActiveFile() {
   if (!window.activeTextEditor) return;
   const { PLUGINS } = require("./plugins");
   const plugin =
@@ -40,12 +40,12 @@ function getPluginForActiveFile() {
   return plugin;
 }
 
-function getFilepathKey(plugin, filepath) {
+export function getFilepathKey(plugin, filepath) {
   return filepath.slice(plugin.projectRoot.length + 1);
 }
 
 // Extracted for sharing with plugins for testing
-function getImportItems(plugin, exportData, buildImportItems) {
+export function getImportItems(plugin, exportData, buildImportItems) {
   Object.assign(exportData, exportData._extraImports);
   delete exportData._extraImports;
   if (exportData)
@@ -53,11 +53,11 @@ function getImportItems(plugin, exportData, buildImportItems) {
 }
 
 // TODO: rename `basenameNoExt`
-function basename(filepath) {
+export function basename(filepath) {
   return path.basename(filepath, path.extname(filepath));
 }
 
-async function insertLine(newLine, importPosition) {
+export async function insertLine(newLine, importPosition) {
   const { match, indexModifier, isFirstImport } = importPosition;
   const editor = window.activeTextEditor;
   const { document } = editor;
@@ -90,23 +90,23 @@ async function insertLine(newLine, importPosition) {
   });
 }
 
-function getTabChar() {
+export function getTabChar() {
   const { options } = window.activeTextEditor;
   return options.insertSpaces ? _.repeat(" ", options.tabSize) : "\t";
 }
 
-function strUntil(str, endChar) {
+export function strUntil(str, endChar) {
   const index =
     typeof endChar === "string" ? str.indexOf(endChar) : str.search(endChar);
   return index < 0 ? str : str.slice(0, index);
 }
 
-function removeExt(filepath) {
+export function removeExt(filepath) {
   const ext = path.extname(filepath);
   return ext ? filepath.slice(0, -ext.length) : filepath;
 }
 
-function getLastInitialComment(text, commentRegex) {
+export function getLastInitialComment(text, commentRegex) {
   // Iterates over comment line matches. If one doesn't begin where the previous one left off, this means
   // a non comment line came between them.
   let expectedNextIndex = 0;
@@ -126,13 +126,13 @@ function getLastInitialComment(text, commentRegex) {
     : null;
 }
 
-function getImportOrderPosition(plugin, importPath) {
+export function getImportOrderPosition(plugin, importPath) {
   if (!plugin.importGroups) return;
   const index = _.flatten(plugin.importGroups).indexOf(importPath);
   return index > -1 ? index : undefined;
 }
 
-function getExportDataKeysByCachedDate(exportData) {
+export function getExportDataKeysByCachedDate(exportData) {
   return Object.keys(exportData).sort((a, b) => {
     const createdA = exportData[a].cached;
     const createdB = exportData[b].cached;
@@ -143,7 +143,7 @@ function getExportDataKeysByCachedDate(exportData) {
   });
 }
 
-function getDiagnostics(filter, forActiveEditor) {
+export function getDiagnostics(filter, forActiveEditor) {
   if (forActiveEditor) {
     return languages
       .getDiagnostics(window.activeTextEditor.document.uri)
@@ -157,21 +157,3 @@ function getDiagnostics(filter, forActiveEditor) {
   }
   return diagnosticsByFile;
 }
-
-module.exports = {
-  writeCacheFile,
-  isFile,
-  getLangFromFilePath,
-  getPluginForActiveFile,
-  getFilepathKey,
-  getImportItems,
-  basename,
-  insertLine,
-  getTabChar,
-  strUntil,
-  removeExt,
-  getLastInitialComment,
-  getImportOrderPosition,
-  getExportDataKeysByCachedDate,
-  getDiagnostics
-};

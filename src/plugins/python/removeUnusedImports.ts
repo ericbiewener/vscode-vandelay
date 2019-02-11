@@ -4,6 +4,8 @@ import { strUntil } from "../../utils"
 import { getNewLine } from "./importing/importer"
 import { importRegex, parseImports } from "./regex"
 
+let a: string = "hello"
+
 export async function removeUnusedImports(plugin) {
   const diagnostics = getDiagnostics(d => d.code === "F401");
   for (const filepath in diagnostics) {

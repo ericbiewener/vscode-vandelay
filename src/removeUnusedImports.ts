@@ -1,7 +1,7 @@
 import { window } from "vscode"
 import { getPluginForActiveFile } from "./utils"
 
-async function removeUnusedImports() {
+export async function removeUnusedImports() {
   const plugin = getPluginForActiveFile();
   if (!plugin) return;
 
@@ -9,7 +9,3 @@ async function removeUnusedImports() {
   await plugin.removeUnusedImports(plugin);
   await window.showTextDocument(originalEditor.document.uri);
 }
-
-module.exports = {
-  removeUnusedImports
-};

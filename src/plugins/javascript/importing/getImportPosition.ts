@@ -5,7 +5,9 @@ import {
 } from "../../../utils"
 import { commentRegex } from "../regex"
 import { isPathNodeModule } from "../utils"
+import { PluginJs } from '../types'
 import { ExportType } from "./buildImportItems"
+import { ParsedImport } from "../regex"
 
 /**
  * Determine which line number should get the import. This could be merged into that line
@@ -13,13 +15,15 @@ import { ExportType } from "./buildImportItems"
  * new import line before or after (indexModifier = -1 or 1)
  **/
 
+export type ImportPosition = { match: ParsedImport, indexModifier: -1 | 0 | 1}
+
 export function getImportPosition(
-  plugin,
-  exportType,
-  importPath,
-  isExtraImport,
-  imports,
-  text
+  plugin: PluginJs,
+  exportType: ExportType,
+  importPath: string,
+  isExtraImport: boolean | undefined,
+  imports: ParsedImport[],
+  text: string,
 ) {
   // If no imports, find first non-comment line
   if (!imports.length) {

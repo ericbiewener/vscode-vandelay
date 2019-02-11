@@ -30,7 +30,7 @@ function catchError(fn) {
   };
 }
 
-function activate(context) {
+export function activate(context) {
   showNewVersionAlert(context);
 
   context.subscriptions.push(
@@ -88,5 +88,3 @@ function activate(context) {
     }
   };
 }
-
-exports.activate = activate;

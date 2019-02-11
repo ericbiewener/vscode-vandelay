@@ -1,12 +1,13 @@
-import { window } from "vscode"
+import { window, TextEditor } from "vscode"
 import path from "path"
 import { insertLine, removeExt } from "../../../utils"
 import { parseImports } from "../regex"
-import { getImportPosition } from "./getImportPosition"
-import { ExportType } from "./buildImportItems"
+import { PluginJs, FileExports } from '../types'
+import { getImportPosition, ImportPosition } from "./getImportPosition"
+import { ExportType, ImportItem } from "./buildImportItems"
 import { getNewLine } from "./getNewLine"
 
-export function insertImport(plugin, importSelection) {
+export function insertImport(plugin: PluginJs, importSelection: ImportItem) {
   const {
     label: exportName,
     description: importPath,
@@ -22,7 +23,7 @@ export function insertImport(plugin, importSelection) {
     absImportPath,
     isExtraImport
   );
-  const fileText = editor.document.getText();
+  const fileText = (editor as TextEditor).document.getText();
   const imports = parseImports(plugin, fileText);
 
   const importPosition = getImportPosition(
@@ -40,10 +41,10 @@ export function insertImport(plugin, importSelection) {
   return insertLine(newLine, importPosition);
 }
 
-function getFinalImportPath(plugin, importPath, absImportPath, isExtraImport) {
+function getFinalImportPath(plugin: PluginJs, importPath: string, absImportPath: string, isExtraImport: boolean | undefined) {
   if (isExtraImport) return importPath;
 
-  const activeFilepath = window.activeTextEditor.document.fileName;
+  const activeFilepath = (window.activeTextEditor as TextEditor).document.fileName;
   importPath = getRelativeImportPath(activeFilepath, absImportPath);
 
   if (plugin.processImportPath) {
@@ -61,10 +62,10 @@ function getFinalImportPath(plugin, importPath, absImportPath, isExtraImport) {
     : removeExt(importPath);
 }
 
-function getNewLineImports(importPosition, exportName, exportType) {
+function getNewLineImports(importPosition: ImportPosition, exportName: string, exportType: ExportType) {
   const { match, indexModifier } = importPosition;
 
-  const imports = indexModifier
+  const imports: FileExports = indexModifier
     ? { named: [], types: [] }
     : {
         named: match.named || [],
@@ -84,7 +85,7 @@ function getNewLineImports(importPosition, exportName, exportType) {
   return imports;
 }
 
-function getRelativeImportPath(file, absImportPath) {
+function getRelativeImportPath(file: string, absImportPath: string) {
   const relativePath = path.relative(path.dirname(file), absImportPath);
   return relativePath[0] === "." ? relativePath : "." + path.sep + relativePath;
 }

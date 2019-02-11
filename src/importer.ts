@@ -4,7 +4,7 @@ import { getDiagnostics } from "./utils"
 import { getImportItems, getPluginForActiveFile } from "./utils"
 import { cacheFileManager } from "./cacheFileManager"
 
-async function selectImport(word, buildImportItems) {
+export async function selectImport(word, buildImportItems) {
   const plugin = getPluginForActiveFile();
   if (!plugin) return;
 
@@ -25,7 +25,7 @@ async function selectImport(word, buildImportItems) {
   });
 }
 
-async function selectImportForActiveWord(buildImportItems) {
+export async function selectImportForActiveWord(buildImportItems) {
   const editor = window.activeTextEditor;
   if (!editor) return;
 
@@ -34,7 +34,7 @@ async function selectImportForActiveWord(buildImportItems) {
   selectImport(activeWord, buildImportItems);
 }
 
-async function importUndefinedVariables() {
+export async function importUndefinedVariables() {
   const filter = _.get(getPluginForActiveFile(), "shouldIncludeDisgnostic");
   if (!filter) return [];
 
@@ -56,8 +56,3 @@ async function importUndefinedVariables() {
   for (const word of _.uniq(words)) await selectImport(word);
 }
 
-module.exports = {
-  selectImport,
-  selectImportForActiveWord,
-  importUndefinedVariables
-};

@@ -16,15 +16,11 @@ function parseCacheFile(plugin) {
  * `cb` should return a promise (e.g. any file writing operations) so that it completes before the next call
  * to the cacheFileManager
  */
-function cacheFileManager(plugin, cb) {
+export function cacheFileManager(plugin, cb) {
   if (fileAccess) {
     fileAccess = fileAccess.then(() => cb(parseCacheFile(plugin)))
   } else {
     fileAccess = Promise.resolve(cb(parseCacheFile(plugin)))
   }
   return fileAccess
-}
-
-module.exports = {
-  cacheFileManager,
 }
