@@ -1,6 +1,6 @@
 const _ = require("lodash");
 const { Range, Uri, window } = require("vscode");
-const { strUntil } = require("../../utils");
+const { strUntil, getDiagnostics } = require("../../utils");
 const { getNewLine } = require("./importing/importer");
 const { importRegex, parseImports } = require("./regex");
 
