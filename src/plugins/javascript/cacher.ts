@@ -2,7 +2,7 @@ import fs from "fs-extra"
 import path from "path"
 import _ from "lodash"
 import { basename, getFilepathKey } from "../../utils"
-import { PluginJs, CachingData, NonFinalExportDatumJs } from "./types"
+import { PluginJs, CachingData, NonFinalExportDataJs, NonFinalExportDatumJs } from "./types"
 import { isPathNodeModule } from "./utils"
 import { parseImports, exportRegex } from "./regex"
 
@@ -146,11 +146,11 @@ export function processCachedData(data: CachingData) {
     const { reexportsToProcess: { fullModules, selective} } = fileExports
     const reexportNames: string[] = [];
 
-    if (fullModules) {
-      for (const subfilePath in fullModules) {
-        const subfileExportNames = reexports[subfilePath]
+    if (selective) {
+      for (const subfilePath in selective) {
+        const subfileExportNames = selective[subfilePath]
         reexportNames.push(...subfileExportNames);
-        const subfileExports = getSubfileExports(mainFilepath, subfilePath, data);
+        const subfileExports = getSubfileExports(mainFilepath, subfilePath, exp);
         if (subfileExports) {
           if (!subfileExports.reexported) {
             subfileExports.reexported = {
@@ -163,9 +163,9 @@ export function processCachedData(data: CachingData) {
       }
     }
 
-    if (all) {
-      for (const subfilePath of all) {
-        const subfileExports = getSubfileExports(mainFilepath, subfilePath, data);
+    if (fullModules) {
+      for (const subfilePath of fullModules) {
+        const subfileExports = getSubfileExports(mainFilepath, subfilePath, exp);
         if (!subfileExports || !subfileExports.named) return;
         if (fileExports.named) {
           fileExports.named.push(...subfileExports.named);
@@ -179,30 +179,24 @@ export function processCachedData(data: CachingData) {
           reexportPath: mainFilepath
         };
       };
-
-      delete fileExports.all;
     }
 
     // flag names in `index.js` key
-    if (reexportNames.length) {
-      fileExports.reexports = reexportNames;
-    } else {
-      delete fileExports.reexports;
-    }
+    if (reexportNames.length) fileExports.reexports = reexportNames;
   };
 
   return data;
 }
 
-function processDefaultName(plugin, defaultName, importPath) {
+function processDefaultName(plugin: PluginJs, defaultName: string, importPath: string) {
   if (!plugin.processDefaultName) return defaultName;
   return plugin.processDefaultName(importPath) || defaultName;
 }
 
-function getSubfileExports(mainFilepath, filename, data) {
+function getSubfileExports(mainFilepath: string, filename: string, exp: NonFinalExportDataJs) {
   const filepathWithoutExt = path.join(path.dirname(mainFilepath), filename);
   for (const ext of [".js", ".jsx"]) {
-    const subfileExports = data[filepathWithoutExt + ext];
+    const subfileExports = exp[filepathWithoutExt + ext];
     if (subfileExports) return subfileExports;
   }
 }

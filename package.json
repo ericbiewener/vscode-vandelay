@@ -98,6 +98,9 @@
     "@types/anymatch": "1.3.0",
     "@types/fs-extra": "5.0.4",
     "@types/lodash": "4.14.120",
+    "@types/mocha": "5.2.5",
+    "@types/node": "11.9.2",
+    "@typescript-eslint/eslint-plugin": "^1.3.0",
     "@typescript-eslint/parser": "^1.3.0",
     "eslint": "5.13.0",
     "eslint-config-ericbiewener": "3.0.0",
@@ -108,9 +111,6 @@
     "vscode": "1.1.29"
   },
   "dependencies": {
-    "@types/mocha": "5.2.5",
-    "@types/node": "^10.12.21",
-    "@typescript-eslint/eslint-plugin": "^1.3.0",
     "anymatch": "^2.0.0",
     "fs-extra": "7.0.1",
     "lodash": "^4.17.5",

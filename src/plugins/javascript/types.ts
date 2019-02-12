@@ -9,8 +9,9 @@ export type PluginJs = Plugin & {
   useSingleQuotes?: boolean,
   useSemicolons?: boolean,
   multilineImportStyle?: 'single' | 'multiple',
-  processImportPath?(importPath: string, absImportPath: string, activeFilepath: string, projectRoot: string): string | undefined,
   trailingComma?: boolean,
+  processImportPath?(importPath: string, absImportPath: string, activeFilepath: string, projectRoot: string): string | undefined,
+  processDefaultName?(path: string): string | undefined
 }
 
 export type FileExports = {
@@ -22,7 +23,7 @@ export type FileExports = {
 export type ExportDatumJs = ExportDatum & FileExports & {
   // TODO: are the below definitions correct? rename to make clearer
   // Exports in current file that are reexported elsewhere
-  reexports: string[],
+  reexports?: string[],
   // Exports in other files that are reexported in current file
   reexported?: {
     reexportPath: string,
@@ -42,7 +43,9 @@ export type NonFinalExportDatumJs = ExportDatumJs & {
   }
 }
 
+export type NonFinalExportDataJs = { [path: string]: NonFinalExportDatumJs }
+
 export type CachingData = {
-  exp: { [path: string]: NonFinalExportDatumJs },
+  exp: NonFinalExportDataJs,
   imp: { [path: string]: FileExports },
 }
