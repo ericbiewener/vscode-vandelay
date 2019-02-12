@@ -15,7 +15,7 @@ function shouldIgnore(plugin, filePath) {
   return anymatch(plugin.excludePatterns, filePath);
 }
 
-function cacheDir(plugin, dir, recursive = true, data = { _extraImports: {} }) {
+function cacheDir(plugin, dir, recursive = true, data, extraImports) {
   return fs
     .readdir(dir)
     .then(items => {
@@ -30,9 +30,9 @@ function cacheDir(plugin, dir, recursive = true, data = { _extraImports: {} }) {
           fs.lstat(fullPath).then(stats => {
             if (stats.isFile()) {
               if (plugin.language === getLangFromFilePath(item))
-                plugin.cacheFile(plugin, fullPath, data);
+                plugin.cacheFile(plugin, fullPath, data, extraImports);
             } else if (recursive) {
-              return cacheDir(plugin, fullPath, true, data);
+              return cacheDir(plugin, fullPath, true, data, extraImports);
             }
           })
         );
@@ -53,7 +53,10 @@ export function cacheProjectLanguage(plugin) {
     return false;
   }
   let cacher = Promise.all(
-    plugin.includePaths.map(p => cacheDir(plugin, p))
+    plugin.includePaths.map(p => {
+      const 
+      cacheDir(plugin, p, data, extraImports)
+    })
   ).then(exportObjArrays => {
     const finalData = {};
     const extraImports = {};
@@ -100,16 +103,17 @@ function onChangeOrCreate(doc) {
   )
     return;
 
-  const data = plugin.cacheFile(plugin, doc.fsPath);
+  const data = {}
+  const extraImports = {}
+  plugin.cacheFile(plugin, doc.fsPath, data, extraImports);
   if (_.isEmpty(data)) return;
 
-  const changedData = _.find(data, (v, k) => k !== "_extraImports");
-  if (changedData) changedData.cached = Date.now();
+  for (const k in data) data[k].cached = Date.now();
 
   cacheFileManager(plugin, cachedData => {
-    // Concatenate & dedupe named/types arrays. Merge them into data._extraImports since that will in turn get
+    // Concatenate & dedupe named/types arrays. Merge them into extraImports since that will in turn get
     // merged back into cachedData
-    _.mergeWith(data._extraImports, cachedData._extraImports, (a, b) => {
+    _.mergeWith(extraImports, cachedData._extraImports, (a, b) => {
       if (_.isArray(a)) return _.union(a, b);
     });
     return writeCacheFile(plugin, Object.assign(cachedData, data));

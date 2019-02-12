@@ -25,7 +25,7 @@ function parseImportsWithRegex(text, regex, replacer, imports = []) {
       end: match.index + match[0].length
     };
     if (match[2])
-      results.imports = _.compact(match[2].replace(replacer, "").split(","));
+      results.imports = match[2].replace(replacer, "").split(",").filter(Boolean);
     imports.push(results);
   }
 

@@ -20,6 +20,7 @@ export type FileExports = {
 }
 
 export type ExportDatumJs = ExportDatum & FileExports & {
+  // TODO: are the below definitions correct? rename to make clearer
   // Exports in current file that are reexported elsewhere
   reexports: string[],
   // Exports in other files that are reexported in current file
@@ -35,13 +36,13 @@ export type ExportDataJs = {
 
 // TODO: can remove Js suffix?
 export type NonFinalExportDatumJs = ExportDatumJs & {
-  all: string[],
-  // TODO: rename to `reexported` to match ExportDatumJs ? Not sure exactly how this property compares
-  reexports: { [path: string]: string[] }
+  reexportsToProcess: {
+    fullModules: string[],
+    selective: { [path: string]: string[] }
+  }
 }
 
-export type NonFinalExportDataJs = {
-  [path: string]: NonFinalExportDatumJs,
-} & {
-  _extraImports: ExportDataJs
+export type CachingData = {
+  exp: { [path: string]: NonFinalExportDatumJs },
+  imp: { [path: string]: FileExports },
 }

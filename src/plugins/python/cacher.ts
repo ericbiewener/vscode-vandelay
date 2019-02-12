@@ -4,14 +4,14 @@ import { getFilepathKey } from "../../utils"
 import { isPathPackage } from "./utils"
 import { parseImports } from "./regex"
 
-export function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
+export function cacheFile(plugin, filepath, data, extraImports) {
   const fileText = fs.readFileSync(filepath, "utf8");
   const imports = parseImports(fileText);
 
   for (const importData of imports) {
     if (isPathPackage(plugin, importData.path)) {
-      const existing = data._extraImports[importData.path] || {};
-      data._extraImports[importData.path] = existing;
+      const existing = extraImports[importData.path] || {};
+      extraImports[importData.path] = existing;
       if (importData.imports) {
         existing.exports = _.union(existing.exports, importData.imports);
       } else {
@@ -47,8 +47,6 @@ export function cacheFile(plugin, filepath, data = { _extraImports: {} }) {
   // This order of class, function, constant will be maintained when picking an import from the list
   const exp = [...classes, ...functions, ...constants];
   if (exp.length) data[getFilepathKey(plugin, filepath)] = { exports: exp };
-
-  return data;
 }
 
 function trimClassOrFn(str) {

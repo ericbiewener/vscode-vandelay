@@ -2,20 +2,22 @@ import fs from "fs-extra"
 import path from "path"
 import _ from "lodash"
 import { basename, getFilepathKey } from "../../utils"
-import { PluginJs, NonFinalExportDataJs, NonFinalExportDatumJs, FileExports } from "./types"
+import { PluginJs, CachingData, NonFinalExportDatumJs } from "./types"
 import { isPathNodeModule } from "./utils"
 import { parseImports, exportRegex } from "./regex"
 
-export function cacheFile(plugin: PluginJs, filepath: string, data: NonFinalExportDataJs = { _extraImports: {} }) {
+export function cacheFile(plugin: PluginJs, filepath: string, data: CachingData) {
+  const { imp, exp } = data
   // @ts-ignore
-  const fileExports: NonFinalExportDatumJs = { named: [], types: [], all: [], reexports: {} };
+  const fileExports: NonFinalExportDatumJs = { named: [], types: [], reexportsToProcess: { fullModules: [], selective: {} } };
+  const { reexportsToProcess } = fileExports
   const fileText = fs.readFileSync(filepath, "utf8");
-  const imports = parseImports(plugin, fileText);
+  const fileImports = parseImports(plugin, fileText);
 
-  for (const importData of imports) {
+  for (const importData of fileImports) {
     if (isPathNodeModule(plugin, importData.path)) {
-      const existing = data._extraImports[importData.path] || {};
-      data._extraImports[importData.path] = existing;
+      const existing = imp[importData.path] || {};
+      imp[importData.path] = existing;
       if (importData.default) {
         existing.default = processDefaultName(
           plugin,
@@ -33,9 +35,9 @@ export function cacheFile(plugin: PluginJs, filepath: string, data: NonFinalExpo
         plugin,
         path.resolve(path.dirname(filepath), `${importData.path}.js`) // Just guess at the file extension. Doesn't actually matter if it's right.
       );
-      const existing = data[pathKey] || {};
+      const existing = exp[pathKey] || {};
       if (existing.default) continue; // don't overwrite default if it already exists
-      data[pathKey] = existing;
+      exp[pathKey] = existing;
       existing.default = importData.default;
     }
   }
@@ -64,7 +66,7 @@ export function cacheFile(plugin: PluginJs, filepath: string, data: NonFinalExpo
         .replace(/{[^]*?}/gm, "")
         .replace(/\s/g, "");
       fileExports.named.push(
-        ..._.compact(text.split(",")).map(exp => exp.split(":")[0])
+        ...text.split(",").filter(Boolean).map(exp => exp.split(":")[0])
       );
     } else if (match[2] && match[2] !== "from") {
       // from — it's actually a reexport
@@ -75,18 +77,16 @@ export function cacheFile(plugin: PluginJs, filepath: string, data: NonFinalExpo
   }
 
   if (!plugin.useES5) {
-    while ((match = exportRegex.fullRexport.exec(fileText))) {
-      fileExports.all = fileExports.all || [];
-      fileExports.all.push(match[1]);
-    }
+    const { fullModules, selective } = reexportsToProcess
+    while ((match = exportRegex.fullRexport.exec(fileText))) fullModules.push(match[1]);
 
     // match[1] = default
     // match[2] = export names
     // match[3] = path
     while ((match = exportRegex.selectiveRexport.exec(fileText))) {
       const subPath = match[3];
-      if (!fileExports.reexports[subPath]) fileExports.reexports[subPath] = [];
-      const reexports = fileExports.reexports[subPath];
+      if (!selective[subPath]) selective[subPath] = [];
+      const reexports = selective[subPath];
 
       if (match[1]) {
         fileExports.named = fileExports.named || [];
@@ -114,19 +114,19 @@ export function cacheFile(plugin: PluginJs, filepath: string, data: NonFinalExpo
 
   if (!_.isEmpty(fileExports)) {
     const pathKey = getFilepathKey(plugin, filepath);
-    const existing = data[pathKey];
+    const existing = exp[pathKey];
     // An existing default could be there from an earlier processed "import * as Foo from.." See https://goo.gl/JXXskw
     if (existing && existing.default && !fileExports.default) {
       fileExports.default = existing.default;
     }
-    data[pathKey] = fileExports;
+    exp[pathKey] = fileExports;
   }
 
   exportRegex.standard.lastIndex = 0;
   exportRegex.fullRexport.lastIndex = 0;
   exportRegex.selectiveRexport.lastIndex = 0;
 
-  return data;
+  return data
 }
 
 /**
@@ -139,14 +139,18 @@ export function cacheFile(plugin: PluginJs, filepath: string, data: NonFinalExpo
  * importing from an adjacent/subfile. While solveable, this is probably an edge case to be ignored
  * (not to mention an undesireable API being created by the developer)
  */
-export function processCachedData(data) {
-  _.each(data, (fileData, mainFilepath) => {
-    const reexportNames = [];
+export function processCachedData(data: CachingData) {
+  const { exp } = data
+  for (const mainFilepath in exp) {
+    const fileExports = exp[mainFilepath]
+    const { reexportsToProcess: { fullModules, selective} } = fileExports
+    const reexportNames: string[] = [];
 
-    if (fileData.reexports) {
-      _.each(fileData.reexports, (exportNames, subfilePath) => {
-        reexportNames.push(...exportNames);
-        const subfileExports = getSubfileData(mainFilepath, subfilePath, data);
+    if (fullModules) {
+      for (const subfilePath in fullModules) {
+        const subfileExportNames = reexports[subfilePath]
+        reexportNames.push(...subfileExportNames);
+        const subfileExports = getSubfileExports(mainFilepath, subfilePath, data);
         if (subfileExports) {
           if (!subfileExports.reexported) {
             subfileExports.reexported = {
@@ -154,19 +158,19 @@ export function processCachedData(data) {
               reexportPath: mainFilepath
             };
           }
-          subfileExports.reexported.reexports.push(...exportNames);
+          subfileExports.reexported.reexports.push(...subfileExportNames);
         }
-      });
+      }
     }
 
-    if (fileData.all) {
-      fileData.all.forEach(subfilePath => {
-        const subfileExports = getSubfileData(mainFilepath, subfilePath, data);
+    if (all) {
+      for (const subfilePath of all) {
+        const subfileExports = getSubfileExports(mainFilepath, subfilePath, data);
         if (!subfileExports || !subfileExports.named) return;
-        if (fileData.named) {
-          fileData.named.push(...subfileExports.named);
+        if (fileExports.named) {
+          fileExports.named.push(...subfileExports.named);
         } else {
-          fileData.named = subfileExports.named;
+          fileExports.named = subfileExports.named;
         }
         reexportNames.push(...subfileExports.named);
         // flag names in original export location
@@ -174,18 +178,18 @@ export function processCachedData(data) {
           reexports: subfileExports.named,
           reexportPath: mainFilepath
         };
-      });
+      };
 
-      delete fileData.all;
+      delete fileExports.all;
     }
 
     // flag names in `index.js` key
     if (reexportNames.length) {
-      fileData.reexports = reexportNames;
+      fileExports.reexports = reexportNames;
     } else {
-      delete fileData.reexports;
+      delete fileExports.reexports;
     }
-  });
+  };
 
   return data;
 }
@@ -195,7 +199,7 @@ function processDefaultName(plugin, defaultName, importPath) {
   return plugin.processDefaultName(importPath) || defaultName;
 }
 
-function getSubfileData(mainFilepath, filename, data) {
+function getSubfileExports(mainFilepath, filename, data) {
   const filepathWithoutExt = path.join(path.dirname(mainFilepath), filename);
   for (const ext of [".js", ".jsx"]) {
     const subfileExports = data[filepathWithoutExt + ext];

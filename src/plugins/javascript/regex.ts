@@ -59,12 +59,11 @@ export function parseImports(plugin: PluginJs, text: string) {
       isTypeOutside
     };
     if (match[2]) {
-      const namedAndTypes = _.compact(
-        match[2]
+      const namedAndTypes = match[2]
           .replace(/{}]/g, "")
           .split(",")
           .map(i => i.trim())
-      );
+          .filter(Boolean)
 
       if (isTypeOutside) {
         results.types = namedAndTypes;
