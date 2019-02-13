@@ -1,9 +1,9 @@
 import { window, workspace } from "vscode"
 import path from "path"
 import { isFile, getFilepathKey } from "./utils"
-import utils from "./utils"
+import { Plugin } from "./types";
 
-export const PLUGINS = {};
+export const PLUGINS: { [lang: string]: Plugin } = {};
 
 const defaultSettings = {
   maxImportLineLength: 100

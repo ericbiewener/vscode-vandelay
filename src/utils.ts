@@ -16,7 +16,7 @@ export function writeCacheFile(plugin, data) {
   );
 }
 
-export function isFile(file) {
+export function isFile(file: string) {
   try {
     return fs.statSync(file).isFile();
   } catch (e) {
@@ -25,7 +25,7 @@ export function isFile(file) {
   }
 }
 
-export function getLangFromFilePath(filePath) {
+export function getLangFromFilePath(filePath: string) {
   const ext = path.extname(filePath).slice(1);
   return extensionToLang[ext] || ext;
 }

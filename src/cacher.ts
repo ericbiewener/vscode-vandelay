@@ -1,4 +1,4 @@
-import { window, workspace } from "vscode";
+import { window, workspace, Uri } from "vscode";
 import path from "path";
 import fs from "fs-extra";
 import _ from "lodash";
@@ -10,14 +10,16 @@ import {
  } from "./utils";
 import { cacheFileManager } from "./cacheFileManager";
 import { PLUGINS } from "./plugins";
+import { Obj, Plugin } from "./types"
 
-function shouldIgnore(plugin, filePath) {
+function shouldIgnore(plugin: Plugin, filePath: string) {
   return anymatch(plugin.excludePatterns, filePath);
 }
 
-function cacheDir(plugin, dir, recursive = true, data, extraImports) {
-  return fs
-    .readdir(dir)
+// TODO: need generics for data
+// async function cacheDir<D extends Obj>(plugin: Plugin, dir: string, recursive: boolean, data: D) {
+async function cacheDir(plugin: Plugin, dir: string, recursive: boolean, data: any) {
+  return fs.readdir(dir)
     .then(items => {
       const readDirPromises = [];
 
@@ -30,9 +32,9 @@ function cacheDir(plugin, dir, recursive = true, data, extraImports) {
           fs.lstat(fullPath).then(stats => {
             if (stats.isFile()) {
               if (plugin.language === getLangFromFilePath(item))
-                plugin.cacheFile(plugin, fullPath, data, extraImports);
+                plugin.cacheFile(plugin, fullPath, data);
             } else if (recursive) {
-              return cacheDir(plugin, fullPath, true, data, extraImports);
+              return cacheDir(plugin, fullPath, true, data);
             }
           })
         );
@@ -43,7 +45,7 @@ function cacheDir(plugin, dir, recursive = true, data, extraImports) {
     .then(() => data);
 }
 
-export function cacheProjectLanguage(plugin) {
+export function cacheProjectLanguage(plugin: Plugin) {
   if (!plugin.includePaths || !plugin.includePaths.length) {
     window.showErrorMessage(
       `You must specify the "includePaths" configuration option in your vandelay-${
@@ -53,10 +55,7 @@ export function cacheProjectLanguage(plugin) {
     return false;
   }
   let cacher = Promise.all(
-    plugin.includePaths.map(p => {
-      const 
-      cacheDir(plugin, p, data, extraImports)
-    })
+    plugin.includePaths.map(p => cacheDir(plugin, p, true, {}))
   ).then(exportObjArrays => {
     const finalData = {};
     const extraImports = {};
@@ -89,8 +88,8 @@ export function cacheProject() {
   });
 }
 
-function onChangeOrCreate(doc) {
-  const plugin = PLUGINS[getLangFromFilePath(doc.fsPath)];
+function onChangeOrCreate(doc: Uri) {
+  const plugin: Plugin | undefined = PLUGINS[getLangFromFilePath(doc.fsPath)];
   if (
     !plugin ||
     shouldIgnore(plugin, doc.fsPath) ||
