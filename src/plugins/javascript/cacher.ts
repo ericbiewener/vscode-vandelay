@@ -2,14 +2,14 @@ import fs from "fs-extra"
 import path from "path"
 import _ from "lodash"
 import { basename, getFilepathKey } from "../../utils"
-import { PluginJs, CachingData, NonFinalExportDataJs, NonFinalExportDatumJs } from "./types"
+import { Plugin, CachingData, NonFinalExportData, NonFinalExportDatum } from "../../types"
 import { isPathNodeModule } from "./utils"
 import { parseImports, exportRegex } from "./regex"
 
-export function cacheFile(plugin: PluginJs, filepath: string, data: CachingData) {
+export function cacheFile(plugin: Plugin, filepath: string, data: CachingData) {
   const { imp, exp } = data
   // @ts-ignore
-  const fileExports: NonFinalExportDatumJs = { named: [], types: [], reexportsToProcess: { fullModules: [], selective: {} } };
+  const fileExports: NonFinalExportDatum = { named: [], types: [], reexportsToProcess: { fullModules: [], selective: {} } };
   const { reexportsToProcess } = fileExports
   const fileText = fs.readFileSync(filepath, "utf8");
   const fileImports = parseImports(plugin, fileText);
@@ -188,12 +188,12 @@ export function processCachedData(data: CachingData) {
   return data;
 }
 
-function processDefaultName(plugin: PluginJs, defaultName: string, importPath: string) {
+function processDefaultName(plugin: Plugin, defaultName: string, importPath: string) {
   if (!plugin.processDefaultName) return defaultName;
   return plugin.processDefaultName(importPath) || defaultName;
 }
 
-function getSubfileExports(mainFilepath: string, filename: string, exp: NonFinalExportDataJs) {
+function getSubfileExports(mainFilepath: string, filename: string, exp: NonFinalExportData) {
   const filepathWithoutExt = path.join(path.dirname(mainFilepath), filename);
   for (const ext of [".js", ".jsx"]) {
     const subfileExports = exp[filepathWithoutExt + ext];

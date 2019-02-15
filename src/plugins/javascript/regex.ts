@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { strUntil } from "../../utils"
-import { PluginJs } from "./types"
+import { Plugin } from "./types"
 
 export const commentRegex = /^(?:[ \t]*\/\/.*|[ \t]*\/\*[^]*?\*\/)/gm;
 
@@ -35,7 +35,7 @@ export type ParsedImport = {
   types?: string[],
 }
 
-export function parseImports(plugin: PluginJs, text: string) {
+export function parseImports(plugin: Plugin, text: string) {
   const regex = plugin.useES5 ? requireRegex : importRegex;
   const imports = [];
   let match;

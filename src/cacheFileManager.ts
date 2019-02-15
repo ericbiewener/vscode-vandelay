@@ -1,9 +1,10 @@
 import fs from 'fs'
 import { isFile } from './utils'
+import { ExportData, Plugin } from './types';
 
-let fileAccess
+let fileAccess: Promise<void>
 
-function parseCacheFile(plugin) {
+function parseCacheFile(plugin: Plugin) {
   return isFile(plugin.cacheFilePath)
     ? JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
     : {}
@@ -16,7 +17,7 @@ function parseCacheFile(plugin) {
  * `cb` should return a promise (e.g. any file writing operations) so that it completes before the next call
  * to the cacheFileManager
  */
-export function cacheFileManager(plugin, cb) {
+export function cacheFileManager(plugin: Plugin, cb: (data: ExportData) => void) {
   if (fileAccess) {
     fileAccess = fileAccess.then(() => cb(parseCacheFile(plugin)))
   } else {

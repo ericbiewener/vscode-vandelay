@@ -4,15 +4,16 @@ import path from "path"
 import _ from "lodash"
 import { languages, Position, Range, window } from "vscode"
 import { JS_EXTENSIONS } from './plugins/javascript/config'
-import { Obj } from './types'
+import { Obj, Plugin, CachingData, ExportData } from './types'
+import { PLUGINS } from './plugins'
 
-const extensionToLang: Obj = {}
+const extensionToLang: { [ext: string]: string } = {}
 for (const ext of JS_EXTENSIONS) extensionToLang[ext] = 'js'
 
-export function writeCacheFile(plugin, data) {
-  _.each(data._extraImports, d => (d.isExtraImport = true));
+export function writeCacheFile(plugin: Plugin, { exp, imp }: CachingData) {
+  _.each(imp, d => (d.isExtraImport = true));
   return makeDir(plugin.cacheDirPath).then(() =>
-    fs.writeFileSync(plugin.cacheFilePath, JSON.stringify(data))
+    fs.writeFileSync(plugin.cacheFilePath, JSON.stringify(Object.assign(imp, exp)))
   );
 }
 
@@ -32,7 +33,6 @@ export function getLangFromFilePath(filePath: string) {
 
 export function getPluginForActiveFile() {
   if (!window.activeTextEditor) return;
-  const { PLUGINS } = require("./plugins");
   const plugin =
     PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)];
   if (!plugin)
@@ -40,16 +40,8 @@ export function getPluginForActiveFile() {
   return plugin;
 }
 
-export function getFilepathKey(plugin, filepath) {
+export function getFilepathKey(plugin: Plugin, filepath: string) {
   return filepath.slice(plugin.projectRoot.length + 1);
-}
-
-// Extracted for sharing with plugins for testing
-export function getImportItems(plugin, exportData, buildImportItems) {
-  Object.assign(exportData, exportData._extraImports);
-  delete exportData._extraImports;
-  if (exportData)
-    return (buildImportItems || plugin.buildImportItems)(plugin, exportData);
 }
 
 // TODO: rename `basenameNoExt`

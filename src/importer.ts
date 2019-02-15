@@ -1,15 +1,16 @@
 import _ from "lodash"
-import { window, workspace } from "vscode"
+import { window, workspace, TextEditor } from "vscode"
 import { getDiagnostics } from "./utils"
-import { getImportItems, getPluginForActiveFile } from "./utils"
+import { getPluginForActiveFile } from "./utils"
 import { cacheFileManager } from "./cacheFileManager"
 
-export async function selectImport(word, buildImportItems) {
+export async function selectImport(word?: string | undefined | null) {
   const plugin = getPluginForActiveFile();
   if (!plugin) return;
 
   return await cacheFileManager(plugin, async exportData => {
-    let items = getImportItems(plugin, exportData, buildImportItems);
+    if (!exportData) return
+    let items = plugin.buildImportItems(plugin, exportData);
     if (!items) return;
     if (word) items = items.filter(item => item.label === word);
 
@@ -25,13 +26,13 @@ export async function selectImport(word, buildImportItems) {
   });
 }
 
-export async function selectImportForActiveWord(buildImportItems) {
+export async function selectImportForActiveWord() {
   const editor = window.activeTextEditor;
   if (!editor) return;
 
   const range = editor.document.getWordRangeAtPosition(editor.selection.active);
   const activeWord = range ? editor.document.getText(range) : null;
-  selectImport(activeWord, buildImportItems);
+  selectImport(activeWord);
 }
 
 export async function importUndefinedVariables() {
@@ -41,17 +42,17 @@ export async function importUndefinedVariables() {
   const diagnostics = getDiagnostics(filter, true);
   if (!diagnostics.length) return;
 
-  const { document } = window.activeTextEditor;
+  const { document } = window.activeTextEditor as TextEditor;
   // Must collect all words before inserting any because insertions will cause the diagnostic ranges
   // to no longer be correct, thus not allowing us to get subsequent words
-  const words = diagnostics.reduce((acc, d) => {
+  const words = []
+  for (const d of diagnostics) {
     // Flake8 is returning a collapsed range, so expand it to the entire word
     const range = _.isEqual(d.range.start, d.range.end)
       ? document.getWordRangeAtPosition(d.range.start)
       : d.range;
-    acc.push(document.getText(range));
-    return acc;
-  }, []);
+    words.push(document.getText(range));
+  }
 
   for (const word of _.uniq(words)) await selectImport(word);
 }

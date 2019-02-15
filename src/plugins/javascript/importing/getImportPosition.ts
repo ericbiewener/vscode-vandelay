@@ -5,7 +5,7 @@ import {
 } from "../../../utils"
 import { commentRegex } from "../regex"
 import { isPathNodeModule } from "../utils"
-import { PluginJs } from '../types'
+import { Plugin } from '../../../types'
 import { ExportType } from "./buildImportItems"
 import { ParsedImport } from "../regex"
 
@@ -18,7 +18,7 @@ import { ParsedImport } from "../regex"
 export type ImportPosition = { match: ParsedImport, indexModifier: -1 | 0 | 1}
 
 export function getImportPosition(
-  plugin: PluginJs,
+  plugin: Plugin,
   exportType: ExportType,
   importPath: string,
   isExtraImport: boolean | undefined,

@@ -1,13 +1,14 @@
 import { window, TextEditor } from "vscode"
 import path from "path"
 import { insertLine, removeExt } from "../../../utils"
+import { Plugin} from "../../../types"
 import { parseImports } from "../regex"
-import { PluginJs, FileExports } from '../types'
+import { FileExports } from '../types'
 import { getImportPosition, ImportPosition } from "./getImportPosition"
 import { ExportType, ImportItem } from "./buildImportItems"
 import { getNewLine } from "./getNewLine"
 
-export function insertImport(plugin: PluginJs, importSelection: ImportItem) {
+export function insertImport(plugin: Plugin, importSelection: ImportItem) {
   const {
     label: exportName,
     description: importPath,
@@ -41,7 +42,7 @@ export function insertImport(plugin: PluginJs, importSelection: ImportItem) {
   return insertLine(newLine, importPosition);
 }
 
-function getFinalImportPath(plugin: PluginJs, importPath: string, absImportPath: string, isExtraImport: boolean | undefined) {
+function getFinalImportPath(plugin: Plugin, importPath: string, absImportPath: string, isExtraImport: boolean | undefined) {
   if (isExtraImport) return importPath;
 
   const activeFilepath = (window.activeTextEditor as TextEditor).document.fileName;

@@ -10,42 +10,40 @@ import {
  } from "./utils";
 import { cacheFileManager } from "./cacheFileManager";
 import { PLUGINS } from "./plugins";
-import { Obj, Plugin } from "./types"
+import { Obj, Plugin, CachingData } from "./types"
 
 function shouldIgnore(plugin: Plugin, filePath: string) {
   return anymatch(plugin.excludePatterns, filePath);
 }
 
-// TODO: need generics for data
-// async function cacheDir<D extends Obj>(plugin: Plugin, dir: string, recursive: boolean, data: D) {
-async function cacheDir(plugin: Plugin, dir: string, recursive: boolean, data: any) {
-  return fs.readdir(dir)
-    .then(items => {
-      const readDirPromises = [];
+async function cacheDir(plugin: Plugin, dir: string, recursive: boolean, data: CachingData): Promise<CachingData> {
+  const items = await fs.readdir(dir)
+  const readDirPromises: Promise<any>[] = [];
 
-      for (const item of items) {
-        const fullPath = path.join(dir, item);
-        if (item === plugin.configFile || shouldIgnore(plugin, fullPath))
-          continue;
+  for (const item of items) {
+    const fullPath = path.join(dir, item);
+    if (item === plugin.configFile || shouldIgnore(plugin, fullPath))
+      continue;
 
-        readDirPromises.push(
-          fs.lstat(fullPath).then(stats => {
-            if (stats.isFile()) {
-              if (plugin.language === getLangFromFilePath(item))
-                plugin.cacheFile(plugin, fullPath, data);
-            } else if (recursive) {
-              return cacheDir(plugin, fullPath, true, data);
-            }
-          })
-        );
-      }
+    readDirPromises.push(
+      fs.lstat(fullPath).then(async stats => {
+        if (stats.isFile()) {
+          if (plugin.language === getLangFromFilePath(item))
+            await plugin.cacheFile(plugin, fullPath, data);
+        } else if (recursive) {
+          await cacheDir(plugin, fullPath, true, data);
+        }
 
-      return Promise.all(readDirPromises);
-    })
-    .then(() => data);
+        return Promise.resolve()
+      })
+    );
+  }
+
+  await Promise.all(readDirPromises);
+  return data
 }
 
-export function cacheProjectLanguage(plugin: Plugin) {
+export async function cacheProjectLanguage(plugin: Plugin) {
   if (!plugin.includePaths || !plugin.includePaths.length) {
     window.showErrorMessage(
       `You must specify the "includePaths" configuration option in your vandelay-${
@@ -54,20 +52,20 @@ export function cacheProjectLanguage(plugin: Plugin) {
     );
     return false;
   }
+  
   let cacher = Promise.all(
-    plugin.includePaths.map(p => cacheDir(plugin, p, true, {}))
-  ).then(exportObjArrays => {
-    const finalData = {};
-    const extraImports = {};
-    for (const data of exportObjArrays) {
-      Object.assign(finalData, data);
+    plugin.includePaths.map(p => cacheDir(plugin, p, true, {} as CachingData))
+  ).then(cachedDirTrees => {
+    const finalData = { exp: {}, imp: {} };
+    for (const { exp, imp } of cachedDirTrees) {
+      Object.assign(finalData.exp, exp);
       // Merge extra import arrays
-      _.mergeWith(extraImports, data._extraImports, (obj, src) => {
+      _.mergeWith(finalData.imp, imp, (obj, src) => {
         if (!Array.isArray(obj)) return;
         return _.uniq(obj.concat(src));
       });
     }
-    return Object.assign(finalData, { _extraImports: extraImports });
+    return finalData;
   });
 
   if (plugin.processCachedData) cacher = cacher.then(plugin.processCachedData);
@@ -102,20 +100,18 @@ function onChangeOrCreate(doc: Uri) {
   )
     return;
 
-  const data = {}
-  const extraImports = {}
-  plugin.cacheFile(plugin, doc.fsPath, data, extraImports);
-  if (_.isEmpty(data)) return;
+  const { exp, imp } = plugin.cacheFile(plugin, doc.fsPath, {});
+  if (_.isEmpty(exp) && _.isEmpty(imp)) return;
 
-  for (const k in data) data[k].cached = Date.now();
+  for (const k in exp) exp[k].cached = Date.now();
 
   cacheFileManager(plugin, cachedData => {
     // Concatenate & dedupe named/types arrays. Merge them into extraImports since that will in turn get
     // merged back into cachedData
-    _.mergeWith(extraImports, cachedData._extraImports, (a, b) => {
-      if (_.isArray(a)) return _.union(a, b);
+    _.mergeWith(cachedData._extraImports, exp, (a, b) => {
+      if (_.isArray(a)) return _.union(b, a);
     });
-    return writeCacheFile(plugin, Object.assign(cachedData, data));
+    return writeCacheFile(plugin, Object.assign(cachedData, imp));
   });
 }
 

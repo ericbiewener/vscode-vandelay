@@ -1,7 +1,8 @@
 import { getTabChar } from "../../../utils"
-import { PluginJs, FileExports } from '../types'
+import { Plugin } from "../../../types"
+import { FileExports } from '../types'
 
-export function getNewLine(plugin: PluginJs, importPath: string, imports: FileExports) {
+export function getNewLine(plugin: Plugin, importPath: string, imports: FileExports) {
   const {
     padCurlyBraces,
     useSingleQuotes,

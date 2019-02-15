@@ -1,7 +1,7 @@
 import { window, TextEditor } from "vscode"
 import path from "path"
 import { getExportDataKeysByCachedDate } from "../../../utils"
-import { PluginJs, ExportDataJs } from '../types'
+import { Plugin, ExportData } from '../../../types'
 
 // TODO: why is this defined here vs. somewhere else?
 export enum ExportType {
@@ -18,7 +18,7 @@ export type ImportItem = {
   absImportPath: string,
 }
 
-export function buildImportItems(plugin: PluginJs, exportData: ExportDataJs) {
+export function buildImportItems(plugin: Plugin, exportData: ExportData) {
   const { projectRoot, shouldIncludeImport } = plugin;
   const activeFilepath = (window.activeTextEditor as TextEditor).document.fileName;
   const items = [];
