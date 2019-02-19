@@ -2,10 +2,11 @@ import fs from "fs"
 import makeDir from "make-dir"
 import path from "path"
 import _ from "lodash"
-import { languages, Position, Range, window } from "vscode"
+import { languages, Position, Range, window, TextEditor, Diagnostic } from "vscode"
 import { JS_EXTENSIONS } from './plugins/javascript/config'
-import { Obj, Plugin, CachingData, ExportData } from './types'
+import { Obj, Plugin, CachingData, ExportData, MergedExportData } from './types'
 import { PLUGINS } from './plugins'
+import { ImportPosition } from "./plugins/javascript/importing/getImportPosition";
 
 const extensionToLang: { [ext: string]: string } = {}
 for (const ext of JS_EXTENSIONS) extensionToLang[ext] = 'js'
@@ -45,13 +46,13 @@ export function getFilepathKey(plugin: Plugin, filepath: string) {
 }
 
 // TODO: rename `basenameNoExt`
-export function basename(filepath) {
+export function basename(filepath: string) {
   return path.basename(filepath, path.extname(filepath));
 }
 
-export async function insertLine(newLine, importPosition) {
+export async function insertLine(newLine: string, importPosition: ImportPosition) {
   const { match, indexModifier, isFirstImport } = importPosition;
-  const editor = window.activeTextEditor;
+  const editor = window.activeTextEditor as TextEditor;
   const { document } = editor;
 
   // If this is the first import and the line after where we're inserting it has content, add an extra line break
@@ -83,22 +84,22 @@ export async function insertLine(newLine, importPosition) {
 }
 
 export function getTabChar() {
-  const { options } = window.activeTextEditor;
-  return options.insertSpaces ? _.repeat(" ", options.tabSize) : "\t";
+  const { options } = window.activeTextEditor as TextEditor;
+  return options.insertSpaces ? _.repeat(" ", Number(options.tabSize) || 2) : "\t";
 }
 
-export function strUntil(str, endChar) {
+export function strUntil(str: string, endChar: string | RegExp) {
   const index =
     typeof endChar === "string" ? str.indexOf(endChar) : str.search(endChar);
   return index < 0 ? str : str.slice(0, index);
 }
 
-export function removeExt(filepath) {
+export function removeExt(filepath: string) {
   const ext = path.extname(filepath);
   return ext ? filepath.slice(0, -ext.length) : filepath;
 }
 
-export function getLastInitialComment(text, commentRegex) {
+export function getLastInitialComment(text: string, commentRegex: RegExp) {
   // Iterates over comment line matches. If one doesn't begin where the previous one left off, this means
   // a non comment line came between them.
   let expectedNextIndex = 0;
@@ -118,31 +119,34 @@ export function getLastInitialComment(text, commentRegex) {
     : null;
 }
 
-export function getImportOrderPosition(plugin, importPath) {
+export function getImportOrderPosition(plugin: Plugin, importPath: string) {
   if (!plugin.importGroups) return;
   const index = _.flatten(plugin.importGroups).indexOf(importPath);
   return index > -1 ? index : undefined;
 }
 
-export function getExportDataKeysByCachedDate(exportData) {
+export function getExportDataKeysByCachedDate(exportData: MergedExportData) {
   return Object.keys(exportData).sort((a, b) => {
     const createdA = exportData[a].cached;
     const createdB = exportData[b].cached;
     if (!createdA && !createdB) return a < b ? -1 : 1; // alphabetical
     if (createdA && !createdB) return -1;
     if (createdB && !createdA) return 1;
+    // @ts-ignore
     return createdA < createdB ? 1 : -1;
   });
 }
 
-export function getDiagnostics(filter, forActiveEditor) {
+export type DiagnosticFilter = (d: Diagnostic) => boolean
+type DiagnosticsByFile = { [path: string]: Diagnostic[] }
+
+export function getDiagnostics(filter: DiagnosticFilter, forActiveEditor?: boolean) {
   if (forActiveEditor) {
-    return languages
-      .getDiagnostics(window.activeTextEditor.document.uri)
-      .filter(filter);
+    const editor = window.activeTextEditor as TextEditor
+    return languages.getDiagnostics(editor.document.uri).filter(filter);
   }
 
-  const diagnosticsByFile = {};
+  const diagnosticsByFile: DiagnosticsByFile = {};
   for (const [file, diagnostics] of languages.getDiagnostics()) {
     const remaining = diagnostics.filter(filter);
     if (remaining.length) diagnosticsByFile[file.fsPath] = remaining;

@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { window, workspace, TextEditor } from "vscode"
-import { getDiagnostics } from "./utils"
+import { getDiagnostics, getExportDataKeysByCachedDate } from "./utils"
 import { getPluginForActiveFile } from "./utils"
 import { cacheFileManager } from "./cacheFileManager"
 
@@ -10,7 +10,9 @@ export async function selectImport(word?: string | undefined | null) {
 
   return await cacheFileManager(plugin, async exportData => {
     if (!exportData) return
-    let items = plugin.buildImportItems(plugin, exportData);
+    const mergedData = { ...exportData.imp, ...exportData.exp }
+    const sortedKeys = getExportDataKeysByCachedDate(mergedData);
+    let items = plugin.buildImportItems(plugin, exportData, sortedKeys);
     if (!items) return;
     if (word) items = items.filter(item => item.label === word);
 

@@ -100,7 +100,7 @@ function onChangeOrCreate(doc: Uri) {
   )
     return;
 
-  const { exp, imp } = plugin.cacheFile(plugin, doc.fsPath, {});
+  const { exp, imp } = plugin.cacheFile(plugin, doc.fsPath, {} as CachingData);
   if (_.isEmpty(exp) && _.isEmpty(imp)) return;
 
   for (const k in exp) exp[k].cached = Date.now();
@@ -108,10 +108,12 @@ function onChangeOrCreate(doc: Uri) {
   cacheFileManager(plugin, cachedData => {
     // Concatenate & dedupe named/types arrays. Merge them into extraImports since that will in turn get
     // merged back into cachedData
-    _.mergeWith(cachedData._extraImports, exp, (a, b) => {
+    _.mergeWith(cachedData.exp, exp, (a, b) => {
       if (_.isArray(a)) return _.union(b, a);
     });
-    return writeCacheFile(plugin, Object.assign(cachedData, imp));
+    Object.assign(cachedData.imp, imp)
+    
+    return writeCacheFile(plugin, cachedData);
   });
 }
 

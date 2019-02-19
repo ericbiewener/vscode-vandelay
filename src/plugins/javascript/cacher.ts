@@ -144,6 +144,7 @@ export function processCachedData(data: CachingData) {
   for (const mainFilepath in exp) {
     const fileExports = exp[mainFilepath]
     const { reexportsToProcess: { fullModules, selective} } = fileExports
+    delete fileExports.reexportsToProcess
     const reexportNames: string[] = [];
 
     if (selective) {
@@ -184,6 +185,7 @@ export function processCachedData(data: CachingData) {
     // flag names in `index.js` key
     if (reexportNames.length) fileExports.reexports = reexportNames;
   };
+
 
   return data;
 }

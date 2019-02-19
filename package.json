@@ -37,7 +37,7 @@
     "workspaceContains:.vandelay/vandelay-*.js"
   ],
   "engines": {
-    "vscode": "^1.21.0"
+    "vscode": "^1.31.0"
   },
   "main": "./src/index.js",
   "contributes": {

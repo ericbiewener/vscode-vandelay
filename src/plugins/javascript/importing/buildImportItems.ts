@@ -1,7 +1,7 @@
 import { window, TextEditor } from "vscode"
 import path from "path"
 import { getExportDataKeysByCachedDate } from "../../../utils"
-import { Plugin, ExportData } from '../../../types'
+import { Plugin, ExportData, RichQuickPickItem } from '../../../types'
 
 // TODO: why is this defined here vs. somewhere else?
 export enum ExportType {
@@ -14,16 +14,15 @@ export type ImportItem = {
   label: string,
   description: string,
   exportType: ExportType,
-  isExtraImport: boolean | undefined,
+  isExtraImport: true | undefined,
   absImportPath: string,
 }
 
-export function buildImportItems(plugin: Plugin, exportData: ExportData) {
+export function buildImportItems(plugin: Plugin, exportData: ExportData, sortedKeys: string[]): RichQuickPickItem[] {
   const { projectRoot, shouldIncludeImport } = plugin;
   const activeFilepath = (window.activeTextEditor as TextEditor).document.fileName;
   const items = [];
 
-  const sortedKeys = getExportDataKeysByCachedDate(exportData);
   for (const importPath of sortedKeys) {
     let absImportPath = path.join(projectRoot, importPath);
     if (absImportPath === activeFilepath) continue;
@@ -63,22 +62,19 @@ export function buildImportItems(plugin: Plugin, exportData: ExportData) {
         typeExports = data.types.filter(exp => !reexports.includes(exp));
     } else {
       defaultExport = data.default;
+      const { reexports } = data;
 
-      if (
-        // If some of the names are reexports from other files (e.g. it's an index.js file) and the active file is
-        // adjacent to or in a subdirectory of the import file, eliminate the reexports because they'll just be imported
-        // from their original locations
-        data.reexports &&
-        activeFilepath.startsWith(path.dirname(absImportPath))
-      ) {
+      // If some of the names are reexports from other files (e.g. it's an index.js file) and the active file is
+      // adjacent to or in a subdirectory of the import file, eliminate the reexports because they'll just be imported
+      // from their original locations
+      if (reexports && activeFilepath.startsWith(path.dirname(absImportPath))) {
         namedExports = data.named
-          ? data.named.filter(n => !data.reexports.includes(n))
+          ? data.named.filter(n => !reexports.includes(n))
           : null;
         typeExports = data.types
-          ? data.types.filter(n => !data.reexports.includes(n))
+          ? data.types.filter(n => !reexports.includes(n))
           : null;
       } else {
-        defaultExport = data.default;
         namedExports = data.named;
         typeExports = data.types;
       }

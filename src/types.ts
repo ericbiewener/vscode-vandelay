@@ -1,13 +1,18 @@
 import { QuickPickItem } from 'vscode'
 import { FileExports } from './plugins/javascript/types'
+import { ExportType } from './plugins/javascript/importing/buildImportItems'
+import { DiagnosticFilter } from './utils';
 
 export type Obj = { [k: string]: any }
 
-export type ExportDatum = {
+export type RichQuickPickItem = QuickPickItem & {
+  exportType: ExportType,
+  isExtraImport: boolean | undefined,
+  absImportPath: string,
 }
 
-export type ExportDatumJs = FileExports & {
-  isExtraImport?: boolean,
+export type ExportDatum = FileExports & {
+  cached?: number,
   // JS
   // TODO: are the below definitions correct? rename to make clearer
   // Exports in current file that are reexported elsewhere
@@ -28,7 +33,14 @@ export type NonFinalExportDatum = ExportDatum & {
 
 export type NonFinalExportData = { [path: string]: NonFinalExportDatum }
 
-export type ExportData = { [path: string]: ExportDatum }
+export type ExportDataImports = {[path: string]: FileExports}
+export type ExportDataExports = {[path: string]: ExportDatum}
+export type MergedExportData = ExportDataExports
+
+export type ExportData = {
+  imp: ExportDataImports,
+  exp: ExportDataExports,
+}
 
 export type CachingData = {
   exp: NonFinalExportData,
@@ -48,9 +60,10 @@ export type Plugin = {
   cacheDirPath: string,
   processCachedData?(data: any): any,
   shouldIncludeImport(absImportPath: string, activeFilepath: string): boolean,
-  cacheFile(plugin: Plugin, path: string, data: CachingData): Promise<CachingData>,
-  buildImportItems(plugin: Plugin, data: ExportData): QuickPickItem[],
-  insertImport(plugin: Plugin, selection: QuickPickItem): Promise<void>,
+  cacheFile(plugin: Plugin, path: string, data: CachingData): CachingData,
+  buildImportItems(plugin: Plugin, data: ExportData): RichQuickPickItem[],
+  insertImport(plugin: Plugin, selection: RichQuickPickItem): Promise<void>,
+  shouldIncludeDisgnostic?: DiagnosticFilter,
 
   // JS
   maxImportLineLength: number,
@@ -62,6 +75,7 @@ export type Plugin = {
   useSemicolons?: boolean,
   multilineImportStyle?: 'single' | 'multiple',
   trailingComma?: boolean,
+  importGroups?: Array<string[]>,
   processImportPath?(importPath: string, absImportPath: string, activeFilepath: string, projectRoot: string): string | undefined,
   processDefaultName?(path: string): string | undefined
 }

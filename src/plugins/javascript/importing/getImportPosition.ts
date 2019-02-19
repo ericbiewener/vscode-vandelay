@@ -15,7 +15,11 @@ import { ParsedImport } from "../regex"
  * new import line before or after (indexModifier = -1 or 1)
  **/
 
-export type ImportPosition = { match: ParsedImport, indexModifier: -1 | 0 | 1}
+export type ImportPosition = {
+  match: ParsedImport | null,
+  indexModifier: -1 | 0 | 1,
+  isFirstImport?: boolean,
+}
 
 export function getImportPosition(
   plugin: Plugin,
@@ -24,7 +28,7 @@ export function getImportPosition(
   isExtraImport: boolean | undefined,
   imports: ParsedImport[],
   text: string,
-) {
+): ImportPosition {
   // If no imports, find first non-comment line
   if (!imports.length) {
     return {
