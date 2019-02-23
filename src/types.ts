@@ -35,7 +35,9 @@ export type NonFinalExportData = { [path: string]: NonFinalExportDatum }
 
 export type ExportDataImports = {[path: string]: FileExports}
 export type ExportDataExports = {[path: string]: ExportDatum}
-export type MergedExportData = ExportDataExports
+export type MergedExportData = {
+  [path: string]: ExportDatum & { isExtraImport?: boolean }
+}
 
 export type ExportData = {
   imp: ExportDataImports,
@@ -61,7 +63,7 @@ export type Plugin = {
   processCachedData?(data: any): any,
   shouldIncludeImport(absImportPath: string, activeFilepath: string): boolean,
   cacheFile(plugin: Plugin, path: string, data: CachingData): CachingData,
-  buildImportItems(plugin: Plugin, data: ExportData): RichQuickPickItem[],
+  buildImportItems(plugin: Plugin, data: MergedExportData, sortedKeys: string[]): RichQuickPickItem[],
   insertImport(plugin: Plugin, selection: RichQuickPickItem): Promise<void>,
   shouldIncludeDisgnostic?: DiagnosticFilter,
 

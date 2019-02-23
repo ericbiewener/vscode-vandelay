@@ -3,6 +3,7 @@ import { window, workspace, TextEditor } from "vscode"
 import { getDiagnostics, getExportDataKeysByCachedDate } from "./utils"
 import { getPluginForActiveFile } from "./utils"
 import { cacheFileManager } from "./cacheFileManager"
+import { MergedExportData } from "./types";
 
 export async function selectImport(word?: string | undefined | null) {
   const plugin = getPluginForActiveFile();
@@ -10,7 +11,7 @@ export async function selectImport(word?: string | undefined | null) {
 
   return await cacheFileManager(plugin, async exportData => {
     if (!exportData) return
-    const mergedData = { ...exportData.imp, ...exportData.exp }
+    const mergedData: MergedExportData = { ...exportData.imp, ...exportData.exp }
     const sortedKeys = getExportDataKeysByCachedDate(mergedData);
     let items = plugin.buildImportItems(plugin, exportData, sortedKeys);
     if (!items) return;
