@@ -1,7 +1,5 @@
 export type FileExports = {
-  default?: string,
-  named: string[],
-  types: string[],
-}
-
-
+  default?: string;
+  named: string[];
+  types: string[];
+};

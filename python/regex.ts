@@ -1,4 +1,4 @@
-import _ from "lodash"
+import _ from "lodash";
 
 const commentRegex = /^(?:[ \t]*#|[ \t]*"""[^]*?""").*/gm;
 
@@ -25,7 +25,10 @@ function parseImportsWithRegex(text, regex, replacer, imports = []) {
       end: match.index + match[0].length
     };
     if (match[2])
-      results.imports = match[2].replace(replacer, "").split(",").filter(Boolean);
+      results.imports = match[2]
+        .replace(replacer, "")
+        .split(",")
+        .filter(Boolean);
     imports.push(results);
   }
 

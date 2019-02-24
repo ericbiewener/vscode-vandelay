@@ -1,8 +1,8 @@
-import { window, Range } from "vscode"
-import path from "path"
-import { getTabChar, strUntil } from "../../../utils"
-import { commentRegex, parseImports } from "../regex"
-import { getImportPosition } from "./getImportPosition"
+import { window, Range } from "vscode";
+import path from "path";
+import { getTabChar, strUntil } from "../../../utils";
+import { commentRegex, parseImports } from "../regex";
+import { getImportPosition } from "./getImportPosition";
 
 // TODO: split into separate files like JS?
 

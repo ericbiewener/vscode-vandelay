@@ -1,16 +1,25 @@
-import fs from "fs-extra"
-import path from "path"
-import _ from "lodash"
-import { basename, getFilepathKey } from "../../utils"
-import { Plugin, CachingData, NonFinalExportData, NonFinalExportDatum } from "../../types"
-import { isPathNodeModule } from "./utils"
-import { parseImports, exportRegex } from "./regex"
+import fs from "fs-extra";
+import path from "path";
+import _ from "lodash";
+import { basename, getFilepathKey } from "../../utils";
+import {
+  Plugin,
+  CachingData,
+  NonFinalExportData,
+  NonFinalExportDatum
+} from "../../types";
+import { isPathNodeModule } from "./utils";
+import { parseImports, exportRegex } from "./regex";
 
 export function cacheFile(plugin: Plugin, filepath: string, data: CachingData) {
-  const { imp, exp } = data
+  const { imp, exp } = data;
   // @ts-ignore
-  const fileExports: NonFinalExportDatum = { named: [], types: [], reexportsToProcess: { fullModules: [], selective: {} } };
-  const { reexportsToProcess } = fileExports
+  const fileExports: NonFinalExportDatum = {
+    named: [],
+    types: [],
+    reexportsToProcess: { fullModules: [], selective: {} }
+  };
+  const { reexportsToProcess } = fileExports;
   const fileText = fs.readFileSync(filepath, "utf8");
   const fileImports = parseImports(plugin, fileText);
 
@@ -66,7 +75,10 @@ export function cacheFile(plugin: Plugin, filepath: string, data: CachingData) {
         .replace(/{[^]*?}/gm, "")
         .replace(/\s/g, "");
       fileExports.named.push(
-        ...text.split(",").filter(Boolean).map(exp => exp.split(":")[0])
+        ...text
+          .split(",")
+          .filter(Boolean)
+          .map(exp => exp.split(":")[0])
       );
     } else if (match[2] && match[2] !== "from") {
       // from — it's actually a reexport
@@ -77,8 +89,9 @@ export function cacheFile(plugin: Plugin, filepath: string, data: CachingData) {
   }
 
   if (!plugin.useES5) {
-    const { fullModules, selective } = reexportsToProcess
-    while ((match = exportRegex.fullRexport.exec(fileText))) fullModules.push(match[1]);
+    const { fullModules, selective } = reexportsToProcess;
+    while ((match = exportRegex.fullRexport.exec(fileText)))
+      fullModules.push(match[1]);
 
     // match[1] = default
     // match[2] = export names
@@ -106,7 +119,7 @@ export function cacheFile(plugin: Plugin, filepath: string, data: CachingData) {
         const key = isType ? "types" : "named";
         reexports.push(words[isType ? 1 : 0]);
         fileExports[key] = fileExports[key] || [];
-        const word = _.last(words)
+        const word = _.last(words);
         if (word) fileExports[key].push(word);
       }
     }
@@ -126,7 +139,7 @@ export function cacheFile(plugin: Plugin, filepath: string, data: CachingData) {
   exportRegex.fullRexport.lastIndex = 0;
   exportRegex.selectiveRexport.lastIndex = 0;
 
-  return data
+  return data;
 }
 
 /**
@@ -140,18 +153,24 @@ export function cacheFile(plugin: Plugin, filepath: string, data: CachingData) {
  * (not to mention an undesireable API being created by the developer)
  */
 export function processCachedData(data: CachingData) {
-  const { exp } = data
+  const { exp } = data;
   for (const mainFilepath in exp) {
-    const fileExports = exp[mainFilepath]
-    const { reexportsToProcess: { fullModules, selective} } = fileExports
-    delete fileExports.reexportsToProcess
+    const fileExports = exp[mainFilepath];
+    const {
+      reexportsToProcess: { fullModules, selective }
+    } = fileExports;
+    delete fileExports.reexportsToProcess;
     const reexportNames: string[] = [];
 
     if (selective) {
       for (const subfilePath in selective) {
-        const subfileExportNames = selective[subfilePath]
+        const subfileExportNames = selective[subfilePath];
         reexportNames.push(...subfileExportNames);
-        const subfileExports = getSubfileExports(mainFilepath, subfilePath, exp);
+        const subfileExports = getSubfileExports(
+          mainFilepath,
+          subfilePath,
+          exp
+        );
         if (subfileExports) {
           if (!subfileExports.reexported) {
             subfileExports.reexported = {
@@ -166,7 +185,11 @@ export function processCachedData(data: CachingData) {
 
     if (fullModules) {
       for (const subfilePath of fullModules) {
-        const subfileExports = getSubfileExports(mainFilepath, subfilePath, exp);
+        const subfileExports = getSubfileExports(
+          mainFilepath,
+          subfilePath,
+          exp
+        );
         if (!subfileExports || !subfileExports.named) return;
         if (fileExports.named) {
           fileExports.named.push(...subfileExports.named);
@@ -179,23 +202,30 @@ export function processCachedData(data: CachingData) {
           reexports: subfileExports.named,
           reexportPath: mainFilepath
         };
-      };
+      }
     }
 
     // flag names in `index.js` key
     if (reexportNames.length) fileExports.reexports = reexportNames;
-  };
-
+  }
 
   return data;
 }
 
-function processDefaultName(plugin: Plugin, defaultName: string, importPath: string) {
+function processDefaultName(
+  plugin: Plugin,
+  defaultName: string,
+  importPath: string
+) {
   if (!plugin.processDefaultName) return defaultName;
   return plugin.processDefaultName(importPath) || defaultName;
 }
 
-function getSubfileExports(mainFilepath: string, filename: string, exp: NonFinalExportData) {
+function getSubfileExports(
+  mainFilepath: string,
+  filename: string,
+  exp: NonFinalExportData
+) {
   const filepathWithoutExt = path.join(path.dirname(mainFilepath), filename);
   for (const ext of [".js", ".jsx"]) {
     const subfileExports = exp[filepathWithoutExt + ext];

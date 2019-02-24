@@ -1,13 +1,10 @@
-import _ from "lodash"
-import {
-  getImportOrderPosition,
-  getLastInitialComment
-} from "../../../utils"
-import { commentRegex } from "../regex"
-import { isPathNodeModule } from "../utils"
-import { Plugin } from '../../../types'
-import { ExportType } from "./buildImportItems"
-import { ParsedImport } from "../regex"
+import _ from "lodash";
+import { getImportOrderPosition, getLastInitialComment } from "../../../utils";
+import { commentRegex } from "../regex";
+import { isPathNodeModule } from "../utils";
+import { Plugin } from "../../../types";
+import { ExportType } from "./buildImportItems";
+import { ParsedImport } from "../regex";
 
 /**
  * Determine which line number should get the import. This could be merged into that line
@@ -16,10 +13,10 @@ import { ParsedImport } from "../regex"
  **/
 
 export type ImportPosition = {
-  match: ParsedImport | null,
-  indexModifier: -1 | 0 | 1,
-  isFirstImport?: boolean,
-}
+  match: ParsedImport | null;
+  indexModifier: -1 | 0 | 1;
+  isFirstImport?: boolean;
+};
 
 export function getImportPosition(
   plugin: Plugin,
@@ -27,7 +24,7 @@ export function getImportPosition(
   importPath: string,
   isExtraImport: boolean | undefined,
   imports: ParsedImport[],
-  text: string,
+  text: string
 ): ImportPosition {
   // If no imports, find first non-comment line
   if (!imports.length) {

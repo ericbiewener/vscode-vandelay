@@ -1,8 +1,8 @@
-import fs from "fs-extra"
-import _ from "lodash"
-import { getFilepathKey } from "../../utils"
-import { isPathPackage } from "./utils"
-import { parseImports } from "./regex"
+import fs from "fs-extra";
+import _ from "lodash";
+import { getFilepathKey } from "../../utils";
+import { isPathPackage } from "./utils";
+import { parseImports } from "./regex";
 
 export function cacheFile(plugin, filepath, data, extraImports) {
   const fileText = fs.readFileSync(filepath, "utf8");

@@ -1,6 +1,6 @@
-import { window, workspace } from "vscode"
-import path from "path"
-import { isFile, getFilepathKey } from "./utils"
+import { window, workspace } from "vscode";
+import path from "path";
+import { isFile, getFilepathKey } from "./utils";
 import { Plugin } from "./types";
 
 export const PLUGINS: { [lang: string]: Plugin } = {};

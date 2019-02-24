@@ -1,5 +1,5 @@
-import { window } from "vscode"
-import { getPluginForActiveFile } from "./utils"
+import { window } from "vscode";
+import { getPluginForActiveFile } from "./utils";
 
 export async function removeUnusedImports() {
   const plugin = getPluginForActiveFile();

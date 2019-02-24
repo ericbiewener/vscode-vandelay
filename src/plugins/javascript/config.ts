@@ -1,7 +1,7 @@
-import { removeUnusedImports } from "./removeUnusedImports"
-import { cacheFile, processCachedData } from "./cacher"
-import { buildImportItems } from "./importing/buildImportItems"
-import { insertImport } from "./importing/importer"
+import { removeUnusedImports } from "./removeUnusedImports";
+import { cacheFile, processCachedData } from "./cacher";
+import { buildImportItems } from "./importing/buildImportItems";
+import { insertImport } from "./importing/importer";
 
 function shouldIncludeDisgnostic({ code, source, message }) {
   return (
@@ -10,7 +10,7 @@ function shouldIncludeDisgnostic({ code, source, message }) {
   );
 }
 
-export const JS_EXTENSIONS = ['js', 'jsx', 'ts', 'tsx', 'mjs']
+export const JS_EXTENSIONS = ["js", "jsx", "ts", "tsx", "mjs"];
 
 // TODO: namespace settings vs utils?
 export const config = {

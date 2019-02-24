@@ -1,4 +1,4 @@
-import { Plugin } from '../../types'
+import { Plugin } from "../../types";
 
 export function isPathNodeModule(plugin: Plugin, importPath: string) {
   if (importPath.startsWith(".")) return false;

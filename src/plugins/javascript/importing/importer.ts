@@ -1,12 +1,12 @@
-import { window, TextEditor } from "vscode"
-import path from "path"
-import { insertLine, removeExt } from "../../../utils"
-import { Plugin} from "../../../types"
-import { parseImports } from "../regex"
-import { FileExports } from '../types'
-import { getImportPosition, ImportPosition } from "./getImportPosition"
-import { ExportType, ImportItem } from "./buildImportItems"
-import { getNewLine } from "./getNewLine"
+import { window, TextEditor } from "vscode";
+import path from "path";
+import { insertLine, removeExt } from "../../../utils";
+import { Plugin } from "../../../types";
+import { parseImports } from "../regex";
+import { FileExports } from "../types";
+import { getImportPosition, ImportPosition } from "./getImportPosition";
+import { ExportType, ImportItem } from "./buildImportItems";
+import { getNewLine } from "./getNewLine";
 
 export function insertImport(plugin: Plugin, importSelection: ImportItem) {
   const {
@@ -42,10 +42,16 @@ export function insertImport(plugin: Plugin, importSelection: ImportItem) {
   return insertLine(newLine, importPosition);
 }
 
-function getFinalImportPath(plugin: Plugin, importPath: string, absImportPath: string, isExtraImport: boolean | undefined) {
+function getFinalImportPath(
+  plugin: Plugin,
+  importPath: string,
+  absImportPath: string,
+  isExtraImport: boolean | undefined
+) {
   if (isExtraImport) return importPath;
 
-  const activeFilepath = (window.activeTextEditor as TextEditor).document.fileName;
+  const activeFilepath = (window.activeTextEditor as TextEditor).document
+    .fileName;
   importPath = getRelativeImportPath(activeFilepath, absImportPath);
 
   if (plugin.processImportPath) {
@@ -63,7 +69,11 @@ function getFinalImportPath(plugin: Plugin, importPath: string, absImportPath: s
     : removeExt(importPath);
 }
 
-function getNewLineImports(importPosition: ImportPosition, exportName: string, exportType: ExportType) {
+function getNewLineImports(
+  importPosition: ImportPosition,
+  exportName: string,
+  exportType: ExportType
+) {
   const { match, indexModifier } = importPosition;
 
   const imports: FileExports = indexModifier

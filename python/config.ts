@@ -1,6 +1,6 @@
-import { cacheFile, processCachedData } from "./cacher"
-import { buildImportItems, insertImport } from "./importing/importer"
-import { removeUnusedImports } from "./removeUnusedImports"
+import { cacheFile, processCachedData } from "./cacher";
+import { buildImportItems, insertImport } from "./importing/importer";
+import { removeUnusedImports } from "./removeUnusedImports";
 
 function shouldIncludeDisgnostic({ code }) {
   return code === "F821";

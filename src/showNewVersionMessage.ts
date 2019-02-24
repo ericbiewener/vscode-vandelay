@@ -1,5 +1,5 @@
-import opn from "opn"
-import { extensions, window, workspace } from "vscode"
+import opn from "opn";
+import { extensions, window, workspace } from "vscode";
 
 export function showNewVersionAlert(context, extConfig = {}) {
   const {

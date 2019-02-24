@@ -1,10 +1,10 @@
-import _ from "lodash"
-import { Range, Uri, window } from "vscode"
-import { strUntil } from "../../utils"
-import { getNewLine } from "./importing/importer"
-import { importRegex, parseImports } from "./regex"
+import _ from "lodash";
+import { Range, Uri, window } from "vscode";
+import { strUntil } from "../../utils";
+import { getNewLine } from "./importing/importer";
+import { importRegex, parseImports } from "./regex";
 
-let a: string = "hello"
+const a = "hello";
 
 export async function removeUnusedImports(plugin) {
   const diagnostics = getDiagnostics(d => d.code === "F401");

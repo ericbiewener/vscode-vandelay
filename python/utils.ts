@@ -1,4 +1,4 @@
-import { strUntil } from "../../utils"
+import { strUntil } from "../../utils";
 
 export function isPathPackage(plugin, importPath) {
   if (importPath.startsWith(".")) return false;

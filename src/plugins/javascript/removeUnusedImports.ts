@@ -1,11 +1,14 @@
-import _ from "lodash"
-import { Range, Uri, window } from "vscode"
-import { getDiagnostics } from "../../utils"
-import { getNewLine } from "./importing/getNewLine"
-import { parseImports } from "./regex"
+import _ from "lodash";
+import { Range, Uri, window } from "vscode";
+import { getDiagnosticsForAllEditors } from "../../utils";
+import { getNewLine } from "./importing/getNewLine";
+import { parseImports } from "./regex";
+import { Plugin } from "../../types";
 
-export async function removeUnusedImports(plugin) {
-  const diagnostics = getDiagnostics(d => d.code === "no-unused-vars");
+export async function removeUnusedImports(plugin: Plugin) {
+  const diagnostics = getDiagnosticsForAllEditors(
+    d => d.code === "no-unused-vars"
+  );
 
   for (const filepath in diagnostics) {
     const editor = await window.showTextDocument(Uri.file(filepath), {

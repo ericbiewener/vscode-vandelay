@@ -3,27 +3,27 @@ import path from "path";
 import fs from "fs-extra";
 import _ from "lodash";
 import anymatch from "anymatch";
-import {
-  writeCacheFile,
-  getLangFromFilePath,
-  getFilepathKey
- } from "./utils";
+import { writeCacheFile, getLangFromFilePath, getFilepathKey } from "./utils";
 import { cacheFileManager } from "./cacheFileManager";
 import { PLUGINS } from "./plugins";
-import { Obj, Plugin, CachingData } from "./types"
+import { Obj, Plugin, CachingData } from "./types";
 
 function shouldIgnore(plugin: Plugin, filePath: string) {
   return anymatch(plugin.excludePatterns, filePath);
 }
 
-async function cacheDir(plugin: Plugin, dir: string, recursive: boolean, data: CachingData): Promise<CachingData> {
-  const items = await fs.readdir(dir)
+async function cacheDir(
+  plugin: Plugin,
+  dir: string,
+  recursive: boolean,
+  data: CachingData
+): Promise<CachingData> {
+  const items = await fs.readdir(dir);
   const readDirPromises: Promise<any>[] = [];
 
   for (const item of items) {
     const fullPath = path.join(dir, item);
-    if (item === plugin.configFile || shouldIgnore(plugin, fullPath))
-      continue;
+    if (item === plugin.configFile || shouldIgnore(plugin, fullPath)) continue;
 
     readDirPromises.push(
       fs.lstat(fullPath).then(async stats => {
@@ -34,13 +34,13 @@ async function cacheDir(plugin: Plugin, dir: string, recursive: boolean, data: C
           await cacheDir(plugin, fullPath, true, data);
         }
 
-        return Promise.resolve()
+        return Promise.resolve();
       })
     );
   }
 
   await Promise.all(readDirPromises);
-  return data
+  return data;
 }
 
 export async function cacheProjectLanguage(plugin: Plugin) {
@@ -52,7 +52,7 @@ export async function cacheProjectLanguage(plugin: Plugin) {
     );
     return false;
   }
-  
+
   let cacher = Promise.all(
     plugin.includePaths.map(p => cacheDir(plugin, p, true, {} as CachingData))
   ).then(cachedDirTrees => {
@@ -111,8 +111,8 @@ function onChangeOrCreate(doc: Uri) {
     _.mergeWith(cachedData.exp, exp, (a, b) => {
       if (_.isArray(a)) return _.union(b, a);
     });
-    Object.assign(cachedData.imp, imp)
-    
+    Object.assign(cachedData.imp, imp);
+
     return writeCacheFile(plugin, cachedData);
   });
 }

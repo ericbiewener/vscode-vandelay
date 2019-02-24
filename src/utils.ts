@@ -1,20 +1,36 @@
-import fs from "fs"
-import makeDir from "make-dir"
-import path from "path"
-import _ from "lodash"
-import { languages, Position, Range, window, TextEditor, Diagnostic } from "vscode"
-import { JS_EXTENSIONS } from './plugins/javascript/config'
-import { Obj, Plugin, CachingData, ExportData, MergedExportData } from './types'
-import { PLUGINS } from './plugins'
+import fs from "fs";
+import makeDir from "make-dir";
+import path from "path";
+import _ from "lodash";
+import {
+  languages,
+  Position,
+  Range,
+  window,
+  TextEditor,
+  Diagnostic
+} from "vscode";
+import { JS_EXTENSIONS } from "./plugins/javascript/config";
+import {
+  Obj,
+  Plugin,
+  CachingData,
+  ExportData,
+  MergedExportData
+} from "./types";
+import { PLUGINS } from "./plugins";
 import { ImportPosition } from "./plugins/javascript/importing/getImportPosition";
 
-const extensionToLang: { [ext: string]: string } = {}
-for (const ext of JS_EXTENSIONS) extensionToLang[ext] = 'js'
+const extensionToLang: { [ext: string]: string } = {};
+for (const ext of JS_EXTENSIONS) extensionToLang[ext] = "js";
 
 export function writeCacheFile(plugin: Plugin, { exp, imp }: CachingData) {
   _.each(imp, d => (d.isExtraImport = true));
   return makeDir(plugin.cacheDirPath).then(() =>
-    fs.writeFileSync(plugin.cacheFilePath, JSON.stringify(Object.assign(imp, exp)))
+    fs.writeFileSync(
+      plugin.cacheFilePath,
+      JSON.stringify(Object.assign(imp, exp))
+    )
   );
 }
 
@@ -50,7 +66,10 @@ export function basename(filepath: string) {
   return path.basename(filepath, path.extname(filepath));
 }
 
-export async function insertLine(newLine: string, importPosition: ImportPosition) {
+export async function insertLine(
+  newLine: string,
+  importPosition: ImportPosition
+) {
   const { match, indexModifier, isFirstImport } = importPosition;
   const editor = window.activeTextEditor as TextEditor;
   const { document } = editor;
@@ -85,7 +104,9 @@ export async function insertLine(newLine: string, importPosition: ImportPosition
 
 export function getTabChar() {
   const { options } = window.activeTextEditor as TextEditor;
-  return options.insertSpaces ? _.repeat(" ", Number(options.tabSize) || 2) : "\t";
+  return options.insertSpaces
+    ? _.repeat(" ", Number(options.tabSize) || 2)
+    : "\t";
 }
 
 export function strUntil(str: string, endChar: string | RegExp) {
@@ -137,15 +158,16 @@ export function getExportDataKeysByCachedDate(exportData: MergedExportData) {
   });
 }
 
-export type DiagnosticFilter = (d: Diagnostic) => boolean
-type DiagnosticsByFile = { [path: string]: Diagnostic[] }
+export type DiagnosticFilter = (d: Diagnostic) => boolean;
 
-export function getDiagnostics(filter: DiagnosticFilter, forActiveEditor?: boolean) {
-  if (forActiveEditor) {
-    const editor = window.activeTextEditor as TextEditor
-    return languages.getDiagnostics(editor.document.uri).filter(filter);
-  }
+export function getDiagnosticsForActiveEditor(filter: DiagnosticFilter) {
+  const editor = window.activeTextEditor as TextEditor;
+  return languages.getDiagnostics(editor.document.uri).filter(filter);
+}
 
+export type DiagnosticsByFile = { [path: string]: Diagnostic[] };
+
+export function getDiagnosticsForAllEditors(filter: DiagnosticFilter) {
   const diagnosticsByFile: DiagnosticsByFile = {};
   for (const [file, diagnostics] of languages.getDiagnostics()) {
     const remaining = diagnostics.filter(filter);
