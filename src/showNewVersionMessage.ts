@@ -1,7 +1,7 @@
 import opn from "opn";
-import { extensions, window, workspace } from "vscode";
+import { extensions, window, workspace, ExtensionContext } from "vscode";
 
-export function showNewVersionAlert(context, extConfig = {}) {
+export function showNewVersionAlert(context: ExtensionContext, extConfig = {}) {
   const {
     name = "Vandelay",
     changelogUrl = "https://github.com/ericbiewener/vscode-vandelay/blob/master/CHANGELOG.md",
