@@ -52,6 +52,8 @@ export type CachingData = {
   };
 };
 
+type ExcludePatterns = (string | RegExp)[];
+
 export type PluginConfig = {
   language: string;
   cacheFile(plugin: Plugin, path: string, data: CachingData): CachingData;
@@ -62,9 +64,10 @@ export type PluginConfig = {
     sortedKeys: string[]
   ): RichQuickPickItem[];
   insertImport(plugin: Plugin, selection: RichQuickPickItem): Promise<any>;
+  removeUnusedImports(plugin: Plugin): Promise<any>;
 
   // JS
-  maxImportLineLength: number;
+  maxImportLineLength?: number;
   nonModulePaths?: string[];
   useES5?: boolean;
   preferTypeOutside?: boolean;
@@ -81,17 +84,18 @@ export type PluginConfig = {
     projectRoot: string
   ): string | undefined;
   processDefaultName?(path: string): string | undefined;
+  shouldIncludeDisgnostic: DiagnosticFilter;
+  excludePatterns?: ExcludePatterns;
 };
 
 // FIXME: Divide type into stuff that came from plugin config vs other? And then do PluginConfig & ...?
 export type Plugin = PluginConfig & {
+  maxImportLineLength: number;
   configFile: string;
   cacheFilePath: string;
   projectRoot: string;
   includePaths: string[];
-  excludePatterns: (string | RegExp)[];
   cacheDirPath: string;
   shouldIncludeImport(absImportPath: string, activeFilepath: string): boolean;
-
-  shouldIncludeDisgnostic?: DiagnosticFilter;
+  excludePatterns: ExcludePatterns;
 };

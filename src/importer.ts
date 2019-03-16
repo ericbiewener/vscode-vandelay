@@ -42,10 +42,12 @@ export async function selectImportForActiveWord() {
 }
 
 export async function importUndefinedVariables() {
-  const filter = _.get(getPluginForActiveFile(), "shouldIncludeDisgnostic");
-  if (!filter) return [];
+  const plugin = getPluginForActiveFile();
+  if (!plugin) return;
 
-  const diagnostics = getDiagnosticsForActiveEditor(filter);
+  const diagnostics = getDiagnosticsForActiveEditor(
+    plugin.shouldIncludeDisgnostic
+  );
   if (!diagnostics.length) return;
 
   const { document } = window.activeTextEditor as TextEditor;

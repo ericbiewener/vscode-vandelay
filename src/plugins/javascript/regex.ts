@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { strUntil } from "../../utils";
-import { Plugin } from "./types";
+import { Plugin } from "../../types";
 
 export const commentRegex = /^(?:[ \t]*\/\/.*|[ \t]*\/\*[^]*?\*\/)/gm;
 
@@ -30,7 +30,7 @@ export type ParsedImport = {
   start: number;
   end: number;
   isTypeOutside: boolean;
-  default?: string;
+  default?: string | undefined | null;
   named?: string[];
   types?: string[];
 };

@@ -101,6 +101,7 @@
     "@types/lodash": "4.14.121",
     "@types/mocha": "5.2.6",
     "@types/node": "11.9.5",
+    "@types/opn": "5.1.0",
     "@typescript-eslint/eslint-plugin": "1.4.1",
     "@typescript-eslint/parser": "1.4.1",
     "eslint": "5.14.1",

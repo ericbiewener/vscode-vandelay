@@ -1,21 +1,18 @@
 import opn from "opn";
 import { extensions, window, workspace, ExtensionContext } from "vscode";
 
-export function showNewVersionAlert(context: ExtensionContext, extConfig = {}) {
-  const {
-    name = "Vandelay",
-    changelogUrl = "https://github.com/ericbiewener/vscode-vandelay/blob/master/CHANGELOG.md",
-    extensionIdentifier = "edb.vandelay",
-    suppressAlert = false
-  } = extConfig;
+const SUPPRESS_ALERT = false;
 
+export function showNewVersionAlert(context: ExtensionContext) {
+  const extension = extensions.getExtension("edb.vandelay");
+  if (!extension) return;
+
+  const { version } = extension.packageJSON;
   const { globalState } = context;
-  const { version } = extensions.getExtension(extensionIdentifier).packageJSON;
-  const oldVersion = globalState.get("lastVersion");
+  const oldVersion: string | undefined = globalState.get("lastVersion");
   if (oldVersion !== version) globalState.update("lastVersion", version);
-  if (!oldVersion || oldVersion === version || suppressAlert) return;
+  if (!oldVersion || oldVersion === version || SUPPRESS_ALERT) return;
 
-  // Extensions don't get their own `showNewVersionAlert`. This is a global Vandelay setting.
   const config = workspace.getConfiguration("vandelay");
   if (!config.showNewVersionAlert) return;
 
@@ -33,13 +30,16 @@ export function showNewVersionAlert(context: ExtensionContext, extConfig = {}) {
   // TODO: all async/await
   window
     .showInformationMessage(
-      `${name} has been updated. Check out the new features!`,
+      `Vandelay has been updated. Check out the new features!`,
       { title: "View Changelog", id: CHANGELOG },
       { title: "Don't show this again", id: "noshow" }
     )
     .then(btn => {
+      if (!btn) return;
       if (btn.id === CHANGELOG) {
-        opn(changelogUrl);
+        opn(
+          "https://github.com/ericbiewener/vscode-vandelay/blob/master/CHANGELOG.md"
+        );
       } else {
         config.update("showNewVersionAlert", false, true);
       }

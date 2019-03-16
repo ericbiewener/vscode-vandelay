@@ -1,5 +1,5 @@
 export type FileExports = {
-  default?: string;
+  default?: string | null | undefined;
   named: string[];
   types: string[];
 };
