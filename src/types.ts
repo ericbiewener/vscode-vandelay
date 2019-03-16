@@ -54,6 +54,31 @@ export type CachingData = {
 
 type ExcludePatterns = (string | RegExp)[];
 
+// FIXME: not sure that this is right. Not sure that the division of all these configs is right.
+export type UserConfig = {
+  includePaths: string[];
+  maxImportLineLength?: number;
+  nonModulePaths?: string[];
+  useES5?: boolean;
+  preferTypeOutside?: boolean;
+  padCurlyBraces?: boolean;
+  useSingleQuotes?: boolean;
+  useSemicolons?: boolean;
+  multilineImportStyle?: "single" | "multiple";
+  trailingComma?: boolean;
+  importGroups?: string[][];
+  projectRoot?: string;
+  processImportPath?(
+    importPath: string,
+    absImportPath: string,
+    activeFilepath: string,
+    projectRoot: string
+  ): string | undefined;
+  processDefaultName?(path: string): string | undefined;
+  excludePatterns?: ExcludePatterns;
+  shouldIncludeImport?(absImportPath: string, activeFilepath: string): boolean;
+};
+
 export type PluginConfig = {
   language: string;
   cacheFile(plugin: Plugin, path: string, data: CachingData): CachingData;
@@ -65,37 +90,22 @@ export type PluginConfig = {
   ): RichQuickPickItem[];
   insertImport(plugin: Plugin, selection: RichQuickPickItem): Promise<any>;
   removeUnusedImports(plugin: Plugin): Promise<any>;
+  shouldIncludeDisgnostic: DiagnosticFilter;
 
   // JS
-  maxImportLineLength?: number;
-  nonModulePaths?: string[];
-  useES5?: boolean;
-  preferTypeOutside?: boolean;
-  padCurlyBraces?: boolean;
-  useSingleQuotes?: boolean;
-  useSemicolons?: boolean;
-  multilineImportStyle?: "single" | "multiple";
-  trailingComma?: boolean;
-  importGroups?: string[][];
-  processImportPath?(
-    importPath: string,
-    absImportPath: string,
-    activeFilepath: string,
-    projectRoot: string
-  ): string | undefined;
-  processDefaultName?(path: string): string | undefined;
-  shouldIncludeDisgnostic: DiagnosticFilter;
-  excludePatterns?: ExcludePatterns;
-};
-
-// FIXME: Divide type into stuff that came from plugin config vs other? And then do PluginConfig & ...?
-export type Plugin = PluginConfig & {
-  maxImportLineLength: number;
-  configFile: string;
-  cacheFilePath: string;
-  projectRoot: string;
-  includePaths: string[];
-  cacheDirPath: string;
-  shouldIncludeImport(absImportPath: string, activeFilepath: string): boolean;
+  useSingleQuotes: boolean;
+  padCurlyBraces: boolean;
+  useSemicolons: boolean;
+  trailingComma: boolean;
+  multilineImportStyle: "single" | "multiple";
   excludePatterns: ExcludePatterns;
 };
+
+export type Plugin = UserConfig &
+  PluginConfig & {
+    maxImportLineLength: number;
+    configFile: string;
+    cacheFilePath: string;
+    projectRoot: string;
+    cacheDirPath: string;
+  };

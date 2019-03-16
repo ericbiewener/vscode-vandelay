@@ -13,7 +13,7 @@ import { ParsedImport } from "../regex";
  **/
 
 export type ImportPositionMatch = {
-  match: ParsedImport | null;
+  match: ParsedImport;
   indexModifier: -1 | 0 | 1;
   isFirstImport: false;
 };

@@ -1,15 +1,18 @@
 import { window, workspace, ExtensionContext } from "vscode";
+// const path = require('path');
 import path from "path";
 import { isFile, getFilepathKey } from "./utils";
-import { Plugin, PluginConfig } from "./types";
+import { Plugin, PluginConfig, UserConfig } from "./types";
+import { cacheProjectLanguage } from "./cacher";
 
 export const PLUGINS: { [lang: string]: Plugin } = {};
 
 const defaultSettings = {
-  maxImportLineLength: 100
+  maxImportLineLength: 100,
+  excludePatterns: []
 };
 
-export function initializePlugin(
+export async function initializePlugin(
   context: ExtensionContext,
   pluginConfig: PluginConfig
 ) {
@@ -23,48 +26,57 @@ export function initializePlugin(
 
   const { language } = pluginConfig;
   const configFile = "vandelay-" + language + ".js";
-  const configSettings = getProjectSettings(configPath, configFile);
-  if (!configSettings) return;
+  const configSettings = await getProjectSettings(configPath, configFile);
 
-  const plugin = Object.assign(
-    {},
+  const cacheDirPath = context.storagePath;
+  if (!cacheDirPath) return;
+
+  const plugin: Plugin = Object.assign(
     defaultSettings,
     pluginConfig,
-    configSettings
+    configSettings,
+    {
+      configFile,
+      cacheDirPath,
+      cacheFilePath: path.join(cacheDirPath, "vandelay-" + language + ".json"),
+      projectRoot:
+        configSettings.projectRoot || workspace.workspaceFolders[0].uri.fsPath
+    }
   );
-  PLUGINS[language] = plugin;
 
-  plugin.cacheDirPath = context.storagePath;
-  plugin.cacheFilePath = path.join(
-    plugin.cacheDirPath,
-    "vandelay-" + language + ".json"
-  );
-  plugin.projectRoot =
-    configSettings.projectRoot || workspace.workspaceFolders[0].uri.fsPath;
-  plugin.configFile = configFile;
-
-  plugin.excludePatterns = plugin.excludePatterns || [];
   plugin.excludePatterns.push(/.*\/\..*/); // exclude all folders starting with dot
+  PLUGINS[language] = plugin;
 
   console.info(`Vandelay language registered: ${language}`);
 
-  if (!isFile(plugin.cacheFilePath)) {
-    const { cacheProjectLanguage } = require("./cacher");
-    cacheProjectLanguage(plugin);
-  }
+  if (!isFile(plugin.cacheFilePath)) cacheProjectLanguage(plugin);
 }
 
-function getProjectSettings(vandelayDir: string, vandelayFile: string) {
+async function getProjectSettings(
+  vandelayDir: string,
+  vandelayFile: string
+): Promise<UserConfig> {
   try {
     const absPath = path.join(vandelayDir, vandelayFile);
     console.log(`Loading vandelay config file from ${absPath}`);
-    return require(absPath);
+    const configSettings = require(/* webpackIgnore: true */ absPath);
+    // const configSettings = await import(/* webpackIgnore: true */absPath);
+    if (typeof configSettings === "object") return configSettings as UserConfig;
+
+    window.showErrorMessage(
+      "Your Vandelay configuration file must export an object."
+    );
+    throw new Error("Vandelay configuration file must export an object.");
   } catch (e) {
-    if (e.code !== "MODULE_NOT_FOUND") {
+    if (e.code === "MODULE_NOT_FOUND") {
+      window.showErrorMessage(
+        "Your Vandelay configuration file was not found."
+      );
+    } else {
       window.showErrorMessage(
         "Cound not parse your " + vandelayFile + " file. Error:\n\n" + e
       );
-      throw e;
     }
+    throw e;
   }
 }

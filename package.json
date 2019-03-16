@@ -39,7 +39,7 @@
   "engines": {
     "vscode": "^1.31.0"
   },
-  "main": "./src/index.js",
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -85,9 +85,8 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "yarn run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "yarn run build",
+    "build": "./node_modules/.bin/webpack --config webpack.config.ts",
     "test": "yarn run compile && node ./node_modules/vscode/bin/test",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "prettier": "prettier-eslint --prettier-last --write \"**/*.ts\"",
@@ -102,6 +101,7 @@
     "@types/mocha": "5.2.6",
     "@types/node": "11.9.5",
     "@types/opn": "5.1.0",
+    "@types/webpack": "4.4.25",
     "@typescript-eslint/eslint-plugin": "1.4.1",
     "@typescript-eslint/parser": "1.4.1",
     "eslint": "5.14.1",
@@ -109,8 +109,12 @@
     "husky": "1.3.1",
     "lint-staged": "8.1.4",
     "prettier-eslint-cli": "4.7.1",
+    "ts-loader": "5.3.3",
+    "ts-node": "8.0.3",
     "typescript": "3.3.3333",
-    "vscode": "1.1.30"
+    "vscode": "1.1.30",
+    "webpack": "4.29.6",
+    "webpack-cli": "3.3.0"
   },
   "dependencies": {
     "@types/make-dir": "1.0.3",

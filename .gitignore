@@ -4,3 +4,4 @@ node_modules
 *.vsix
 TODO.md
 yarn-error.log
+dist/

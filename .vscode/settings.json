@@ -1,18 +1,19 @@
 // Place your settings in this file to overwrite default and user settings.
 {
   "files.exclude": {
-    "**/.git": true,
-    "**/.svn": true,
-    "**/.hg": true,
-    "**/CVS": true,
-    "**/.DS_Store": true,
     ".serverless": true,
     ".vscode": false,
     "**/__pycache__": true,
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/.hg": true,
     "**/.serverless": true,
+    "**/.svn": true,
+    "**/CVS": true,
     "**/node_modules": true,
+    "dist": true,
+    "python": true,
     "yarn-error.log": true,
-    "yarn.lock": true,
-    "python": true
+    "yarn.lock": true
   },
 }

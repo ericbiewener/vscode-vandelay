@@ -1,18 +1,18 @@
 {
 	"compilerOptions": {
-		"module": "commonjs",
+		"module": "esnext",
+		"moduleResolution": "node",
 		"target": "es6",
-		"outDir": "build",
+		"outDir": "dist",
 		"lib": [
 			"es6",
 		],
 		"sourceMap": true,
-		"rootDir": "src",
 		"strict": true,
 		"allowSyntheticDefaultImports": true,
+		"removeComments": false
 	},
-	"exclude": [
-		"node_modules",
-		".vscode-test"
-	]
+	"include": [
+		"src",
+	],
 }

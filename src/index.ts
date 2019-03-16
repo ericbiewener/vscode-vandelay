@@ -11,6 +11,8 @@ import { config as jsConfig } from "./plugins/javascript/config";
 import { removeUnusedImports } from "./removeUnusedImports";
 import { showNewVersionAlert } from "./showNewVersionMessage";
 
+// FIXME: .vscodeignore src dir and others
+
 /*
  * VS Code has an error swallowing problem, so we catch and manually log.
  */
@@ -29,7 +31,7 @@ function catchError(fn: (...args: any[]) => any) {
   };
 }
 
-export function activate(context: ExtensionContext) {
+export async function activate(context: ExtensionContext) {
   showNewVersionAlert(context);
 
   context.subscriptions.push(
@@ -62,7 +64,7 @@ export function activate(context: ExtensionContext) {
   const pluginConfigs = [jsConfig];
   // const pluginConfigs = [jsConfig, pyConfig];
 
-  for (const config of pluginConfigs) initializePlugin(context, config);
+  await Promise.all(pluginConfigs.map(c => initializePlugin(context, c)));
 
   context.subscriptions.push(
     workspace.onDidChangeConfiguration(e => {
