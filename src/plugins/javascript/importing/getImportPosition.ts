@@ -12,11 +12,17 @@ import { ParsedImport } from "../regex";
  * new import line before or after (indexModifier = -1 or 1)
  **/
 
-export type ImportPosition = {
+export type ImportPositionMatch = {
   match: ParsedImport | null;
   indexModifier: -1 | 0 | 1;
-  isFirstImport?: boolean;
+  isFirstImport: false;
 };
+export type ImportPositionNoMatch = {
+  match: { start: number; end: number };
+  indexModifier: 1;
+  isFirstImport: true;
+};
+export type ImportPosition = ImportPositionMatch | ImportPositionNoMatch;
 
 export function getImportPosition(
   plugin: Plugin,
@@ -46,7 +52,8 @@ export function getImportPosition(
         (exportType === ExportType.type
           ? pathMatches.find(p => p.isTypeOutside)
           : pathMatches.find(p => !p.isTypeOutside)) || pathMatches[0],
-      indexModifier: 0
+      indexModifier: 0,
+      isFirstImport: false
     };
   }
 
@@ -57,7 +64,7 @@ export function getImportPosition(
     // plugin.importOrder check
     const lineImportPos = getImportOrderPosition(plugin, importData.path);
     if (importPos != null && (!lineImportPos || importPos < lineImportPos)) {
-      return { match: importData, indexModifier: -1 };
+      return { match: importData, indexModifier: -1, isFirstImport: false };
     } else if (lineImportPos != null) {
       continue;
     }
@@ -66,7 +73,7 @@ export function getImportPosition(
     const lineIsNodeModule = isPathNodeModule(plugin, importData.path);
 
     if (isExtraImport && (!lineIsNodeModule || importPath < importData.path)) {
-      return { match: importData, indexModifier: -1 };
+      return { match: importData, indexModifier: -1, isFirstImport: false };
     } else if (lineIsNodeModule) {
       continue;
     }
@@ -74,19 +81,19 @@ export function getImportPosition(
     // Absolute path check
     const lineIsAbsolute = !importData.path.startsWith(".");
     if (importIsAbsolute && (!lineIsAbsolute || importPath < importData.path)) {
-      return { match: importData, indexModifier: -1 };
+      return { match: importData, indexModifier: -1, isFirstImport: false };
     } else if (lineIsAbsolute) {
       continue;
     }
 
     // Alphabetical
     if (importPath < importData.path)
-      return { match: importData, indexModifier: -1 };
+      return { match: importData, indexModifier: -1, isFirstImport: false };
   }
 
   // Since we didn't find a line to sort the new import before, it will go after the last import
   return {
     match: _.last(imports),
     indexModifier: 1
-  };
+  } as ImportPositionMatch;
 }

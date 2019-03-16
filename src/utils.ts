@@ -134,7 +134,7 @@ export function getLastInitialComment(text: string, commentRegex: RegExp) {
         start: lastMatch.index,
         end: lastMatch.index + lastMatch[0].length
       }
-    : null;
+    : { start: 0, end: 0 };
 }
 
 export function getImportOrderPosition(plugin: Plugin, importPath: string) {
