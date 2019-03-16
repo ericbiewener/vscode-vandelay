@@ -86,7 +86,8 @@
   },
   "scripts": {
     "vscode:prepublish": "yarn run build",
-    "build": "./node_modules/.bin/webpack --config webpack.config.ts",
+    "dev": "NODE_ENV=development ./node_modules/.bin/webpack --config webpack.config.ts",
+    "build": "NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.ts",
     "test": "yarn run compile && node ./node_modules/vscode/bin/test",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "prettier": "prettier-eslint --prettier-last --write \"**/*.ts\"",

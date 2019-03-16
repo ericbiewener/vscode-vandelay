@@ -1,5 +1,4 @@
 import { window, workspace, ExtensionContext } from "vscode";
-// const path = require('path');
 import path from "path";
 import { isFile, getFilepathKey } from "./utils";
 import { Plugin, PluginConfig, UserConfig } from "./types";
@@ -59,8 +58,10 @@ async function getProjectSettings(
   try {
     const absPath = path.join(vandelayDir, vandelayFile);
     console.log(`Loading vandelay config file from ${absPath}`);
-    const configSettings = require(/* webpackIgnore: true */ absPath);
-    // const configSettings = await import(/* webpackIgnore: true */absPath);
+    // @ts-ignore
+    const configSettings = await Promise.resolve(
+      __non_webpack_require__(absPath)
+    );
     if (typeof configSettings === "object") return configSettings as UserConfig;
 
     window.showErrorMessage(

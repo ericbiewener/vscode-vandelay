@@ -2,6 +2,7 @@ const path = require("path");
 import { Configuration } from "webpack";
 
 const config: Configuration = {
+  mode: process.env.NODE_ENV as "development" | "production",
   target: "node",
   entry: "./src/index.ts",
   output: {
