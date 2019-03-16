@@ -2,10 +2,15 @@ import { removeUnusedImports } from "./removeUnusedImports";
 import { cacheFile, processCachedData } from "./cacher";
 import { buildImportItems } from "./importing/buildImportItems";
 import { insertImport } from "./importing/importer";
+import { PluginConfig } from "../../types";
+import { Diagnostic } from "vscode";
 
-function shouldIncludeDisgnostic({ code, source, message }) {
+type DiagnosticCode = string | number | undefined;
+
+function shouldIncludeDisgnostic({ code, source, message }: Diagnostic) {
+  const codes: DiagnosticCode[] = ["no-undef", "react/jsx-no-undef"];
   return (
-    ["no-undef", "react/jsx-no-undef"].includes(code) ||
+    codes.includes(code) ||
     (source === "flow" && message.startsWith("Cannot resolve name"))
   );
 }
@@ -13,7 +18,7 @@ function shouldIncludeDisgnostic({ code, source, message }) {
 export const JS_EXTENSIONS = ["js", "jsx", "ts", "tsx", "mjs"];
 
 // TODO: namespace settings vs utils?
-export const config = {
+export const config: PluginConfig = {
   language: "js",
   cacheFile,
   processCachedData,
@@ -25,6 +30,6 @@ export const config = {
   padCurlyBraces: true,
   useSemicolons: true,
   trailingComma: true,
-  multilineImportStyle: "multi",
+  multilineImportStyle: "multiple",
   excludePatterns: [/.*\/node_modules(\/.*)?/]
 };

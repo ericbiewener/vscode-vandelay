@@ -1,4 +1,4 @@
-import { window, commands, workspace } from "vscode";
+import { window, commands, workspace, ExtensionContext } from "vscode";
 import { initializePlugin } from "./plugins";
 import { cacheProject, watchForChanges } from "./cacher";
 import {
@@ -6,17 +6,16 @@ import {
   selectImport,
   selectImportForActiveWord
 } from "./importer";
-import jsConfig from "./plugins/javascript/config";
-import pyConfig from "./plugins/python/config";
+import { config as jsConfig } from "./plugins/javascript/config";
+// import { config as pyConfig} from "./plugins/python/config";
 import { removeUnusedImports } from "./removeUnusedImports";
 import { showNewVersionAlert } from "./showNewVersionMessage";
-import { getImportItems } from "./utils";
 
 /*
  * VS Code has an error swallowing problem, so we catch and manually log.
  */
-function catchError(fn) {
-  return async function(...args) {
+function catchError(fn: (...args: any[]) => any) {
+  return async function(...args: any[]) {
     try {
       const result = await fn(...args);
       return result;
@@ -30,7 +29,7 @@ function catchError(fn) {
   };
 }
 
-export function activate(context) {
+export function activate(context: ExtensionContext) {
   showNewVersionAlert(context);
 
   context.subscriptions.push(
@@ -60,7 +59,8 @@ export function activate(context) {
     )
   );
 
-  const pluginConfigs = [jsConfig.config, pyConfig.config];
+  const pluginConfigs = [jsConfig];
+  // const pluginConfigs = [jsConfig, pyConfig];
 
   for (const config of pluginConfigs) initializePlugin(context, config);
 
@@ -78,7 +78,7 @@ export function activate(context) {
   );
 
   return {
-    registerPlugin: async ({ language }) => {
+    registerPlugin: async ({ language }: { language: string }) => {
       window.showErrorMessage(
         `Please uninstall extension Vandelay ${language.toUpperCase()}. Vandelay no longer requires langauge extensions to be installed separately.`
       );

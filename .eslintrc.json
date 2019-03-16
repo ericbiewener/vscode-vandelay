@@ -1,5 +1,5 @@
 {
-    "extends": ["plugin:@typescript-eslint/recommended", "ericbiewener"],
+    "extends": ["plugin:@typescript-eslint/recommended", "plugin:ericbiewener-typescript"],
     "env": {
         "browser": false,
         "es6": true,

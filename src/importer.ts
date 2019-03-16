@@ -1,9 +1,6 @@
 import _ from "lodash";
 import { window, workspace, TextEditor } from "vscode";
-import {
-  getDiagnosticsForActiveEditor,
-  getExportDataKeysByCachedDate
-} from "./utils";
+import { getDiagnosticsForActiveEditor } from "./utils";
 import { getPluginForActiveFile } from "./utils";
 import { cacheFileManager } from "./cacheFileManager";
 import { MergedExportData } from "./types";
@@ -64,4 +61,16 @@ export async function importUndefinedVariables() {
   }
 
   for (const word of _.uniq(words)) await selectImport(word);
+}
+
+function getExportDataKeysByCachedDate(exportData: MergedExportData) {
+  return Object.keys(exportData).sort((a, b) => {
+    const createdA = exportData[a].cached;
+    const createdB = exportData[b].cached;
+    if (!createdA && !createdB) return a < b ? -1 : 1; // alphabetical
+    if (createdA && !createdB) return -1;
+    if (createdB && !createdA) return 1;
+    // @ts-ignore
+    return createdA < createdB ? 1 : -1;
+  });
 }

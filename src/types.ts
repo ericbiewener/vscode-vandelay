@@ -1,14 +1,15 @@
-import { QuickPickItem } from "vscode";
 import { FileExports } from "./plugins/javascript/types";
 import { ExportType } from "./plugins/javascript/importing/buildImportItems";
 import { DiagnosticFilter } from "./utils";
 
 export type Obj = { [k: string]: any };
 
-export type RichQuickPickItem = QuickPickItem & {
-  exportType: ExportType;
+export type RichQuickPickItem = {
+  label: string;
+  description: string;
   isExtraImport: boolean | undefined;
   absImportPath: string;
+  [key: string]: any;
 };
 
 export type ExportDatum = FileExports & {
@@ -51,25 +52,16 @@ export type CachingData = {
   };
 };
 
-// Divide type into stuff that came from plugin config vs other? And then do PluginConfig & ...?
-export type Plugin = {
+export type PluginConfig = {
   language: string;
-  configFile: string;
-  cacheFilePath: string;
-  projectRoot: string;
-  includePaths: string[];
-  excludePatterns: (string | RegExp)[];
-  cacheDirPath: string;
-  processCachedData?(data: any): any;
-  shouldIncludeImport(absImportPath: string, activeFilepath: string): boolean;
   cacheFile(plugin: Plugin, path: string, data: CachingData): CachingData;
+  processCachedData?(data: any): any;
   buildImportItems(
     plugin: Plugin,
     data: MergedExportData,
     sortedKeys: string[]
   ): RichQuickPickItem[];
-  insertImport(plugin: Plugin, selection: RichQuickPickItem): Promise<void>;
-  shouldIncludeDisgnostic?: DiagnosticFilter;
+  insertImport(plugin: Plugin, selection: RichQuickPickItem): Promise<any>;
 
   // JS
   maxImportLineLength: number;
@@ -89,4 +81,17 @@ export type Plugin = {
     projectRoot: string
   ): string | undefined;
   processDefaultName?(path: string): string | undefined;
+};
+
+// FIXME: Divide type into stuff that came from plugin config vs other? And then do PluginConfig & ...?
+export type Plugin = PluginConfig & {
+  configFile: string;
+  cacheFilePath: string;
+  projectRoot: string;
+  includePaths: string[];
+  excludePatterns: (string | RegExp)[];
+  cacheDirPath: string;
+  shouldIncludeImport(absImportPath: string, activeFilepath: string): boolean;
+
+  shouldIncludeDisgnostic?: DiagnosticFilter;
 };

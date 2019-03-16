@@ -1,7 +1,7 @@
-import { window, workspace } from "vscode";
+import { window, workspace, ExtensionContext } from "vscode";
 import path from "path";
 import { isFile, getFilepathKey } from "./utils";
-import { Plugin } from "./types";
+import { Plugin, PluginConfig } from "./types";
 
 export const PLUGINS: { [lang: string]: Plugin } = {};
 
@@ -9,17 +9,21 @@ const defaultSettings = {
   maxImportLineLength: 100
 };
 
-export function initializePlugin(context, pluginConfig) {
+export function initializePlugin(
+  context: ExtensionContext,
+  pluginConfig: PluginConfig
+) {
   if (!workspace.workspaceFolders) return;
 
-  let configLocation = workspace.workspaceFolders.find(
+  const configWorkspaceFolder = workspace.workspaceFolders.find(
     f => path.basename(f.uri.fsPath) === ".vandelay"
   );
-  configLocation = (configLocation || workspace.workspaceFolders[0]).uri.fsPath;
+  const configPath = (configWorkspaceFolder || workspace.workspaceFolders[0])
+    .uri.fsPath;
 
   const { language } = pluginConfig;
   const configFile = "vandelay-" + language + ".js";
-  const configSettings = getProjectSettings(configLocation, configFile);
+  const configSettings = getProjectSettings(configPath, configFile);
   if (!configSettings) return;
 
   const plugin = Object.assign(
@@ -50,7 +54,7 @@ export function initializePlugin(context, pluginConfig) {
   }
 }
 
-function getProjectSettings(vandelayDir, vandelayFile) {
+function getProjectSettings(vandelayDir: string, vandelayFile: string) {
   try {
     const absPath = path.join(vandelayDir, vandelayFile);
     console.log(`Loading vandelay config file from ${absPath}`);

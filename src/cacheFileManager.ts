@@ -1,6 +1,6 @@
 import fs from "fs";
 import { isFile } from "./utils";
-import { ExportData, Plugin } from "./types";
+import { ExportData, Plugin, CachingData } from "./types";
 
 let fileAccess: Promise<void>;
 
@@ -19,7 +19,7 @@ function parseCacheFile(plugin: Plugin) {
  */
 export function cacheFileManager(
   plugin: Plugin,
-  cb: (data: ExportData) => void
+  cb: (data: CachingData) => void
 ) {
   if (fileAccess) {
     fileAccess = fileAccess.then(() => cb(parseCacheFile(plugin)));

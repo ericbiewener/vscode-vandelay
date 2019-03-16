@@ -1,12 +1,6 @@
 import { window, TextEditor } from "vscode";
 import path from "path";
-import { getExportDataKeysByCachedDate } from "../../../utils";
-import {
-  Plugin,
-  ExportData,
-  RichQuickPickItem,
-  MergedExportData
-} from "../../../types";
+import { Plugin, RichQuickPickItem, MergedExportData } from "../../../types";
 
 // TODO: why is this defined here vs. somewhere else?
 export enum ExportType {
@@ -15,22 +9,18 @@ export enum ExportType {
   type = 2
 }
 
-export type ImportItem = {
-  label: string;
-  description: string;
+export type ImportItem = RichQuickPickItem & {
   exportType: ExportType;
-  isExtraImport: true | undefined;
-  absImportPath: string;
 };
 
 export function buildImportItems(
   plugin: Plugin,
   exportData: MergedExportData,
   sortedKeys: string[]
-): RichQuickPickItem[] {
+): ImportItem[] {
   const { projectRoot, shouldIncludeImport } = plugin;
-  const activeFilepath = (window.activeTextEditor as TextEditor).document
-    .fileName;
+  const editor = window.activeTextEditor as TextEditor;
+  const activeFilepath = editor.document.fileName;
   const items = [];
 
   for (const importPath of sortedKeys) {

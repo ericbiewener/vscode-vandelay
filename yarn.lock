@@ -358,6 +358,15 @@ babel-code-frame@^6.22.0:
     esutils "^2.0.2"
     js-tokens "^3.0.2"
 
+babel-eslint@11.0.0-beta.0:
+  version "11.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/babel-eslint/-/babel-eslint-11.0.0-beta.0.tgz#3645b9b84d848e070e0afadc95d0c8ff96f4c63a"
+  integrity sha512-GJTX0XL22be/A5sFp1/4qQIOnZJ/KJ8YrA0aW07SZoDXTMLB1KQT0rYl4a9Y5DfJGPuVDVf0bMYyvLLXmXPpHw==
+  dependencies:
+    eslint-scope "3.7.1"
+    eslint-visitor-keys "^1.0.0"
+    semver "^5.6.0"
+
 babel-runtime@^6.23.0, babel-runtime@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
@@ -983,15 +992,24 @@ escape-string-regexp@1.0.5, escape-string-regexp@^1.0.2, escape-string-regexp@^1
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
   integrity sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
 
-eslint-config-ericbiewener-typescript@3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/eslint-config-ericbiewener-typescript/-/eslint-config-ericbiewener-typescript-3.1.2.tgz#cbcab471cc417409c6c0da5b4722a8a18bdb33db"
-  integrity sha512-+n+H9T+H5gctmek1jnLY7T6dIzqXyoSeFSWyKsxmcX32VjwoSx3KECjODNEJ9mLV/VTDnQJTU6vJ8NbpOTsFqQ==
+eslint-config-ericbiewener-typescript@3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-ericbiewener-typescript/-/eslint-config-ericbiewener-typescript-3.2.0.tgz#8f925d603093f6a5f281a46acd605ec10d49794d"
+  integrity sha512-9E0vk8vumjBtVXawVSWXVTXhhzoTwA9r2HV/RkFMoHRRB1p80dkig3eZNSMf32waxGoN1NFwY2AAa8ckhtmTMA==
   dependencies:
     "@typescript-eslint/eslint-plugin" "1.4.1"
     "@typescript-eslint/parser" "1.4.1"
+    babel-eslint "11.0.0-beta.0"
     base "*"
     typescript "3.3.3333"
+
+eslint-scope@3.7.1:
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/eslint-scope/-/eslint-scope-3.7.1.tgz#3d63c3edfda02e06e01a452ad88caacc7cdcb6e8"
+  integrity sha1-PWPD7f2gLgbgGkUq2IyqzHzctug=
+  dependencies:
+    esrecurse "^4.1.0"
+    estraverse "^4.1.1"
 
 eslint-scope@^3.7.1:
   version "3.7.3"

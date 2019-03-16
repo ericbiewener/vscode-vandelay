@@ -8,14 +8,14 @@ import { getImportPosition, ImportPosition } from "./getImportPosition";
 import { ExportType, ImportItem } from "./buildImportItems";
 import { getNewLine } from "./getNewLine";
 
-export function insertImport(plugin: Plugin, importSelection: ImportItem) {
+export async function insertImport(plugin: Plugin, selection: ImportItem) {
   const {
     label: exportName,
     description: importPath,
     absImportPath,
     exportType,
     isExtraImport
-  } = importSelection;
+  } = selection;
   const editor = window.activeTextEditor;
 
   const finalImportPath = getFinalImportPath(

@@ -129,8 +129,9 @@ export function watchForChanges() {
 
     cacheFileManager(plugin, cachedData => {
       const key = getFilepathKey(plugin, doc.fsPath);
-      if (!cachedData[key]) return;
-      delete cachedData[key];
+      const { exp } = cachedData;
+      if (!exp[key]) return;
+      delete exp[key];
       return writeCacheFile(plugin, cachedData);
     });
   });

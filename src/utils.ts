@@ -24,13 +24,10 @@ import { ImportPosition } from "./plugins/javascript/importing/getImportPosition
 const extensionToLang: { [ext: string]: string } = {};
 for (const ext of JS_EXTENSIONS) extensionToLang[ext] = "js";
 
-export function writeCacheFile(plugin: Plugin, { exp, imp }: CachingData) {
-  _.each(imp, d => (d.isExtraImport = true));
+export function writeCacheFile(plugin: Plugin, data: CachingData) {
+  _.each(data.imp, d => (d.isExtraImport = true));
   return makeDir(plugin.cacheDirPath).then(() =>
-    fs.writeFileSync(
-      plugin.cacheFilePath,
-      JSON.stringify(Object.assign(imp, exp))
-    )
+    fs.writeFileSync(plugin.cacheFilePath, JSON.stringify(data))
   );
 }
 
@@ -144,18 +141,6 @@ export function getImportOrderPosition(plugin: Plugin, importPath: string) {
   if (!plugin.importGroups) return;
   const index = _.flatten(plugin.importGroups).indexOf(importPath);
   return index > -1 ? index : undefined;
-}
-
-export function getExportDataKeysByCachedDate(exportData: MergedExportData) {
-  return Object.keys(exportData).sort((a, b) => {
-    const createdA = exportData[a].cached;
-    const createdB = exportData[b].cached;
-    if (!createdA && !createdB) return a < b ? -1 : 1; // alphabetical
-    if (createdA && !createdB) return -1;
-    if (createdB && !createdA) return 1;
-    // @ts-ignore
-    return createdA < createdB ? 1 : -1;
-  });
 }
 
 export type DiagnosticFilter = (d: Diagnostic) => boolean;
