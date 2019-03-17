@@ -7,7 +7,7 @@ import {
   selectImportForActiveWord
 } from "./importer";
 import { config as jsConfig } from "./plugins/javascript/config";
-// import { config as pyConfig} from "./plugins/python/config";
+import { config as pyConfig } from "./plugins/python/config";
 import { removeUnusedImports } from "./removeUnusedImports";
 import { showNewVersionAlert } from "./showNewVersionMessage";
 
@@ -61,8 +61,7 @@ export async function activate(context: ExtensionContext) {
     )
   );
 
-  const pluginConfigs = [jsConfig];
-  // const pluginConfigs = [jsConfig, pyConfig];
+  const pluginConfigs = [jsConfig, pyConfig];
 
   await Promise.all(pluginConfigs.map(c => initializePlugin(context, c)));
 

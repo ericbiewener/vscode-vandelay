@@ -36,7 +36,7 @@ export function buildImportItems(
       dotPath = removeExt(importPath).replace(/\//g, ".");
       if (plugin.processImportPath) {
         dotPath = plugin.processImportPath(
-          importPath,
+          dotPath,
           absImportPath,
           activeFilepath,
           plugin.projectRoot
