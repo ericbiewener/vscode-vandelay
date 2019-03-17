@@ -1,7 +1,13 @@
 import _ from "lodash";
-import { getLastInitialComment, strUntil } from "../../../utils";
-import { commentRegex } from "../regex";
+import {
+  getLastInitialComment,
+  strUntil,
+  getImportOrderPosition,
+  last
+} from "../../../utils";
+import { commentRegex, ParsedImportPy } from "../regex";
 import { isPathPackage } from "../utils";
+import { PluginPy } from "../types";
 
 /**
  * Determine which line number should get the import. This could be merged into that line
@@ -9,13 +15,25 @@ import { isPathPackage } from "../utils";
  * new import line before or after (lineIndexModifier = -1 or 1)
  **/
 
+export type ImportPositionMatch = {
+  match: ParsedImportPy;
+  indexModifier: -1 | 0 | 1;
+  isFirstImport: false;
+};
+export type ImportPositionNoMatch = {
+  match: { start: number; end: number };
+  indexModifier: 1;
+  isFirstImport: true;
+};
+export type ImportPositionPy = ImportPositionMatch | ImportPositionNoMatch;
+
 export function getImportPosition(
-  plugin,
-  importPath,
-  isExtraImport,
-  imports,
-  text
-) {
+  plugin: PluginPy,
+  importPath: string,
+  isExtraImport: boolean | undefined,
+  imports: ParsedImportPy[],
+  text: string
+): ImportPositionPy {
   // If no imports, find first non-comment line
   if (!imports.length) {
     return {
@@ -29,7 +47,7 @@ export function getImportPosition(
   // where the exact match is located if it exists.
   const exactMatch = imports.find(i => i.path === importPath);
   if (exactMatch) {
-    return { match: exactMatch, indexModifier: 0 };
+    return { match: exactMatch, indexModifier: 0, isFirstImport: false };
   }
 
   const importPos = getImportOrderPosition(plugin, strUntil(importPath, "."));
@@ -51,13 +69,14 @@ export function getImportPosition(
       return {
         match: importData,
         indexModifier:
-          importPos < lineImportPos || importPath < importData.path ? -1 : 1
+          importPos < lineImportPos || importPath < importData.path ? -1 : 1,
+        isFirstImport: false
       };
     }
 
     // One is a package and the other isn't
     if (isExtraImport && !lineIsPackage) {
-      return { match: importData, indexModifier: -1 };
+      return { match: importData, indexModifier: -1, isFirstImport: false };
     } else if (!isExtraImport && lineIsPackage) {
       continue;
     }
@@ -73,12 +92,13 @@ export function getImportPosition(
         continue;
       return {
         match: importData,
-        indexModifier: -1
+        indexModifier: -1,
+        isFirstImport: false
       };
     }
 
     if (isExtraImport && (!lineIsPackage || importPath < importData.path)) {
-      return { match: importData, indexModifier: -1 };
+      return { match: importData, indexModifier: -1, isFirstImport: false };
     } else if (lineIsPackage) {
       continue;
     }
@@ -87,7 +107,7 @@ export function getImportPosition(
     // them to get compared alphabetically.
     const lineIsAbsolute = !importData.path.startsWith(".");
     if (importIsAbsolute && (!lineIsAbsolute || importPath < importData.path)) {
-      return { match: importData, indexModifier: -1 };
+      return { match: importData, indexModifier: -1, isFirstImport: false };
     } else if (lineIsAbsolute) {
       continue;
     }
@@ -95,7 +115,8 @@ export function getImportPosition(
 
   // Since we didn't find a line to sort the new import before, it will go after the last import
   return {
-    match: _.last(imports),
-    indexModifier: 1
+    match: last(imports),
+    indexModifier: 1,
+    isFirstImport: false
   };
 }

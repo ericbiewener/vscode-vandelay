@@ -2,12 +2,14 @@ import {
   UserConfig,
   PluginConfig,
   DefaultPluginConfig,
-  RuntimePluginConfig
+  RuntimePluginConfig,
+  RichQuickPickItem
 } from "../../types";
 
 /**
- * Data Structures
+ * Cached Data Structures
  */
+// FIXME: remove isExtraImport?
 
 export type FileExportsPy = {
   importEntirePackage?: boolean;

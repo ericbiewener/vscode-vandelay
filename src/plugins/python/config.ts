@@ -1,5 +1,6 @@
 import { cacheFile } from "./cacher";
-import { buildImportItems, insertImport } from "./importing/importer";
+import { insertImport } from "./importing/importer";
+import { buildImportItems } from "./importing/buildImportItems";
 import { removeUnusedImports } from "./removeUnusedImports";
 import { PluginConfigPy } from "./types";
 import { Diagnostic } from "vscode";

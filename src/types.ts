@@ -3,9 +3,9 @@ import {
   PluginJs,
   MergedExportDataJs,
   CachingDataJs,
-  ExportDataJs
+  ExportDataJs,
+  RichQuickPickItemJs
 } from "./plugins/javascript/types";
-import { ExportType } from "./plugins/javascript/importing/buildImportItems";
 import { DiagnosticFilter } from "./utils";
 import {
   PluginPy,
@@ -14,20 +14,20 @@ import {
   MergedExportDataPy,
   ExportDataPy
 } from "./plugins/python/types";
-// import { PluginPy } from "./plugins/python/types";
-
-export type Obj = { [k: string]: any };
+import { ImportPositionPy } from "./plugins/python/importing/getImportPosition";
+import { ImportPositionJs } from "./plugins/javascript/importing/getImportPosition";
 
 export type RichQuickPickItem = {
   label: string;
   description: string;
   isExtraImport: boolean | undefined;
-  absImportPath: string;
-  [key: string]: any;
 };
+type AllRichQuickPickItem = RichQuickPickItem | RichQuickPickItemJs;
+
+export type ImportPosition = ImportPositionJs | ImportPositionPy;
 
 /**
- * Data Structurs
+ * Cached Data Structurs
  */
 
 export type FileExports = FileExportsJs | FileExportsPy;
@@ -62,17 +62,17 @@ export type UserConfig = {
 
 export type PluginConfig = {
   language: string;
+  shouldIncludeDisgnostic: DiagnosticFilter;
+  excludePatterns?: ExcludePatterns;
   cacheFile(plugin: Plugin, path: string, data: CachingData): CachingData;
   processCachedData?(data: any): any;
+  removeUnusedImports(plugin: Plugin): Promise<any>;
   buildImportItems(
     plugin: Plugin,
     data: MergedExportData,
     sortedKeys: string[]
   ): RichQuickPickItem[];
   insertImport(plugin: Plugin, selection: RichQuickPickItem): Promise<any>;
-  removeUnusedImports(plugin: Plugin): Promise<any>;
-  shouldIncludeDisgnostic: DiagnosticFilter;
-  excludePatterns?: ExcludePatterns;
 };
 
 export type DefaultPluginConfig = {

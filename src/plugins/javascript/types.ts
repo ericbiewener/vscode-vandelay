@@ -2,12 +2,25 @@ import {
   UserConfig,
   PluginConfig,
   DefaultPluginConfig,
-  RuntimePluginConfig
+  RuntimePluginConfig,
+  RichQuickPickItem
 } from "../../types";
 
+export enum ExportType {
+  default = 0,
+  named = 1,
+  type = 2
+}
+
+export type RichQuickPickItemJs = RichQuickPickItem & {
+  absImportPath: string;
+  exportType: ExportType;
+};
+
 /**
- * Data Structures
+ * Cached Data Structurs
  */
+// FIXME: make sure these are all correct
 
 export type FileExportsJs = {
   default?: string | null | undefined;
@@ -41,6 +54,7 @@ export type NonFinalExportDataJs = { [path: string]: NonFinalExportDatumJs };
 
 export type ExportDataImportsJs = { [path: string]: FileExportsJs };
 export type ExportDataExportsJs = { [path: string]: ExportDatumJs };
+// FIXME: remove isExtraImport?
 export type MergedExportDataJs = {
   [path: string]: ExportDatumJs & { isExtraImport?: boolean };
 };
@@ -50,6 +64,7 @@ export type ExportDataJs = {
   exp: ExportDataExportsJs;
 };
 
+// FIXME: remove isExtraImport?
 export type CachingDataJs = {
   exp: NonFinalExportDataJs;
   imp: {
@@ -68,6 +83,12 @@ export type PluginConfigJs = PluginConfig & {
   useSemicolons: boolean;
   trailingComma: boolean;
   multilineImportStyle: "single" | "multiple";
+  buildImportItems(
+    plugin: PluginJs,
+    data: MergedExportDataJs,
+    sortedKeys: string[]
+  ): RichQuickPickItemJs[];
+  insertImport(plugin: PluginJs, selection: RichQuickPickItemJs): Promise<any>;
 };
 
 export type UserConfigJs = UserConfig & {

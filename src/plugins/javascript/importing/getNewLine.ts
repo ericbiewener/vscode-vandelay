@@ -1,11 +1,10 @@
 import { getTabChar } from "../../../utils";
-import { Plugin } from "../../../types";
 import { FileExportsJs, PluginJs } from "../types";
 
 export function getNewLine(
   plugin: PluginJs,
   importPath: string,
-  imports: FileExportsJs
+  lineImports: FileExportsJs
 ) {
   const {
     padCurlyBraces,
@@ -17,22 +16,24 @@ export function getNewLine(
   } = plugin;
 
   const sensitivity = { sensitivity: "base" };
-  imports.named.sort((a, b) => a.localeCompare(b, undefined, sensitivity));
-  imports.types.sort((a, b) => a.localeCompare(b, undefined, sensitivity));
+  lineImports.named.sort((a, b) => a.localeCompare(b, undefined, sensitivity));
+  lineImports.types.sort((a, b) => a.localeCompare(b, undefined, sensitivity));
 
   const putTypeOutside =
-    plugin.preferTypeOutside && !imports.default && !imports.named.length;
+    plugin.preferTypeOutside &&
+    !lineImports.default &&
+    !lineImports.named.length;
   const nonDefaultImports = putTypeOutside
-    ? imports.types
-    : imports.named.concat(imports.types.map(t => "type " + t));
+    ? lineImports.types
+    : lineImports.named.concat(lineImports.types.map(t => "type " + t));
 
   let newLineStart = plugin.useES5 ? "const" : "import";
-  if (imports.default) newLineStart += " " + imports.default;
+  if (lineImports.default) newLineStart += " " + lineImports.default;
 
   let newLineMiddle = "";
   let newLineEnd = "";
   if (nonDefaultImports.length) {
-    if (imports.default) newLineStart += ",";
+    if (lineImports.default) newLineStart += ",";
     if (putTypeOutside) newLineStart += " type";
     newLineStart += " {";
     if (padCurlyBraces) newLineStart += " ";

@@ -1,64 +1,29 @@
-import { window, Range } from "vscode";
+import { window, Range, TextEditor } from "vscode";
 import path from "path";
-import { getTabChar, strUntil } from "../../../utils";
-import { commentRegex, parseImports } from "../regex";
-import { getImportPosition } from "./getImportPosition";
+import {
+  getTabChar,
+  strUntil,
+  getLastInitialComment,
+  insertLine
+} from "../../../utils";
+import { commentRegex, parseImports, ParsedImportPy } from "../regex";
+import {
+  getImportPosition,
+  ImportPositionPy,
+  ImportPositionMatch
+} from "./getImportPosition";
+import { PluginPy } from "../types";
+import { RichQuickPickItem } from "../../../types";
+import { getNewLine } from "./getNewLine";
 
-// TODO: split into separate files like JS?
-
-export function buildImportItems(plugin, exportData) {
-  const { projectRoot, shouldIncludeImport } = plugin;
-  const activeFilepath = window.activeTextEditor.document.fileName;
-  const items = [];
-
-  const sortedKeys = getExportDataKeysByCachedDate(exportData);
-  for (const importPath of sortedKeys) {
-    const data = exportData[importPath];
-    const absImportPath = data.isExtraImport
-      ? importPath
-      : path.join(projectRoot, importPath);
-    if (absImportPath === activeFilepath) continue;
-    if (
-      shouldIncludeImport &&
-      !shouldIncludeImport(absImportPath, activeFilepath)
-    ) {
-      continue;
-    }
-
-    let dotPath;
-    if (data.isExtraImport) {
-      dotPath = importPath;
-    } else {
-      dotPath = removeExt(importPath).replace(/\//g, ".");
-      if (plugin.processImportPath) dotPath = plugin.processImportPath(dotPath);
-    }
-
-    if (data.importEntirePackage) {
-      items.push({
-        label: importPath,
-        isExtraImport: data.isExtraImport
-      });
-    }
-
-    if (!data.exports) continue;
-
-    for (const exportName of data.exports) {
-      items.push({
-        label: exportName,
-        description: dotPath,
-        isExtraImport: data.isExtraImport
-      });
-    }
-  }
-
-  return items;
-}
-
-export function insertImport(plugin, importSelection) {
+export async function insertImport(
+  plugin: PluginPy,
+  importSelection: RichQuickPickItem
+) {
   const { label: exportName, isExtraImport } = importSelection;
   const isPackageImport = !importSelection.description;
   const importPath = importSelection.description || exportName;
-  const editor = window.activeTextEditor;
+  const editor = window.activeTextEditor as TextEditor;
 
   const fileText = editor.document.getText();
   const imports = parseImports(fileText);
@@ -72,6 +37,7 @@ export function insertImport(plugin, importSelection) {
 
   // Make sure we aren't importing a full package when it already has a partial import, or vice versa
   if (!importPosition.indexModifier && !importPosition.isFirstImport) {
+    // We have an exact line match for position
     if (isPackageImport) {
       if (importPosition.match.imports) {
         // partial imports exist
@@ -96,14 +62,13 @@ export function insertImport(plugin, importSelection) {
     : getNewLine(plugin, importPath, lineImports);
 
   // Import groups
-
-  const { indexModifier } = importPosition;
   // If indexModifier is 0, we're adding to a pre-existing line so no need to worry about groups
-  if (indexModifier && plugin.importGroups) {
+
+  const { indexModifier, isFirstImport } = importPosition;
+  if (indexModifier && !isFirstImport && plugin.importGroups) {
     const { before, after } = getSurroundingImportPaths(
-      plugin,
       imports,
-      importPosition
+      importPosition as ImportPositionMatch
     );
 
     if (before || after) {
@@ -144,7 +109,8 @@ export function insertImport(plugin, importSelection) {
   return insertLine(newLine, importPosition);
 }
 
-function findImportPathGroup(plugin, importPath) {
+function findImportPathGroup(plugin: PluginPy, importPath: string) {
+  if (!plugin.importGroups) return;
   const importPathPrefix = strUntil(importPath, ".");
 
   for (const group of plugin.importGroups) {
@@ -154,7 +120,10 @@ function findImportPathGroup(plugin, importPath) {
   }
 }
 
-function getSurroundingImportPaths(plugin, imports, importPosition) {
+function getSurroundingImportPaths(
+  imports: ParsedImportPy[],
+  importPosition: ImportPositionMatch
+) {
   const { match, indexModifier } = importPosition;
   const matchIndex = imports.indexOf(match);
   const before = imports[matchIndex - (indexModifier > 0 ? 0 : 1)];
@@ -168,51 +137,15 @@ function getSurroundingImportPaths(plugin, imports, importPosition) {
   };
 }
 
-function getNewLineImports(importPosition, exportName) {
-  const { match, indexModifier } = importPosition;
+function getNewLineImports(
+  importPosition: ImportPositionPy,
+  exportName: string
+) {
+  const { match, indexModifier, isFirstImport } = importPosition;
+  if (indexModifier || isFirstImport) return [exportName];
 
-  if (indexModifier) return [exportName];
-  if (match.imports.includes(exportName)) return;
-  return [...match.imports, exportName];
-}
-
-export function getNewLine(plugin, importPath, imports) {
-  const { maxImportLineLength } = plugin;
-
-  const sensitivity = { sensitivity: "base" };
-  imports.sort((a, b) => a.localeCompare(b, undefined, sensitivity));
-
-  const newLineStart = "from " + importPath + " import ";
-  const newLineEnd = imports.join(", ");
-
-  const tabChar = getTabChar();
-  const newLineLength = newLineStart.length + newLineEnd.length;
-
-  if (newLineLength <= maxImportLineLength) {
-    return newLineStart + newLineEnd;
-  }
-
-  let line = newLineStart + "(";
-  let fullText = "";
-
-  imports.forEach((name, i) => {
-    const isLast = i === imports.length - 1;
-
-    let newText = (i > 0 ? " " : "") + name;
-    if (!isLast) newText += ",";
-
-    let newLength = line.length + newText.length;
-    if (isLast) newLength++; // for closing parenthesis
-
-    if (newLength < maxImportLineLength) {
-      line += newText;
-    } else {
-      fullText += line + "\n";
-      line = tabChar + newText.trim();
-    }
-
-    if (isLast) fullText += line;
-  });
-
-  return fullText + ")";
+  const { imports } = match as ParsedImportPy;
+  if (!imports) return [exportName];
+  if (imports.includes(exportName)) return;
+  return [...imports, exportName];
 }

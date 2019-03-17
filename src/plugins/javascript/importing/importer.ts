@@ -3,12 +3,19 @@ import path from "path";
 import { insertLine, removeExt } from "../../../utils";
 import { Plugin } from "../../../types";
 import { parseImports, ParsedImportJs } from "../regex";
-import { FileExportsJs, PluginJs } from "../types";
-import { getImportPosition, ImportPosition } from "./getImportPosition";
-import { ExportType, ImportItem } from "./buildImportItems";
+import {
+  FileExportsJs,
+  PluginJs,
+  RichQuickPickItemJs,
+  ExportType
+} from "../types";
+import { getImportPosition, ImportPositionJs } from "./getImportPosition";
 import { getNewLine } from "./getNewLine";
 
-export async function insertImport(plugin: PluginJs, selection: ImportItem) {
+export async function insertImport(
+  plugin: PluginJs,
+  selection: RichQuickPickItemJs
+) {
   const {
     label: exportName,
     description: importPath,
@@ -70,7 +77,7 @@ function getFinalImportPath(
 }
 
 function getNewLineImports(
-  importPosition: ImportPosition,
+  importPosition: ImportPositionJs,
   exportName: string,
   exportType: ExportType
 ) {

@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import path from "path";
 import _ from "lodash";
-import { basename, getFilepathKey } from "../../utils";
+import { basename, getFilepathKey, last } from "../../utils";
 import { isPathNodeModule } from "./utils";
 import { parseImports, exportRegex } from "./regex";
 import {
@@ -126,7 +126,7 @@ export function cacheFile(
         const key = isType ? "types" : "named";
         reexports.push(words[isType ? 1 : 0]);
         fileExports[key] = fileExports[key] || [];
-        const word = _.last(words);
+        const word = last(words);
         if (word) fileExports[key].push(word);
       }
     }

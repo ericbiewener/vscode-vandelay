@@ -1,6 +1,7 @@
+// FIXME: use lodash-es fix in webpack
 import _ from "lodash";
 
-const commentRegex = /^(?:[ \t]*#|[ \t]*"""[^]*?""").*/gm;
+export const commentRegex = /^(?:[ \t]*#|[ \t]*"""[^]*?""").*/gm;
 
 /**
  * Regexes must end with `.*` after last capturing group to ensure that we capture the full line.

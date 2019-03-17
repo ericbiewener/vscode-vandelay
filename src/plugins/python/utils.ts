@@ -1,6 +1,7 @@
 import { strUntil } from "../../utils";
+import { PluginPy } from "./types";
 
-export function isPathPackage(plugin, importPath) {
+export function isPathPackage(plugin: PluginPy, importPath: string) {
   if (importPath.startsWith(".")) return false;
   const pathStart = strUntil(importPath, ".");
   return !plugin.includePaths.some(p => {

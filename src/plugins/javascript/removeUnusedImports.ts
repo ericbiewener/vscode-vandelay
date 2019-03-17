@@ -1,6 +1,9 @@
 import _ from "lodash";
 import { Range, Uri, window } from "vscode";
-import { getDiagnosticsForAllEditors } from "../../utils";
+import {
+  getDiagnosticsForAllEditors,
+  sortUnusedImportChanges
+} from "../../utils";
 import { getNewLine } from "./importing/getNewLine";
 import { parseImports, ParsedImportJs } from "./regex";
 import { Plugin } from "../../types";
@@ -51,10 +54,7 @@ export async function removeUnusedImports(plugin: PluginJs) {
       changes.push(change);
     }
 
-    // FIXME: make sure this sort works. had to change it from lodash
-    // Sort in reverse order so that modifying a line doesn't effect the other line locations that
-    // need to be changed
-    changes.sort((a, b) => (a.match.start < b.match.start ? 1 : -1));
+    sortUnusedImportChanges(changes);
 
     await editor.edit(builder => {
       for (const change of changes) {
