@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cacheProject 1`] = `
+Object {
+  "_extraImports": Object {
+    "full_package1": Object {
+      "importEntirePackage": true,
+      "isExtraImport": true,
+    },
+    "full_package2": Object {
+      "importEntirePackage": true,
+      "isExtraImport": true,
+    },
+    "group1a.subdir_1": Object {
+      "exports": Array [
+        "group1a_1",
+      ],
+      "isExtraImport": true,
+    },
+    "group1a.subdir_2": Object {
+      "exports": Array [
+        "group1a_2",
+      ],
+      "isExtraImport": true,
+    },
+    "group1b.subdir_1": Object {
+      "exports": Array [
+        "group1b_1",
+      ],
+      "isExtraImport": true,
+    },
+    "group2a.subdir_1": Object {
+      "exports": Array [
+        "group2a_1",
+      ],
+      "isExtraImport": true,
+    },
+    "group2a.subdir_2": Object {
+      "exports": Array [
+        "group2a_2",
+      ],
+      "isExtraImport": true,
+    },
+    "group2b.subdir_1": Object {
+      "exports": Array [
+        "group2b_1",
+      ],
+      "isExtraImport": true,
+    },
+    "package3": Object {
+      "exports": Array [
+        "package3_file1_1",
+        "package3_file1_2",
+        "package3_file1_3",
+        "package3_file2_1",
+        "package3_src2_file1_1",
+      ],
+      "isExtraImport": true,
+    },
+    "package4": Object {
+      "exports": Array [
+        "package4_file1_1",
+        "package4_file1_2",
+        "package4_file1_3",
+      ],
+      "isExtraImport": true,
+    },
+    "package5": Object {
+      "exports": Array [
+        "package5_file1_1",
+        "package5_file1_2",
+        "package5_file1_3",
+      ],
+      "isExtraImport": true,
+    },
+  },
+  "src1/file1.py": Object {
+    "exports": Array [
+      "Class_file1_1",
+      "Class_file1_2",
+      "fn_file1_1",
+      "fn_file1_2",
+      "CONSTANT_FILE1_1",
+      "CONSTANT_FILE1_2",
+    ],
+  },
+  "src1/file2.py": Object {
+    "exports": Array [
+      "Class_file2_1",
+      "Class_file2_2",
+      "fn_file2_1",
+      "fn_file2_2",
+      "CONSTANT_FILE2_1",
+    ],
+  },
+  "src1/subdir/file1.py": Object {
+    "exports": Array [
+      "CONSTANT_SUBDIR_FILE1_1",
+    ],
+  },
+  "src2/file1.py": Object {
+    "exports": Array [
+      "CONSTANT_SRC2_FILE1_1",
+    ],
+  },
+  "src3/file1.py": Object {
+    "exports": Array [
+      "CONSTANT_SRC3_FILE1_1",
+    ],
+  },
+}
+`;

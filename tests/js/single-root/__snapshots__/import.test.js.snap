@@ -1,0 +1,2074 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildImportItems 1`] = `
+Array [
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src2/file1.js",
+    "description": "src2/file1",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src2_file1_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module1",
+    "description": "module1",
+    "exportType": 0,
+    "isExtraImport": true,
+    "label": "defaultModule1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module1_file2",
+    "description": "module1_file2",
+    "exportType": 0,
+    "isExtraImport": true,
+    "label": "defaultModule_file2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module2",
+    "description": "module2",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module2_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module2",
+    "description": "module2",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module2_2 as module2_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module2",
+    "description": "module2",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module2_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module2",
+    "description": "module2",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module2_src2_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module2",
+    "description": "module2",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module2_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module3",
+    "description": "module3",
+    "exportType": 0,
+    "isExtraImport": true,
+    "label": "defaultModule3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module3",
+    "description": "module3",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module3_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module3",
+    "description": "module3",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module3_2 as module3_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module3",
+    "description": "module3",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module3_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module3",
+    "description": "module3",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module3_typeInside",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module3",
+    "description": "module3",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module3_typeOutside",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module4",
+    "description": "module4",
+    "exportType": 0,
+    "isExtraImport": true,
+    "label": "defaultModule4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module4",
+    "description": "module4",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module4_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module4",
+    "description": "module4",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module4_2 as module4_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module4",
+    "description": "module4",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module4_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module5",
+    "description": "module5",
+    "exportType": 0,
+    "isExtraImport": true,
+    "label": "defaultModule5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module5",
+    "description": "module5",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module5_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module5",
+    "description": "module5",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module5_2 as module4_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module5",
+    "description": "module5",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module5_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module5",
+    "description": "module5",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module5_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module6",
+    "description": "module6",
+    "exportType": 0,
+    "isExtraImport": true,
+    "label": "* as FullModule",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module7",
+    "description": "module7",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module7_typeOutside_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module7",
+    "description": "module7",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module7_typeOutside_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 0,
+    "isExtraImport": undefined,
+    "label": "file2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file2_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file2_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file3.js",
+    "description": "src1/file3",
+    "exportType": 0,
+    "isExtraImport": undefined,
+    "label": "file3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file3.js",
+    "description": "src1/file3",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file3_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file3.js",
+    "description": "src1/file3",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file3_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file3.js",
+    "description": "src1/file3",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file3_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file3.js",
+    "description": "src1/file3",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file3_4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file3.js",
+    "description": "src1/file3",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file3_5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file3.js",
+    "description": "src1/file3",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file3_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file3.js",
+    "description": "src1/file3",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file3_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file4.js",
+    "description": "src1/file4",
+    "exportType": 0,
+    "isExtraImport": undefined,
+    "label": "file4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file4.js",
+    "description": "src1/file4",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file4_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file4.js",
+    "description": "src1/file4",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file4_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file4.js",
+    "description": "src1/file4",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file4_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file4.js",
+    "description": "src1/file4",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file4_4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file4.js",
+    "description": "src1/file4",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file4_5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file4.js",
+    "description": "src1/file4",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file4_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file4.js",
+    "description": "src1/file4",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file4_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file5.js",
+    "description": "src1/file5",
+    "exportType": 0,
+    "isExtraImport": undefined,
+    "label": "file5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file5.js",
+    "description": "src1/file5",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file5_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file5.js",
+    "description": "src1/file5",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file5_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file5.js",
+    "description": "src1/file5",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file5_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file5.js",
+    "description": "src1/file5",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file5_4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file5.js",
+    "description": "src1/file5",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file5_5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file5.js",
+    "description": "src1/file5",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file5_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file5.js",
+    "description": "src1/file5",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file5_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file6.js",
+    "description": "src1/file6",
+    "exportType": 0,
+    "isExtraImport": undefined,
+    "label": "file6",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file6.js",
+    "description": "src1/file6",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file6_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file6.js",
+    "description": "src1/file6",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file6_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file6.js",
+    "description": "src1/file6",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file6_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file6.js",
+    "description": "src1/file6",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file6_4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file6.js",
+    "description": "src1/file6",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file6_5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file6.js",
+    "description": "src1/file6",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file6_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file6.js",
+    "description": "src1/file6",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file6_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file7.js",
+    "description": "src1/file7",
+    "exportType": 0,
+    "isExtraImport": undefined,
+    "label": "* as AllFile7Exports",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file7.js",
+    "description": "src1/file7",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file7_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file7.js",
+    "description": "src1/file7",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file7_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file7.js",
+    "description": "src1/file7",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file7_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file7.js",
+    "description": "src1/file7",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file7_4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file7.js",
+    "description": "src1/file7",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file7_5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file7.js",
+    "description": "src1/file7",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file7_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file7.js",
+    "description": "src1/file7",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file7_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 0,
+    "isExtraImport": undefined,
+    "label": "src1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file3_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file4_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file5_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file6_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file7_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/subdir/file1.js",
+    "description": "src1/subdir/file1",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_subdir_file1_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src3/file1.js",
+    "description": "src3/file1",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src3_file1_1",
+  },
+]
+`;
+
+exports[`buildImportItems 2`] = `
+Array [
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module1",
+    "description": "module1",
+    "exportType": 0,
+    "isExtraImport": true,
+    "label": "defaultModule1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module1_file2",
+    "description": "module1_file2",
+    "exportType": 0,
+    "isExtraImport": true,
+    "label": "defaultModule_file2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module2",
+    "description": "module2",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module2_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module2",
+    "description": "module2",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module2_2 as module2_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module2",
+    "description": "module2",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module2_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module2",
+    "description": "module2",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module2_src2_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module2",
+    "description": "module2",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module2_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module3",
+    "description": "module3",
+    "exportType": 0,
+    "isExtraImport": true,
+    "label": "defaultModule3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module3",
+    "description": "module3",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module3_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module3",
+    "description": "module3",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module3_2 as module3_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module3",
+    "description": "module3",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module3_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module3",
+    "description": "module3",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module3_typeInside",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module3",
+    "description": "module3",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module3_typeOutside",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module4",
+    "description": "module4",
+    "exportType": 0,
+    "isExtraImport": true,
+    "label": "defaultModule4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module4",
+    "description": "module4",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module4_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module4",
+    "description": "module4",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module4_2 as module4_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module4",
+    "description": "module4",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module4_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module5",
+    "description": "module5",
+    "exportType": 0,
+    "isExtraImport": true,
+    "label": "defaultModule5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module5",
+    "description": "module5",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module5_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module5",
+    "description": "module5",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module5_2 as module4_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module5",
+    "description": "module5",
+    "exportType": 1,
+    "isExtraImport": true,
+    "label": "module5_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module5",
+    "description": "module5",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module5_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module6",
+    "description": "module6",
+    "exportType": 0,
+    "isExtraImport": true,
+    "label": "* as FullModule",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module7",
+    "description": "module7",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module7_typeOutside_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module7",
+    "description": "module7",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module7_typeOutside_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file1.js",
+    "description": "src1/file1",
+    "exportType": 0,
+    "isExtraImport": undefined,
+    "label": "file1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file1.js",
+    "description": "src1/file1",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file1_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file1.js",
+    "description": "src1/file1",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file1_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 0,
+    "isExtraImport": undefined,
+    "label": "file2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file2_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file3.js",
+    "description": "src1/file3",
+    "exportType": 0,
+    "isExtraImport": undefined,
+    "label": "file3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file3.js",
+    "description": "src1/file3",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file3_4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file3.js",
+    "description": "src1/file3",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file3_5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file4.js",
+    "description": "src1/file4",
+    "exportType": 0,
+    "isExtraImport": undefined,
+    "label": "file4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file4.js",
+    "description": "src1/file4",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file4_4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file4.js",
+    "description": "src1/file4",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file4_5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file4.js",
+    "description": "src1/file4",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file4_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file4.js",
+    "description": "src1/file4",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file4_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file5.js",
+    "description": "src1/file5",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file5_4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file5.js",
+    "description": "src1/file5",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file5_5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file5.js",
+    "description": "src1/file5",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file5_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file5.js",
+    "description": "src1/file5",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file5_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file6.js",
+    "description": "src1/file6",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file6_4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file6.js",
+    "description": "src1/file6",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file6_5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file6.js",
+    "description": "src1/file6",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file6_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file6.js",
+    "description": "src1/file6",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file6_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file7.js",
+    "description": "src1/file7",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file7_4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file7.js",
+    "description": "src1/file7",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file7_5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file7.js",
+    "description": "src1/file7",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file7_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file7.js",
+    "description": "src1/file7",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file7_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 0,
+    "isExtraImport": undefined,
+    "label": "src1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file3_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file3_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file3_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file4_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file4_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file4_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "file5default",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file5_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file5_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file5_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "file6default",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file6_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file6_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file6_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "file7default",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file7_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file7_2_renamed",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file7_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file1_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file1_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file1_3",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file1_4",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file1_5",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file2_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file3_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1",
+    "description": "src1/index",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file3_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/subdir/file1.js",
+    "description": "src1/subdir/file1",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_subdir_file1_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src3/file1.js",
+    "description": "src3/file1",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src3_file1_1",
+  },
+]
+`;
+
+exports[`buildTypeImportItems 1`] = `
+Array [
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module2",
+    "description": "module2",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module2_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module3",
+    "description": "module3",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module3_typeInside",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module3",
+    "description": "module3",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module3_typeOutside",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module5",
+    "description": "module5",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module5_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module7",
+    "description": "module7",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module7_typeOutside_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/module7",
+    "description": "module7",
+    "exportType": 2,
+    "isExtraImport": true,
+    "label": "module7_typeOutside_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file2_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file2_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file3.js",
+    "description": "src1/file3",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file3_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file3.js",
+    "description": "src1/file3",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file3_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file4.js",
+    "description": "src1/file4",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file4_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file4.js",
+    "description": "src1/file4",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file4_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file5.js",
+    "description": "src1/file5",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file5_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file5.js",
+    "description": "src1/file5",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file5_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file6.js",
+    "description": "src1/file6",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file6_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file6.js",
+    "description": "src1/file6",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file6_t_2",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file7.js",
+    "description": "src1/file7",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file7_t_1",
+  },
+  Object {
+    "absImportPath": "/Users/ericbiewener/Active Projects/vandelay/vandelay-js/test/single-root/src1/file7.js",
+    "description": "src1/file7",
+    "exportType": 2,
+    "isExtraImport": undefined,
+    "label": "src1_file7_t_2",
+  },
+]
+`;
+
+exports[`import - comment with code right after - original order 1`] = `
+"// I'm a comment
+import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from 'module2';
+import defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside } from 'module3';
+import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from 'module4';
+import defaultModule5, { module5_1, module5_2 as module4_2_renamed, module5_3, type module5_t_1
+} from 'module5';
+import * as FullModule from 'module6';
+import { type module7_typeOutside_1, type module7_typeOutside_2 } from 'module7';
+import { src2_file1_1 } from '../src2/file1';
+import { src3_file1_1 } from '../src3/file1';
+import src1, { src1_file2_2_renamed, src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed, src1_file7_2_renamed } from './';
+import file2, { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2 } from './file2';
+import file3, { src1_file3_1, src1_file3_2, src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2 } from './file3';
+import file4, { src1_file4_1, src1_file4_2, src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2 } from './file4';
+import file5, { src1_file5_1, src1_file5_2, src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2 } from './file5';
+import file6, { src1_file6_1, src1_file6_2, src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2 } from './file6';
+import * as AllFile7Exports, { src1_file7_1, src1_file7_2, src1_file7_3, src1_file7_4, src1_file7_5,
+  type src1_file7_t_1, type src1_file7_t_2 } from './file7';
+import { src1_subdir_file1_1 } from './subdir/file1';
+
+const foo = 1
+"
+`;
+
+exports[`import - comment with linebreak and code - original order 1`] = `
+"// I'm a comment
+import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from 'module2';
+import defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside } from 'module3';
+import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from 'module4';
+import defaultModule5, { module5_1, module5_2 as module4_2_renamed, module5_3, type module5_t_1
+} from 'module5';
+import * as FullModule from 'module6';
+import { type module7_typeOutside_1, type module7_typeOutside_2 } from 'module7';
+import { src2_file1_1 } from '../src2/file1';
+import { src3_file1_1 } from '../src3/file1';
+import src1, { src1_file2_2_renamed, src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed, src1_file7_2_renamed } from './';
+import file2, { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2 } from './file2';
+import file3, { src1_file3_1, src1_file3_2, src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2 } from './file3';
+import file4, { src1_file4_1, src1_file4_2, src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2 } from './file4';
+import file5, { src1_file5_1, src1_file5_2, src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2 } from './file5';
+import file6, { src1_file6_1, src1_file6_2, src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2 } from './file6';
+import * as AllFile7Exports, { src1_file7_1, src1_file7_2, src1_file7_3, src1_file7_4, src1_file7_5,
+  type src1_file7_t_1, type src1_file7_t_2 } from './file7';
+import { src1_subdir_file1_1 } from './subdir/file1';
+
+const foo = 1
+"
+`;
+
+exports[`import - empty - original order 1`] = `
+"import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from 'module2';
+import defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside } from 'module3';
+import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from 'module4';
+import defaultModule5, { module5_1, module5_2 as module4_2_renamed, module5_3, type module5_t_1
+} from 'module5';
+import * as FullModule from 'module6';
+import { type module7_typeOutside_1, type module7_typeOutside_2 } from 'module7';
+import { src2_file1_1 } from '../src2/file1';
+import { src3_file1_1 } from '../src3/file1';
+import src1, { src1_file2_2_renamed, src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed, src1_file7_2_renamed } from './';
+import file2, { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2 } from './file2';
+import file3, { src1_file3_1, src1_file3_2, src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2 } from './file3';
+import file4, { src1_file4_1, src1_file4_2, src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2 } from './file4';
+import file5, { src1_file5_1, src1_file5_2, src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2 } from './file5';
+import file6, { src1_file6_1, src1_file6_2, src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2 } from './file6';
+import * as AllFile7Exports, { src1_file7_1, src1_file7_2, src1_file7_3, src1_file7_4, src1_file7_5,
+  type src1_file7_t_1, type src1_file7_t_2 } from './file7';
+import { src1_subdir_file1_1 } from './subdir/file1';
+"
+`;
+
+exports[`import - has code - original order 1`] = `
+"import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from 'module2';
+import defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside } from 'module3';
+import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from 'module4';
+import defaultModule5, { module5_1, module5_2 as module4_2_renamed, module5_3, type module5_t_1
+} from 'module5';
+import * as FullModule from 'module6';
+import { type module7_typeOutside_1, type module7_typeOutside_2 } from 'module7';
+import { src2_file1_1 } from '../src2/file1';
+import { src3_file1_1 } from '../src3/file1';
+import src1, { src1_file2_2_renamed, src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed, src1_file7_2_renamed } from './';
+import file2, { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2 } from './file2';
+import file3, { src1_file3_1, src1_file3_2, src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2 } from './file3';
+import file4, { src1_file4_1, src1_file4_2, src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2 } from './file4';
+import file5, { src1_file5_1, src1_file5_2, src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2 } from './file5';
+import file6, { src1_file6_1, src1_file6_2, src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2 } from './file6';
+import * as AllFile7Exports, { src1_file7_1, src1_file7_2, src1_file7_3, src1_file7_4, src1_file7_5,
+  type src1_file7_t_1, type src1_file7_t_2 } from './file7';
+import { src1_subdir_file1_1 } from './subdir/file1';
+
+const foo = 1
+"
+`;
+
+exports[`import - importGroups 1`] = `
+"import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from 'module4';
+import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from 'module2';
+import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside } from 'module3';
+import defaultModule5, { module5_1, module5_2 as module4_2_renamed, module5_3, type module5_t_1
+} from 'module5';
+import * as FullModule from 'module6';
+import { type module7_typeOutside_1, type module7_typeOutside_2 } from 'module7';
+import { src2_file1_1 } from '../src2/file1';
+import { src3_file1_1 } from '../src3/file1';
+import src1, { src1_file2_2_renamed, src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed, src1_file7_2_renamed } from './';
+import file2, { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2 } from './file2';
+import file3, { src1_file3_1, src1_file3_2, src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2 } from './file3';
+import file4, { src1_file4_1, src1_file4_2, src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2 } from './file4';
+import file5, { src1_file5_1, src1_file5_2, src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2 } from './file5';
+import file6, { src1_file6_1, src1_file6_2, src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2 } from './file6';
+import * as AllFile7Exports, { src1_file7_1, src1_file7_2, src1_file7_3, src1_file7_4, src1_file7_5,
+  type src1_file7_t_1, type src1_file7_t_2 } from './file7';
+import { src1_subdir_file1_1 } from './subdir/file1';
+"
+`;
+
+exports[`import - maxImportLineLength 1`] = `
+"import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import { module2_1,
+  module2_2 as module2_2_renamed, module2_3,
+  module2_src2_1, type module2_t_1
+} from 'module2';
+import defaultModule3, { module3_1,
+  module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside,
+  type module3_typeOutside } from 'module3';
+import defaultModule4, { module4_1,
+  module4_2 as module4_2_renamed, module4_3
+} from 'module4';
+import defaultModule5, { module5_1,
+  module5_2 as module4_2_renamed, module5_3,
+  type module5_t_1 } from 'module5';
+import * as FullModule from 'module6';
+import { type module7_typeOutside_1,
+  type module7_typeOutside_2
+} from 'module7';
+import { src2_file1_1 } from '../src2/file1';
+import { src3_file1_1 } from '../src3/file1';
+import src1, { src1_file2_2_renamed,
+  src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed,
+  src1_file7_2_renamed } from './';
+import file2, { src1_file2_1, src1_file2_2,
+  src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2
+} from './file2';
+import file3, { src1_file3_1, src1_file3_2,
+  src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2
+} from './file3';
+import file4, { src1_file4_1, src1_file4_2,
+  src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2
+} from './file4';
+import file5, { src1_file5_1, src1_file5_2,
+  src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2
+} from './file5';
+import file6, { src1_file6_1, src1_file6_2,
+  src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2
+} from './file6';
+import * as AllFile7Exports, { src1_file7_1,
+  src1_file7_2, src1_file7_3, src1_file7_4,
+  src1_file7_5, type src1_file7_t_1,
+  type src1_file7_t_2 } from './file7';
+import { src1_subdir_file1_1
+} from './subdir/file1';
+"
+`;
+
+exports[`import - multiline comment - original order 1`] = `
+"/*
+I'm a comment
+With multiple lines
+*/
+import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from 'module2';
+import defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside } from 'module3';
+import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from 'module4';
+import defaultModule5, { module5_1, module5_2 as module4_2_renamed, module5_3, type module5_t_1
+} from 'module5';
+import * as FullModule from 'module6';
+import { type module7_typeOutside_1, type module7_typeOutside_2 } from 'module7';
+import { src2_file1_1 } from '../src2/file1';
+import { src3_file1_1 } from '../src3/file1';
+import src1, { src1_file2_2_renamed, src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed, src1_file7_2_renamed } from './';
+import file2, { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2 } from './file2';
+import file3, { src1_file3_1, src1_file3_2, src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2 } from './file3';
+import file4, { src1_file4_1, src1_file4_2, src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2 } from './file4';
+import file5, { src1_file5_1, src1_file5_2, src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2 } from './file5';
+import file6, { src1_file6_1, src1_file6_2, src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2 } from './file6';
+import * as AllFile7Exports, { src1_file7_1, src1_file7_2, src1_file7_3, src1_file7_4, src1_file7_5,
+  type src1_file7_t_1, type src1_file7_t_2 } from './file7';
+import { src1_subdir_file1_1 } from './subdir/file1';
+"
+`;
+
+exports[`import - multilineImportStyle = single 1`] = `
+"import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import {
+  module2_1,
+  module2_2 as module2_2_renamed,
+  module2_3,
+  module2_src2_1,
+  type module2_t_1,
+} from 'module2';
+import defaultModule3, {
+  module3_1,
+  module3_2 as module3_2_renamed,
+  module3_3,
+  type module3_typeInside,
+  type module3_typeOutside,
+} from 'module3';
+import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from 'module4';
+import defaultModule5, {
+  module5_1,
+  module5_2 as module4_2_renamed,
+  module5_3,
+  type module5_t_1,
+} from 'module5';
+import * as FullModule from 'module6';
+import { type module7_typeOutside_1, type module7_typeOutside_2 } from 'module7';
+import { src2_file1_1 } from '../src2/file1';
+import { src3_file1_1 } from '../src3/file1';
+import src1, {
+  src1_file2_2_renamed,
+  src1_file3_2_renamed,
+  src1_file4_2_renamed,
+  src1_file5_2_renamed,
+  src1_file6_2_renamed,
+  src1_file7_2_renamed,
+} from './';
+import file2, {
+  src1_file2_1,
+  src1_file2_2,
+  src1_file2_3,
+  src1_file2_4,
+  src1_file2_5,
+  type src1_file2_t_1,
+  type src1_file2_t_2,
+} from './file2';
+import file3, {
+  src1_file3_1,
+  src1_file3_2,
+  src1_file3_3,
+  src1_file3_4,
+  src1_file3_5,
+  type src1_file3_t_1,
+  type src1_file3_t_2,
+} from './file3';
+import file4, {
+  src1_file4_1,
+  src1_file4_2,
+  src1_file4_3,
+  src1_file4_4,
+  src1_file4_5,
+  type src1_file4_t_1,
+  type src1_file4_t_2,
+} from './file4';
+import file5, {
+  src1_file5_1,
+  src1_file5_2,
+  src1_file5_3,
+  src1_file5_4,
+  src1_file5_5,
+  type src1_file5_t_1,
+  type src1_file5_t_2,
+} from './file5';
+import file6, {
+  src1_file6_1,
+  src1_file6_2,
+  src1_file6_3,
+  src1_file6_4,
+  src1_file6_5,
+  type src1_file6_t_1,
+  type src1_file6_t_2,
+} from './file6';
+import * as AllFile7Exports, {
+  src1_file7_1,
+  src1_file7_2,
+  src1_file7_3,
+  src1_file7_4,
+  src1_file7_5,
+  type src1_file7_t_1,
+  type src1_file7_t_2,
+} from './file7';
+import { src1_subdir_file1_1 } from './subdir/file1';
+"
+`;
+
+exports[`import - nonModulePaths 1`] = `
+"import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from 'module2';
+import defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside } from 'module3';
+import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from 'module4';
+import defaultModule5, { module5_1, module5_2 as module4_2_renamed, module5_3, type module5_t_1
+} from 'module5';
+import * as FullModule from 'module6';
+import { type module7_typeOutside_1, type module7_typeOutside_2 } from 'module7';
+import file2, { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2 } from 'file2';
+import file3, { src1_file3_1, src1_file3_2, src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2 } from 'file3';
+import { src2_file1_1 } from '../src2/file1';
+import { src3_file1_1 } from '../src3/file1';
+import src1, { src1_file2_2_renamed, src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed, src1_file7_2_renamed } from './';
+import file4, { src1_file4_1, src1_file4_2, src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2 } from './file4';
+import file5, { src1_file5_1, src1_file5_2, src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2 } from './file5';
+import file6, { src1_file6_1, src1_file6_2, src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2 } from './file6';
+import * as AllFile7Exports, { src1_file7_1, src1_file7_2, src1_file7_3, src1_file7_4, src1_file7_5,
+  type src1_file7_t_1, type src1_file7_t_2 } from './file7';
+import { src1_subdir_file1_1 } from './subdir/file1';
+"
+`;
+
+exports[`import - padCurlyBraces = false 1`] = `
+"import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import {module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from 'module2';
+import defaultModule3, {module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside} from 'module3';
+import defaultModule4, {module4_1, module4_2 as module4_2_renamed, module4_3} from 'module4';
+import defaultModule5, {module5_1, module5_2 as module4_2_renamed, module5_3, type module5_t_1
+} from 'module5';
+import * as FullModule from 'module6';
+import {type module7_typeOutside_1, type module7_typeOutside_2} from 'module7';
+import {src2_file1_1} from '../src2/file1';
+import {src3_file1_1} from '../src3/file1';
+import src1, {src1_file2_2_renamed, src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed, src1_file7_2_renamed} from './';
+import file2, {src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2} from './file2';
+import file3, {src1_file3_1, src1_file3_2, src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2} from './file3';
+import file4, {src1_file4_1, src1_file4_2, src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2} from './file4';
+import file5, {src1_file5_1, src1_file5_2, src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2} from './file5';
+import file6, {src1_file6_1, src1_file6_2, src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2} from './file6';
+import * as AllFile7Exports, {src1_file7_1, src1_file7_2, src1_file7_3, src1_file7_4, src1_file7_5,
+  type src1_file7_t_1, type src1_file7_t_2} from './file7';
+import {src1_subdir_file1_1} from './subdir/file1';
+"
+`;
+
+exports[`import - preferTypeOutside = true 1`] = `
+"import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from 'module2';
+import defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside } from 'module3';
+import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from 'module4';
+import defaultModule5, { module5_1, module5_2 as module4_2_renamed, module5_3, type module5_t_1
+} from 'module5';
+import * as FullModule from 'module6';
+import type { module7_typeOutside_1, module7_typeOutside_2 } from 'module7';
+import { src2_file1_1 } from '../src2/file1';
+import { src3_file1_1 } from '../src3/file1';
+import src1, { src1_file2_2_renamed, src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed, src1_file7_2_renamed } from './';
+import file2, { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2 } from './file2';
+import file3, { src1_file3_1, src1_file3_2, src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2 } from './file3';
+import file4, { src1_file4_1, src1_file4_2, src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2 } from './file4';
+import file5, { src1_file5_1, src1_file5_2, src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2 } from './file5';
+import file6, { src1_file6_1, src1_file6_2, src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2 } from './file6';
+import * as AllFile7Exports, { src1_file7_1, src1_file7_2, src1_file7_3, src1_file7_4, src1_file7_5,
+  type src1_file7_t_1, type src1_file7_t_2 } from './file7';
+import { src1_subdir_file1_1 } from './subdir/file1';
+"
+`;
+
+exports[`import - processImportPath 1`] = `
+"import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from 'module2';
+import defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside } from 'module3';
+import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from 'module4';
+import defaultModule5, { module5_1, module5_2 as module4_2_renamed, module5_3, type module5_t_1
+} from 'module5';
+import * as FullModule from 'module6';
+import { type module7_typeOutside_1, type module7_typeOutside_2 } from 'module7';
+import { src2_file1_1 } from '../src2/FILE1';
+import { src3_file1_1 } from '../src3/FILE1';
+import src1, { src1_file2_2_renamed, src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed, src1_file7_2_renamed } from './';
+import file2, { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2 } from './file2';
+import file3, { src1_file3_1, src1_file3_2, src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2 } from './file3';
+import file4, { src1_file4_1, src1_file4_2, src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2 } from './file4';
+import file5, { src1_file5_1, src1_file5_2, src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2 } from './file5';
+import file6, { src1_file6_1, src1_file6_2, src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2 } from './file6';
+import * as AllFile7Exports, { src1_file7_1, src1_file7_2, src1_file7_3, src1_file7_4, src1_file7_5,
+  type src1_file7_t_1, type src1_file7_t_2 } from './file7';
+import { src1_subdir_file1_1 } from './subdir/FILE1';
+"
+`;
+
+exports[`import - processImportPath 2`] = `
+Array [
+  "./file2.js",
+  "absRoot/src1/file2.js",
+  "absRoot/src1/file1.js",
+  "absRoot",
+]
+`;
+
+exports[`import - shouldIncludeImport 1`] = `
+"import { src2_file1_1 } from '../src2/file1';
+import { src3_file1_1 } from '../src3/file1';
+import { src1_subdir_file1_1 } from './subdir/file1';
+"
+`;
+
+exports[`import - shouldIncludeImport 2`] = `
+Array [
+  "absRoot/src3/file1.js",
+  "absRoot/src1/file1.js",
+]
+`;
+
+exports[`import - single line comment - original order 1`] = `
+"// I'm a comment
+import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from 'module2';
+import defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside } from 'module3';
+import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from 'module4';
+import defaultModule5, { module5_1, module5_2 as module4_2_renamed, module5_3, type module5_t_1
+} from 'module5';
+import * as FullModule from 'module6';
+import { type module7_typeOutside_1, type module7_typeOutside_2 } from 'module7';
+import { src2_file1_1 } from '../src2/file1';
+import { src3_file1_1 } from '../src3/file1';
+import src1, { src1_file2_2_renamed, src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed, src1_file7_2_renamed } from './';
+import file2, { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2 } from './file2';
+import file3, { src1_file3_1, src1_file3_2, src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2 } from './file3';
+import file4, { src1_file4_1, src1_file4_2, src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2 } from './file4';
+import file5, { src1_file5_1, src1_file5_2, src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2 } from './file5';
+import file6, { src1_file6_1, src1_file6_2, src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2 } from './file6';
+import * as AllFile7Exports, { src1_file7_1, src1_file7_2, src1_file7_3, src1_file7_4, src1_file7_5,
+  type src1_file7_t_1, type src1_file7_t_2 } from './file7';
+import { src1_subdir_file1_1 } from './subdir/file1';
+"
+`;
+
+exports[`import - src1/subdir/file1.js - original order 1`] = `
+"import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from 'module2';
+import defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside } from 'module3';
+import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from 'module4';
+import defaultModule5, { module5_1, module5_2 as module4_2_renamed, module5_3, type module5_t_1
+} from 'module5';
+import * as FullModule from 'module6';
+import { type module7_typeOutside_1, type module7_typeOutside_2 } from 'module7';
+import src1, { src1_file2_2_renamed, src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed, src1_file7_2_renamed } from '..';
+import { src2_file1_1 } from '../../src2/file1';
+import { src3_file1_1 } from '../../src3/file1';
+import file1, { src1_file1_1, src1_file1_2, src1_file1_3, src1_file1_4, src1_file1_5,
+  type src1_file1_t_1, type src1_file1_t_2 } from '../file1';
+import file2, { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2 } from '../file2';
+import file3, { src1_file3_1, src1_file3_2, src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2 } from '../file3';
+import file4, { src1_file4_1, src1_file4_2, src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2 } from '../file4';
+import file5, { src1_file5_1, src1_file5_2, src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2 } from '../file5';
+import file6, { src1_file6_1, src1_file6_2, src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2 } from '../file6';
+import * as AllFile7Exports, { src1_file7_1, src1_file7_2, src1_file7_3, src1_file7_4, src1_file7_5,
+  type src1_file7_t_1, type src1_file7_t_2 } from '../file7';
+"
+`;
+
+exports[`import - src2/file1.js - original order 1`] = `
+"import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from 'module2';
+import defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside } from 'module3';
+import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from 'module4';
+import defaultModule5, { module5_1, module5_2 as module4_2_renamed, module5_3, type module5_t_1
+} from 'module5';
+import * as FullModule from 'module6';
+import { type module7_typeOutside_1, type module7_typeOutside_2 } from 'module7';
+import src1, { file5default, file6default, file7default, src1_file1_1, src1_file1_2, src1_file1_3,
+  src1_file1_4, src1_file1_5, src1_file2_1, src1_file2_2_renamed, src1_file2_3, src1_file3_1,
+  src1_file3_2_renamed, src1_file3_3, src1_file4_1, src1_file4_2_renamed, src1_file4_3,
+  src1_file5_1, src1_file5_2_renamed, src1_file5_3, src1_file6_1, src1_file6_2_renamed,
+  src1_file6_3, src1_file7_1, src1_file7_2_renamed, src1_file7_3, type src1_file2_t_2,
+  type src1_file3_t_1, type src1_file3_t_2 } from '../src1';
+import file1, { type src1_file1_t_1, type src1_file1_t_2 } from '../src1/file1';
+import file2, { src1_file2_4, src1_file2_5, type src1_file2_t_1 } from '../src1/file2';
+import file3, { src1_file3_4, src1_file3_5 } from '../src1/file3';
+import file4, { src1_file4_4, src1_file4_5, type src1_file4_t_1, type src1_file4_t_2
+} from '../src1/file4';
+import { src1_file5_4, src1_file5_5, type src1_file5_t_1, type src1_file5_t_2
+} from '../src1/file5';
+import { src1_file6_4, src1_file6_5, type src1_file6_t_1, type src1_file6_t_2
+} from '../src1/file6';
+import { src1_file7_4, src1_file7_5, type src1_file7_t_1, type src1_file7_t_2
+} from '../src1/file7';
+import { src1_subdir_file1_1 } from '../src1/subdir/file1';
+import { src3_file1_1 } from '../src3/file1';
+"
+`;
+
+exports[`import - trailingComma = false 1`] = `
+"import defaultModule1 from 'module1';
+import defaultModule_file2 from 'module1_file2';
+import {
+  module2_1,
+  module2_2 as module2_2_renamed,
+  module2_3,
+  module2_src2_1,
+  type module2_t_1
+} from 'module2';
+import defaultModule3, {
+  module3_1,
+  module3_2 as module3_2_renamed,
+  module3_3,
+  type module3_typeInside,
+  type module3_typeOutside
+} from 'module3';
+import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from 'module4';
+import defaultModule5, {
+  module5_1,
+  module5_2 as module4_2_renamed,
+  module5_3,
+  type module5_t_1
+} from 'module5';
+import * as FullModule from 'module6';
+import { type module7_typeOutside_1, type module7_typeOutside_2 } from 'module7';
+import { src2_file1_1 } from '../src2/file1';
+import { src3_file1_1 } from '../src3/file1';
+import src1, {
+  src1_file2_2_renamed,
+  src1_file3_2_renamed,
+  src1_file4_2_renamed,
+  src1_file5_2_renamed,
+  src1_file6_2_renamed,
+  src1_file7_2_renamed
+} from './';
+import file2, {
+  src1_file2_1,
+  src1_file2_2,
+  src1_file2_3,
+  src1_file2_4,
+  src1_file2_5,
+  type src1_file2_t_1,
+  type src1_file2_t_2
+} from './file2';
+import file3, {
+  src1_file3_1,
+  src1_file3_2,
+  src1_file3_3,
+  src1_file3_4,
+  src1_file3_5,
+  type src1_file3_t_1,
+  type src1_file3_t_2
+} from './file3';
+import file4, {
+  src1_file4_1,
+  src1_file4_2,
+  src1_file4_3,
+  src1_file4_4,
+  src1_file4_5,
+  type src1_file4_t_1,
+  type src1_file4_t_2
+} from './file4';
+import file5, {
+  src1_file5_1,
+  src1_file5_2,
+  src1_file5_3,
+  src1_file5_4,
+  src1_file5_5,
+  type src1_file5_t_1,
+  type src1_file5_t_2
+} from './file5';
+import file6, {
+  src1_file6_1,
+  src1_file6_2,
+  src1_file6_3,
+  src1_file6_4,
+  src1_file6_5,
+  type src1_file6_t_1,
+  type src1_file6_t_2
+} from './file6';
+import * as AllFile7Exports, {
+  src1_file7_1,
+  src1_file7_2,
+  src1_file7_3,
+  src1_file7_4,
+  src1_file7_5,
+  type src1_file7_t_1,
+  type src1_file7_t_2
+} from './file7';
+import { src1_subdir_file1_1 } from './subdir/file1';
+"
+`;
+
+exports[`import - useSemicolons = false 1`] = `
+"import defaultModule1 from 'module1'
+import defaultModule_file2 from 'module1_file2'
+import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from 'module2'
+import defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside } from 'module3'
+import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from 'module4'
+import defaultModule5, { module5_1, module5_2 as module4_2_renamed, module5_3, type module5_t_1
+} from 'module5'
+import * as FullModule from 'module6'
+import { type module7_typeOutside_1, type module7_typeOutside_2 } from 'module7'
+import { src2_file1_1 } from '../src2/file1'
+import { src3_file1_1 } from '../src3/file1'
+import src1, { src1_file2_2_renamed, src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed, src1_file7_2_renamed } from './'
+import file2, { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2 } from './file2'
+import file3, { src1_file3_1, src1_file3_2, src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2 } from './file3'
+import file4, { src1_file4_1, src1_file4_2, src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2 } from './file4'
+import file5, { src1_file5_1, src1_file5_2, src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2 } from './file5'
+import file6, { src1_file6_1, src1_file6_2, src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2 } from './file6'
+import * as AllFile7Exports, { src1_file7_1, src1_file7_2, src1_file7_3, src1_file7_4, src1_file7_5,
+  type src1_file7_t_1, type src1_file7_t_2 } from './file7'
+import { src1_subdir_file1_1 } from './subdir/file1'
+"
+`;
+
+exports[`import - useSingleQuotes = false 1`] = `
+"import defaultModule1 from \\"module1\\";
+import defaultModule_file2 from \\"module1_file2\\";
+import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from \\"module2\\";
+import defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside } from \\"module3\\";
+import defaultModule4, { module4_1, module4_2 as module4_2_renamed, module4_3 } from \\"module4\\";
+import defaultModule5, { module5_1, module5_2 as module4_2_renamed, module5_3, type module5_t_1
+} from \\"module5\\";
+import * as FullModule from \\"module6\\";
+import { type module7_typeOutside_1, type module7_typeOutside_2 } from \\"module7\\";
+import { src2_file1_1 } from \\"../src2/file1\\";
+import { src3_file1_1 } from \\"../src3/file1\\";
+import src1, { src1_file2_2_renamed, src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed, src1_file7_2_renamed } from \\"./\\";
+import file2, { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2 } from \\"./file2\\";
+import file3, { src1_file3_1, src1_file3_2, src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2 } from \\"./file3\\";
+import file4, { src1_file4_1, src1_file4_2, src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2 } from \\"./file4\\";
+import file5, { src1_file5_1, src1_file5_2, src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2 } from \\"./file5\\";
+import file6, { src1_file6_1, src1_file6_2, src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2 } from \\"./file6\\";
+import * as AllFile7Exports, { src1_file7_1, src1_file7_2, src1_file7_3, src1_file7_4, src1_file7_5,
+  type src1_file7_t_1, type src1_file7_t_2 } from \\"./file7\\";
+import { src1_subdir_file1_1 } from \\"./subdir/file1\\";
+"
+`;
