@@ -2,8 +2,8 @@ import { removeUnusedImports } from "./removeUnusedImports";
 import { cacheFile, processCachedData } from "./cacher";
 import { buildImportItems } from "./importing/buildImportItems";
 import { insertImport } from "./importing/importer";
-import { PluginConfig } from "../../types";
 import { Diagnostic } from "vscode";
+import { PluginConfigJs } from "./types";
 
 type DiagnosticCode = string | number | undefined;
 
@@ -18,7 +18,7 @@ function shouldIncludeDisgnostic({ code, source, message }: Diagnostic) {
 export const JS_EXTENSIONS = ["js", "jsx", "ts", "tsx", "mjs"];
 
 // TODO: namespace settings vs utils?
-export const config: PluginConfig = {
+export const config: PluginConfigJs = {
   language: "js",
   cacheFile,
   processCachedData,

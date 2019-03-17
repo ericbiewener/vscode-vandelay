@@ -5,6 +5,7 @@ import { isPathNodeModule } from "../utils";
 import { Plugin } from "../../../types";
 import { ExportType } from "./buildImportItems";
 import { ParsedImport } from "../regex";
+import { PluginJs } from "../types";
 
 /**
  * Determine which line number should get the import. This could be merged into that line
@@ -25,7 +26,7 @@ export type ImportPositionNoMatch = {
 export type ImportPosition = ImportPositionMatch | ImportPositionNoMatch;
 
 export function getImportPosition(
-  plugin: Plugin,
+  plugin: PluginJs,
   exportType: ExportType,
   importPath: string,
   isExtraImport: boolean | undefined,

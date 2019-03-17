@@ -4,6 +4,7 @@ import { getDiagnosticsForAllEditors } from "../../utils";
 import { getNewLine } from "./importing/getNewLine";
 import { parseImports, ParsedImport } from "./regex";
 import { Plugin } from "../../types";
+import { PluginJs } from "./types";
 
 type Change = {
   default: string | null | undefined;
@@ -12,7 +13,7 @@ type Change = {
   match: ParsedImport;
 };
 
-export async function removeUnusedImports(plugin: Plugin) {
+export async function removeUnusedImports(plugin: PluginJs) {
   const diagnostics = getDiagnosticsForAllEditors(
     d => d.code === "no-unused-vars"
   );

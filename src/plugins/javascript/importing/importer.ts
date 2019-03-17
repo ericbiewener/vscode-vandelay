@@ -3,12 +3,12 @@ import path from "path";
 import { insertLine, removeExt } from "../../../utils";
 import { Plugin } from "../../../types";
 import { parseImports, ParsedImport } from "../regex";
-import { FileExports } from "../types";
+import { FileExportsJs, PluginJs } from "../types";
 import { getImportPosition, ImportPosition } from "./getImportPosition";
 import { ExportType, ImportItem } from "./buildImportItems";
 import { getNewLine } from "./getNewLine";
 
-export async function insertImport(plugin: Plugin, selection: ImportItem) {
+export async function insertImport(plugin: PluginJs, selection: ImportItem) {
   const {
     label: exportName,
     description: importPath,
@@ -43,7 +43,7 @@ export async function insertImport(plugin: Plugin, selection: ImportItem) {
 }
 
 function getFinalImportPath(
-  plugin: Plugin,
+  plugin: PluginJs,
   importPath: string,
   absImportPath: string,
   isExtraImport: boolean | undefined
@@ -76,7 +76,7 @@ function getNewLineImports(
 ) {
   const { match, indexModifier, isFirstImport } = importPosition;
 
-  let imports: FileExports;
+  let imports: FileExportsJs;
 
   if (indexModifier || isFirstImport) {
     imports = { named: [], types: [] };

@@ -3,7 +3,7 @@ import { window, workspace, TextEditor } from "vscode";
 import { getDiagnosticsForActiveEditor } from "./utils";
 import { getPluginForActiveFile } from "./utils";
 import { cacheFileManager } from "./cacheFileManager";
-import { MergedExportData } from "./types";
+import { MergedExportDataJs } from "./plugins/javascript/types";
 
 export async function selectImport(word?: string | undefined | null) {
   const plugin = getPluginForActiveFile();
@@ -11,11 +11,11 @@ export async function selectImport(word?: string | undefined | null) {
 
   return await cacheFileManager(plugin, async exportData => {
     if (!exportData) return;
-    const mergedData: MergedExportData = {
+    const mergedData: MergedExportDataJs = {
       ...exportData.imp,
       ...exportData.exp
     };
-    const sortedKeys = getExportDataKeysByCachedDate(mergedData);
+    const sortedKeys = getExportDataJsKeysByCachedDate(mergedData);
     let items = plugin.buildImportItems(plugin, mergedData, sortedKeys);
     if (!items) return;
     if (word) items = items.filter(item => item.label === word);
@@ -65,7 +65,7 @@ export async function importUndefinedVariables() {
   for (const word of _.uniq(words)) await selectImport(word);
 }
 
-function getExportDataKeysByCachedDate(exportData: MergedExportData) {
+function getExportDataJsKeysByCachedDate(exportData: MergedExportDataJs) {
   return Object.keys(exportData).sort((a, b) => {
     const createdA = exportData[a].cached;
     const createdB = exportData[b].cached;

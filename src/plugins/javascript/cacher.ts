@@ -2,24 +2,31 @@ import fs from "fs-extra";
 import path from "path";
 import _ from "lodash";
 import { basename, getFilepathKey } from "../../utils";
-import {
-  Plugin,
-  CachingData,
-  NonFinalExportData,
-  NonFinalExportDatum
-} from "../../types";
 import { isPathNodeModule } from "./utils";
 import { parseImports, exportRegex } from "./regex";
+import {
+  PluginJs,
+  NonFinalExportDatumJs,
+  CachingDataJs,
+  NonFinalExportDataJs,
+  ReexportsToProcess
+} from "./types";
 
-export function cacheFile(plugin: Plugin, filepath: string, data: CachingData) {
+export function cacheFile(
+  plugin: PluginJs,
+  filepath: string,
+  data: CachingDataJs
+) {
   const { imp, exp } = data;
-  // @ts-ignore
-  const fileExports: NonFinalExportDatum = {
+  const reexportsToProcess: ReexportsToProcess = {
+    fullModules: [],
+    selective: {}
+  };
+  const fileExports: NonFinalExportDatumJs = {
     named: [],
     types: [],
-    reexportsToProcess: { fullModules: [], selective: {} }
+    reexportsToProcess
   };
-  const { reexportsToProcess } = fileExports;
   const fileText = fs.readFileSync(filepath, "utf8");
   const fileImports = parseImports(plugin, fileText);
 
@@ -152,7 +159,7 @@ export function cacheFile(plugin: Plugin, filepath: string, data: CachingData) {
  * importing from an adjacent/subfile. While solveable, this is probably an edge case to be ignored
  * (not to mention an undesireable API being created by the developer)
  */
-export function processCachedData(data: CachingData) {
+export function processCachedData(data: CachingDataJs) {
   const { exp } = data;
   for (const mainFilepath in exp) {
     const fileExports = exp[mainFilepath];
@@ -213,7 +220,7 @@ export function processCachedData(data: CachingData) {
 }
 
 function processDefaultName(
-  plugin: Plugin,
+  plugin: PluginJs,
   defaultName: string,
   importPath: string
 ) {
@@ -224,7 +231,7 @@ function processDefaultName(
 function getSubfileExports(
   mainFilepath: string,
   filename: string,
-  exp: NonFinalExportData
+  exp: NonFinalExportDataJs
 ) {
   const filepathWithoutExt = path.join(path.dirname(mainFilepath), filename);
   for (const ext of [".js", ".jsx"]) {

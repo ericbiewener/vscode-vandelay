@@ -11,13 +11,7 @@ import {
   Diagnostic
 } from "vscode";
 import { JS_EXTENSIONS } from "./plugins/javascript/config";
-import {
-  Obj,
-  Plugin,
-  CachingData,
-  ExportData,
-  MergedExportData
-} from "./types";
+import { Plugin, CachingData } from "./types";
 import { PLUGINS } from "./plugins";
 import { ImportPosition } from "./plugins/javascript/importing/getImportPosition";
 

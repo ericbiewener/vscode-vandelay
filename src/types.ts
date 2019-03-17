@@ -1,6 +1,13 @@
-import { FileExports } from "./plugins/javascript/types";
+import {
+  FileExportsJs,
+  PluginJs,
+  MergedExportDataJs,
+  CachingDataJs,
+  ExportDataJs
+} from "./plugins/javascript/types";
 import { ExportType } from "./plugins/javascript/importing/buildImportItems";
 import { DiagnosticFilter } from "./utils";
+// import { PluginPy } from "./plugins/python/types";
 
 export type Obj = { [k: string]: any };
 
@@ -12,45 +19,18 @@ export type RichQuickPickItem = {
   [key: string]: any;
 };
 
-export type ExportDatum = FileExports & {
-  cached?: number;
-  // JS
-  // TODO: are the below definitions correct? rename to make clearer
-  // Exports in current file that are reexported elsewhere
-  reexports?: string[];
-  // Exports in other files that are reexported in current file
-  reexported?: {
-    reexportPath: string;
-    reexports: string[];
-  };
-};
+/**
+ * Data Structurs
+ */
 
-export type NonFinalExportDatum = ExportDatum & {
-  reexportsToProcess?: {
-    fullModules: string[];
-    selective: { [path: string]: string[] };
-  };
-};
+export type FileExports = FileExportsJs;
+export type CachingData = CachingDataJs;
+export type MergedExportData = MergedExportDataJs;
+export type ExportData = ExportDataJs;
 
-export type NonFinalExportData = { [path: string]: NonFinalExportDatum };
-
-export type ExportDataImports = { [path: string]: FileExports };
-export type ExportDataExports = { [path: string]: ExportDatum };
-export type MergedExportData = {
-  [path: string]: ExportDatum & { isExtraImport?: boolean };
-};
-
-export type ExportData = {
-  imp: ExportDataImports;
-  exp: ExportDataExports;
-};
-
-export type CachingData = {
-  exp: NonFinalExportData;
-  imp: {
-    [path: string]: FileExports & { isExtraImport?: boolean };
-  };
-};
+/**
+ * Plugin Config
+ */
 
 type ExcludePatterns = (string | RegExp)[];
 
@@ -59,14 +39,6 @@ export type UserConfig = {
   includePaths: string[];
   maxImportLineLength?: number;
   nonModulePaths?: string[];
-  useES5?: boolean;
-  preferTypeOutside?: boolean;
-  padCurlyBraces?: boolean;
-  useSingleQuotes?: boolean;
-  useSemicolons?: boolean;
-  multilineImportStyle?: "single" | "multiple";
-  trailingComma?: boolean;
-  importGroups?: string[][];
   projectRoot?: string;
   processImportPath?(
     importPath: string,
@@ -91,21 +63,20 @@ export type PluginConfig = {
   insertImport(plugin: Plugin, selection: RichQuickPickItem): Promise<any>;
   removeUnusedImports(plugin: Plugin): Promise<any>;
   shouldIncludeDisgnostic: DiagnosticFilter;
-
-  // JS
-  useSingleQuotes: boolean;
-  padCurlyBraces: boolean;
-  useSemicolons: boolean;
-  trailingComma: boolean;
-  multilineImportStyle: "single" | "multiple";
-  excludePatterns: ExcludePatterns;
+  excludePatterns?: ExcludePatterns;
 };
 
-export type Plugin = UserConfig &
-  PluginConfig & {
-    maxImportLineLength: number;
-    configFile: string;
-    cacheFilePath: string;
-    projectRoot: string;
-    cacheDirPath: string;
-  };
+export type DefaultPluginConfig = {
+  maxImportLineLength: number;
+  excludePatterns: ExcludePatterns[];
+};
+
+export type RuntimePluginConfig = {
+  configFile: string;
+  cacheFilePath: string;
+  projectRoot: string;
+  cacheDirPath: string;
+};
+
+export type Plugin = PluginJs;
+// export type Plugin = PluginJs | PluginPy
