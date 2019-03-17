@@ -15,6 +15,15 @@
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ]
         },{
+            "name": "Nairobi",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "/Users/ericbiewener/dev/nairobi",
+                "--extensionDevelopmentPath=${workspaceFolder}"
+            ]
+        },{
             "name": "JS - Single Root Workspace Extension",
             "type": "extensionHost",
             "request": "launch",

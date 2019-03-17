@@ -1,23 +1,17 @@
 import { window, TextEditor } from "vscode";
 import path from "path";
-import { Plugin, RichQuickPickItem, MergedExportData } from "../../../types";
-
-// TODO: why is this defined here vs. somewhere else?
-export enum ExportType {
-  default = 0,
-  named = 1,
-  type = 2
-}
-
-export type ImportItem = RichQuickPickItem & {
-  exportType: ExportType;
-};
+import {
+  PluginJs,
+  MergedExportDataJs,
+  RichQuickPickItemJs,
+  ExportType
+} from "../types";
 
 export function buildImportItems(
-  plugin: Plugin,
-  exportData: MergedExportData,
+  plugin: PluginJs,
+  exportData: MergedExportDataJs,
   sortedKeys: string[]
-): ImportItem[] {
+): RichQuickPickItemJs[] {
   const { projectRoot, shouldIncludeImport } = plugin;
   const editor = window.activeTextEditor as TextEditor;
   const activeFilepath = editor.document.fileName;

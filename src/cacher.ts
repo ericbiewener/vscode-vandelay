@@ -6,7 +6,7 @@ import anymatch from "anymatch";
 import { writeCacheFile, getLangFromFilePath, getFilepathKey } from "./utils";
 import { cacheFileManager } from "./cacheFileManager";
 import { PLUGINS } from "./plugins";
-import { Obj, Plugin, CachingData } from "./types";
+import { Plugin, CachingData } from "./types";
 
 function shouldIgnore(plugin: Plugin, filePath: string) {
   return anymatch(plugin.excludePatterns, filePath);

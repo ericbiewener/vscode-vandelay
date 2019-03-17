@@ -1,10 +1,13 @@
 import _ from "lodash";
-import { getImportOrderPosition, getLastInitialComment } from "../../../utils";
+import {
+  getImportOrderPosition,
+  getLastInitialComment,
+  last
+} from "../../../utils";
 import { commentRegex } from "../regex";
 import { isPathNodeModule } from "../utils";
-import { Plugin } from "../../../types";
-import { ExportType } from "./buildImportItems";
-import { ParsedImport } from "../regex";
+import { ParsedImportJs } from "../regex";
+import { PluginJs, ExportType } from "../types";
 
 /**
  * Determine which line number should get the import. This could be merged into that line
@@ -13,7 +16,7 @@ import { ParsedImport } from "../regex";
  **/
 
 export type ImportPositionMatch = {
-  match: ParsedImport;
+  match: ParsedImportJs;
   indexModifier: -1 | 0 | 1;
   isFirstImport: false;
 };
@@ -22,16 +25,16 @@ export type ImportPositionNoMatch = {
   indexModifier: 1;
   isFirstImport: true;
 };
-export type ImportPosition = ImportPositionMatch | ImportPositionNoMatch;
+export type ImportPositionJs = ImportPositionMatch | ImportPositionNoMatch;
 
 export function getImportPosition(
-  plugin: Plugin,
+  plugin: PluginJs,
   exportType: ExportType,
   importPath: string,
   isExtraImport: boolean | undefined,
-  imports: ParsedImport[],
+  imports: ParsedImportJs[],
   text: string
-): ImportPosition {
+): ImportPositionJs {
   // If no imports, find first non-comment line
   if (!imports.length) {
     return {
@@ -93,7 +96,7 @@ export function getImportPosition(
 
   // Since we didn't find a line to sort the new import before, it will go after the last import
   return {
-    match: _.last(imports),
+    match: last(imports),
     indexModifier: 1
   } as ImportPositionMatch;
 }

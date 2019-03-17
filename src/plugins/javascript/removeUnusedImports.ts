@@ -1,18 +1,22 @@
 import _ from "lodash";
 import { Range, Uri, window } from "vscode";
-import { getDiagnosticsForAllEditors } from "../../utils";
+import {
+  getDiagnosticsForAllEditors,
+  sortUnusedImportChanges
+} from "../../utils";
 import { getNewLine } from "./importing/getNewLine";
-import { parseImports, ParsedImport } from "./regex";
+import { parseImports, ParsedImportJs } from "./regex";
 import { Plugin } from "../../types";
+import { PluginJs } from "./types";
 
 type Change = {
   default: string | null | undefined;
   named: string[];
   types: string[];
-  match: ParsedImport;
+  match: ParsedImportJs;
 };
 
-export async function removeUnusedImports(plugin: Plugin) {
+export async function removeUnusedImports(plugin: PluginJs) {
   const diagnostics = getDiagnosticsForAllEditors(
     d => d.code === "no-unused-vars"
   );
@@ -50,10 +54,7 @@ export async function removeUnusedImports(plugin: Plugin) {
       changes.push(change);
     }
 
-    // FIXME: make sure this sort works. had to change it from lodash
-    // Sort in reverse order so that modifying a line doesn't effect the other line locations that
-    // need to be changed
-    changes.sort((a, b) => (a.match.start < b.match.start ? 1 : -1));
+    sortUnusedImportChanges(changes);
 
     await editor.edit(builder => {
       for (const change of changes) {

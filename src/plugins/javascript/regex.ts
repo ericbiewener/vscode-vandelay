@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { strUntil } from "../../utils";
 import { Plugin } from "../../types";
+import { PluginJs } from "./types";
 
 export const commentRegex = /^(?:[ \t]*\/\/.*|[ \t]*\/\*[^]*?\*\/)/gm;
 
@@ -25,7 +26,7 @@ export const exportRegex = {
 const importRegex = /^import +?([^{]+?[, ])? *(?:{([^]*?)} +)?from +["'](.*)["'].*/gm;
 const requireRegex = /^(?:const|let|var) +(\w+)?(?:{([^]*?)})? *= *require\( *['"](.*?)['"].*/gm;
 
-export type ParsedImport = {
+export type ParsedImportJs = {
   path: string;
   start: number;
   end: number;
@@ -35,7 +36,7 @@ export type ParsedImport = {
   types?: string[];
 };
 
-export function parseImports(plugin: Plugin, text: string) {
+export function parseImports(plugin: PluginJs, text: string) {
   const regex = plugin.useES5 ? requireRegex : importRegex;
   const imports = [];
   let match;
@@ -50,7 +51,7 @@ export function parseImports(plugin: Plugin, text: string) {
       continue;
     }
     const isTypeOutside = !!match[2] && match[1] === "type ";
-    const results: ParsedImport = {
+    const importData: ParsedImportJs = {
       path: match[3],
       start: match.index,
       end: match.index + match[0].length,
@@ -66,15 +67,15 @@ export function parseImports(plugin: Plugin, text: string) {
         .filter(Boolean);
 
       if (isTypeOutside) {
-        results.types = namedAndTypes;
+        importData.types = namedAndTypes;
       } else {
         const groups = _.partition(namedAndTypes, i => i.startsWith("type "));
         if (groups[0].length)
-          results.types = groups[0].map(i => i.slice(5).trim());
-        if (groups[1].length) results.named = groups[1];
+          importData.types = groups[0].map(i => i.slice(5).trim());
+        if (groups[1].length) importData.named = groups[1];
       }
     }
-    imports.push(results);
+    imports.push(importData);
   }
 
   regex.lastIndex = 0;

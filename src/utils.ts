@@ -11,15 +11,8 @@ import {
   Diagnostic
 } from "vscode";
 import { JS_EXTENSIONS } from "./plugins/javascript/config";
-import {
-  Obj,
-  Plugin,
-  CachingData,
-  ExportData,
-  MergedExportData
-} from "./types";
+import { Plugin, CachingData, ImportPosition } from "./types";
 import { PLUGINS } from "./plugins";
-import { ImportPosition } from "./plugins/javascript/importing/getImportPosition";
 
 const extensionToLang: { [ext: string]: string } = {};
 for (const ext of JS_EXTENSIONS) extensionToLang[ext] = "js";
@@ -159,4 +152,19 @@ export function getDiagnosticsForAllEditors(filter: DiagnosticFilter) {
     if (remaining.length) diagnosticsByFile[file.fsPath] = remaining;
   }
   return diagnosticsByFile;
+}
+
+// FIXME: make sure this sort works. had to change it from lodash
+/**
+ * Sort in reverse order so that modifying a line doesn't effect the other line locations that need to be changed
+ */
+type Change = { match: { start: number } };
+
+export function sortUnusedImportChanges(changes: Change[]) {
+  changes.sort((a, b) => (a.match.start < b.match.start ? 1 : -1));
+}
+
+// _.last always makes TS think the value could be undefeind
+export function last(arr: any[]) {
+  return arr[arr.length - 1];
 }
