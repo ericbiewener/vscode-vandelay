@@ -15,6 +15,7 @@ export enum ExportType {
 export type RichQuickPickItemJs = RichQuickPickItem & {
   absImportPath: string;
   exportType: ExportType;
+  description: string;
 };
 
 /**
@@ -83,12 +84,6 @@ export type PluginConfigJs = PluginConfig & {
   useSemicolons: boolean;
   trailingComma: boolean;
   multilineImportStyle: "single" | "multiple";
-  buildImportItems(
-    plugin: PluginJs,
-    data: MergedExportDataJs,
-    sortedKeys: string[]
-  ): RichQuickPickItemJs[];
-  insertImport(plugin: PluginJs, selection: RichQuickPickItemJs): Promise<any>;
 };
 
 export type UserConfigJs = UserConfig & {

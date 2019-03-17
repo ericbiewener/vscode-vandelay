@@ -19,7 +19,7 @@ import { ImportPositionJs } from "./plugins/javascript/importing/getImportPositi
 
 export type RichQuickPickItem = {
   label: string;
-  description: string;
+  description?: string | undefined;
   isExtraImport: boolean | undefined;
 };
 type AllRichQuickPickItem = RichQuickPickItem | RichQuickPickItemJs;
@@ -71,8 +71,8 @@ export type PluginConfig = {
     plugin: Plugin,
     data: MergedExportData,
     sortedKeys: string[]
-  ): RichQuickPickItem[];
-  insertImport(plugin: Plugin, selection: RichQuickPickItem): Promise<any>;
+  ): AllRichQuickPickItem[];
+  insertImport(plugin: Plugin, selection: AllRichQuickPickItem): Promise<any>;
 };
 
 export type DefaultPluginConfig = {
@@ -86,5 +86,3 @@ export type RuntimePluginConfig = {
   projectRoot: string;
   cacheDirPath: string;
 };
-
-// export type Plugin = PluginJs | PluginPy

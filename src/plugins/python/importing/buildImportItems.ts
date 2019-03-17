@@ -2,6 +2,7 @@ import path from "path";
 import { window, TextEditor } from "vscode";
 import { PluginPy, MergedExportDataPy } from "../types";
 import { removeExt } from "../../../utils";
+import { RichQuickPickItem } from "../../../types";
 
 // FIXME: add quick start to readme -- just create vandelay-*.js in root, and includePaths, and done!
 
@@ -9,7 +10,7 @@ export function buildImportItems(
   plugin: PluginPy,
   exportData: MergedExportDataPy,
   sortedKeys: string[]
-) {
+): RichQuickPickItem[] {
   const { projectRoot, shouldIncludeImport } = plugin;
   const editor = window.activeTextEditor as TextEditor;
   const activeFilepath = editor.document.fileName;
