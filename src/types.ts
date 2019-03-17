@@ -7,6 +7,13 @@ import {
 } from "./plugins/javascript/types";
 import { ExportType } from "./plugins/javascript/importing/buildImportItems";
 import { DiagnosticFilter } from "./utils";
+import {
+  PluginPy,
+  CachingDataPy,
+  FileExportsPy,
+  MergedExportDataPy,
+  ExportDataPy
+} from "./plugins/python/types";
 // import { PluginPy } from "./plugins/python/types";
 
 export type Obj = { [k: string]: any };
@@ -23,14 +30,16 @@ export type RichQuickPickItem = {
  * Data Structurs
  */
 
-export type FileExports = FileExportsJs;
-export type CachingData = CachingDataJs;
-export type MergedExportData = MergedExportDataJs;
-export type ExportData = ExportDataJs;
+export type FileExports = FileExportsJs | FileExportsPy;
+export type CachingData = CachingDataJs | CachingDataPy;
+export type MergedExportData = MergedExportDataJs | MergedExportDataPy;
+export type ExportData = ExportDataJs | ExportDataPy;
 
 /**
  * Plugin Config
  */
+
+export type Plugin = PluginJs | PluginPy;
 
 type ExcludePatterns = (string | RegExp)[];
 
@@ -78,5 +87,4 @@ export type RuntimePluginConfig = {
   cacheDirPath: string;
 };
 
-export type Plugin = PluginJs;
 // export type Plugin = PluginJs | PluginPy

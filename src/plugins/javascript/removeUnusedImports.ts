@@ -2,7 +2,7 @@ import _ from "lodash";
 import { Range, Uri, window } from "vscode";
 import { getDiagnosticsForAllEditors } from "../../utils";
 import { getNewLine } from "./importing/getNewLine";
-import { parseImports, ParsedImport } from "./regex";
+import { parseImports, ParsedImportJs } from "./regex";
 import { Plugin } from "../../types";
 import { PluginJs } from "./types";
 
@@ -10,7 +10,7 @@ type Change = {
   default: string | null | undefined;
   named: string[];
   types: string[];
-  match: ParsedImport;
+  match: ParsedImportJs;
 };
 
 export async function removeUnusedImports(plugin: PluginJs) {

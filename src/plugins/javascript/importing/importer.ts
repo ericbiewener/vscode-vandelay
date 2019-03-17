@@ -2,7 +2,7 @@ import { window, TextEditor } from "vscode";
 import path from "path";
 import { insertLine, removeExt } from "../../../utils";
 import { Plugin } from "../../../types";
-import { parseImports, ParsedImport } from "../regex";
+import { parseImports, ParsedImportJs } from "../regex";
 import { FileExportsJs, PluginJs } from "../types";
 import { getImportPosition, ImportPosition } from "./getImportPosition";
 import { ExportType, ImportItem } from "./buildImportItems";
@@ -81,7 +81,7 @@ function getNewLineImports(
   if (indexModifier || isFirstImport) {
     imports = { named: [], types: [] };
   } else {
-    const obj = match as ParsedImport;
+    const obj = match as ParsedImportJs;
     imports = {
       named: obj.named || [],
       types: obj.types || [],

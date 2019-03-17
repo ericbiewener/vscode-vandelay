@@ -4,7 +4,7 @@ import { commentRegex } from "../regex";
 import { isPathNodeModule } from "../utils";
 import { Plugin } from "../../../types";
 import { ExportType } from "./buildImportItems";
-import { ParsedImport } from "../regex";
+import { ParsedImportJs } from "../regex";
 import { PluginJs } from "../types";
 
 /**
@@ -14,7 +14,7 @@ import { PluginJs } from "../types";
  **/
 
 export type ImportPositionMatch = {
-  match: ParsedImport;
+  match: ParsedImportJs;
   indexModifier: -1 | 0 | 1;
   isFirstImport: false;
 };
@@ -30,7 +30,7 @@ export function getImportPosition(
   exportType: ExportType,
   importPath: string,
   isExtraImport: boolean | undefined,
-  imports: ParsedImport[],
+  imports: ParsedImportJs[],
   text: string
 ): ImportPosition {
   // If no imports, find first non-comment line
