@@ -156,9 +156,9 @@ export function processCachedData(data: CachingData) {
   const { exp } = data;
   for (const mainFilepath in exp) {
     const fileExports = exp[mainFilepath];
-    const {
-      reexportsToProcess: { fullModules, selective }
-    } = fileExports;
+    if (!fileExports.reexportsToProcess) continue;
+
+    const { fullModules, selective } = fileExports.reexportsToProcess;
     delete fileExports.reexportsToProcess;
     const reexportNames: string[] = [];
 

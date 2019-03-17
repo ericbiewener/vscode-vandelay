@@ -26,7 +26,7 @@ export type ExportDatum = FileExports & {
 };
 
 export type NonFinalExportDatum = ExportDatum & {
-  reexportsToProcess: {
+  reexportsToProcess?: {
     fullModules: string[];
     selective: { [path: string]: string[] };
   };

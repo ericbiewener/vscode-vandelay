@@ -6,15 +6,6 @@
 	"version": "0.2.0",
     "configurations": [
         {
-            "name": "Dynamic Import Test",
-            "type": "extensionHost",
-            "request": "launch",
-            "runtimeExecutable": "${execPath}",
-            "args": [
-                "${workspaceFolder}/test-workspace",
-                "--extensionDevelopmentPath=${workspaceFolder}"
-            ]
-        },{
             "name": "Mumbai",
             "type": "extensionHost",
             "request": "launch",

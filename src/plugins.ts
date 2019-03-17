@@ -58,8 +58,8 @@ async function getProjectSettings(
   try {
     const absPath = path.join(vandelayDir, vandelayFile);
     console.log(`Loading vandelay config file from ${absPath}`);
-    // @ts-ignore
     const configSettings = await Promise.resolve(
+      // @ts-ignore
       __non_webpack_require__(absPath)
     );
     if (typeof configSettings === "object") return configSettings as UserConfig;

@@ -54,7 +54,9 @@ export async function cacheProjectLanguage(plugin: Plugin) {
   }
 
   let cacher = Promise.all(
-    plugin.includePaths.map(p => cacheDir(plugin, p, true, {} as CachingData))
+    plugin.includePaths.map(p =>
+      cacheDir(plugin, p, true, { imp: {}, exp: {} })
+    )
   ).then(cachedDirTrees => {
     const finalData = { exp: {}, imp: {} };
     for (const { exp, imp } of cachedDirTrees) {
