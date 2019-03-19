@@ -1,5 +1,5 @@
 import { window, commands, workspace, ExtensionContext } from "vscode";
-import { initializePlugin } from "./plugins";
+import { initializePlugin, PLUGINS } from "./plugins";
 import { cacheProject, watchForChanges } from "./cacher";
 import {
   importUndefinedVariables,
@@ -12,6 +12,8 @@ import { removeUnusedImports } from "./removeUnusedImports";
 import { showNewVersionAlert } from "./showNewVersionMessage";
 
 // FIXME: .vscodeignore src dir and others
+// FIXME: need to wipe out old cached data because of data structure change? pretty sure it did
+// change because take a look at src/importer.js -- it has to merge imp & exp properties
 
 /*
  * VS Code has an error swallowing problem, so we catch and manually log.
@@ -86,6 +88,9 @@ export async function activate(context: ExtensionContext) {
       await commands.executeCommand(
         "workbench.extensions.action.showEnabledExtensions"
       );
+    },
+    _test: {
+      plugins: PLUGINS
     }
   };
 }

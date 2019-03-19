@@ -12,17 +12,12 @@ const {
   Range,
 } = require('vscode')
 
-afterEach(async function() {
-  await commands.executeCommand('workbench.action.closeAllEditors')
-  // Prevents test failures caused by text editors not being in expected open or closed state
-  return new Promise(resolve => setTimeout(resolve, 100))
-})
-
-const testRoot = workspace.workspaceFolders[0].uri.path
-
 const getPlugin = async () => {
-  const api = await extensions.getExtension('edb.vandelay-js').activate()
-  return api.plugin
+  const api = await extensions.getExtension('edb.vandelay').activate()
+  const plugins = api._test.plugins
+  // since we're only testing one language activated at a time, just return the plugin associated
+  // with the first key
+  for (const lang in plugins) return plugin[lang]
 }
 
 const getExportData = plugin =>
@@ -33,7 +28,7 @@ const openFile = (...fileParts) =>
     Uri.file(
       fileParts.length
         ? path.join(...fileParts)
-        : path.join(testRoot, 'src1/file1.js')
+        : path.join(TEST_ROOT, 'src1/file1.js')
     )
   )
 
@@ -100,12 +95,12 @@ const cacheTest = async (context, config) => {
 }
 
 const testSpyCall = (context, call) =>
-  expect(call.args.map(p => p.replace(testRoot, 'absRoot'))).toMatchSnapshot(
+  expect(call.args.map(p => p.replace(TEST_ROOT, 'absRoot'))).toMatchSnapshot(
     context
   )
 
 module.exports = {
-  testRoot,
+  TEST_ROOT,
   getPlugin,
   getExportData,
   openFile,

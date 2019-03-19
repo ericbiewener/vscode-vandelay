@@ -102,7 +102,10 @@ function onChangeOrCreate(doc: Uri) {
   )
     return;
 
-  const { exp, imp } = plugin.cacheFile(plugin, doc.fsPath, {} as CachingData);
+  const { exp, imp } = plugin.cacheFile(plugin, doc.fsPath, {
+    imp: {},
+    exp: {}
+  });
   if (_.isEmpty(exp) && _.isEmpty(imp)) return;
 
   for (const k in exp) exp[k].cached = Date.now();

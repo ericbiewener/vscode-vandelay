@@ -2,7 +2,256 @@
 
 exports[`cacheProject - excludePatterns = [src2] 1`] = `
 Object {
-  "_extraImports": Object {
+  "exp": Object {
+    "src1/file1.js": Object {
+      "default": "file1",
+      "named": Array [
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file1_1",
+          "src1_file1_2",
+          "src1_file1_3",
+          "src1_file1_4",
+          "src1_file1_5",
+        ],
+      },
+      "types": Array [
+        "src1_file1_t_1",
+        "src1_file1_t_2",
+      ],
+    },
+    "src1/file2.js": Object {
+      "default": "file2",
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_3",
+        "src1_file2_4",
+        "src1_file2_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file2_1",
+          "src1_file2_2",
+          "src1_file2_t_2",
+          "src1_file2_3",
+        ],
+      },
+      "types": Array [
+        "src1_file2_t_1",
+        "src1_file2_t_2",
+      ],
+    },
+    "src1/file3.js": Object {
+      "default": "file3",
+      "named": Array [
+        "src1_file3_1",
+        "src1_file3_2",
+        "src1_file3_3",
+        "src1_file3_4",
+        "src1_file3_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file3_1",
+          "src1_file3_t_1",
+          "src1_file3_2",
+          "src1_file3_t_2",
+          "src1_file3_3",
+        ],
+      },
+      "types": Array [
+        "src1_file3_t_1",
+        "src1_file3_t_2",
+      ],
+    },
+    "src1/file4.js": Object {
+      "default": "file4",
+      "named": Array [
+        "src1_file4_1",
+        "src1_file4_2",
+        "src1_file4_3",
+        "src1_file4_4",
+        "src1_file4_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file4_1",
+          "src1_file4_2",
+          "src1_file4_3",
+        ],
+      },
+      "types": Array [
+        "src1_file4_t_1",
+        "src1_file4_t_2",
+      ],
+    },
+    "src1/file5.js": Object {
+      "default": "file5",
+      "named": Array [
+        "src1_file5_1",
+        "src1_file5_2",
+        "src1_file5_3",
+        "src1_file5_4",
+        "src1_file5_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "default",
+          "file5default",
+          "src1_file5_1",
+          "src1_file5_2",
+          "src1_file5_3",
+        ],
+      },
+      "types": Array [
+        "src1_file5_t_1",
+        "src1_file5_t_2",
+      ],
+    },
+    "src1/file6.js": Object {
+      "default": "file6",
+      "named": Array [
+        "src1_file6_1",
+        "src1_file6_2",
+        "src1_file6_3",
+        "src1_file6_4",
+        "src1_file6_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "default",
+          "file6default",
+          "src1_file6_1",
+          "src1_file6_2",
+          "src1_file6_3",
+        ],
+      },
+      "types": Array [
+        "src1_file6_t_1",
+        "src1_file6_t_2",
+      ],
+    },
+    "src1/file7.js": Object {
+      "default": "* as AllFile7Exports",
+      "named": Array [
+        "src1_file7_1",
+        "src1_file7_2",
+        "src1_file7_3",
+        "src1_file7_4",
+        "src1_file7_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "default",
+          "file7default",
+          "src1_file7_1",
+          "src1_file7_2",
+          "src1_file7_3",
+        ],
+      },
+      "types": Array [
+        "src1_file7_t_1",
+        "src1_file7_t_2",
+      ],
+    },
+    "src1/index.js": Object {
+      "default": "src1",
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2_renamed",
+        "src1_file2_3",
+        "src1_file3_1",
+        "src1_file3_2_renamed",
+        "src1_file3_3",
+        "src1_file4_1",
+        "src1_file4_2_renamed",
+        "src1_file4_3",
+        "file5default",
+        "src1_file5_1",
+        "src1_file5_2_renamed",
+        "src1_file5_3",
+        "file6default",
+        "src1_file6_1",
+        "src1_file6_2_renamed",
+        "src1_file6_3",
+        "file7default",
+        "src1_file7_1",
+        "src1_file7_2_renamed",
+        "src1_file7_3",
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+      ],
+      "reexports": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_t_2",
+        "src1_file2_3",
+        "src1_file3_1",
+        "src1_file3_t_1",
+        "src1_file3_2",
+        "src1_file3_t_2",
+        "src1_file3_3",
+        "src1_file4_1",
+        "src1_file4_2",
+        "src1_file4_3",
+        "default",
+        "file5default",
+        "src1_file5_1",
+        "src1_file5_2",
+        "src1_file5_3",
+        "default",
+        "file6default",
+        "src1_file6_1",
+        "src1_file6_2",
+        "src1_file6_3",
+        "default",
+        "file7default",
+        "src1_file7_1",
+        "src1_file7_2",
+        "src1_file7_3",
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+      ],
+      "types": Array [
+        "src1_file2_t_2",
+        "src1_file3_t_1",
+        "src1_file3_t_2",
+      ],
+    },
+    "src1/subdir/file1.js": Object {
+      "named": Array [
+        "src1_subdir_file1_1",
+      ],
+      "types": Array [],
+    },
+    "src3/file1.js": Object {
+      "named": Array [
+        "src3_file1_1",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
     "module1": Object {
       "default": "defaultModule1",
       "isExtraImport": true,
@@ -67,258 +316,21 @@ Object {
         "module7_typeOutside_2",
       ],
     },
-  },
-  "src1/file1.js": Object {
-    "default": "file1",
-    "named": Array [
-      "src1_file1_1",
-      "src1_file1_2",
-      "src1_file1_3",
-      "src1_file1_4",
-      "src1_file1_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "src1_file1_1",
-        "src1_file1_2",
-        "src1_file1_3",
-        "src1_file1_4",
-        "src1_file1_5",
-      ],
-    },
-    "types": Array [
-      "src1_file1_t_1",
-      "src1_file1_t_2",
-    ],
-  },
-  "src1/file2.js": Object {
-    "default": "file2",
-    "named": Array [
-      "src1_file2_1",
-      "src1_file2_2",
-      "src1_file2_3",
-      "src1_file2_4",
-      "src1_file2_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "src1_file2_1",
-        "src1_file2_2",
-        "src1_file2_t_2",
-        "src1_file2_3",
-      ],
-    },
-    "types": Array [
-      "src1_file2_t_1",
-      "src1_file2_t_2",
-    ],
-  },
-  "src1/file3.js": Object {
-    "default": "file3",
-    "named": Array [
-      "src1_file3_1",
-      "src1_file3_2",
-      "src1_file3_3",
-      "src1_file3_4",
-      "src1_file3_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "src1_file3_1",
-        "src1_file3_t_1",
-        "src1_file3_2",
-        "src1_file3_t_2",
-        "src1_file3_3",
-      ],
-    },
-    "types": Array [
-      "src1_file3_t_1",
-      "src1_file3_t_2",
-    ],
-  },
-  "src1/file4.js": Object {
-    "default": "file4",
-    "named": Array [
-      "src1_file4_1",
-      "src1_file4_2",
-      "src1_file4_3",
-      "src1_file4_4",
-      "src1_file4_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "src1_file4_1",
-        "src1_file4_2",
-        "src1_file4_3",
-      ],
-    },
-    "types": Array [
-      "src1_file4_t_1",
-      "src1_file4_t_2",
-    ],
-  },
-  "src1/file5.js": Object {
-    "default": "file5",
-    "named": Array [
-      "src1_file5_1",
-      "src1_file5_2",
-      "src1_file5_3",
-      "src1_file5_4",
-      "src1_file5_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "default",
-        "file5default",
-        "src1_file5_1",
-        "src1_file5_2",
-        "src1_file5_3",
-      ],
-    },
-    "types": Array [
-      "src1_file5_t_1",
-      "src1_file5_t_2",
-    ],
-  },
-  "src1/file6.js": Object {
-    "default": "file6",
-    "named": Array [
-      "src1_file6_1",
-      "src1_file6_2",
-      "src1_file6_3",
-      "src1_file6_4",
-      "src1_file6_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "default",
-        "file6default",
-        "src1_file6_1",
-        "src1_file6_2",
-        "src1_file6_3",
-      ],
-    },
-    "types": Array [
-      "src1_file6_t_1",
-      "src1_file6_t_2",
-    ],
-  },
-  "src1/file7.js": Object {
-    "default": "* as AllFile7Exports",
-    "named": Array [
-      "src1_file7_1",
-      "src1_file7_2",
-      "src1_file7_3",
-      "src1_file7_4",
-      "src1_file7_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "default",
-        "file7default",
-        "src1_file7_1",
-        "src1_file7_2",
-        "src1_file7_3",
-      ],
-    },
-    "types": Array [
-      "src1_file7_t_1",
-      "src1_file7_t_2",
-    ],
-  },
-  "src1/index.js": Object {
-    "default": "src1",
-    "named": Array [
-      "src1_file2_1",
-      "src1_file2_2_renamed",
-      "src1_file2_3",
-      "src1_file3_1",
-      "src1_file3_2_renamed",
-      "src1_file3_3",
-      "src1_file4_1",
-      "src1_file4_2_renamed",
-      "src1_file4_3",
-      "file5default",
-      "src1_file5_1",
-      "src1_file5_2_renamed",
-      "src1_file5_3",
-      "file6default",
-      "src1_file6_1",
-      "src1_file6_2_renamed",
-      "src1_file6_3",
-      "file7default",
-      "src1_file7_1",
-      "src1_file7_2_renamed",
-      "src1_file7_3",
-      "src1_file1_1",
-      "src1_file1_2",
-      "src1_file1_3",
-      "src1_file1_4",
-      "src1_file1_5",
-    ],
-    "reexports": Array [
-      "src1_file2_1",
-      "src1_file2_2",
-      "src1_file2_t_2",
-      "src1_file2_3",
-      "src1_file3_1",
-      "src1_file3_t_1",
-      "src1_file3_2",
-      "src1_file3_t_2",
-      "src1_file3_3",
-      "src1_file4_1",
-      "src1_file4_2",
-      "src1_file4_3",
-      "default",
-      "file5default",
-      "src1_file5_1",
-      "src1_file5_2",
-      "src1_file5_3",
-      "default",
-      "file6default",
-      "src1_file6_1",
-      "src1_file6_2",
-      "src1_file6_3",
-      "default",
-      "file7default",
-      "src1_file7_1",
-      "src1_file7_2",
-      "src1_file7_3",
-      "src1_file1_1",
-      "src1_file1_2",
-      "src1_file1_3",
-      "src1_file1_4",
-      "src1_file1_5",
-    ],
-    "types": Array [
-      "src1_file2_t_2",
-      "src1_file3_t_1",
-      "src1_file3_t_2",
-    ],
-  },
-  "src1/subdir/file1.js": Object {
-    "named": Array [
-      "src1_subdir_file1_1",
-    ],
-  },
-  "src3/file1.js": Object {
-    "named": Array [
-      "src3_file1_1",
-    ],
   },
 }
 `;
 
 exports[`cacheProject - includePaths = [src2] 1`] = `
 Object {
-  "_extraImports": Object {
+  "exp": Object {
+    "src2/file1.js": Object {
+      "named": Array [
+        "src2_file1_1",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
     "module2": Object {
       "isExtraImport": true,
       "named": Array [
@@ -326,17 +338,267 @@ Object {
       ],
     },
   },
-  "src2/file1.js": Object {
-    "named": Array [
-      "src2_file1_1",
-    ],
-  },
 }
 `;
 
 exports[`cacheProject - processDefaultName 1`] = `
 Object {
-  "_extraImports": Object {
+  "exp": Object {
+    "src1/file1.js": Object {
+      "default": "DEFAULT",
+      "named": Array [
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file1_1",
+          "src1_file1_2",
+          "src1_file1_3",
+          "src1_file1_4",
+          "src1_file1_5",
+        ],
+      },
+      "types": Array [
+        "src1_file1_t_1",
+        "src1_file1_t_2",
+      ],
+    },
+    "src1/file2.js": Object {
+      "default": "DEFAULT",
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_3",
+        "src1_file2_4",
+        "src1_file2_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file2_1",
+          "src1_file2_2",
+          "src1_file2_t_2",
+          "src1_file2_3",
+        ],
+      },
+      "types": Array [
+        "src1_file2_t_1",
+        "src1_file2_t_2",
+      ],
+    },
+    "src1/file3.js": Object {
+      "default": "DEFAULT",
+      "named": Array [
+        "src1_file3_1",
+        "src1_file3_2",
+        "src1_file3_3",
+        "src1_file3_4",
+        "src1_file3_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file3_1",
+          "src1_file3_t_1",
+          "src1_file3_2",
+          "src1_file3_t_2",
+          "src1_file3_3",
+        ],
+      },
+      "types": Array [
+        "src1_file3_t_1",
+        "src1_file3_t_2",
+      ],
+    },
+    "src1/file4.js": Object {
+      "default": "DEFAULT",
+      "named": Array [
+        "src1_file4_1",
+        "src1_file4_2",
+        "src1_file4_3",
+        "src1_file4_4",
+        "src1_file4_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file4_1",
+          "src1_file4_2",
+          "src1_file4_3",
+        ],
+      },
+      "types": Array [
+        "src1_file4_t_1",
+        "src1_file4_t_2",
+      ],
+    },
+    "src1/file5.js": Object {
+      "default": "DEFAULT",
+      "named": Array [
+        "src1_file5_1",
+        "src1_file5_2",
+        "src1_file5_3",
+        "src1_file5_4",
+        "src1_file5_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "default",
+          "file5default",
+          "src1_file5_1",
+          "src1_file5_2",
+          "src1_file5_3",
+        ],
+      },
+      "types": Array [
+        "src1_file5_t_1",
+        "src1_file5_t_2",
+      ],
+    },
+    "src1/file6.js": Object {
+      "default": "DEFAULT",
+      "named": Array [
+        "src1_file6_1",
+        "src1_file6_2",
+        "src1_file6_3",
+        "src1_file6_4",
+        "src1_file6_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "default",
+          "file6default",
+          "src1_file6_1",
+          "src1_file6_2",
+          "src1_file6_3",
+        ],
+      },
+      "types": Array [
+        "src1_file6_t_1",
+        "src1_file6_t_2",
+      ],
+    },
+    "src1/file7.js": Object {
+      "default": "* as AllFile7Exports",
+      "named": Array [
+        "src1_file7_1",
+        "src1_file7_2",
+        "src1_file7_3",
+        "src1_file7_4",
+        "src1_file7_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "default",
+          "file7default",
+          "src1_file7_1",
+          "src1_file7_2",
+          "src1_file7_3",
+        ],
+      },
+      "types": Array [
+        "src1_file7_t_1",
+        "src1_file7_t_2",
+      ],
+    },
+    "src1/index.js": Object {
+      "default": "DEFAULT",
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2_renamed",
+        "src1_file2_3",
+        "src1_file3_1",
+        "src1_file3_2_renamed",
+        "src1_file3_3",
+        "src1_file4_1",
+        "src1_file4_2_renamed",
+        "src1_file4_3",
+        "file5default",
+        "src1_file5_1",
+        "src1_file5_2_renamed",
+        "src1_file5_3",
+        "file6default",
+        "src1_file6_1",
+        "src1_file6_2_renamed",
+        "src1_file6_3",
+        "file7default",
+        "src1_file7_1",
+        "src1_file7_2_renamed",
+        "src1_file7_3",
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+      ],
+      "reexports": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_t_2",
+        "src1_file2_3",
+        "src1_file3_1",
+        "src1_file3_t_1",
+        "src1_file3_2",
+        "src1_file3_t_2",
+        "src1_file3_3",
+        "src1_file4_1",
+        "src1_file4_2",
+        "src1_file4_3",
+        "default",
+        "file5default",
+        "src1_file5_1",
+        "src1_file5_2",
+        "src1_file5_3",
+        "default",
+        "file6default",
+        "src1_file6_1",
+        "src1_file6_2",
+        "src1_file6_3",
+        "default",
+        "file7default",
+        "src1_file7_1",
+        "src1_file7_2",
+        "src1_file7_3",
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+      ],
+      "types": Array [
+        "src1_file2_t_2",
+        "src1_file3_t_1",
+        "src1_file3_t_2",
+      ],
+    },
+    "src1/subdir/file1.js": Object {
+      "named": Array [
+        "src1_subdir_file1_1",
+      ],
+      "types": Array [],
+    },
+    "src2/file1.js": Object {
+      "named": Array [
+        "src2_file1_1",
+      ],
+      "types": Array [],
+    },
+    "src3/file1.js": Object {
+      "named": Array [
+        "src3_file1_1",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
     "module1": Object {
       "default": "defaultModule1",
       "isExtraImport": true,
@@ -402,256 +664,6 @@ Object {
         "module7_typeOutside_2",
       ],
     },
-  },
-  "src1/file1.js": Object {
-    "default": "DEFAULT",
-    "named": Array [
-      "src1_file1_1",
-      "src1_file1_2",
-      "src1_file1_3",
-      "src1_file1_4",
-      "src1_file1_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "src1_file1_1",
-        "src1_file1_2",
-        "src1_file1_3",
-        "src1_file1_4",
-        "src1_file1_5",
-      ],
-    },
-    "types": Array [
-      "src1_file1_t_1",
-      "src1_file1_t_2",
-    ],
-  },
-  "src1/file2.js": Object {
-    "default": "DEFAULT",
-    "named": Array [
-      "src1_file2_1",
-      "src1_file2_2",
-      "src1_file2_3",
-      "src1_file2_4",
-      "src1_file2_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "src1_file2_1",
-        "src1_file2_2",
-        "src1_file2_t_2",
-        "src1_file2_3",
-      ],
-    },
-    "types": Array [
-      "src1_file2_t_1",
-      "src1_file2_t_2",
-    ],
-  },
-  "src1/file3.js": Object {
-    "default": "DEFAULT",
-    "named": Array [
-      "src1_file3_1",
-      "src1_file3_2",
-      "src1_file3_3",
-      "src1_file3_4",
-      "src1_file3_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "src1_file3_1",
-        "src1_file3_t_1",
-        "src1_file3_2",
-        "src1_file3_t_2",
-        "src1_file3_3",
-      ],
-    },
-    "types": Array [
-      "src1_file3_t_1",
-      "src1_file3_t_2",
-    ],
-  },
-  "src1/file4.js": Object {
-    "default": "DEFAULT",
-    "named": Array [
-      "src1_file4_1",
-      "src1_file4_2",
-      "src1_file4_3",
-      "src1_file4_4",
-      "src1_file4_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "src1_file4_1",
-        "src1_file4_2",
-        "src1_file4_3",
-      ],
-    },
-    "types": Array [
-      "src1_file4_t_1",
-      "src1_file4_t_2",
-    ],
-  },
-  "src1/file5.js": Object {
-    "default": "DEFAULT",
-    "named": Array [
-      "src1_file5_1",
-      "src1_file5_2",
-      "src1_file5_3",
-      "src1_file5_4",
-      "src1_file5_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "default",
-        "file5default",
-        "src1_file5_1",
-        "src1_file5_2",
-        "src1_file5_3",
-      ],
-    },
-    "types": Array [
-      "src1_file5_t_1",
-      "src1_file5_t_2",
-    ],
-  },
-  "src1/file6.js": Object {
-    "default": "DEFAULT",
-    "named": Array [
-      "src1_file6_1",
-      "src1_file6_2",
-      "src1_file6_3",
-      "src1_file6_4",
-      "src1_file6_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "default",
-        "file6default",
-        "src1_file6_1",
-        "src1_file6_2",
-        "src1_file6_3",
-      ],
-    },
-    "types": Array [
-      "src1_file6_t_1",
-      "src1_file6_t_2",
-    ],
-  },
-  "src1/file7.js": Object {
-    "default": "* as AllFile7Exports",
-    "named": Array [
-      "src1_file7_1",
-      "src1_file7_2",
-      "src1_file7_3",
-      "src1_file7_4",
-      "src1_file7_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "default",
-        "file7default",
-        "src1_file7_1",
-        "src1_file7_2",
-        "src1_file7_3",
-      ],
-    },
-    "types": Array [
-      "src1_file7_t_1",
-      "src1_file7_t_2",
-    ],
-  },
-  "src1/index.js": Object {
-    "default": "DEFAULT",
-    "named": Array [
-      "src1_file2_1",
-      "src1_file2_2_renamed",
-      "src1_file2_3",
-      "src1_file3_1",
-      "src1_file3_2_renamed",
-      "src1_file3_3",
-      "src1_file4_1",
-      "src1_file4_2_renamed",
-      "src1_file4_3",
-      "file5default",
-      "src1_file5_1",
-      "src1_file5_2_renamed",
-      "src1_file5_3",
-      "file6default",
-      "src1_file6_1",
-      "src1_file6_2_renamed",
-      "src1_file6_3",
-      "file7default",
-      "src1_file7_1",
-      "src1_file7_2_renamed",
-      "src1_file7_3",
-      "src1_file1_1",
-      "src1_file1_2",
-      "src1_file1_3",
-      "src1_file1_4",
-      "src1_file1_5",
-    ],
-    "reexports": Array [
-      "src1_file2_1",
-      "src1_file2_2",
-      "src1_file2_t_2",
-      "src1_file2_3",
-      "src1_file3_1",
-      "src1_file3_t_1",
-      "src1_file3_2",
-      "src1_file3_t_2",
-      "src1_file3_3",
-      "src1_file4_1",
-      "src1_file4_2",
-      "src1_file4_3",
-      "default",
-      "file5default",
-      "src1_file5_1",
-      "src1_file5_2",
-      "src1_file5_3",
-      "default",
-      "file6default",
-      "src1_file6_1",
-      "src1_file6_2",
-      "src1_file6_3",
-      "default",
-      "file7default",
-      "src1_file7_1",
-      "src1_file7_2",
-      "src1_file7_3",
-      "src1_file1_1",
-      "src1_file1_2",
-      "src1_file1_3",
-      "src1_file1_4",
-      "src1_file1_5",
-    ],
-    "types": Array [
-      "src1_file2_t_2",
-      "src1_file3_t_1",
-      "src1_file3_t_2",
-    ],
-  },
-  "src1/subdir/file1.js": Object {
-    "named": Array [
-      "src1_subdir_file1_1",
-    ],
-  },
-  "src2/file1.js": Object {
-    "named": Array [
-      "src2_file1_1",
-    ],
-  },
-  "src3/file1.js": Object {
-    "named": Array [
-      "src3_file1_1",
-    ],
   },
 }
 `;
@@ -664,7 +676,262 @@ Array [
 
 exports[`cacheProject 1`] = `
 Object {
-  "_extraImports": Object {
+  "exp": Object {
+    "src1/file1.js": Object {
+      "default": "file1",
+      "named": Array [
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file1_1",
+          "src1_file1_2",
+          "src1_file1_3",
+          "src1_file1_4",
+          "src1_file1_5",
+        ],
+      },
+      "types": Array [
+        "src1_file1_t_1",
+        "src1_file1_t_2",
+      ],
+    },
+    "src1/file2.js": Object {
+      "default": "file2",
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_3",
+        "src1_file2_4",
+        "src1_file2_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file2_1",
+          "src1_file2_2",
+          "src1_file2_t_2",
+          "src1_file2_3",
+        ],
+      },
+      "types": Array [
+        "src1_file2_t_1",
+        "src1_file2_t_2",
+      ],
+    },
+    "src1/file3.js": Object {
+      "default": "file3",
+      "named": Array [
+        "src1_file3_1",
+        "src1_file3_2",
+        "src1_file3_3",
+        "src1_file3_4",
+        "src1_file3_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file3_1",
+          "src1_file3_t_1",
+          "src1_file3_2",
+          "src1_file3_t_2",
+          "src1_file3_3",
+        ],
+      },
+      "types": Array [
+        "src1_file3_t_1",
+        "src1_file3_t_2",
+      ],
+    },
+    "src1/file4.js": Object {
+      "default": "file4",
+      "named": Array [
+        "src1_file4_1",
+        "src1_file4_2",
+        "src1_file4_3",
+        "src1_file4_4",
+        "src1_file4_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file4_1",
+          "src1_file4_2",
+          "src1_file4_3",
+        ],
+      },
+      "types": Array [
+        "src1_file4_t_1",
+        "src1_file4_t_2",
+      ],
+    },
+    "src1/file5.js": Object {
+      "default": "file5",
+      "named": Array [
+        "src1_file5_1",
+        "src1_file5_2",
+        "src1_file5_3",
+        "src1_file5_4",
+        "src1_file5_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "default",
+          "file5default",
+          "src1_file5_1",
+          "src1_file5_2",
+          "src1_file5_3",
+        ],
+      },
+      "types": Array [
+        "src1_file5_t_1",
+        "src1_file5_t_2",
+      ],
+    },
+    "src1/file6.js": Object {
+      "default": "file6",
+      "named": Array [
+        "src1_file6_1",
+        "src1_file6_2",
+        "src1_file6_3",
+        "src1_file6_4",
+        "src1_file6_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "default",
+          "file6default",
+          "src1_file6_1",
+          "src1_file6_2",
+          "src1_file6_3",
+        ],
+      },
+      "types": Array [
+        "src1_file6_t_1",
+        "src1_file6_t_2",
+      ],
+    },
+    "src1/file7.js": Object {
+      "default": "* as AllFile7Exports",
+      "named": Array [
+        "src1_file7_1",
+        "src1_file7_2",
+        "src1_file7_3",
+        "src1_file7_4",
+        "src1_file7_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "default",
+          "file7default",
+          "src1_file7_1",
+          "src1_file7_2",
+          "src1_file7_3",
+        ],
+      },
+      "types": Array [
+        "src1_file7_t_1",
+        "src1_file7_t_2",
+      ],
+    },
+    "src1/index.js": Object {
+      "default": "src1",
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2_renamed",
+        "src1_file2_3",
+        "src1_file3_1",
+        "src1_file3_2_renamed",
+        "src1_file3_3",
+        "src1_file4_1",
+        "src1_file4_2_renamed",
+        "src1_file4_3",
+        "file5default",
+        "src1_file5_1",
+        "src1_file5_2_renamed",
+        "src1_file5_3",
+        "file6default",
+        "src1_file6_1",
+        "src1_file6_2_renamed",
+        "src1_file6_3",
+        "file7default",
+        "src1_file7_1",
+        "src1_file7_2_renamed",
+        "src1_file7_3",
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+      ],
+      "reexports": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_t_2",
+        "src1_file2_3",
+        "src1_file3_1",
+        "src1_file3_t_1",
+        "src1_file3_2",
+        "src1_file3_t_2",
+        "src1_file3_3",
+        "src1_file4_1",
+        "src1_file4_2",
+        "src1_file4_3",
+        "default",
+        "file5default",
+        "src1_file5_1",
+        "src1_file5_2",
+        "src1_file5_3",
+        "default",
+        "file6default",
+        "src1_file6_1",
+        "src1_file6_2",
+        "src1_file6_3",
+        "default",
+        "file7default",
+        "src1_file7_1",
+        "src1_file7_2",
+        "src1_file7_3",
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+      ],
+      "types": Array [
+        "src1_file2_t_2",
+        "src1_file3_t_1",
+        "src1_file3_t_2",
+      ],
+    },
+    "src1/subdir/file1.js": Object {
+      "named": Array [
+        "src1_subdir_file1_1",
+      ],
+      "types": Array [],
+    },
+    "src2/file1.js": Object {
+      "named": Array [
+        "src2_file1_1",
+      ],
+      "types": Array [],
+    },
+    "src3/file1.js": Object {
+      "named": Array [
+        "src3_file1_1",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
     "module1": Object {
       "default": "defaultModule1",
       "isExtraImport": true,
@@ -731,262 +998,267 @@ Object {
       ],
     },
   },
-  "src1/file1.js": Object {
-    "default": "file1",
-    "named": Array [
-      "src1_file1_1",
-      "src1_file1_2",
-      "src1_file1_3",
-      "src1_file1_4",
-      "src1_file1_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
+}
+`;
+
+exports[`import - nonModulePaths 1`] = `
+Object {
+  "exp": Object {
+    "src1/file1.js": Object {
+      "default": "file1",
+      "named": Array [
         "src1_file1_1",
         "src1_file1_2",
         "src1_file1_3",
         "src1_file1_4",
         "src1_file1_5",
       ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file1_1",
+          "src1_file1_2",
+          "src1_file1_3",
+          "src1_file1_4",
+          "src1_file1_5",
+        ],
+      },
+      "types": Array [
+        "src1_file1_t_1",
+        "src1_file1_t_2",
+      ],
     },
-    "types": Array [
-      "src1_file1_t_1",
-      "src1_file1_t_2",
-    ],
-  },
-  "src1/file2.js": Object {
-    "default": "file2",
-    "named": Array [
-      "src1_file2_1",
-      "src1_file2_2",
-      "src1_file2_3",
-      "src1_file2_4",
-      "src1_file2_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
+    "src1/file2.js": Object {
+      "default": "file2",
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_3",
+        "src1_file2_4",
+        "src1_file2_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file2_1",
+          "src1_file2_2",
+          "src1_file2_t_2",
+          "src1_file2_3",
+        ],
+      },
+      "types": Array [
+        "src1_file2_t_1",
+        "src1_file2_t_2",
+      ],
+    },
+    "src1/file3.js": Object {
+      "default": "file3",
+      "named": Array [
+        "src1_file3_1",
+        "src1_file3_2",
+        "src1_file3_3",
+        "src1_file3_4",
+        "src1_file3_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file3_1",
+          "src1_file3_t_1",
+          "src1_file3_2",
+          "src1_file3_t_2",
+          "src1_file3_3",
+        ],
+      },
+      "types": Array [
+        "src1_file3_t_1",
+        "src1_file3_t_2",
+      ],
+    },
+    "src1/file4.js": Object {
+      "default": "file4",
+      "named": Array [
+        "src1_file4_1",
+        "src1_file4_2",
+        "src1_file4_3",
+        "src1_file4_4",
+        "src1_file4_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "src1_file4_1",
+          "src1_file4_2",
+          "src1_file4_3",
+        ],
+      },
+      "types": Array [
+        "src1_file4_t_1",
+        "src1_file4_t_2",
+      ],
+    },
+    "src1/file5.js": Object {
+      "default": "file5",
+      "named": Array [
+        "src1_file5_1",
+        "src1_file5_2",
+        "src1_file5_3",
+        "src1_file5_4",
+        "src1_file5_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "default",
+          "file5default",
+          "src1_file5_1",
+          "src1_file5_2",
+          "src1_file5_3",
+        ],
+      },
+      "types": Array [
+        "src1_file5_t_1",
+        "src1_file5_t_2",
+      ],
+    },
+    "src1/file6.js": Object {
+      "default": "file6",
+      "named": Array [
+        "src1_file6_1",
+        "src1_file6_2",
+        "src1_file6_3",
+        "src1_file6_4",
+        "src1_file6_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "default",
+          "file6default",
+          "src1_file6_1",
+          "src1_file6_2",
+          "src1_file6_3",
+        ],
+      },
+      "types": Array [
+        "src1_file6_t_1",
+        "src1_file6_t_2",
+      ],
+    },
+    "src1/file7.js": Object {
+      "default": "* as AllFile7Exports",
+      "named": Array [
+        "src1_file7_1",
+        "src1_file7_2",
+        "src1_file7_3",
+        "src1_file7_4",
+        "src1_file7_5",
+      ],
+      "reexported": Object {
+        "reexportPath": "src1/index.js",
+        "reexports": Array [
+          "default",
+          "file7default",
+          "src1_file7_1",
+          "src1_file7_2",
+          "src1_file7_3",
+        ],
+      },
+      "types": Array [
+        "src1_file7_t_1",
+        "src1_file7_t_2",
+      ],
+    },
+    "src1/index.js": Object {
+      "default": "src1",
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2_renamed",
+        "src1_file2_3",
+        "src1_file3_1",
+        "src1_file3_2_renamed",
+        "src1_file3_3",
+        "src1_file4_1",
+        "src1_file4_2_renamed",
+        "src1_file4_3",
+        "file5default",
+        "src1_file5_1",
+        "src1_file5_2_renamed",
+        "src1_file5_3",
+        "file6default",
+        "src1_file6_1",
+        "src1_file6_2_renamed",
+        "src1_file6_3",
+        "file7default",
+        "src1_file7_1",
+        "src1_file7_2_renamed",
+        "src1_file7_3",
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+      ],
       "reexports": Array [
         "src1_file2_1",
         "src1_file2_2",
         "src1_file2_t_2",
         "src1_file2_3",
-      ],
-    },
-    "types": Array [
-      "src1_file2_t_1",
-      "src1_file2_t_2",
-    ],
-  },
-  "src1/file3.js": Object {
-    "default": "file3",
-    "named": Array [
-      "src1_file3_1",
-      "src1_file3_2",
-      "src1_file3_3",
-      "src1_file3_4",
-      "src1_file3_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
         "src1_file3_1",
         "src1_file3_t_1",
         "src1_file3_2",
         "src1_file3_t_2",
         "src1_file3_3",
-      ],
-    },
-    "types": Array [
-      "src1_file3_t_1",
-      "src1_file3_t_2",
-    ],
-  },
-  "src1/file4.js": Object {
-    "default": "file4",
-    "named": Array [
-      "src1_file4_1",
-      "src1_file4_2",
-      "src1_file4_3",
-      "src1_file4_4",
-      "src1_file4_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
         "src1_file4_1",
         "src1_file4_2",
         "src1_file4_3",
-      ],
-    },
-    "types": Array [
-      "src1_file4_t_1",
-      "src1_file4_t_2",
-    ],
-  },
-  "src1/file5.js": Object {
-    "default": "file5",
-    "named": Array [
-      "src1_file5_1",
-      "src1_file5_2",
-      "src1_file5_3",
-      "src1_file5_4",
-      "src1_file5_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
         "default",
         "file5default",
         "src1_file5_1",
         "src1_file5_2",
         "src1_file5_3",
-      ],
-    },
-    "types": Array [
-      "src1_file5_t_1",
-      "src1_file5_t_2",
-    ],
-  },
-  "src1/file6.js": Object {
-    "default": "file6",
-    "named": Array [
-      "src1_file6_1",
-      "src1_file6_2",
-      "src1_file6_3",
-      "src1_file6_4",
-      "src1_file6_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
         "default",
         "file6default",
         "src1_file6_1",
         "src1_file6_2",
         "src1_file6_3",
-      ],
-    },
-    "types": Array [
-      "src1_file6_t_1",
-      "src1_file6_t_2",
-    ],
-  },
-  "src1/file7.js": Object {
-    "default": "* as AllFile7Exports",
-    "named": Array [
-      "src1_file7_1",
-      "src1_file7_2",
-      "src1_file7_3",
-      "src1_file7_4",
-      "src1_file7_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
         "default",
         "file7default",
         "src1_file7_1",
         "src1_file7_2",
         "src1_file7_3",
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+      ],
+      "types": Array [
+        "src1_file2_t_2",
+        "src1_file3_t_1",
+        "src1_file3_t_2",
       ],
     },
-    "types": Array [
-      "src1_file7_t_1",
-      "src1_file7_t_2",
-    ],
+    "src1/subdir/file1.js": Object {
+      "named": Array [
+        "src1_subdir_file1_1",
+      ],
+      "types": Array [],
+    },
+    "src2/file1.js": Object {
+      "named": Array [
+        "src2_file1_1",
+      ],
+      "types": Array [],
+    },
+    "src3/file1.js": Object {
+      "named": Array [
+        "src3_file1_1",
+      ],
+      "types": Array [],
+    },
   },
-  "src1/index.js": Object {
-    "default": "src1",
-    "named": Array [
-      "src1_file2_1",
-      "src1_file2_2_renamed",
-      "src1_file2_3",
-      "src1_file3_1",
-      "src1_file3_2_renamed",
-      "src1_file3_3",
-      "src1_file4_1",
-      "src1_file4_2_renamed",
-      "src1_file4_3",
-      "file5default",
-      "src1_file5_1",
-      "src1_file5_2_renamed",
-      "src1_file5_3",
-      "file6default",
-      "src1_file6_1",
-      "src1_file6_2_renamed",
-      "src1_file6_3",
-      "file7default",
-      "src1_file7_1",
-      "src1_file7_2_renamed",
-      "src1_file7_3",
-      "src1_file1_1",
-      "src1_file1_2",
-      "src1_file1_3",
-      "src1_file1_4",
-      "src1_file1_5",
-    ],
-    "reexports": Array [
-      "src1_file2_1",
-      "src1_file2_2",
-      "src1_file2_t_2",
-      "src1_file2_3",
-      "src1_file3_1",
-      "src1_file3_t_1",
-      "src1_file3_2",
-      "src1_file3_t_2",
-      "src1_file3_3",
-      "src1_file4_1",
-      "src1_file4_2",
-      "src1_file4_3",
-      "default",
-      "file5default",
-      "src1_file5_1",
-      "src1_file5_2",
-      "src1_file5_3",
-      "default",
-      "file6default",
-      "src1_file6_1",
-      "src1_file6_2",
-      "src1_file6_3",
-      "default",
-      "file7default",
-      "src1_file7_1",
-      "src1_file7_2",
-      "src1_file7_3",
-      "src1_file1_1",
-      "src1_file1_2",
-      "src1_file1_3",
-      "src1_file1_4",
-      "src1_file1_5",
-    ],
-    "types": Array [
-      "src1_file2_t_2",
-      "src1_file3_t_1",
-      "src1_file3_t_2",
-    ],
-  },
-  "src1/subdir/file1.js": Object {
-    "named": Array [
-      "src1_subdir_file1_1",
-    ],
-  },
-  "src2/file1.js": Object {
-    "named": Array [
-      "src2_file1_1",
-    ],
-  },
-  "src3/file1.js": Object {
-    "named": Array [
-      "src3_file1_1",
-    ],
-  },
-}
-`;
-
-exports[`import - nonModulePaths 1`] = `
-Object {
-  "_extraImports": Object {
+  "imp": Object {
     "module1_file2": Object {
       "default": "defaultModule_file2",
       "isExtraImport": true,
@@ -1042,256 +1314,6 @@ Object {
         "src3_file1_1",
       ],
     },
-  },
-  "src1/file1.js": Object {
-    "default": "file1",
-    "named": Array [
-      "src1_file1_1",
-      "src1_file1_2",
-      "src1_file1_3",
-      "src1_file1_4",
-      "src1_file1_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "src1_file1_1",
-        "src1_file1_2",
-        "src1_file1_3",
-        "src1_file1_4",
-        "src1_file1_5",
-      ],
-    },
-    "types": Array [
-      "src1_file1_t_1",
-      "src1_file1_t_2",
-    ],
-  },
-  "src1/file2.js": Object {
-    "default": "file2",
-    "named": Array [
-      "src1_file2_1",
-      "src1_file2_2",
-      "src1_file2_3",
-      "src1_file2_4",
-      "src1_file2_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "src1_file2_1",
-        "src1_file2_2",
-        "src1_file2_t_2",
-        "src1_file2_3",
-      ],
-    },
-    "types": Array [
-      "src1_file2_t_1",
-      "src1_file2_t_2",
-    ],
-  },
-  "src1/file3.js": Object {
-    "default": "file3",
-    "named": Array [
-      "src1_file3_1",
-      "src1_file3_2",
-      "src1_file3_3",
-      "src1_file3_4",
-      "src1_file3_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "src1_file3_1",
-        "src1_file3_t_1",
-        "src1_file3_2",
-        "src1_file3_t_2",
-        "src1_file3_3",
-      ],
-    },
-    "types": Array [
-      "src1_file3_t_1",
-      "src1_file3_t_2",
-    ],
-  },
-  "src1/file4.js": Object {
-    "default": "file4",
-    "named": Array [
-      "src1_file4_1",
-      "src1_file4_2",
-      "src1_file4_3",
-      "src1_file4_4",
-      "src1_file4_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "src1_file4_1",
-        "src1_file4_2",
-        "src1_file4_3",
-      ],
-    },
-    "types": Array [
-      "src1_file4_t_1",
-      "src1_file4_t_2",
-    ],
-  },
-  "src1/file5.js": Object {
-    "default": "file5",
-    "named": Array [
-      "src1_file5_1",
-      "src1_file5_2",
-      "src1_file5_3",
-      "src1_file5_4",
-      "src1_file5_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "default",
-        "file5default",
-        "src1_file5_1",
-        "src1_file5_2",
-        "src1_file5_3",
-      ],
-    },
-    "types": Array [
-      "src1_file5_t_1",
-      "src1_file5_t_2",
-    ],
-  },
-  "src1/file6.js": Object {
-    "default": "file6",
-    "named": Array [
-      "src1_file6_1",
-      "src1_file6_2",
-      "src1_file6_3",
-      "src1_file6_4",
-      "src1_file6_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "default",
-        "file6default",
-        "src1_file6_1",
-        "src1_file6_2",
-        "src1_file6_3",
-      ],
-    },
-    "types": Array [
-      "src1_file6_t_1",
-      "src1_file6_t_2",
-    ],
-  },
-  "src1/file7.js": Object {
-    "default": "* as AllFile7Exports",
-    "named": Array [
-      "src1_file7_1",
-      "src1_file7_2",
-      "src1_file7_3",
-      "src1_file7_4",
-      "src1_file7_5",
-    ],
-    "reexported": Object {
-      "reexportPath": "src1/index.js",
-      "reexports": Array [
-        "default",
-        "file7default",
-        "src1_file7_1",
-        "src1_file7_2",
-        "src1_file7_3",
-      ],
-    },
-    "types": Array [
-      "src1_file7_t_1",
-      "src1_file7_t_2",
-    ],
-  },
-  "src1/index.js": Object {
-    "default": "src1",
-    "named": Array [
-      "src1_file2_1",
-      "src1_file2_2_renamed",
-      "src1_file2_3",
-      "src1_file3_1",
-      "src1_file3_2_renamed",
-      "src1_file3_3",
-      "src1_file4_1",
-      "src1_file4_2_renamed",
-      "src1_file4_3",
-      "file5default",
-      "src1_file5_1",
-      "src1_file5_2_renamed",
-      "src1_file5_3",
-      "file6default",
-      "src1_file6_1",
-      "src1_file6_2_renamed",
-      "src1_file6_3",
-      "file7default",
-      "src1_file7_1",
-      "src1_file7_2_renamed",
-      "src1_file7_3",
-      "src1_file1_1",
-      "src1_file1_2",
-      "src1_file1_3",
-      "src1_file1_4",
-      "src1_file1_5",
-    ],
-    "reexports": Array [
-      "src1_file2_1",
-      "src1_file2_2",
-      "src1_file2_t_2",
-      "src1_file2_3",
-      "src1_file3_1",
-      "src1_file3_t_1",
-      "src1_file3_2",
-      "src1_file3_t_2",
-      "src1_file3_3",
-      "src1_file4_1",
-      "src1_file4_2",
-      "src1_file4_3",
-      "default",
-      "file5default",
-      "src1_file5_1",
-      "src1_file5_2",
-      "src1_file5_3",
-      "default",
-      "file6default",
-      "src1_file6_1",
-      "src1_file6_2",
-      "src1_file6_3",
-      "default",
-      "file7default",
-      "src1_file7_1",
-      "src1_file7_2",
-      "src1_file7_3",
-      "src1_file1_1",
-      "src1_file1_2",
-      "src1_file1_3",
-      "src1_file1_4",
-      "src1_file1_5",
-    ],
-    "types": Array [
-      "src1_file2_t_2",
-      "src1_file3_t_1",
-      "src1_file3_t_2",
-    ],
-  },
-  "src1/subdir/file1.js": Object {
-    "named": Array [
-      "src1_subdir_file1_1",
-    ],
-  },
-  "src2/file1.js": Object {
-    "named": Array [
-      "src2_file1_1",
-    ],
-  },
-  "src3/file1.js": Object {
-    "named": Array [
-      "src3_file1_1",
-    ],
   },
 }
 `;

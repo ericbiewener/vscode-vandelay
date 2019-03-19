@@ -1,4 +1,3 @@
-require('..')
 //
 // PLEASE DO NOT MODIFY / DELETE UNLESS YOU KNOW WHAT YOU ARE DOING
 //
@@ -21,7 +20,5 @@ testRunner.configure({
   useColors: true,
   timeout: 5000,
 })
-
-global.lang = 'js'
 
 module.exports = testRunner

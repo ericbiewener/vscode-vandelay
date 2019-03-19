@@ -17,6 +17,7 @@ function parseCacheFile(plugin: Plugin) {
  * `cb` should return a promise (e.g. any file writing operations) so that it completes before the next call
  * to the cacheFileManager
  */
+// FIXME: i don't think CachingData is right. It's a nonfinalized version of the data to be cached...
 export function cacheFileManager(
   plugin: Plugin,
   cb: (data: CachingData) => void

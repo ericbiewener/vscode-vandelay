@@ -1,6 +1,8 @@
-const { commands } = require('vscode')
+const { commands, workspace } = require('vscode')
 const { getPlugin } = require('./utils')
 require('./toMatchSnapshot')
+
+global.TEST_ROOT = workspace.workspaceFolders[0].uri.path
 
 let clone
 beforeEach(async () => {

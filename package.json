@@ -2,7 +2,7 @@
   "name": "vandelay",
   "displayName": "Vandelay",
   "description": "Automatically generate import statements for JavaScript and Python.",
-  "version": "1.3.1",
+  "version": "2.0.0",
   "publisher": "edb",
   "author": "Eric Biewener",
   "license": "MIT",
@@ -93,7 +93,8 @@
     "prettier": "prettier-eslint --prettier-last --write \"**/*.ts\"",
     "prettierr": "prettier-eslint --prettier-last --write",
     "package": "vsce package --yarn",
-    "ext": "rm -rf ~/.vscode/extensions/edb.vandelay-[0-9]* && rm -f *.vsix && yarn run package && code --install-extension *.vsix"
+    "ext": "rm -rf ~/.vscode/extensions/edb.vandelay-[0-9]* && rm -f *.vsix && yarn run package && code --install-extension *.vsix",
+    "compare": "node compareSnapshotStructures"
   },
   "devDependencies": {
     "@types/anymatch": "1.3.1",
@@ -105,6 +106,8 @@
     "@types/webpack": "4.4.25",
     "@typescript-eslint/eslint-plugin": "1.4.1",
     "@typescript-eslint/parser": "1.4.1",
+    "chalk": "2.4.2",
+    "deep-object-diff": "1.1.0",
     "eslint": "5.14.1",
     "eslint-config-ericbiewener-typescript": "3.2.0",
     "expect": "24.5.0",

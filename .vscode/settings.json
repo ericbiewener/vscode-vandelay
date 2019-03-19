@@ -11,7 +11,6 @@
     "**/.svn": true,
     "**/CVS": true,
     "**/node_modules": true,
-    "dist": true,
     "python": true,
     "yarn-error.log": true,
     "yarn.lock": true
