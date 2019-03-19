@@ -16,7 +16,6 @@ Object.assign(log, {
   info: (...args) => console.info(chalk.blue(...stringify(args))),
 })
 
-
 function parseObj(snapshotData) {
   return JSON.parse(
     snapshotData
@@ -32,6 +31,22 @@ function transformBak(bak) {
   return {
     exp: bak,
     imp: extraImports,
+  }
+}
+
+function highlightDiffChange(diff, ...keys) {
+  for (const k in diff) {
+    const v = diff[k]
+    const keyArray = [...keys, k]
+    if (Array.isArray(v)) {
+      if (v.length) log.error(keyArray.join('.'), v)
+    } else if (v) {
+      if (typeof v === "object") {
+        highlightDiffChange(v, ...keyArray)
+      } else {
+        log.error(keyArray.join('.'), v)
+      }
+    }
   }
 }
 
@@ -56,11 +71,14 @@ function compareAll(newPath) {
     const newObj = parseObj(newSnap[key])
     const oldObj = transformBak(parseObj(oldSnap[key]))
     log.success(`snapshot: ${key}`)
-    log(detailedDiff(oldObj, newObj))
+    const diff = detailedDiff(oldObj, newObj)
+    log(diff)
+    highlightDiffChange(diff)
   }
 }
 
 
 
 compareAll('./tests/js/single-root/__snapshots__/cache.test.js.snap')
+compareAll('./tests/js/es5/__snapshots__/cache.test.js.snap')
 
