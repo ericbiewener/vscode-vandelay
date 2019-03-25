@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import path from "path";
 import _ from "lodash";
-import { basename, getFilepathKey, last } from "../../utils";
+import { basenameNoExt, getFilepathKey, last } from "../../utils";
 import { isPathNodeModule } from "./utils";
 import { parseImports, exportRegex } from "./regex";
 import {
@@ -67,8 +67,8 @@ export function cacheFile(
   while ((match = mainRegex.exec(fileText))) {
     if (match[1] === "default" || (plugin.useES5 && match[1])) {
       const proposedName = filepath.endsWith("index.js")
-        ? basename(path.dirname(filepath))
-        : basename(filepath);
+        ? basenameNoExt(path.dirname(filepath))
+        : basenameNoExt(filepath);
       fileExports.default = processDefaultName(plugin, proposedName, filepath);
     } else if (!plugin.useES5 && !match[2] && !match[1].endsWith(",")) {
       // endsWith(',') — it's actually a reexport

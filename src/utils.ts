@@ -51,8 +51,7 @@ export function getFilepathKey(plugin: Plugin, filepath: string) {
   return filepath.slice(plugin.projectRoot.length + 1);
 }
 
-// TODO: rename `basenameNoExt`
-export function basename(filepath: string) {
+export function basenameNoExt(filepath: string) {
   return path.basename(filepath, path.extname(filepath));
 }
 
@@ -127,7 +126,7 @@ export function getLastInitialComment(text: string, commentRegex: RegExp) {
         start: lastMatch.index,
         end: lastMatch.index + lastMatch[0].length
       }
-    : { start: 0, end: 0 };
+    : null;
 }
 
 export function getImportOrderPosition(plugin: Plugin, importPath: string) {

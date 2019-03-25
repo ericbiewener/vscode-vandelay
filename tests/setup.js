@@ -23,5 +23,5 @@ afterEach(async () => {
 
   await commands.executeCommand('workbench.action.closeAllEditors')
   // Prevents test failures caused by text editors not being in expected open or closed state
-  return new Promise(resolve => setTimeout(resolve, 10))
+  return new Promise(resolve => setTimeout(resolve, 100))
 })

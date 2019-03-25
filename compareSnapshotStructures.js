@@ -1,26 +1,17 @@
 const _ = require('lodash')
 const chalk = require('chalk')
+const path = require('path')
+const fs = require('fs')
+const log = require('log-all-the-things')
 const { detailedDiff } = require('deep-object-diff')
-
-function stringify(args) {
-  return args.map(a => a && Object.getPrototypeOf(a) === Object.prototype ? JSON.stringify(a, null, 2): a)
-}
-
-function log(...args) {
-  console.log(...stringify(args))
-}
-
-Object.assign(log, {
-  error: (...args) => console.error(chalk.red(...stringify(args))),
-  success: (...args) => console.log(chalk.green(...stringify(args))),
-  info: (...args) => console.info(chalk.blue(...stringify(args))),
-})
+const jestDiff = require('jest-diff')
 
 function parseObj(snapshotData) {
   return JSON.parse(
     snapshotData
       .replace(/Object /g, '')
       .replace(/Array /g, '')
+      .replace(/: undefined,/g, ': " undefined",')
       .replace(/(?:,)(\n *[}\]])/g, '$1') // remove trailing commas
     )
 } 
@@ -54,12 +45,13 @@ function compareAll(newPath) {
   log.info('------------------------------------------------------------------')
   log.info(`comparing: ${newPath}`)
   log.info('------------------------------------------------------------------')
-  const newSnap = require(newPath)
-  const oldSnap = require(`${newPath}.BAK`)
+  const newSnaps = require(newPath)
+  const oldSnaps = require(`${newPath}.BAK`)
   
-  const newKeys = Object.keys(newSnap)
-  const oldKeys = Object.keys(oldSnap)
+  const newKeys = Object.keys(newSnaps)
+  const oldKeys = Object.keys(oldSnaps)
   
+  // Make sure comparisons have same snapshots
   if (!_.isEqual(newKeys, oldKeys)) {
     log.error('keys do not match')
     log.error('new', newKeys)
@@ -67,18 +59,54 @@ function compareAll(newPath) {
     return
   }
 
-  for (const key in newSnap) {
-    const newObj = parseObj(newSnap[key])
-    const oldObj = transformBak(parseObj(oldSnap[key]))
+  for (const key in newSnaps) {
     log.success(`snapshot: ${key}`)
+
+    const newSnap = newSnaps[key]
+    const oldSnap = oldSnaps[key]
+    let newObj
+    let oldObj
+
+    try {
+      newObj = parseObj(newSnap)
+      oldObj = parseObj(oldSnap)
+    } catch(e) {
+      // Must be import insert tests
+      if (newSnap === oldSnap) {
+        log('output is equal!')
+      } else {
+        log.error('output is different')
+        log(jestDiff(oldSnap, newSnap))
+      }
+      continue
+    }
+
+    if (Array.isArray(newObj)) { // buildImports tests
+      newObj = newObj.map(o => JSON.stringify(o)).sort()
+      oldObj = oldObj.map(o => JSON.stringify(o)).sort()
+    } else { // cached data tests
+      oldObj = transformBak(oldObj)
+    }
+
     const diff = detailedDiff(oldObj, newObj)
     log(diff)
     highlightDiffChange(diff)
   }
 }
 
+function findSnapshots(snapshots, dir) {
+  const items = fs.readdirSync(dir);
 
+  for (const item of items) {
+    const fullPath = path.join(dir, item);
+    if (fs.lstatSync(fullPath).isFile()) {
+      if (fullPath.endsWith('.snap')) snapshots.push(fullPath)
+    } else {
+      findSnapshots(snapshots, fullPath);
+    }
+  }
+}
 
-compareAll('./tests/js/single-root/__snapshots__/cache.test.js.snap')
-compareAll('./tests/js/es5/__snapshots__/cache.test.js.snap')
-
+const snapshots = []
+findSnapshots(snapshots, path.join(process.cwd(), './tests'))
+snapshots.forEach(compareAll)

@@ -3,13 +3,6 @@
 exports[`buildImportItems 1`] = `
 Array [
   Object {
-    "absImportPath": "absRoot/src2/file1.js",
-    "description": "src2/file1",
-    "exportType": 1,
-    "isExtraImport": undefined,
-    "label": "src2_file1_1",
-  },
-  Object {
     "absImportPath": "absRoot/module1",
     "description": "module1",
     "exportType": 0,
@@ -575,6 +568,13 @@ Array [
     "exportType": 1,
     "isExtraImport": undefined,
     "label": "src1_subdir_file1_1",
+  },
+  Object {
+    "absImportPath": "absRoot/src2/file1.js",
+    "description": "src2/file1",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src2_file1_1",
   },
   Object {
     "absImportPath": "absRoot/src3/file1.js",

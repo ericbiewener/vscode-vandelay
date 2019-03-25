@@ -21,7 +21,7 @@ export type ImportPositionMatch = {
   isFirstImport: false;
 };
 export type ImportPositionNoMatch = {
-  match: { start: number; end: number };
+  match: { start: number; end: number } | null;
   indexModifier: 1;
   isFirstImport: true;
 };

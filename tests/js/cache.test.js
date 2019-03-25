@@ -3,10 +3,9 @@ const { commands } = require('vscode')
 const path = require('path')
 const fs = require('fs')
 const sinon = require('sinon')
-const { getPlugin, openFile } = require('../utils')
-require('../setup')
+const { getPlugin, openFile, testSpyCall } = require('../utils')
 
-const cacheTest = async (context, config) => {
+async function cacheTest(context, config) {
   const [plugin] = await Promise.all([getPlugin(), openFile()])
   Object.assign(plugin, config)
   await commands.executeCommand('vandelay.cacheProject')
@@ -14,10 +13,9 @@ const cacheTest = async (context, config) => {
   expect(data).toMatchSnapshot(context)
 }
 
-const testSpyCall = (context, call) =>
-  expect(call.args.map(p => p.replace(TEST_ROOT, 'absRoot'))).toMatchSnapshot(
-    context
-  )
+/**
+ * TESTS
+ */
 
 it('cacheProject', async function() {
   await cacheTest(this)
