@@ -358,7 +358,6 @@ const { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5, sr
   src1_file2_t_2 } = require('../src1/file2')
 const file3 = require('../src1/file3')
 const { src1_subdir_file1_1 } = require('../src1/subdir/file1')
-const { src2_file1_1 } = require('./file1')
 "
 `;
 
