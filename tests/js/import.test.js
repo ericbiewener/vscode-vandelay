@@ -183,6 +183,17 @@ it('import - trailingComma = false', async function() {
   })
 })
 
+it('import - processImportPath', async function() {
+  const processImportPath = sinon.fake(
+    importPath =>
+      importPath.endsWith('file1.js')
+        ? importPath.replace('file', 'FILE')
+        : null
+  )
+  await configInsertTest(this, { processImportPath })
+  testSpyCall(this, processImportPath.getCall(0))
+})
+
 it('import - nonModulePaths', async function() {
   await configInsertTest(
     this,

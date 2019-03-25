@@ -1068,6 +1068,15 @@ import { src1_subdir_file1_1 } from './subdir/FILE1';
 "
 `;
 
+exports[`import - processImportPath 2`] = `
+Array [
+  "../src3/file1.js",
+  "absRoot/src3/file1.js",
+  "absRoot/src1/file1.js",
+  "absRoot",
+]
+`;
+
 exports[`import - shouldIncludeImport 1`] = `
 "import { src2_file1_1 } from '../src2/file1';
 import { src3_file1_1 } from '../src3/file1';

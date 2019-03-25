@@ -6,6 +6,8 @@ const log = require('log-all-the-things')
 const { detailedDiff } = require('deep-object-diff')
 const jestDiff = require('jest-diff')
 
+const DIFF_CHANGED = "DIFF CHANGED"
+
 function parseObj(snapshotData) {
   return JSON.parse(
     snapshotData
@@ -30,11 +32,15 @@ function highlightDiffChange(diff, ...keys) {
     const v = diff[k]
     const keyArray = [...keys, k]
     if (Array.isArray(v)) {
-      if (v.length) log.error(keyArray.join('.'), v)
+      if (v.length) {
+        log.error(DIFF_CHANGED)
+        log.error(keyArray.join('.'), v)
+      }
     } else if (v) {
       if (typeof v === "object") {
         highlightDiffChange(v, ...keyArray)
       } else {
+        log.error(DIFF_CHANGED)
         log.error(keyArray.join('.'), v)
       }
     }
@@ -42,20 +48,31 @@ function highlightDiffChange(diff, ...keys) {
 }
 
 function compareAll(newPath) {
+  const newSnaps = require(newPath)
+  let oldSnaps
+
+  try {
+    oldSnaps = require(`${newPath}.BAK`)
+  } catch (e) {
+    if (e.code === "MODULE_NOT_FOUND") return;
+    throw e
+  }
+
   log.info('------------------------------------------------------------------')
   log.info(`comparing: ${newPath}`)
   log.info('------------------------------------------------------------------')
-  const newSnaps = require(newPath)
-  const oldSnaps = require(`${newPath}.BAK`)
   
   const newKeys = Object.keys(newSnaps)
   const oldKeys = Object.keys(oldSnaps)
   
   // Make sure comparisons have same snapshots
   if (!_.isEqual(newKeys, oldKeys)) {
+    log.error(DIFF_CHANGED)
     log.error('keys do not match')
-    log.error('new', newKeys)
-    log.error('old', newKeys)
+    log.error('MISSING')
+    log(_.difference(oldKeys, newKeys))
+    log.error('NEW')
+    log(_.difference(newKeys, oldKeys))
     return
   }
 
@@ -75,7 +92,7 @@ function compareAll(newPath) {
       if (newSnap === oldSnap) {
         log('output is equal!')
       } else {
-        log.error('output is different')
+        log.error(DIFF_CHANGED)
         log(jestDiff(oldSnap, newSnap))
       }
       continue

@@ -284,6 +284,28 @@ const {src1_subdir_file1_1} = require('./subdir/file1')
 "
 `;
 
+exports[`import - processImportPath 1`] = `
+"const defaultModule1 = require('module1')
+const defaultModule_file2 = require('module1_file2')
+const { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} = require('module2')
+const { src2_file1_1 } = require('../src2/FILE1')
+const { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5, src1_file2_t_1,
+  src1_file2_t_2 } = require('./file2')
+const file3 = require('./file3')
+const { src1_subdir_file1_1 } = require('./subdir/FILE1')
+"
+`;
+
+exports[`import - processImportPath 2`] = `
+Array [
+  "../src2/file1.js",
+  "absRoot/src2/file1.js",
+  "absRoot/src1/file1.js",
+  "absRoot",
+]
+`;
+
 exports[`import - shouldIncludeImport 1`] = `
 "const { src2_file1_1 } = require('../src2/file1')
 const { src1_subdir_file1_1 } = require('./subdir/file1')
