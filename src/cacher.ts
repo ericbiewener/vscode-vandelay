@@ -110,7 +110,7 @@ function onChangeOrCreate(doc: Uri) {
 
   for (const k in exp) exp[k].cached = Date.now();
 
-  cacheFileManager(plugin, cachedData => {
+  return cacheFileManager(plugin, cachedData => {
     // Concatenate & dedupe named/types arrays. Merge them into extraImports since that will in turn get
     // merged back into cachedData
     _.mergeWith(cachedData.exp, exp, (a, b) => {

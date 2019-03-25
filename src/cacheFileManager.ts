@@ -2,8 +2,6 @@ import fs from "fs";
 import { isFile } from "./utils";
 import { ExportData, Plugin, CachingData } from "./types";
 
-let fileAccess: Promise<void>;
-
 function parseCacheFile(plugin: Plugin) {
   return isFile(plugin.cacheFilePath)
     ? JSON.parse(fs.readFileSync(plugin.cacheFilePath, "utf-8"))
@@ -18,14 +16,14 @@ function parseCacheFile(plugin: Plugin) {
  * to the cacheFileManager
  */
 // FIXME: i don't think CachingData is right. It's a nonfinalized version of the data to be cached...
+let fileAccess: Promise<void>;
+
 export function cacheFileManager(
   plugin: Plugin,
   cb: (data: CachingData) => void
 ) {
-  if (fileAccess) {
-    fileAccess = fileAccess.then(() => cb(parseCacheFile(plugin)));
-  } else {
-    fileAccess = Promise.resolve(cb(parseCacheFile(plugin)));
-  }
+  fileAccess = fileAccess
+    ? fileAccess.then(() => cb(parseCacheFile(plugin)))
+    : Promise.resolve(cb(parseCacheFile(plugin)));
   return fileAccess;
 }
