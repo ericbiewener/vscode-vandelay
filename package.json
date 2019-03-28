@@ -2,7 +2,7 @@
   "name": "vandelay",
   "displayName": "Vandelay",
   "description": "Automatically generate import statements for JavaScript and Python.",
-  "version": "1.3.1",
+  "version": "2.0.0",
   "publisher": "edb",
   "author": "Eric Biewener",
   "license": "MIT",
@@ -37,9 +37,9 @@
     "workspaceContains:.vandelay/vandelay-*.js"
   ],
   "engines": {
-    "vscode": "^1.21.0"
+    "vscode": "^1.31.0"
   },
-  "main": "./src/index.js",
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -85,28 +85,62 @@
     }
   },
   "scripts": {
+    "vscode:prepublish": "yarn run build",
+    "start": "NODE_ENV=development ./node_modules/.bin/webpack --config webpack.config.ts -w",
+    "build": "NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.ts",
+    "test": "yarn run compile && node ./node_modules/vscode/bin/test",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "prettier": "prettier-eslint --prettier-last --write \"**/*.js\"",
+    "prettier": "prettier-eslint --prettier-last --write \"**/*.ts\"",
+    "prettierr": "prettier-eslint --prettier-last --write",
     "package": "vsce package --yarn",
-    "ext": "rm -rf ~/.vscode/extensions/edb.vandelay-[0-9]* && rm -f *.vsix && yarn run package && code --install-extension *.vsix"
+    "ext": "rm -rf ~/.vscode/extensions/edb.vandelay-[0-9]* && rm -f *.vsix && yarn run package && code --install-extension *.vsix",
+    "compare": "node compareSnapshotStructures"
   },
   "devDependencies": {
-    "eslint": "5.13.0",
-    "eslint-config-ericbiewener": "2.0.3",
+    "@babel/core": "7.4.0",
+    "@babel/plugin-proposal-class-properties": "7.4.0",
+    "@babel/plugin-proposal-object-rest-spread": "7.4.0",
+    "@babel/preset-typescript": "7.3.3",
+    "@types/anymatch": "1.3.1",
+    "@types/fs-extra": "5.0.5",
+    "@types/lodash": "4.14.123",
+    "@types/mocha": "5.2.6",
+    "@types/node": "11.11.7",
+    "@types/opn": "5.1.0",
+    "@types/webpack": "4.4.26",
+    "@typescript-eslint/eslint-plugin": "1.5.0",
+    "@typescript-eslint/parser": "1.5.0",
+    "babel-loader": "8.0.5",
+    "babel-plugin-lodash": "3.3.4",
+    "chalk": "2.4.2",
+    "deep-object-diff": "1.1.0",
+    "eslint": "5.15.3",
+    "eslint-config-ericbiewener-typescript": "3.2.0",
+    "expect": "24.5.0",
     "husky": "1.3.1",
-    "lint-staged": "8.1.3",
-    "prettier-eslint-cli": "^4.7.1",
-    "vscode": "1.1.28"
+    "jest-diff": "24.5.0",
+    "jest-snapshot": "24.5.0",
+    "lint-staged": "8.1.5",
+    "log-all-the-things": "1.5.0",
+    "prettier-eslint-cli": "4.7.1",
+    "sinon": "7.3.0",
+    "ts-node": "8.0.3",
+    "typescript": "3.3.4000",
+    "utlz": "1.0.0",
+    "vscode": "1.1.33",
+    "webpack": "4.29.6",
+    "webpack-cli": "3.3.0"
   },
   "dependencies": {
-    "anymatch": "^2.0.0",
+    "@types/make-dir": "2.1.0",
+    "anymatch": "2.0.0",
     "fs-extra": "7.0.1",
-    "lodash": "^4.17.5",
-    "make-dir": "2.0.0",
-    "opn": "^5.4.0"
+    "lodash": "4.17.11",
+    "make-dir": "2.1.0",
+    "opn": "5.5.0"
   },
   "lint-staged": {
-    "**/*.js": [
+    "**/*.ts": [
       "prettier-eslint --prettier-last --write",
       "git add"
     ]

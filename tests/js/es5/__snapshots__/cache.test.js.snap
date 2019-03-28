@@ -1,0 +1,585 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Cache Tests | cacheProject - excludePatterns = [src2] 1`] = `
+Object {
+  "exp": Object {
+    "src1/file1.js": Object {
+      "named": Array [
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+        "src1_file1_other1",
+        "src1_file1_other2",
+        "src1_file1_t_1",
+        "src1_file1_t_2",
+      ],
+      "types": Array [],
+    },
+    "src1/file2.js": Object {
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_3",
+        "src1_file2_4",
+        "src1_file2_5",
+        "src1_file2_t_1",
+        "src1_file2_t_2",
+      ],
+      "types": Array [],
+    },
+    "src1/file3.js": Object {
+      "default": "file3",
+      "named": Array [],
+      "types": Array [],
+    },
+    "src1/subdir/file1.js": Object {
+      "named": Array [
+        "src1_subdir_file1_1",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
+    "module1": Object {
+      "default": "defaultModule1",
+      "isExtraImport": true,
+    },
+    "module1_file2": Object {
+      "default": "defaultModule_file2",
+      "isExtraImport": true,
+    },
+    "module2": Object {
+      "isExtraImport": true,
+      "named": Array [
+        "module2_1",
+        "module2_2 as module2_2_renamed",
+        "module2_3",
+      ],
+      "types": Array [
+        "module2_t_1",
+      ],
+    },
+  },
+}
+`;
+
+exports[`Cache Tests | cacheProject - includePaths = [src2] 1`] = `
+Object {
+  "exp": Object {
+    "src2/file1.js": Object {
+      "named": Array [
+        "src2_file1_1",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
+    "module2": Object {
+      "isExtraImport": true,
+      "named": Array [
+        "module2_src2_1",
+      ],
+    },
+  },
+}
+`;
+
+exports[`Cache Tests | cacheProject - processDefaultName 1`] = `
+Object {
+  "exp": Object {
+    "src1/file1.js": Object {
+      "named": Array [
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+        "src1_file1_other1",
+        "src1_file1_other2",
+        "src1_file1_t_1",
+        "src1_file1_t_2",
+      ],
+      "types": Array [],
+    },
+    "src1/file2.js": Object {
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_3",
+        "src1_file2_4",
+        "src1_file2_5",
+        "src1_file2_t_1",
+        "src1_file2_t_2",
+      ],
+      "types": Array [],
+    },
+    "src1/file3.js": Object {
+      "default": "DEFAULT",
+      "named": Array [],
+      "types": Array [],
+    },
+    "src1/subdir/file1.js": Object {
+      "named": Array [
+        "src1_subdir_file1_1",
+      ],
+      "types": Array [],
+    },
+    "src2/file1.js": Object {
+      "named": Array [
+        "src2_file1_1",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
+    "module1": Object {
+      "default": "defaultModule1",
+      "isExtraImport": true,
+    },
+    "module1_file2": Object {
+      "default": "defaultModule_file2",
+      "isExtraImport": true,
+    },
+    "module2": Object {
+      "isExtraImport": true,
+      "named": Array [
+        "module2_1",
+        "module2_2 as module2_2_renamed",
+        "module2_3",
+        "module2_src2_1",
+      ],
+      "types": Array [
+        "module2_t_1",
+      ],
+    },
+  },
+}
+`;
+
+exports[`Cache Tests | cacheProject - processDefaultName 2`] = `
+Array [
+  "absRoot/src1/file3.js",
+]
+`;
+
+exports[`Cache Tests | cacheProject 1`] = `
+Object {
+  "exp": Object {
+    "src1/file1.js": Object {
+      "named": Array [
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+        "src1_file1_other1",
+        "src1_file1_other2",
+        "src1_file1_t_1",
+        "src1_file1_t_2",
+      ],
+      "types": Array [],
+    },
+    "src1/file2.js": Object {
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_3",
+        "src1_file2_4",
+        "src1_file2_5",
+        "src1_file2_t_1",
+        "src1_file2_t_2",
+      ],
+      "types": Array [],
+    },
+    "src1/file3.js": Object {
+      "default": "file3",
+      "named": Array [],
+      "types": Array [],
+    },
+    "src1/subdir/file1.js": Object {
+      "named": Array [
+        "src1_subdir_file1_1",
+      ],
+      "types": Array [],
+    },
+    "src2/file1.js": Object {
+      "named": Array [
+        "src2_file1_1",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
+    "module1": Object {
+      "default": "defaultModule1",
+      "isExtraImport": true,
+    },
+    "module1_file2": Object {
+      "default": "defaultModule_file2",
+      "isExtraImport": true,
+    },
+    "module2": Object {
+      "isExtraImport": true,
+      "named": Array [
+        "module2_1",
+        "module2_2 as module2_2_renamed",
+        "module2_3",
+        "module2_src2_1",
+      ],
+      "types": Array [
+        "module2_t_1",
+      ],
+    },
+  },
+}
+`;
+
+exports[`Cache Tests | import - nonModulePaths 1`] = `
+Object {
+  "exp": Object {
+    "src1/file1.js": Object {
+      "named": Array [
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+        "src1_file1_other1",
+        "src1_file1_other2",
+        "src1_file1_t_1",
+        "src1_file1_t_2",
+      ],
+      "types": Array [],
+    },
+    "src1/file2.js": Object {
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_3",
+        "src1_file2_4",
+        "src1_file2_5",
+        "src1_file2_t_1",
+        "src1_file2_t_2",
+      ],
+      "types": Array [],
+    },
+    "src1/file3.js": Object {
+      "default": "file3",
+      "named": Array [],
+      "types": Array [],
+    },
+    "src1/subdir/file1.js": Object {
+      "named": Array [
+        "src1_subdir_file1_1",
+      ],
+      "types": Array [],
+    },
+    "src2/file1.js": Object {
+      "named": Array [
+        "src2_file1_1",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
+    "module1_file2": Object {
+      "default": "defaultModule_file2",
+      "isExtraImport": true,
+    },
+  },
+}
+`;
+
+exports[`cacheProject - excludePatterns = [src2] 1`] = `
+Object {
+  "exp": Object {
+    "src1/file1.js": Object {
+      "named": Array [
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+        "src1_file1_t_1",
+        "src1_file1_t_2",
+        "src1_file1_other1",
+        "src1_file1_other2",
+      ],
+      "types": Array [],
+    },
+    "src1/file2.js": Object {
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_3",
+        "src1_file2_4",
+        "src1_file2_5",
+        "src1_file2_t_1",
+        "src1_file2_t_2",
+      ],
+      "types": Array [],
+    },
+    "src1/file3.js": Object {
+      "default": "file3",
+      "named": Array [],
+      "types": Array [],
+    },
+    "src1/subdir/file1.js": Object {
+      "named": Array [
+        "src1_subdir_file1_1",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
+    "module1": Object {
+      "default": "defaultModule1",
+      "isExtraImport": true,
+    },
+    "module1_file2": Object {
+      "default": "defaultModule_file2",
+      "isExtraImport": true,
+    },
+    "module2": Object {
+      "isExtraImport": true,
+      "named": Array [
+        "module2_1",
+        "module2_2 as module2_2_renamed",
+        "module2_3",
+      ],
+      "types": Array [
+        "module2_t_1",
+      ],
+    },
+  },
+}
+`;
+
+exports[`cacheProject - includePaths = [src2] 1`] = `
+Object {
+  "exp": Object {
+    "src2/file1.js": Object {
+      "named": Array [
+        "src2_file1_1",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
+    "module2": Object {
+      "isExtraImport": true,
+      "named": Array [
+        "module2_src2_1",
+      ],
+    },
+  },
+}
+`;
+
+exports[`cacheProject - processDefaultName 1`] = `
+Object {
+  "exp": Object {
+    "src1/file1.js": Object {
+      "named": Array [
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+        "src1_file1_t_1",
+        "src1_file1_t_2",
+        "src1_file1_other1",
+        "src1_file1_other2",
+      ],
+      "types": Array [],
+    },
+    "src1/file2.js": Object {
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_3",
+        "src1_file2_4",
+        "src1_file2_5",
+        "src1_file2_t_1",
+        "src1_file2_t_2",
+      ],
+      "types": Array [],
+    },
+    "src1/file3.js": Object {
+      "default": "DEFAULT",
+      "named": Array [],
+      "types": Array [],
+    },
+    "src1/subdir/file1.js": Object {
+      "named": Array [
+        "src1_subdir_file1_1",
+      ],
+      "types": Array [],
+    },
+    "src2/file1.js": Object {
+      "named": Array [
+        "src2_file1_1",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
+    "module1": Object {
+      "default": "defaultModule1",
+      "isExtraImport": true,
+    },
+    "module1_file2": Object {
+      "default": "defaultModule_file2",
+      "isExtraImport": true,
+    },
+    "module2": Object {
+      "isExtraImport": true,
+      "named": Array [
+        "module2_1",
+        "module2_2 as module2_2_renamed",
+        "module2_3",
+        "module2_src2_1",
+      ],
+      "types": Array [
+        "module2_t_1",
+      ],
+    },
+  },
+}
+`;
+
+exports[`cacheProject - processDefaultName 2`] = `
+Array [
+  "absRoot/src1/file3.js",
+]
+`;
+
+exports[`cacheProject 1`] = `
+Object {
+  "exp": Object {
+    "src1/file1.js": Object {
+      "named": Array [
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+        "src1_file1_t_1",
+        "src1_file1_t_2",
+        "src1_file1_other1",
+        "src1_file1_other2",
+      ],
+      "types": Array [],
+    },
+    "src1/file2.js": Object {
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_3",
+        "src1_file2_4",
+        "src1_file2_5",
+        "src1_file2_t_1",
+        "src1_file2_t_2",
+      ],
+      "types": Array [],
+    },
+    "src1/file3.js": Object {
+      "default": "file3",
+      "named": Array [],
+      "types": Array [],
+    },
+    "src1/subdir/file1.js": Object {
+      "named": Array [
+        "src1_subdir_file1_1",
+      ],
+      "types": Array [],
+    },
+    "src2/file1.js": Object {
+      "named": Array [
+        "src2_file1_1",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
+    "module1": Object {
+      "default": "defaultModule1",
+      "isExtraImport": true,
+    },
+    "module1_file2": Object {
+      "default": "defaultModule_file2",
+      "isExtraImport": true,
+    },
+    "module2": Object {
+      "isExtraImport": true,
+      "named": Array [
+        "module2_1",
+        "module2_2 as module2_2_renamed",
+        "module2_3",
+        "module2_src2_1",
+      ],
+      "types": Array [
+        "module2_t_1",
+      ],
+    },
+  },
+}
+`;
+
+exports[`import - nonModulePaths 1`] = `
+Object {
+  "exp": Object {
+    "src1/file1.js": Object {
+      "named": Array [
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+        "src1_file1_t_1",
+        "src1_file1_t_2",
+        "src1_file1_other1",
+        "src1_file1_other2",
+      ],
+      "types": Array [],
+    },
+    "src1/file2.js": Object {
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_3",
+        "src1_file2_4",
+        "src1_file2_5",
+        "src1_file2_t_1",
+        "src1_file2_t_2",
+      ],
+      "types": Array [],
+    },
+    "src1/file3.js": Object {
+      "default": "file3",
+      "named": Array [],
+      "types": Array [],
+    },
+    "src1/subdir/file1.js": Object {
+      "named": Array [
+        "src1_subdir_file1_1",
+      ],
+      "types": Array [],
+    },
+    "src2/file1.js": Object {
+      "named": Array [
+        "src2_file1_1",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
+    "module1_file2": Object {
+      "default": "defaultModule_file2",
+      "isExtraImport": true,
+    },
+  },
+}
+`;
