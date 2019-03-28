@@ -1,3 +1,7 @@
+### Version 2.0
+- Made JavaScript & Python plugins part of core Vandelay extension, so no longer any need to install
+  those plugins separately.
+
 ### Version 1.3.1
 - Fix for windows
 - Downgrade event-stream because of security vulnerability
