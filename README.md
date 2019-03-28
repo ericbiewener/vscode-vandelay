@@ -257,7 +257,7 @@ Defaults to `false`. If your project uses ES5 module syntax (i.e. `require`) you
 true. Only `module.exports = { foo, bar }` and `module.exports = defaultExport` syntax is supported.
 
 ## Multi-Root Workspace
-You must add a `.vandelay` directory to your workspace that contains a file named `vandelay-js.js`.
+You must add a `.vandelay` directory to your workspace that contains a file named `vandelay-<js|py>.js`.
 Along with the above configuration options, you must also provide a `projectRoot` string that
 specifies the absolute path to the directory that should be considered the overall root of your
 project. This will be used for determining relative paths (these paths may always be adjusted via
