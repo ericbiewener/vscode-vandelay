@@ -178,17 +178,6 @@ processImportPath: importPath => (
 )
 ```
 
-### `processDefaultName: filepath => ?string` (JS only)
-Default exports will be tracked using the file name (i.e. a default export in `myFile.js` will be
-named `myFile`). Implement this setting to modify this behavior on a file-by-file basis. By
-returning a falsey value, the default filename-based naming will still be used.
-
-* `filepath`: is the absolute path to the file on your computer.
-
-```js
-processDefaultName: filepath => filepath === "/Users/eric/my-project/src/foo/bar.js" ? "greatName" : null
-```
-
 ### `shouldIncludeImport: (absImportPath: string, activeFilepath: string) => boolean`
 May be used to exclude certain imports from the list of options.
 
@@ -199,6 +188,19 @@ May be used to exclude certain imports from the list of options.
 shouldIncludeImport: (absImportPath, activeFilepath) => (
   absImportPath.includes('__mocks__') && !activeFilepath.endsWith('.test.js')
 )
+```
+
+## JavaScript Only Options
+
+### `processDefaultName: filepath => ?string` (JS only)
+Default exports will be tracked using the file name (i.e. a default export in `myFile.js` will be
+named `myFile`). Implement this setting to modify this behavior on a file-by-file basis. By
+returning a falsey value, the default filename-based naming will still be used.
+
+* `filepath`: is the absolute path to the file on your computer.
+
+```js
+processDefaultName: filepath => filepath === "/Users/eric/my-project/src/foo/bar.js" ? "greatName" : null
 ```
   
 ### `padCurlyBraces: boolean` (JS only)
