@@ -18,7 +18,7 @@
 - [Quick Start](#quick-start)
 - [Flow & Typescript Support](#flow--typescript-support)
 - [Commands](#commands)
-- [Importing external and environment packages](importing-external-and-environment-packages)
+- [Importing external and environment packages](#importing-external-and-environment-packages)
 - [How to Use](#how-to-use)
 - [Configuration](#configuration)
 - [Multi-Root Workspace](#multi-root-workspace)
@@ -45,7 +45,7 @@ The following commands are available from the Command Palette. Feel free to set 
 ### Cache Project Exports
 Caches all project exports in all languages that have a Vandelay configuration file (see 
 [How to Use](#how-to-use)). Vandelay will automatically run this command the first time it
-initializes for a given project, and the plugin will watch for file changes (including branch
+initializes for a given project, and the plugin will watch for file changes (including git branch
 switching, file deletion, etc) in order to update its cache of available imports. But you may need
 to manually run this command if files are changed while VS Code is not running.
 
@@ -60,7 +60,10 @@ active word are found, you'll be asked to choose.
 Vandelay will attempt to find imports for all undefined variables reported by the linter for the
 active file. Like the "Import active word" command, if only a single possible import is found for a
 given variable, it will automatically be imported. Otherwise, you will need to choose the correct
-one. JavaScript requires the [ESLint](https://github.com/Microsoft/vscode-eslint) extension to be installed for this to work, while Python currently supports [flake8](https://code.visualstudio.com/docs/python/linting#_flake8). If you want unused Flow types to be removed, the [Flow](https://github.com/flowtype/flow-for-vscode) extension must be installed.
+one. JavaScript requires the [ESLint](https://github.com/Microsoft/vscode-eslint) extension to be
+installed for this to work, while Python currently supports
+[flake8](https://code.visualstudio.com/docs/python/linting#_flake8). If you want undefined Flow types imported, the
+[Flow](https://github.com/flowtype/flow-for-vscode) extension must be installed.
 
 ### Remove Unused Imports
 Vandelay will remove all unused imports reported by the linter. This command requires the linters mentioned above in _Import undefined variables_.
