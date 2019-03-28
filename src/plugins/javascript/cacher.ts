@@ -139,6 +139,8 @@ export function cacheFile(
     if (existing && existing.default && !fileExports.default) {
       fileExports.default = existing.default;
     }
+    if (fileExports.named) fileExports.named.sort();
+    if (fileExports.types) fileExports.types.sort();
     exp[pathKey] = fileExports;
   }
 

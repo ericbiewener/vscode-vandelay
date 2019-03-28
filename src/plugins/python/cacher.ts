@@ -24,7 +24,7 @@ export function cacheFile(
         existing.importEntirePackage = true;
       }
     }
-    // If there are imports, than they'll get added to the cache when that file gets cached. For
+    // If there are imports then they'll get added to the cache when that file gets cached. For
     // now, we only need to worry about whether then entire file is being imported
     else if (!importData.imports) {
       exp[importData.path] = { importEntirePackage: true };
@@ -51,8 +51,11 @@ export function cacheFile(
     }
   }
 
-  // This order of class, function, constant will be maintained when picking an import from the list
-  const fileExports = [...classes, ...functions, ...constants];
+  const fileExports = [
+    ...classes.sort(),
+    ...functions.sort(),
+    ...constants.sort()
+  ];
   if (fileExports.length)
     exp[getFilepathKey(plugin, filepath)] = { exports: fileExports };
 

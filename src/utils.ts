@@ -163,6 +163,12 @@ export function sortUnusedImportChanges(changes: Change[]) {
   changes.sort((a, b) => (a.match.start < b.match.start ? 1 : -1));
 }
 
+export function mergeObjectsWithArrays(obj1: {}, obj2: {}) {
+  return _.mergeWith(obj1, obj2, (obj, src) => {
+    if (Array.isArray(obj)) return _.union(obj, src);
+  });
+}
+
 // _.last always makes TS think the value could be undefeind
 export function last(arr: any[]) {
   return arr[arr.length - 1];

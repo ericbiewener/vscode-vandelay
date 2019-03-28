@@ -67,17 +67,17 @@ function compareAll(newPath) {
   
   // Make sure comparisons have same snapshots
   if (!_.isEqual(newKeys, oldKeys)) {
-    log.error(DIFF_CHANGED)
-    log.error('keys do not match')
-    log.error('MISSING')
+    log.e(DIFF_CHANGED)
+    log.e('keys do not match')
+    log.e('MISSING')
     log(_.difference(oldKeys, newKeys))
-    log.error('NEW')
+    log.e('NEW')
     log(_.difference(newKeys, oldKeys))
     return
   }
 
   for (const key in newSnaps) {
-    log.success(`snapshot: ${key}`)
+    log.s(`snapshot: ${key}`)
 
     const newSnap = newSnaps[key]
     const oldSnap = oldSnaps[key]
@@ -92,19 +92,32 @@ function compareAll(newPath) {
       if (newSnap === oldSnap) {
         log('output is equal!')
       } else {
-        log.error(DIFF_CHANGED)
+        log.e(DIFF_CHANGED)
         log(jestDiff(oldSnap, newSnap))
       }
       continue
     }
 
     if (Array.isArray(newObj)) { // buildImports tests
-      newObj = newObj.map(o => JSON.stringify(o)).sort()
-      oldObj = oldObj.map(o => JSON.stringify(o)).sort()
-    } else { // cached data tests
-      oldObj = transformBak(oldObj)
+      newObj = newObj.map(o => JSON.stringify(o, null, 2)).sort()
+      oldObj = oldObj.map(o => JSON.stringify(o, null, 2)).sort()
+      if (_.isEqual(oldObj, newObj)) continue
+      const missingFromOld = _.difference(oldObj, newObj)
+      const missingFromNew = _.difference(newObj, oldObj)
+      log.e(DIFF_CHANGED)
+      if (missingFromOld.length) {
+        log('Missing from Old')
+        log.s(missingFromOld)()
+      }
+      if (missingFromNew.length) {
+        log('Missing from New')
+        log.s(missingFromNew)()
+      }
+      continue
     }
 
+    // cached data tests
+    oldObj = transformBak(oldObj)
     const diff = detailedDiff(oldObj, newObj)
     log(diff)
     highlightDiffChange(diff)

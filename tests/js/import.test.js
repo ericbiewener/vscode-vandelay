@@ -1,89 +1,24 @@
 const _ = require('lodash')
 const { window, commands, Range } = require('vscode')
 const path = require('path')
-const expect = require('expect')
+const { importTests } = require('../shared-tests')
 const {
   getPlugin,
   openFile,
   testSpyCall,
   buildImportItems,
   saveFile,
+  insertTest,
+  configInsertTest,
 } = require('../utils')
 
 function basenameNoExt(filepath) {
   return path.basename(filepath, path.extname(filepath));
 }
 
-function replaceFileContents(newText = '') {
-  const editor = window.activeTextEditor
-  return editor.edit(builder => {
-    builder.replace(
-      editor.document.validateRange(new Range(0, 0, 9999999999, 0)),
-      newText
-    )
-  })
-}
+describe("Import Tests", function() {
 
-// TODO: ditch all top-level arraow functions. use normal function
-
-async function insertItems(plugin, importItems) {
-  for (const item of importItems) {
-    window.showQuickPick.callsFake(() => Promise.resolve(item))
-    await commands.executeCommand("vandelay.selectImport");
-  }
-  
-  return window.activeTextEditor.document.getText()
-}
-
-async function insertTest(context, startingText, filepath) {
-  context.timeout(1000 * 30)
-  const open = () => (filepath ? openFile(filepath) : openFile())
-
-  const [plugin] = await Promise.all([getPlugin(), open()])
-  await replaceFileContents(startingText)
-  
-  let importItems = await buildImportItems()
-
-  const originalResult = await insertItems(plugin, importItems)
-  expect(originalResult).toMatchSnapshot(context, 'original order')
-
-  if (process.env.FULL_INSERT_TEST) {
-    for (let i = 0; i < 5; i++) {
-      await replaceFileContents(startingText)
-      importItems = _.shuffle(importItems)
-      const newResult = await insertItems(plugin, importItems)
-      if (newResult !== originalResult) {
-        console.log(`\n\n${JSON.stringify(importItems)}\n\n`)
-      }
-      expect(newResult).toBe(originalResult)
-    }
-  }
-}
-
-async function configInsertTest(context, config, reCache) {
-  context.timeout(1000 * 30)
-  if (reCache) await commands.executeCommand('vandelay.cacheProject')
-  const [plugin] = await Promise.all([getPlugin(), openFile()])
-  await replaceFileContents()
-  Object.assign(plugin, config)
-  const importItems = await buildImportItems()
-  const result = await insertItems(plugin, importItems)
-  expect(result).toMatchSnapshot(context)
-}
-
-describe.only("Import Tests", function() {
-
-  it.only('buildImportItems', async function() {
-    await openFile()
-    // await saveFile()
-    const items = await buildImportItems()
-    for (const i of items) i.absImportPath = i.absImportPath.replace(TEST_ROOT, 'absRoot')
-    expect(items).toMatchSnapshot(this)
-  })
-
-  it('import - empty', async function() {
-    await insertTest(this)
-  })
+  importTests()
 
   it('import - has code', async function() {
     await insertTest(

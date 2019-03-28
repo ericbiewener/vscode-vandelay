@@ -58,7 +58,6 @@ const insertItems = async (plugin, importItems) => {
 }
 
 const insertTest = async (context, startingText, filepath) => {
-  context.timeout(1000 * 60)
   const open = () => (filepath ? openFile(filepath) : openFile())
 
   const [plugin] = await Promise.all([getPlugin(), open()])

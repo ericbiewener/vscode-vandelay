@@ -20,7 +20,7 @@ beforeEach(async () => {
 })
 
 afterEach(async () => {
-  window.showQuickPick.resetHistory()
+  window.showQuickPick.reset()
 
   const plugin = await getPlugin()
   Object.assign(plugin, clone)

@@ -18,7 +18,7 @@ global.expect = require('expect')
 testRunner.configure({
   ui: 'bdd',
   useColors: true,
-  timeout: 5000,
+  timeout: 1000 * 30,
 })
 
 global.lang = 'js'

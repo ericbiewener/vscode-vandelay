@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { sleep } = require('utlz')
-const { window, workspace, extensions, Uri, commands } = require('vscode')
+const { window, Range, workspace, extensions, Uri, commands } = require('vscode')
 
 async function getPlugin() {
   const api = await extensions.getExtension('edb.vandelay').activate()
@@ -43,10 +43,63 @@ async function buildImportItems() {
   return items
 }
 
-async function saveFile() {
-  await openFile('src1/file6.js')
+async function saveFile(filepath) {
+  await openFile(filepath)
   await commands.executeCommand('workbench.action.files.save')
   return await sleep(1000) // Previous command file watcher won't have completed yet
+}
+
+function replaceFileContents(newText = '') {
+  const editor = window.activeTextEditor
+  return editor.edit(builder => {
+    builder.replace(
+      editor.document.validateRange(new Range(0, 0, 9999999999, 0)),
+      newText
+    )
+  })
+}
+
+async function insertItems(plugin, importItems) {
+  for (const item of importItems) {
+    window.showQuickPick.callsFake(() => Promise.resolve(item))
+    await commands.executeCommand("vandelay.selectImport");
+  }
+  
+  return window.activeTextEditor.document.getText()
+}
+
+async function insertTest(context, startingText, filepath) {
+  const open = () => (filepath ? openFile(filepath) : openFile())
+
+  const [plugin] = await Promise.all([getPlugin(), open()])
+  await replaceFileContents(startingText)
+  
+  let importItems = await buildImportItems()
+
+  const originalResult = await insertItems(plugin, importItems)
+  expect(originalResult).toMatchSnapshot(context, 'original order')
+
+  if (process.env.FULL_INSERT_TEST) {
+    for (let i = 0; i < 5; i++) {
+      await replaceFileContents(startingText)
+      importItems = _.shuffle(importItems)
+      const newResult = await insertItems(plugin, importItems)
+      if (newResult !== originalResult) {
+        console.log(`\n\n${JSON.stringify(importItems)}\n\n`)
+      }
+      expect(newResult).toBe(originalResult)
+    }
+  }
+}
+
+async function configInsertTest(context, config, reCache) {
+  if (reCache) await commands.executeCommand('vandelay.cacheProject')
+  const [plugin] = await Promise.all([getPlugin(), openFile()])
+  await replaceFileContents()
+  Object.assign(plugin, config)
+  const importItems = await buildImportItems()
+  const result = await insertItems(plugin, importItems)
+  expect(result).toMatchSnapshot(context)
 }
 
 module.exports = {
@@ -57,4 +110,6 @@ module.exports = {
   cacheTest,
   buildImportItems,
   saveFile,
+  insertTest,
+  configInsertTest,
 }

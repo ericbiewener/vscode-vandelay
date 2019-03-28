@@ -1,16 +1,9 @@
+const { importTests } = require('../shared-tests')
+const { insertTest, configInsertTest } = require('../utils')
+
 describe("Import Tests", function() {
 
-  it('buildImportItems', async function() {
-    const [plugin] = await Promise.all([getPlugin(), openFile()])
-    const data = getExportData(plugin)
-    data['src2/file1.py'].cached = Date.now()
-    const items = plugin._test.getImportItems(plugin, data, buildImportItems)
-    expect(items).toMatchSnapshot(this)
-  })
-
-  it('import - empty', async function() {
-    await insertTest(this)
-  })
+  importTests()
 
   it('import - has code', async function() {
     await insertTest(
@@ -61,7 +54,7 @@ def foo():
   })
 
   it('import - src1/subdir/file1.js', async function() {
-    await insertTest(this, '', path.join(testRoot, 'src1/subdir/file1.py'))
+    await insertTest(this, '', 'src1/subdir/file1.py')
   })
 
   it('import - importGroups', async function() {

@@ -3,7 +3,12 @@ import path from "path";
 import fs from "fs-extra";
 import _ from "lodash";
 import anymatch from "anymatch";
-import { writeCacheFile, getLangFromFilePath, getFilepathKey } from "./utils";
+import {
+  writeCacheFile,
+  getLangFromFilePath,
+  getFilepathKey,
+  mergeObjectsWithArrays
+} from "./utils";
 import { cacheFileManager } from "./cacheFileManager";
 import { PLUGINS } from "./plugins";
 import { Plugin, CachingData } from "./types";
@@ -62,10 +67,7 @@ export async function cacheProjectLanguage(plugin: Plugin) {
     for (const { exp, imp } of cachedDirTrees) {
       Object.assign(finalData.exp, exp);
       // Merge extra import arrays
-      _.mergeWith(finalData.imp, imp, (obj, src) => {
-        if (!Array.isArray(obj)) return;
-        return _.uniq(obj.concat(src));
-      });
+      mergeObjectsWithArrays(finalData.imp, imp);
     }
     return finalData;
   });
@@ -113,10 +115,8 @@ function onChangeOrCreate(doc: Uri) {
   return cacheFileManager(plugin, cachedData => {
     // Concatenate & dedupe named/types arrays. Merge them into extraImports since that will in turn get
     // merged back into cachedData
-    _.mergeWith(cachedData.exp, exp, (a, b) => {
-      if (_.isArray(a)) return _.union(b, a);
-    });
-    Object.assign(cachedData.imp, imp);
+    mergeObjectsWithArrays(cachedData.imp, imp);
+    Object.assign(cachedData.exp, exp);
 
     return writeCacheFile(plugin, cachedData);
   });

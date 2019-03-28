@@ -53,6 +53,7 @@ export function buildImportItems(
 
     if (!data.exports) continue;
 
+    // Don't sort data.exports because they were already sorted when caching. See python `cacheFile`
     for (const exportName of data.exports) {
       items.push({
         label: exportName,
