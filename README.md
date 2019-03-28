@@ -194,7 +194,7 @@ shouldIncludeImport: (absImportPath, activeFilepath) => (
 
 ### `processDefaultName: filepath => ?string` (JS only)
 Default exports will be tracked using the file name (i.e. a default export in `myFile.js` will be
-named `myFile`). Implement this setting to modify this behavior on a file-by-file basis. By
+named `myFile`). This setting lets you modify this behavior on a file-by-file basis. By
 returning a falsey value, the default filename-based naming will still be used.
 
 * `filepath`: is the absolute path to the file on your computer.
