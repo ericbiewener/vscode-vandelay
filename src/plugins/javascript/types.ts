@@ -83,6 +83,7 @@ export type PluginConfigJs = PluginConfig & {
 };
 
 export type UserConfigJs = UserConfig & {
+  processDefaultName?(path: string): string | undefined;
   useES5?: boolean;
   preferTypeOutside?: boolean;
   padCurlyBraces?: boolean;

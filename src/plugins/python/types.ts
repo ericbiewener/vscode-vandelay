@@ -48,12 +48,10 @@ export type CachingDataPy = {
 
 export type PluginConfigPy = PluginConfig & {
   language: "py";
-  multilineImportParentheses: boolean;
 };
 
 export type UserConfigPy = UserConfig & {
   importGroups?: string[][];
-  multilineImportParentheses?: boolean;
 };
 
 export type PluginPy = DefaultPluginConfig &

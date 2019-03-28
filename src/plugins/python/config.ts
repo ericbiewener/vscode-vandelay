@@ -15,6 +15,5 @@ export const config: PluginConfigPy = {
   buildImportItems,
   insertImport,
   removeUnusedImports,
-  shouldIncludeDisgnostic,
-  multilineImportParentheses: true
+  shouldIncludeDisgnostic
 };

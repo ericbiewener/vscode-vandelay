@@ -4,8 +4,6 @@ import { PluginPy, MergedExportDataPy } from "../types";
 import { removeExt } from "../../../utils";
 import { RichQuickPickItem } from "../../../types";
 
-// FIXME: add quick start to readme -- just create vandelay-*.js in root, and includePaths, and done!
-
 export function buildImportItems(
   plugin: PluginPy,
   exportData: MergedExportDataPy,

@@ -54,7 +54,6 @@ export type UserConfig = {
     activeFilepath: string,
     projectRoot: string
   ): string | undefined;
-  processDefaultName?(path: string): string | undefined;
   excludePatterns?: ExcludePatterns;
   shouldIncludeImport?(absImportPath: string, activeFilepath: string): boolean;
 };
