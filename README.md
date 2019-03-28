@@ -149,8 +149,8 @@ Defaults to 100. Used to determine when to wrap import statements onto multiple 
 ### `processImportPath: (importPath: string, absImportPath: string, activeFilepath: string, projectRoot: string) => ?string`
 When inserting a new import, this setting allows you to modify the import path that gets written to
 the file. Useful if you have your build tool configured in a way that allows it to process
-non-relative paths (for example, all your imports are relative to the project root). Returning a
-falsey value will all the standard relative path to be used.
+non-relative paths (for example, all your imports are written relative to the project root). Returning a
+falsey value will cause the standard relative path to be used.
 
 * `importPath`:
 	* **JavaScript:** relative import path that will be written if you don't return a value.
