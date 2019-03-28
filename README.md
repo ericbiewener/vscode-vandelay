@@ -31,10 +31,10 @@
 Importing code is annoying and the current VS Code tooling around it isn't good enough.
 This plugin keeps track of all available imports and allows you to quickly import them following
 whatever style guide your project requires for how import statements get written (see
-[Configuration](#configuration-vandelay-jsjs)). Multi-root workspaces are supported ([documentation](#multi-root-workspace)).
+[Configuration](#configuration)). Multi-root workspaces are supported ([documentation](#multi-root-workspace)).
 
 ## Quick Start
-See [Configuration](#configuration).
+See [How to Use](#how-to-use).
 
 ## Flow & Typescript Support
 Flow types are supported, but Typescript isn't yet. A PR would be welcome :)
