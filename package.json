@@ -94,7 +94,8 @@
     "prettierr": "prettier-eslint --prettier-last --write",
     "package": "vsce package --yarn",
     "ext": "rm -rf ~/.vscode/extensions/edb.vandelay-[0-9]* && rm -f *.vsix && yarn run package && code --install-extension *.vsix",
-    "compare": "node compareSnapshotStructures"
+    "compare": "node compareSnapshotStructures",
+    "vsce": "vsce publish --yarn"
   },
   "devDependencies": {
     "@babel/core": "7.4.0",
