@@ -4,6 +4,7 @@ artwork
 src
 test-workspaces
 tests
+.babelrc
 .eslintrc.json
 .gitignore
 compareSnapshotStructures

@@ -2,11 +2,8 @@
 	"compilerOptions": {
 		"module": "esnext",
 		"moduleResolution": "node",
-		"target": "es6",
+		"target": "esnext",
 		"outDir": "dist",
-		"lib": [
-			"es6",
-		],
 		"sourceMap": true,
 		"strict": true,
 		"allowSyntheticDefaultImports": true,
