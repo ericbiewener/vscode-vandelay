@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const _ = require('lodash')
 const { sleep } = require('utlz')
 const { window, Range, workspace, extensions, Uri, commands } = require('vscode')
 

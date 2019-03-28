@@ -90,6 +90,8 @@ export async function activate(context: ExtensionContext) {
     },
     _test: {
       plugins: PLUGINS
-    }
+    },
+    // Prevent Vandelay JS/PY from throwing error. #TODO: Remove some time in the future
+    commands: {}
   };
 }
