@@ -247,10 +247,10 @@ written to the file instead of the relative path.
 
 ### `preferTypeOutside: boolean` (JS Only)
 Defaults to `false`. If using Flow, settings this to `true` will cause import statements for types
-to put the type on the outside of the braces (`import type { type1, type2 } ...`) *so long as only
+to put the type on the outside of the braces (`import type { Type1, Type2 } ...`) *so long as only
 types are being imported from the given import path*. This can help mitigate circular dependency
 issues under some circumstances. Regardless of this setting, if a value import exists for a given
-path then the syntax `import { myVal, type type1 } ...` will be used.
+path then the syntax `import { myVal, type Type1 } ...` will be used.
 
 ### `useES5: boolean` (JS only)
 Defaults to `false`. If your project uses ES5 module syntax (i.e. `require`) you should set this to
