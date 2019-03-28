@@ -215,7 +215,7 @@ Defaults to `true`. Whether import statements should be writting with semicolons
 
 ### `multilineImportStyle: 'multiple' | 'single'` (JS only)
 Defaults to `multiple`. Whether to allow multiple imports on a line when the import needs to span
-multiple lines because it has gone over the allowed line length (LINK TO CORE README LINE LENGTH)
+multiple lines because it has gone over the [allowed line length](#maximportlinelength-number).
 
 **multiple**
 ```js
