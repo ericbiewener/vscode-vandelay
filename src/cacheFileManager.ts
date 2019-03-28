@@ -1,6 +1,6 @@
 import fs from "fs";
 import { isFile } from "./utils";
-import { ExportData, Plugin, CachingData } from "./types";
+import { ExportData, Plugin } from "./types";
 
 function parseCacheFile(plugin: Plugin) {
   return isFile(plugin.cacheFilePath)
@@ -15,12 +15,11 @@ function parseCacheFile(plugin: Plugin) {
  * `cb` should return a promise (e.g. any file writing operations) so that it completes before the next call
  * to the cacheFileManager
  */
-// FIXME: i don't think CachingData is right. It's a nonfinalized version of the data to be cached...
 let fileAccess: Promise<void>;
 
 export function cacheFileManager(
   plugin: Plugin,
-  cb: (data: CachingData) => void
+  cb: (data: ExportData) => void
 ) {
   fileAccess = fileAccess
     ? fileAccess.then(() => cb(parseCacheFile(plugin)))

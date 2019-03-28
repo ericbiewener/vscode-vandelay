@@ -43,7 +43,6 @@ export type Plugin = PluginJs | PluginPy;
 
 type ExcludePatterns = (string | RegExp)[];
 
-// FIXME: not sure that this is right. Not sure that the division of all these configs is right.
 export type UserConfig = {
   includePaths: string[];
   maxImportLineLength?: number;

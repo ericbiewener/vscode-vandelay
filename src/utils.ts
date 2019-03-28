@@ -153,7 +153,6 @@ export function getDiagnosticsForAllEditors(filter: DiagnosticFilter) {
   return diagnosticsByFile;
 }
 
-// FIXME: make sure this sort works. had to change it from lodash
 /**
  * Sort in reverse order so that modifying a line doesn't effect the other line locations that need to be changed
  */

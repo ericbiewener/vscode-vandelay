@@ -32,20 +32,6 @@ export async function removeUnusedImports(plugin: PluginPy) {
     const changesByPath: { [path: string]: Change } = {};
 
     for (const diagnostic of diagnostics[filepath]) {
-      // FIXME: i don't think the next bit is needed because it should have errored in original
-      // vandelay-py since importMatch was undefined
-      // If importing entire package, remove whole line
-      // if (
-      //   importRegex.entirePackage.test(
-      //     document.lineAt(diagnostic.range.start.line).text
-      //   )
-      // ) {
-      //   const change = { imports: [], match: importMatch };
-      //   changesByPath[importMatch.path] = change;
-      //   changes.push(change);
-      //   continue;
-      // }
-
       const offset = document.offsetAt(diagnostic.range.start);
       const importMatch = fileImports.find(
         i => i.start <= offset && i.end >= offset

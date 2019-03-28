@@ -26,42 +26,12 @@
       ]
     },
     {
-      "name": "JS - Single Root Workspace Extension",
+      "name": "Bad Config",
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
       "args": [
-        "${workspaceFolder}/../test-workspaces/js",
-        "--extensionDevelopmentPath=${workspaceFolder}"
-      ]
-    },
-    {
-      "name": "JS - Multi Root Workspace Extension",
-      "type": "extensionHost",
-      "request": "launch",
-      "runtimeExecutable": "${execPath}",
-      "args": [
-        "${workspaceFolder}/../test-workspaces/js-multi-root.code-workspace",
-        "--extensionDevelopmentPath=${workspaceFolder}"
-      ]
-    },
-    {
-      "name": "PY - Single Root Workspace Extension",
-      "type": "extensionHost",
-      "request": "launch",
-      "runtimeExecutable": "${execPath}",
-      "args": [
-        "${workspaceFolder}/../test-workspaces/py",
-        "--extensionDevelopmentPath=${workspaceFolder}"
-      ]
-    },
-    {
-      "name": "PY - Multi Root Workspace Extension",
-      "type": "extensionHost",
-      "request": "launch",
-      "runtimeExecutable": "${execPath}",
-      "args": [
-        "${workspaceFolder}/../test-workspaces/py-multi-root.code-workspace",
+        "${workspaceFolder}/test-workspaces/bad-config",
         "--extensionDevelopmentPath=${workspaceFolder}"
       ]
     },
@@ -72,6 +42,21 @@
       "runtimeExecutable": "${execPath}",
       "env": {
         "TEST_PROJECT": "single-root"
+      },
+      "args": [
+        "${workspaceFolder}/tests/js/single-root",
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--extensionTestsPath=${workspaceFolder}/tests/js"
+      ]
+    },
+    {
+      "name": "Tests - JS - Single Root - FULL",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "env": {
+        "TEST_PROJECT": "single-root",
+        "FULL_INSERT_TEST": "true"
       },
       "args": [
         "${workspaceFolder}/tests/js/single-root",
@@ -109,7 +94,22 @@
       ]
     },
     {
-      "name": "Tests - JS - UPDATE SNAPSHOTS - Single Root ES5",
+      "name": "Tests - JS - Single Root ES5 - FULL",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "env": {
+        "TEST_PROJECT": "es5",
+        "FULL_INSERT_TEST": "true"
+      },
+      "args": [
+        "${workspaceFolder}/tests/js/es5",
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--extensionTestsPath=${workspaceFolder}/tests/js"
+      ]
+    },
+    {
+      "name": "Tests - JS - Single Root ES5 - UPDATE SNAPSHOTS",
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
@@ -124,36 +124,49 @@
       ]
     },
     {
-      "name": "Tests - JS - FULL - Single Root",
+      "name": "Tests - JS - Multi Root",
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
       "env": {
-        "TEST_PROJECT": "single-root",
-        "FULL_INSERT_TEST": "true"
+        "TEST_PROJECT": "multi-root"
       },
       "args": [
-        "${workspaceFolder}/tests/js/single-root",
+        "${workspaceFolder}/tests/js/multi-root",
         "--extensionDevelopmentPath=${workspaceFolder}",
         "--extensionTestsPath=${workspaceFolder}/tests/js"
       ]
     },
     {
-      "name": "Tests - JS - FULL - Single Root ES5",
+      "name": "Tests - JS - Multi Root - FULL",
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
       "env": {
-        "TEST_PROJECT": "es5",
+        "TEST_PROJECT": "multi-root",
         "FULL_INSERT_TEST": "true"
       },
       "args": [
-        "${workspaceFolder}/tests/js/es5",
+        "${workspaceFolder}/tests/js/multi-root",
         "--extensionDevelopmentPath=${workspaceFolder}",
         "--extensionTestsPath=${workspaceFolder}/tests/js"
       ]
     },
-
+    {
+      "name": "Tests - JS - UPDATE SNAPSHOTS - Multi Root",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "env": {
+        "TEST_PROJECT": "multi-root",
+        "UPDATE_SNAPSHOT": "true"
+      },
+      "args": [
+        "${workspaceFolder}/tests/js/multi-root",
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--extensionTestsPath=${workspaceFolder}/tests/js"
+      ]
+    },
     {
       "name": "Tests - PY - Single Root",
       "type": "extensionHost",

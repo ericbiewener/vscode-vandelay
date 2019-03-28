@@ -9,7 +9,6 @@ import {
 /**
  * Cached Data Structures
  */
-// FIXME: remove isExtraImport?
 
 export type FileExportsPy = {
   importEntirePackage?: boolean;
@@ -18,15 +17,6 @@ export type FileExportsPy = {
 
 export type ExportDatumPy = FileExportsPy & {
   cached?: number;
-  // JS
-  // TODO: are the below definitions correct? rename to make clearer
-  // Exports in current file that are reexported elsewhere
-  reexports?: string[];
-  // Exports in other files that are reexported in current file
-  reexported?: {
-    reexportPath: string;
-    reexports: string[];
-  };
 };
 
 export type ReexportsToProcess = {
@@ -34,16 +24,10 @@ export type ReexportsToProcess = {
   selective: { [path: string]: string[] };
 };
 
-export type NonFinalExportDatumPy = ExportDatumPy & {
-  reexportsToProcess?: ReexportsToProcess;
-};
-
-export type NonFinalExportDataPy = { [path: string]: NonFinalExportDatumPy };
-
 export type ExportDataImportsPy = { [path: string]: FileExportsPy };
 export type ExportDataExportsPy = { [path: string]: ExportDatumPy };
 export type MergedExportDataPy = {
-  [path: string]: ExportDatumPy & { isExtraImport?: boolean };
+  [path: string]: ExportDatumPy & { isExtraImport?: true };
 };
 
 export type ExportDataPy = {
@@ -52,9 +36,9 @@ export type ExportDataPy = {
 };
 
 export type CachingDataPy = {
-  exp: NonFinalExportDataPy;
+  exp: ExportDataExportsPy;
   imp: {
-    [path: string]: FileExportsPy & { isExtraImport?: boolean };
+    [path: string]: FileExportsPy & { isExtraImport?: true };
   };
 };
 

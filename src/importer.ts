@@ -11,10 +11,10 @@ export async function selectImport(word?: string | undefined | null) {
 
   return await cacheFileManager(plugin, async exportData => {
     if (!exportData) return;
-    const mergedData: MergedExportData = {
+    const mergedData = {
       ...exportData.imp,
       ...exportData.exp
-    };
+    } as MergedExportData;
     const sortedKeys = getExportDataKeysByCachedDate(mergedData);
     let items = plugin.buildImportItems(plugin, mergedData, sortedKeys);
     if (!items) return;

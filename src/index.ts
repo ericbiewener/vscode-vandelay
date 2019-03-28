@@ -1,4 +1,5 @@
 import { window, commands, workspace, ExtensionContext } from "vscode";
+import _ from "lodash";
 import { initializePlugin, PLUGINS } from "./plugins";
 import { cacheProject, watchForChanges } from "./cacher";
 import {
@@ -11,7 +12,6 @@ import { config as pyConfig } from "./plugins/python/config";
 import { removeUnusedImports } from "./removeUnusedImports";
 import { showNewVersionAlert } from "./showNewVersionMessage";
 
-// FIXME: use object.entries
 // FIXME: .vscodeignore src dir and others
 // FIXME: need to wipe out old cached data because of data structure change? pretty sure it did
 // change because take a look at src/importer.js -- it has to merge imp & exp properties
@@ -36,6 +36,12 @@ function catchError(fn: (...args: any[]) => any) {
 
 export async function activate(context: ExtensionContext) {
   showNewVersionAlert(context);
+
+  const pluginConfigs = [jsConfig, pyConfig];
+
+  await Promise.all(pluginConfigs.map(c => initializePlugin(context, c)));
+
+  if (_.isEmpty(PLUGINS)) return;
 
   context.subscriptions.push(
     commands.registerCommand("vandelay.cacheProject", catchError(cacheProject)),
@@ -63,10 +69,6 @@ export async function activate(context: ExtensionContext) {
       })
     )
   );
-
-  const pluginConfigs = [jsConfig, pyConfig];
-
-  await Promise.all(pluginConfigs.map(c => initializePlugin(context, c)));
 
   context.subscriptions.push(
     workspace.onDidChangeConfiguration(e => {

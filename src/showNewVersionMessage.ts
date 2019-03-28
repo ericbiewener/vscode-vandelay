@@ -27,7 +27,6 @@ export function showNewVersionAlert(context: ExtensionContext) {
 
   const CHANGELOG = "CHANGELOG";
   // TODO: use https://code.visualstudio.com/updates/v1_31#_open-resources-in-a-browser
-  // TODO: all async/await
   window
     .showInformationMessage(
       `Vandelay has been updated. Check out the new features!`,

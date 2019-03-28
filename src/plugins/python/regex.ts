@@ -1,4 +1,4 @@
-// FIXME: use lodash-es fix in webpack
+// TODO: use lodash-es fix in webpack
 import _ from "lodash";
 
 export const commentRegex = /^(?:[ \t]*#|[ \t]*"""[^]*?""").*/gm;

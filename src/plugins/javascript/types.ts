@@ -21,7 +21,6 @@ export type RichQuickPickItemJs = RichQuickPickItem & {
 /**
  * Cached Data Structurs
  */
-// FIXME: make sure these are all correct
 
 export type FileExportsJs = {
   default?: string | null | undefined;
@@ -31,8 +30,7 @@ export type FileExportsJs = {
 
 export type ExportDatumJs = FileExportsJs & {
   cached?: number;
-  // JS
-  // TODO: are the below definitions correct? rename to make clearer
+  // TODO: rename `reexports` and `reexported` to make clearer
   // Exports in current file that are reexported elsewhere
   reexports?: string[];
   // Exports in other files that are reexported in current file
@@ -55,9 +53,8 @@ export type NonFinalExportDataJs = { [path: string]: NonFinalExportDatumJs };
 
 export type ExportDataImportsJs = { [path: string]: FileExportsJs };
 export type ExportDataExportsJs = { [path: string]: ExportDatumJs };
-// FIXME: remove isExtraImport?
 export type MergedExportDataJs = {
-  [path: string]: ExportDatumJs & { isExtraImport?: boolean };
+  [path: string]: ExportDatumJs & { isExtraImport?: true };
 };
 
 export type ExportDataJs = {
@@ -65,11 +62,10 @@ export type ExportDataJs = {
   exp: ExportDataExportsJs;
 };
 
-// FIXME: remove isExtraImport?
 export type CachingDataJs = {
   exp: NonFinalExportDataJs;
   imp: {
-    [path: string]: FileExportsJs & { isExtraImport?: boolean };
+    [path: string]: FileExportsJs & { isExtraImport?: true };
   };
 };
 

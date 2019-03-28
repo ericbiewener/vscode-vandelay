@@ -49,15 +49,6 @@ async function cacheDir(
 }
 
 export async function cacheProjectLanguage(plugin: Plugin) {
-  if (!plugin.includePaths || !plugin.includePaths.length) {
-    window.showErrorMessage(
-      `You must specify the "includePaths" configuration option in your vandelay-${
-        plugin.language
-      }.js file.`
-    );
-    return false;
-  }
-
   let cacher = Promise.all(
     plugin.includePaths.map(p =>
       cacheDir(plugin, p, true, { imp: {}, exp: {} })
@@ -84,8 +75,6 @@ export function cacheProject() {
     return;
   }
   return Promise.all(_.map(PLUGINS, cacheProjectLanguage)).then(results => {
-    if (results.includes(false)) return; // Weren't able to cache all languages. Don't display success message.
-    // Don't return this because that will return a promise that doesn't resolve until the message gets dismissed.
     window.showInformationMessage("Project exports have been cached. 🐔");
   });
 }

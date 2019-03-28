@@ -31,6 +31,13 @@ export async function initializePlugin(
   const userConfig = await getUserConfig(configPath, configFile);
   if (!userConfig) return;
 
+  if (!userConfig.includePaths || !userConfig.includePaths.length) {
+    window.showErrorMessage(
+      `You must specify the "includePaths" configuration option in your vandelay-${language}.js file.`
+    );
+    return;
+  }
+
   const plugin = Object.assign(defaultSettings, pluginConfig, userConfig, {
     configFile,
     cacheDirPath,

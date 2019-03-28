@@ -17,7 +17,6 @@ function shouldIncludeDisgnostic({ code, source, message }: Diagnostic) {
 
 export const JS_EXTENSIONS = ["js", "jsx", "ts", "tsx", "mjs"];
 
-// TODO: namespace settings vs utils?
 export const config: PluginConfigJs = {
   language: "js",
   cacheFile,
