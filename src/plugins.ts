@@ -38,10 +38,12 @@ export async function initializePlugin(
     return;
   }
 
+  console.log(cacheDirPath);
+
   const plugin = Object.assign(defaultSettings, pluginConfig, userConfig, {
     configFile,
     cacheDirPath,
-    cacheFilePath: path.join(cacheDirPath, "vandelay-" + language + ".json"),
+    cacheFilePath: path.join(cacheDirPath, "vandelay-v2-" + language + ".json"),
     projectRoot:
       userConfig.projectRoot || workspace.workspaceFolders[0].uri.fsPath
   }) as Plugin;
