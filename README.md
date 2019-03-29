@@ -9,7 +9,7 @@
 
 <br />
 <p align="center">
-<img src="https://raw.githubusercontent.com/ericbiewener/vscode-vandelay-js/master/artwork/animation.gif" width="757" height="426" align="center" />
+<img src="https://raw.githubusercontent.com/ericbiewener/vscode-vandelay/master/artwork/animation.gif" width="757" height="426" align="center" />
 </p>
 <br />
 
