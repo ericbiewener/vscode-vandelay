@@ -1,16 +1,16 @@
-import { window, TextEditor } from "vscode";
-import path from "path";
-import { insertLine, removeExt } from "../../../utils";
-import { Plugin } from "../../../types";
-import { parseImports, ParsedImportJs } from "../regex";
+import { window, TextEditor } from 'vscode'
+import path from 'path'
+import { insertLine, removeExt } from '../../../utils'
+import { Plugin } from '../../../types'
+import { parseImports, ParsedImportJs } from '../regex'
 import {
   FileExportsJs,
   PluginJs,
   RichQuickPickItemJs,
-  ExportType
-} from "../types";
-import { getImportPosition, ImportPositionJs } from "./getImportPosition";
-import { getNewLine } from "./getNewLine";
+  ExportType,
+} from '../types'
+import { getImportPosition, ImportPositionJs } from './getImportPosition'
+import { getNewLine } from './getNewLine'
 
 export async function insertImport(
   plugin: PluginJs,
@@ -21,18 +21,18 @@ export async function insertImport(
     description: importPath,
     absImportPath,
     exportType,
-    isExtraImport
-  } = selection;
-  const editor = window.activeTextEditor;
+    isExtraImport,
+  } = selection
+  const editor = window.activeTextEditor
 
   const finalImportPath = getFinalImportPath(
     plugin,
     importPath,
     absImportPath,
     isExtraImport
-  );
-  const fileText = (editor as TextEditor).document.getText();
-  const imports = parseImports(plugin, fileText);
+  )
+  const fileText = (editor as TextEditor).document.getText()
+  const imports = parseImports(plugin, fileText)
 
   const importPosition = getImportPosition(
     plugin,
@@ -41,12 +41,12 @@ export async function insertImport(
     isExtraImport,
     imports,
     fileText
-  );
-  const lineImports = getNewLineImports(importPosition, exportName, exportType);
-  if (!lineImports) return;
-  const newLine = getNewLine(plugin, finalImportPath, lineImports);
+  )
+  const lineImports = getNewLineImports(importPosition, exportName, exportType)
+  if (!lineImports) return
+  const newLine = getNewLine(plugin, finalImportPath, lineImports)
 
-  return insertLine(newLine, importPosition);
+  return insertLine(newLine, importPosition)
 }
 
 function getFinalImportPath(
@@ -55,11 +55,11 @@ function getFinalImportPath(
   absImportPath: string,
   isExtraImport: boolean | undefined
 ) {
-  if (isExtraImport) return importPath;
+  if (isExtraImport) return importPath
 
   const activeFilepath = (window.activeTextEditor as TextEditor).document
-    .fileName;
-  importPath = getRelativeImportPath(activeFilepath, absImportPath);
+    .fileName
+  importPath = getRelativeImportPath(activeFilepath, absImportPath)
 
   if (plugin.processImportPath) {
     const processedPath = plugin.processImportPath(
@@ -67,13 +67,13 @@ function getFinalImportPath(
       absImportPath,
       activeFilepath,
       plugin.projectRoot
-    );
-    return removeExt(processedPath || importPath);
+    )
+    return removeExt(processedPath || importPath)
   }
 
-  return path.basename(importPath) === "index.js"
+  return path.basename(importPath) === 'index.js'
     ? path.dirname(importPath)
-    : removeExt(importPath);
+    : removeExt(importPath)
 }
 
 function getNewLineImports(
@@ -81,34 +81,34 @@ function getNewLineImports(
   exportName: string,
   exportType: ExportType
 ) {
-  const { match, indexModifier, isFirstImport } = importPosition;
+  const { match, indexModifier, isFirstImport } = importPosition
 
-  let imports: FileExportsJs;
+  let imports: FileExportsJs
 
   if (indexModifier || isFirstImport) {
-    imports = { named: [], types: [] };
+    imports = { named: [], types: [] }
   } else {
-    const obj = match as ParsedImportJs;
+    const obj = match as ParsedImportJs
     imports = {
       named: obj.named || [],
       types: obj.types || [],
-      default: obj.default
-    };
+      default: obj.default,
+    }
   }
 
   if (exportType === ExportType.default) {
-    if (imports.default) return;
-    imports.default = exportName;
+    if (imports.default) return
+    imports.default = exportName
   } else {
-    const arr = imports[exportType === ExportType.named ? "named" : "types"];
-    if (arr.includes(exportName)) return;
-    arr.push(exportName);
+    const arr = imports[exportType === ExportType.named ? 'named' : 'types']
+    if (arr.includes(exportName)) return
+    arr.push(exportName)
   }
 
-  return imports;
+  return imports
 }
 
 function getRelativeImportPath(file: string, absImportPath: string) {
-  const relativePath = path.relative(path.dirname(file), absImportPath);
-  return relativePath[0] === "." ? relativePath : "." + path.sep + relativePath;
+  const relativePath = path.relative(path.dirname(file), absImportPath)
+  return relativePath[0] === '.' ? relativePath : '.' + path.sep + relativePath
 }

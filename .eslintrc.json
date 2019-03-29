@@ -1,14 +1,12 @@
 {
-    "extends": ["plugin:@typescript-eslint/recommended", "plugin:ericbiewener-typescript"],
-    "env": {
-        "browser": false,
-        "es6": true,
-        "node": true,
-        "jest": true
-    },
-    "plugins": ["@typescript-eslint"],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    }
+  "extends": "ericbiewener-typescript",
+  "env": {
+    "browser": false,
+    "es6": true,
+    "node": true,
+    "jest": true
+  },
+  "globals": {
+    "__non_webpack_require__": false
+  }
 }
