@@ -1,3 +1,6 @@
+### Version 2.1.0
+- Typescript support
+
 ### Version 2.0
 - Made JavaScript & Python plugins part of core Vandelay extension, so no longer any need to install
   those plugins separately. If you previously installed Vandelay JS or Vandelay PY, you may
