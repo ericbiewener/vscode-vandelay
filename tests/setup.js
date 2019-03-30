@@ -5,9 +5,13 @@ const { getPlugin } = require('./utils')
 require('./toMatchSnapshot')
 
 global.sinon = sinon
-global.TEST_ROOT = workspace.workspaceFolders[0].uri.path
 
-sinon.stub(window, "showQuickPick")
+sinon.stub(window, 'showQuickPick')
+
+before(async () => {
+  const plugin = await getPlugin()
+  global.TEST_ROOT = plugin.projectRoot
+})
 
 let clone
 beforeEach(async () => {

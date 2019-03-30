@@ -26,6 +26,16 @@
       ]
     },
     {
+      "name": "Multi Root",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "${workspaceFolder}/tests/js/multi-root/multi-root.code-workspace",
+        "--extensionDevelopmentPath=${workspaceFolder}",
+      ]
+    },
+    {
       "name": "Bad Config",
       "type": "extensionHost",
       "request": "launch",
@@ -145,7 +155,7 @@
         "TEST_PROJECT": "multi-root"
       },
       "args": [
-        "${workspaceFolder}/tests/js/multi-root",
+        "${workspaceFolder}/tests/js/multi-root/multi-root.code-workspace",
         "--extensionDevelopmentPath=${workspaceFolder}",
         "--extensionTestsPath=${workspaceFolder}/tests/js"
       ]
@@ -160,7 +170,7 @@
         "FULL_INSERT_TEST": "true"
       },
       "args": [
-        "${workspaceFolder}/tests/js/multi-root",
+        "${workspaceFolder}/tests/js/multi-root/multi-root.code-workspace",
         "--extensionDevelopmentPath=${workspaceFolder}",
         "--extensionTestsPath=${workspaceFolder}/tests/js"
       ]
@@ -175,7 +185,7 @@
         "UPDATE_SNAPSHOT": "true"
       },
       "args": [
-        "${workspaceFolder}/tests/js/multi-root",
+        "${workspaceFolder}/tests/js/multi-root/multi-root.code-workspace",
         "--extensionDevelopmentPath=${workspaceFolder}",
         "--extensionTestsPath=${workspaceFolder}/tests/js"
       ]

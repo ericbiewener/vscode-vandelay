@@ -15,8 +15,9 @@ export function getNewLine(
     trailingComma,
   } = plugin
 
-  lineImports.named.sort()
-  lineImports.types.sort()
+  const sensitivity = { sensitivity: 'base' }
+  lineImports.named.sort((a, b) => a.localeCompare(b, undefined, sensitivity))
+  lineImports.types.sort((a, b) => a.localeCompare(b, undefined, sensitivity))
 
   const putTypeOutside =
     plugin.preferTypeOutside &&
