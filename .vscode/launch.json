@@ -36,6 +36,17 @@
       ]
     },
     {
+      "name": "Typescript",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "${workspaceFolder}/test-workspaces/typescript",
+        "--extensionDevelopmentPath=${workspaceFolder}"
+      ]
+    },
+
+    {
       "name": "Tests - JS - Single Root",
       "type": "extensionHost",
       "request": "launch",
@@ -79,6 +90,7 @@
         "--extensionTestsPath=${workspaceFolder}/tests/js"
       ]
     },
+
     {
       "name": "Tests - JS - Single Root ES5",
       "type": "extensionHost",
@@ -123,6 +135,7 @@
         "--extensionTestsPath=${workspaceFolder}/tests/js"
       ]
     },
+
     {
       "name": "Tests - JS - Multi Root",
       "type": "extensionHost",
@@ -167,6 +180,52 @@
         "--extensionTestsPath=${workspaceFolder}/tests/js"
       ]
     },
+
+    {
+      "name": "Tests - JS - Typescript",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "env": {
+        "TEST_PROJECT": "single-root"
+      },
+      "args": [
+        "${workspaceFolder}/tests/typescript/single-root",
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--extensionTestsPath=${workspaceFolder}/tests/typescript"
+      ]
+    },
+    {
+      "name": "Tests - JS - Typescript - FULL",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "env": {
+        "TEST_PROJECT": "single-root",
+        "FULL_INSERT_TEST": "true"
+      },
+      "args": [
+        "${workspaceFolder}/tests/typescript/single-root",
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--extensionTestsPath=${workspaceFolder}/tests/typescript"
+      ]
+    },
+    {
+      "name": "Tests - JS - UPDATE SNAPSHOTS - Typescript",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "env": {
+        "TEST_PROJECT": "single-root",
+        "UPDATE_SNAPSHOT": "true"
+      },
+      "args": [
+        "${workspaceFolder}/tests/typescript/single-root",
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--extensionTestsPath=${workspaceFolder}/tests/typescript"
+      ]
+    },
+
     {
       "name": "Tests - PY - Single Root",
       "type": "extensionHost",

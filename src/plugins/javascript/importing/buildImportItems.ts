@@ -6,6 +6,7 @@ import {
   RichQuickPickItemJs,
   ExportType,
 } from '../types'
+import { isIndexFile } from '../utils'
 
 export function buildImportItems(
   plugin: PluginJs,
@@ -77,12 +78,7 @@ export function buildImportItems(
     const ext = path.extname(importPath)
     const importPathNoExt = ext ? importPath.slice(0, -ext.length) : importPath
 
-    if (
-      absImportPath.endsWith('index.js') ||
-      absImportPath.endsWith('index.jsx')
-    ) {
-      absImportPath = path.dirname(absImportPath)
-    }
+    if (isIndexFile(absImportPath)) absImportPath = path.dirname(absImportPath)
 
     if (defaultExport) {
       items.push({

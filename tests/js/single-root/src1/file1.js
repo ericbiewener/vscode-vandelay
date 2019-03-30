@@ -33,12 +33,12 @@ export class src1_file1_5 extends Component {
 
 }
 
-export type src1_file1_t_1 = {
-  foo: string,
+export type src1_file1_t_1<V> = {
+  foo: V,
   bar: number,
 }
 
-export type src1_file1_t_2 = src1_file1_t_1 & { baz: 9 }
+export type src1_file1_t_2 = src1_file1_t_1<*> & { baz: 9 }
 
 export default function() {
 

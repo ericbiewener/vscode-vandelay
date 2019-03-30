@@ -98,6 +98,7 @@ export type UserConfigJs = UserConfig & {
   multilineImportStyle?: 'single' | 'multiple'
   trailingComma?: boolean
   importGroups?: string[]
+  typescript?: boolean
 }
 
 export type PluginJs = DefaultPluginConfig &

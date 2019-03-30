@@ -53,7 +53,7 @@ export async function initializePlugin(
 
   console.info(`Vandelay language registered: ${language}`)
 
-  if (!isFile(plugin.cacheFilePath)) cacheProjectLanguage(plugin)
+  if (!isFile(plugin.cacheFilePath)) return cacheProjectLanguage(plugin)
 }
 
 async function getUserConfig(vandelayDir: string, vandelayFile: string) {

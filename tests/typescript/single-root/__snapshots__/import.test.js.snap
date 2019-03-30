@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Import Tests | buildImportItems 1`] = `
+Array [
+  Object {
+    "absImportPath": "absRoot/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 0,
+    "isExtraImport": undefined,
+    "label": "file2",
+  },
+  Object {
+    "absImportPath": "absRoot/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_1",
+  },
+  Object {
+    "absImportPath": "absRoot/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_2",
+  },
+  Object {
+    "absImportPath": "absRoot/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_3",
+  },
+  Object {
+    "absImportPath": "absRoot/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_4",
+  },
+  Object {
+    "absImportPath": "absRoot/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_5",
+  },
+  Object {
+    "absImportPath": "absRoot/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_t_1",
+  },
+  Object {
+    "absImportPath": "absRoot/src1/file2.js",
+    "description": "src1/file2",
+    "exportType": 1,
+    "isExtraImport": undefined,
+    "label": "src1_file2_t_2",
+  },
+  Object {
+    "absImportPath": "absRoot/module1_file2",
+    "description": "module1_file2",
+    "exportType": 0,
+    "isExtraImport": true,
+    "label": "defaultModule_file2",
+  },
+]
+`;
+
+exports[`Import Tests | import - empty - original order 1`] = `
+"import defaultModule_file2 from 'module1_file2';
+import file2, { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  src1_file2_t_1, src1_file2_t_2 } from './file2';
+"
+`;

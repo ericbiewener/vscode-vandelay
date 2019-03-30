@@ -30,7 +30,7 @@ function catchError(fn: (...args: any[]) => any) {
   }
 }
 
-export async function activate(context: ExtensionContext) {
+export const activate = async function activate(context: ExtensionContext) {
   showNewVersionAlert(context)
 
   const pluginConfigs = [jsConfig, pyConfig]

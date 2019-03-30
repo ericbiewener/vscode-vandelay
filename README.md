@@ -16,7 +16,7 @@
 ## Table of Contents
 - [Overview](#overview)
 - [Quick Start](#quick-start)
-- [Flow & Typescript Support](#flow--typescript-support)
+- [Typescript & Flow Support](#typescript--flow-support)
 - [Commands](#commands)
 - [Importing external and environment packages](#importing-external-and-environment-packages)
 - [How to Use](#how-to-use)
@@ -36,8 +36,8 @@ whatever style guide your project requires for how import statements get written
 ## Quick Start
 See [How to Use](#how-to-use).
 
-## Flow & Typescript Support
-Flow types are supported, but Typescript isn't yet. A PR would be welcome :)
+## Typescript & Flow Support
+Both Typescript and Flow are supported.
 
 ## Commands
 The following commands are available from the Command Palette. Feel free to set your own keyboard shortcuts.
@@ -255,6 +255,10 @@ path then the syntax `import { myVal, type Type1 } ...` will be used.
 ### `useES5: boolean` (JS only)
 Defaults to `false`. If your project uses ES5 module syntax (i.e. `require`) you should set this to
 true. Only `module.exports = { foo, bar }` and `module.exports = defaultExport` syntax is supported.
+
+### `typescript: boolean` (JS only)
+Files ending in `*.ts` will automatically be parsed as Typescript files. You only need to set this
+configuration option to `true` if your Typescript files end in `*.js`.
 
 ## Multi-Root Workspace
 You must add a `.vandelay` directory to your workspace that contains a file named `vandelay-<js|py>.js`.

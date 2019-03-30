@@ -9,17 +9,24 @@ import { parseImports, ParsedImportJs } from './regex'
 import { Plugin } from '../../types'
 import { PluginJs } from './types'
 
-interface Change {
-  default: string | null | undefined
-  named: string[]
-  types: string[]
-  match: ParsedImportJs
-}
+const ENTIRE_LINE = 1
+
+type Change =
+  | {
+      default: string | null | undefined
+      named: string[]
+      types: string[]
+      match: ParsedImportJs
+      entireLine: false
+    }
+  | { entireLine: true; match: ParsedImportJs }
 
 export async function removeUnusedImports(plugin: PluginJs) {
-  const diagnostics = getDiagnosticsForAllEditors(
-    d => d.code === 'no-unused-vars'
-  )
+  const diagnostics = getDiagnosticsForAllEditors(d => {
+    if (d.code === 'no-unused-vars') return true
+    if (d.source !== 'ts') return false
+    return d.code === 6133 || d.code === 6192
+  })
 
   for (const filepath in diagnostics) {
     const editor = await window.showTextDocument(Uri.file(filepath), {
@@ -30,7 +37,7 @@ export async function removeUnusedImports(plugin: PluginJs) {
     const fullText = document.getText()
     const fileImports = parseImports(plugin, fullText)
     const changes: Change[] = []
-    const changesByPath: { [path: string]: Change } = {}
+    const changesByPath: { [path: string]: Change | undefined } = {}
 
     for (const diagnostic of diagnostics[filepath]) {
       const offset = document.offsetAt(diagnostic.range.start)
@@ -40,16 +47,22 @@ export async function removeUnusedImports(plugin: PluginJs) {
       if (!importMatch) continue
 
       const existingChange = changesByPath[importMatch.path]
+      if (existingChange && existingChange.entireLine) continue // Not actually possible, but needed to appease TS
+
       const { default: defaultImport, named, types } =
         existingChange || importMatch
       const unusedImport = document.getText(diagnostic.range)
+      const entireLine = unusedImport.includes(' from ')
 
-      const change = {
-        default: defaultImport !== unusedImport ? defaultImport : null,
-        named: named ? named.filter(n => n !== unusedImport) : [],
-        types: types ? types.filter(n => n !== unusedImport) : [],
-        match: importMatch,
-      }
+      const change: Change = entireLine
+        ? { entireLine: true, match: importMatch }
+        : {
+            default: defaultImport !== unusedImport ? defaultImport : null,
+            named: named ? named.filter(n => n !== unusedImport) : [],
+            types: types ? types.filter(n => n !== unusedImport) : [],
+            match: importMatch,
+            entireLine: false,
+          }
       changesByPath[importMatch.path] = change
       changes.push(change)
     }
@@ -58,11 +71,17 @@ export async function removeUnusedImports(plugin: PluginJs) {
 
     await editor.edit(builder => {
       for (const change of changes) {
-        const { default: defaultImport, named, types, match } = change
-        const newLine =
-          defaultImport || named.length || types.length
-            ? getNewLine(plugin, match.path, change)
-            : ''
+        let newLine
+        const { match } = change
+        if (change.entireLine) {
+          newLine = ''
+        } else {
+          const { default: defaultImport, named, types } = change
+          newLine =
+            defaultImport || named.length || types.length
+              ? getNewLine(plugin, match.path, change)
+              : ''
+        }
 
         builder.replace(
           new Range(

@@ -9,6 +9,7 @@ export const exportRegex = {
   // `standard` also captures selective reexports that include a default reexport. It is the
   // responsibility of `cacheFile` to handle this when processing these improts.
   standard: /^export +(\w+,?)(?: +(\w+))?/gm,
+  standardTypescript: /^export +(\w+,?)(?: +(\w+))?(?: +(\w+))?/gm,
   fullRexport: /^export +\*.+?['"](.+)['"]/gm,
   selectiveRexport: /^export +(\w*),* *{([^]+?)}.+?['"](.+)['"]/gm,
   moduleExports: /^module\.exports *= *(\w+)?(?:{([^]*?)})?.*/gm,

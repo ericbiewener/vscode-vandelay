@@ -8,8 +8,7 @@ export function getNewLine(
 ) {
   const { maxImportLineLength } = plugin
 
-  const sensitivity = { sensitivity: 'base' }
-  lineImports.sort((a, b) => a.localeCompare(b, undefined, sensitivity))
+  lineImports.sort()
 
   const newLineStart = 'from ' + importPath + ' import '
   const newLineEnd = lineImports.join(', ')

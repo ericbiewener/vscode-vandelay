@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Cache Tests | cacheProject 1`] = `
+Object {
+  "exp": Object {
+    "src1/file1.js": Object {
+      "default": "file1",
+      "named": Array [
+        "declare_function",
+        "src1_file1_1",
+        "src1_file1_2",
+        "src1_file1_3",
+        "src1_file1_4",
+        "src1_file1_5",
+        "src1_file1_const_enum",
+        "src1_file1_enum",
+        "src1_file1_interface",
+        "src1_file1_t_1",
+        "src1_file1_t_2",
+      ],
+      "types": Array [],
+    },
+    "src1/file2.js": Object {
+      "default": "file2",
+      "named": Array [
+        "src1_file2_1",
+        "src1_file2_2",
+        "src1_file2_3",
+        "src1_file2_4",
+        "src1_file2_5",
+        "src1_file2_t_1",
+        "src1_file2_t_2",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
+    "module1_file2": Object {
+      "default": "defaultModule_file2",
+      "isExtraImport": true,
+    },
+  },
+}
+`;

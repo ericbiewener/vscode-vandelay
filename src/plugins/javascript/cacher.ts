@@ -2,7 +2,7 @@ import fs from 'fs-extra'
 import path from 'path'
 import _ from 'lodash'
 import { basenameNoExt, getFilepathKey, last } from '../../utils'
-import { isPathNodeModule } from './utils'
+import { isPathNodeModule, isIndexFile } from './utils'
 import { parseImports, exportRegex } from './regex'
 import {
   PluginJs,
@@ -10,8 +10,10 @@ import {
   CachingDataJs,
   NonFinalExportDataJs,
   ReexportsToProcess,
+  ExportType,
 } from './types'
 
+// TODO: Break this function up
 export function cacheFile(
   plugin: PluginJs,
   filepath: string,
@@ -59,14 +61,21 @@ export function cacheFile(
   }
 
   let match
+  let mainRegex
+  let isTypescript
 
-  const mainRegex = plugin.useES5
-    ? exportRegex.moduleExports
-    : exportRegex.standard
+  if (plugin.useES5) {
+    mainRegex = exportRegex.moduleExports
+  } else {
+    isTypescript = filepath.endsWith('.ts') || plugin.typescript
+    mainRegex = isTypescript
+      ? exportRegex.standardTypescript
+      : exportRegex.standard
+  }
 
   while ((match = mainRegex.exec(fileText))) {
     if (match[1] === 'default' || (plugin.useES5 && match[1])) {
-      const proposedName = filepath.endsWith('index.js')
+      const proposedName = isIndexFile(filepath)
         ? basenameNoExt(path.dirname(filepath))
         : basenameNoExt(filepath)
       fileExports.default = processDefaultName(plugin, proposedName, filepath)
@@ -89,9 +98,20 @@ export function cacheFile(
       )
     } else if (match[2] && match[2] !== 'from') {
       // from — it's actually a reexport
-      const key = match[1] === 'type' ? 'types' : 'named'
-      fileExports[key] = fileExports[key] || []
-      fileExports[key].push(match[2])
+      // `export class Foo extends`, `export class Foo implements`
+      if (match[3] && match[3] !== 'extends' && match[3] !== 'implements') {
+        if (!isTypescript) continue
+        const exportType = match[2]
+        const exportName = match[3]
+        // `const enum Foo`, `export declare function declare_function(arg: any)`
+        if (exportName && ['enum', 'function'].includes(exportType)) {
+          fileExports.named.push(match[3])
+        }
+      } else {
+        const key = match[1] === 'type' && !isTypescript ? 'types' : 'named'
+        fileExports[key] = fileExports[key] || []
+        fileExports[key].push(match[2])
+      }
     }
   }
 
