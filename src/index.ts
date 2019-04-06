@@ -59,9 +59,9 @@ export const activate = async function activate(context: ExtensionContext) {
     ),
     commands.registerCommand(
       'vandelay.fixImports',
-      catchError(() => {
-        removeUnusedImports()
-        importUndefinedVariables()
+      catchError(async () => {
+        await removeUnusedImports()
+        await importUndefinedVariables()
       })
     )
   )

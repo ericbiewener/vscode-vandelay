@@ -57,9 +57,18 @@ export async function insertImport(
 
   const lineImports = getNewLineImports(importPosition, exportName)
   if (!lineImports) return
-  let newLine = isPackageImport
-    ? `import ${exportName}`
-    : getNewLine(plugin, importPath, lineImports)
+
+  let newLine: string
+  if (isPackageImport) {
+    newLine = `import ${exportName}`
+  } else {
+    // If we're adding to an existing line, re-use its path from `importPosition.match.path` in case it is a relative one
+    const lineImportPath =
+      importPosition.indexModifier || !importPosition.match.path
+        ? importPath
+        : importPosition.match.path
+    newLine = getNewLine(plugin, lineImportPath, lineImports)
+  }
 
   // Import groups
   // If indexModifier is 0, we're adding to a pre-existing line so no need to worry about groups

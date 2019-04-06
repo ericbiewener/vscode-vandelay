@@ -1,4 +1,6 @@
 import _ from 'lodash'
+import path from 'path'
+import { TextEditor, window } from 'vscode'
 import {
   getLastInitialComment,
   strUntil,
@@ -43,9 +45,28 @@ export function getImportPosition(
     }
   }
 
+  let dirDotPath: string | undefined
+  const editor = window.activeTextEditor as TextEditor
+
   // First look for an exact match. This is done outside the main sorting loop because we don't care
   // where the exact match is located if it exists.
-  const exactMatch = imports.find(i => i.path === importPath)
+  const exactMatch = imports.find(i => {
+    let existingImportPath = i.path
+    if (existingImportPath[0] === '.') {
+      // relative path
+      if (!dirDotPath) {
+        const filepath = (window.activeTextEditor as TextEditor).document
+          .fileName
+        const relativeDirPath = path.relative(
+          plugin.projectRoot,
+          path.dirname(filepath)
+        )
+        dirDotPath = relativeDirPath.replace(/\//g, '.')
+      }
+      existingImportPath = `${dirDotPath}${existingImportPath}`
+    }
+    return existingImportPath === importPath
+  })
   if (exactMatch) {
     return { match: exactMatch, indexModifier: 0, isFirstImport: false }
   }

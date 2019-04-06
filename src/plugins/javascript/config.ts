@@ -11,7 +11,8 @@ function shouldIncludeDisgnostic({ code, source, message }: Diagnostic) {
   const codes: DiagnosticCode[] = ['no-undef', 'react/jsx-no-undef']
   return (
     codes.includes(code) ||
-    (source === 'flow' && message.startsWith('Cannot resolve name'))
+    (source === 'flow' && message.startsWith('Cannot resolve name')) ||
+    (source === 'ts' && code === 2552)
   )
 }
 

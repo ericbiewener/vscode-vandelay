@@ -55,6 +55,16 @@
         "--extensionDevelopmentPath=${workspaceFolder}"
       ]
     },
+    {
+      "name": "Fix Everything",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "${workspaceFolder}/test-workspaces/fix-everything",
+        "--extensionDevelopmentPath=${workspaceFolder}"
+      ]
+    },
 
     {
       "name": "Tests - JS - Single Root",
