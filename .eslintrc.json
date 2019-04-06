@@ -8,5 +8,8 @@
   },
   "globals": {
     "__non_webpack_require__": false
+  },
+  "rules": {
+    "semi": ["error", "never"]
   }
 }
