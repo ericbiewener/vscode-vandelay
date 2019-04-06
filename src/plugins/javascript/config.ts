@@ -1,24 +1,25 @@
-import { removeUnusedImports } from './removeUnusedImports'
-import { cacheFile, processCachedData } from './cacher'
-import { buildImportItems } from './importing/buildImportItems'
-import { insertImport } from './importing/importer'
-import { Diagnostic } from 'vscode'
-import { PluginConfigJs } from './types'
+import { removeUnusedImports } from "./removeUnusedImports";
+import { cacheFile, processCachedData } from "./cacher";
+import { buildImportItems } from "./importing/buildImportItems";
+import { insertImport } from "./importing/importer";
+import { Diagnostic } from "vscode";
+import { PluginConfigJs } from "./types";
 
-type DiagnosticCode = string | number | undefined
+type DiagnosticCode = string | number | undefined;
 
 function shouldIncludeDisgnostic({ code, source, message }: Diagnostic) {
-  const codes: DiagnosticCode[] = ['no-undef', 'react/jsx-no-undef']
+  const codes: DiagnosticCode[] = ["no-undef", "react/jsx-no-undef"];
   return (
     codes.includes(code) ||
-    (source === 'flow' && message.startsWith('Cannot resolve name'))
-  )
+    (source === "flow" && message.startsWith("Cannot resolve name")) ||
+    (source === "ts" && code === 2552)
+  );
 }
 
-export const JS_EXTENSIONS = ['js', 'jsx', 'ts', 'tsx', 'mjs']
+export const JS_EXTENSIONS = ["js", "jsx", "ts", "tsx", "mjs"];
 
 export const config: PluginConfigJs = {
-  language: 'js',
+  language: "js",
   cacheFile,
   processCachedData,
   buildImportItems,
@@ -29,6 +30,6 @@ export const config: PluginConfigJs = {
   padCurlyBraces: true,
   useSemicolons: true,
   trailingComma: true,
-  multilineImportStyle: 'multiple',
-  excludePatterns: [/.*\/node_modules(\/.*)?/],
-}
+  multilineImportStyle: "multiple",
+  excludePatterns: [/.*\/node_modules(\/.*)?/]
+};
