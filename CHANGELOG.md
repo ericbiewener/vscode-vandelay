@@ -1,3 +1,7 @@
+### Version 2.2.0
+- Preserve relative Python import paths
+- Fix bug in `Fix Imports` command that could cause active file's unused imports to not get removed
+
 ### Version 2.1.0
 - Typescript support
 
