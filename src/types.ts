@@ -80,7 +80,7 @@ export type DefaultPluginConfig = {
 
 export type RuntimePluginConfig = {
   configFile: string
-  cacheFilePath: string
+  cacheFilepath: string
   projectRoot: string
   cacheDirPath: string
 }

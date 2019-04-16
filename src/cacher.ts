@@ -5,7 +5,7 @@ import _ from 'lodash'
 import anymatch from 'anymatch'
 import {
   writeCacheFile,
-  getLangFromFilePath,
+  getLangFromFilepath,
   getFilepathKey,
   mergeObjectsWithArrays,
 } from './utils'
@@ -13,8 +13,8 @@ import { cacheFileManager } from './cacheFileManager'
 import { PLUGINS } from './plugins'
 import { Plugin, CachingData } from './types'
 
-function shouldIgnore(plugin: Plugin, filePath: string) {
-  return anymatch(plugin.excludePatterns, filePath)
+function shouldIgnore(plugin: Plugin, filepath: string) {
+  return anymatch(plugin.excludePatterns, filepath)
 }
 
 async function cacheDir(
@@ -33,7 +33,7 @@ async function cacheDir(
     readDirPromises.push(
       fs.lstat(fullPath).then(async stats => {
         if (stats.isFile()) {
-          if (plugin.language === getLangFromFilePath(item))
+          if (plugin.language === getLangFromFilepath(item))
             await plugin.cacheFile(plugin, fullPath, data)
         } else if (recursive) {
           await cacheDir(plugin, fullPath, true, data)
@@ -80,7 +80,7 @@ export function cacheProject() {
 }
 
 function onChangeOrCreate(doc: Uri) {
-  const plugin: Plugin | undefined = PLUGINS[getLangFromFilePath(doc.fsPath)]
+  const plugin: Plugin | undefined = PLUGINS[getLangFromFilepath(doc.fsPath)]
   if (
     !plugin ||
     shouldIgnore(plugin, doc.fsPath) ||
@@ -118,7 +118,7 @@ export function watchForChanges() {
   watcher.onDidCreate(onChangeOrCreate)
 
   watcher.onDidDelete(doc => {
-    const plugin = PLUGINS[getLangFromFilePath(doc.fsPath)]
+    const plugin = PLUGINS[getLangFromFilepath(doc.fsPath)]
     if (!plugin) return
 
     cacheFileManager(plugin, cachedData => {

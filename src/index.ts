@@ -1,9 +1,17 @@
-import { window, commands, workspace, ExtensionContext } from 'vscode'
+import {
+  commands,
+  ExtensionContext,
+  languages,
+  window,
+  workspace,
+  ConfigurationTarget,
+} from 'vscode'
 import _ from 'lodash'
 import { initializePlugin, PLUGINS } from './plugins'
 import { cacheProject, watchForChanges } from './cacher'
 import {
   importUndefinedVariables,
+  onDidChangeDiagnostics,
   selectImport,
   selectImportForActiveWord,
 } from './importer'
@@ -31,6 +39,22 @@ function catchError(fn: (...args: any[]) => any) {
 }
 
 export const activate = async function activate(context: ExtensionContext) {
+  // Migrate settings to new names
+  const settings = workspace.getConfiguration('vandelay')
+  const scope = settings.inspect('autoImportSingleResult')
+  if (scope) {
+    settings.update(
+      'autoSelectSingleImportResult',
+      scope.globalValue,
+      ConfigurationTarget.Global
+    )
+    settings.update(
+      'autoSelectSingleImportResult',
+      scope.workspaceValue,
+      ConfigurationTarget.Workspace
+    )
+  }
+
   showNewVersionAlert(context)
 
   const pluginConfigs = [jsConfig, pyConfig]
@@ -63,10 +87,8 @@ export const activate = async function activate(context: ExtensionContext) {
         await removeUnusedImports()
         await importUndefinedVariables()
       })
-    )
-  )
+    ),
 
-  context.subscriptions.push(
     workspace.onDidChangeConfiguration(e => {
       if (
         e.affectsConfiguration('vandelay.configLocation') ||
@@ -78,6 +100,12 @@ export const activate = async function activate(context: ExtensionContext) {
 
     watchForChanges()
   )
+
+  if (settings.autoImport) {
+    context.subscriptions.push(
+      languages.onDidChangeDiagnostics(onDidChangeDiagnostics)
+    )
+  }
 
   return {
     registerPlugin: async ({ language }: { language: string }) => {

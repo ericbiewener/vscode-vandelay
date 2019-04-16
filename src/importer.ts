@@ -1,5 +1,13 @@
 import _ from 'lodash'
-import { window, workspace, TextEditor } from 'vscode'
+import {
+  DiagnosticChangeEvent,
+  languages,
+  TextEditor,
+  window,
+  workspace,
+  TextDocument,
+  Diagnostic,
+} from 'vscode'
 import { getDiagnosticsForActiveEditor } from './utils'
 import { getPluginForActiveFile } from './utils'
 import { cacheFileManager } from './cacheFileManager'
@@ -7,7 +15,10 @@ import { MergedExportData } from './types'
 
 // FIXME: all @ts-ignores
 
-export async function selectImport(word?: string | undefined | null) {
+export async function selectImport(
+  word?: string | undefined | null,
+  autoInsertOnly?: boolean
+) {
   const plugin = getPluginForActiveFile()
   if (!plugin) return
 
@@ -23,12 +34,19 @@ export async function selectImport(word?: string | undefined | null) {
     if (!items) return
     if (word) items = items.filter(item => item.label === word)
 
-    const selection =
-      !word ||
-      items.length > 1 ||
-      !workspace.getConfiguration('vandelay').autoImportSingleResult
-        ? await window.showQuickPick(items, { matchOnDescription: true })
-        : items[0]
+    let selection
+
+    if (autoInsertOnly) {
+      if (items.length > 1) return
+      selection = items[0]
+    } else {
+      selection =
+        !word ||
+        items.length > 1 ||
+        !workspace.getConfiguration('vandelay').autoSelectSingleImportResult
+          ? await window.showQuickPick(items, { matchOnDescription: true })
+          : items[0]
+    }
 
     if (!selection) return
     return plugin.insertImport(plugin, selection)
@@ -51,21 +69,44 @@ export async function importUndefinedVariables() {
   const diagnostics = getDiagnosticsForActiveEditor(
     plugin.shouldIncludeDisgnostic
   )
-  if (!diagnostics.length) return
 
   const { document } = window.activeTextEditor as TextEditor
+  const words = getUndefinedWords(document, diagnostics)
+  for (const word of words) await selectImport(word)
+}
+
+export async function onDidChangeDiagnostics(e: DiagnosticChangeEvent) {
+  return Promise.all(
+    e.uris.map(async uri => {
+      const editor = window.activeTextEditor
+      if (!editor || uri.path !== editor.document.uri.path) return
+
+      const plugin = getPluginForActiveFile(true)
+      if (!plugin) return
+
+      const diagnostics = languages
+        .getDiagnostics(uri)
+        .filter(plugin.shouldIncludeDisgnostic)
+
+      const words = getUndefinedWords(editor.document, diagnostics)
+      for (const word of words) await selectImport(word, true)
+    })
+  )
+}
+
+function getUndefinedWords(document: TextDocument, diagnostics: Diagnostic[]) {
   // Must collect all words before inserting any because insertions will cause the diagnostic ranges
   // to no longer be correct, thus not allowing us to get subsequent words
-  const words = []
-  for (const d of diagnostics) {
+  const words = diagnostics.map(d => {
     // Flake8 is returning a collapsed range, so expand it to the entire word
     const range = _.isEqual(d.range.start, d.range.end)
       ? document.getWordRangeAtPosition(d.range.start)
       : d.range
-    words.push(document.getText(range))
-  }
 
-  for (const word of _.uniq(words)) await selectImport(word)
+    return document.getText(range)
+  })
+
+  return _.uniq(words)
 }
 
 function getExportDataKeysByCachedDate(exportData: MergedExportData) {

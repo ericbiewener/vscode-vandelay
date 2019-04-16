@@ -192,10 +192,10 @@ export function processCachedData(data: CachingDataJs) {
     const reexportNames: string[] = []
 
     if (selective) {
-      for (const subfilePath in selective) {
-        const subfileExportNames = selective[subfilePath]
+      for (const subFilepath in selective) {
+        const subfileExportNames = selective[subFilepath]
         reexportNames.push(...subfileExportNames)
-        const subfileExports = getSubfileExports(mainFilepath, subfilePath, exp)
+        const subfileExports = getSubfileExports(mainFilepath, subFilepath, exp)
         if (subfileExports) {
           if (!subfileExports.reexported) {
             subfileExports.reexported = {
@@ -209,8 +209,8 @@ export function processCachedData(data: CachingDataJs) {
     }
 
     if (fullModules) {
-      for (const subfilePath of fullModules) {
-        const subfileExports = getSubfileExports(mainFilepath, subfilePath, exp)
+      for (const subFilepath of fullModules) {
+        const subfileExports = getSubfileExports(mainFilepath, subFilepath, exp)
         if (!subfileExports || !subfileExports.named) return
         if (fileExports.named) {
           fileExports.named.push(...subfileExports.named)

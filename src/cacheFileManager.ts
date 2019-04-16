@@ -3,8 +3,8 @@ import { isFile } from './utils'
 import { ExportData, Plugin } from './types'
 
 function parseCacheFile(plugin: Plugin) {
-  return isFile(plugin.cacheFilePath)
-    ? JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
+  return isFile(plugin.cacheFilepath)
+    ? JSON.parse(fs.readFileSync(plugin.cacheFilepath, 'utf-8'))
     : {}
 }
 

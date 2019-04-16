@@ -5,6 +5,7 @@ import { Plugin, PluginConfig, UserConfig, DefaultPluginConfig } from './types'
 import { cacheProjectLanguage } from './cacher'
 
 export const PLUGINS: { [lang: string]: Plugin } = {}
+const watchers: { [path: string]: boolean } = {}
 
 const defaultSettings: DefaultPluginConfig = {
   maxImportLineLength: 100,
@@ -28,22 +29,14 @@ export async function initializePlugin(
 
   const { language } = pluginConfig
   const configFile = 'vandelay-' + language + '.js'
-  const userConfig = await getUserConfig(configPath, configFile)
+  const configFilepath = path.join(configPath, configFile)
+  const userConfig = await getUserConfig(configFilepath, language)
   if (!userConfig) return
-
-  if (!userConfig.includePaths || !userConfig.includePaths.length) {
-    window.showErrorMessage(
-      `You must specify the "includePaths" configuration option in your vandelay-${language}.js file.`
-    )
-    return
-  }
-
-  console.log(cacheDirPath)
 
   const plugin = Object.assign(defaultSettings, pluginConfig, userConfig, {
     configFile,
     cacheDirPath,
-    cacheFilePath: path.join(cacheDirPath, 'vandelay-v2-' + language + '.json'),
+    cacheFilepath: path.join(cacheDirPath, 'vandelay-v2-' + language + '.json'),
     projectRoot:
       userConfig.projectRoot || workspace.workspaceFolders[0].uri.fsPath,
   }) as Plugin
@@ -51,25 +44,46 @@ export async function initializePlugin(
   plugin.excludePatterns.push(/.*\/\..*/) // exclude all folders starting with dot
   PLUGINS[language] = plugin
 
+  // Watch for changes to vandelay-*.js file
+  if (!watchers[configFilepath]) {
+    watchers[configFilepath] = true
+    const watcher = workspace
+      .createFileSystemWatcher(configFilepath)
+      .onDidChange(async () => {
+        const userConfig = await getUserConfig(configFilepath, language)
+        Object.assign(plugin, userConfig)
+      })
+    context.subscriptions.push(watcher)
+  }
+
   console.info(`Vandelay language registered: ${language}`)
 
-  if (!isFile(plugin.cacheFilePath)) return cacheProjectLanguage(plugin)
+  if (!isFile(plugin.cacheFilepath)) return cacheProjectLanguage(plugin)
 }
 
-async function getUserConfig(vandelayDir: string, vandelayFile: string) {
+async function getUserConfig(configFilepath: string, language: string) {
   try {
-    const absPath = path.join(vandelayDir, vandelayFile)
-    console.log(`Loading vandelay config file from ${absPath}`)
+    console.info(`Loading vandelay config file from ${configFilepath}`)
     // @ts-ignore -- use default `require` for dynamic imports
-    const userConfig = __non_webpack_require__(absPath)
-    if (typeof userConfig === 'object') return userConfig as UserConfig
+    const userConfig = __non_webpack_require__(configFilepath)
+    if (typeof userConfig === 'object') {
+      if (!userConfig.includePaths || !userConfig.includePaths.length) {
+        window.showErrorMessage(
+          `You must specify the "includePaths" configuration option in your vandelay-${language}.js file.`
+        )
+        return
+      }
+      return userConfig as UserConfig
+    }
     window.showErrorMessage(
       'Your Vandelay configuration file must export an object.'
     )
   } catch (e) {
     if (e.code === 'MODULE_NOT_FOUND') return // All good. Vandelay simply won't be used for the given language
     window.showErrorMessage(
-      'Cound not parse your ' + vandelayFile + ' file. Error:\n\n' + e
+      `Cound not parse your ${path.basename(
+        configFilepath
+      )} file. Error:\n\n${e}`
     )
   }
 }

@@ -8,12 +8,15 @@ import { PluginConfigJs } from './types'
 type DiagnosticCode = string | number | undefined
 
 function shouldIncludeDisgnostic({ code, source, message }: Diagnostic) {
+  if (source === 'ts') {
+    const codes: DiagnosticCode[] = [2552, 2304]
+    return codes.includes(code)
+  } else if (source === 'flow') {
+    return message.startsWith('Cannot resolve name')
+  }
+
   const codes: DiagnosticCode[] = ['no-undef', 'react/jsx-no-undef']
-  return (
-    codes.includes(code) ||
-    (source === 'flow' && message.startsWith('Cannot resolve name')) ||
-    (source === 'ts' && code === 2552)
-  )
+  return codes.includes(code)
 }
 
 export const JS_EXTENSIONS = ['js', 'jsx', 'ts', 'tsx', 'mjs']

@@ -31,7 +31,9 @@
 Importing code is annoying and the current VS Code tooling around it isn't good enough.
 This plugin keeps track of all available imports and allows you to quickly import them following
 whatever style guide your project requires for how import statements get written (see
-[Configuration](#configuration)). Multi-root workspaces are supported ([documentation](#multi-root-workspace)).
+[Configuration](#configuration)). If you use a supported linter (or Typescript or Flow), import statements will be written
+automatically as you type (Python requires saving the file since it currently does not lint on
+change). Multi-root workspaces are supported ([documentation](#multi-root-workspace)).
 
 ## Quick Start
 See [How to Use](#how-to-use).
@@ -87,7 +89,7 @@ workspace, see [those instructions](#multi-root-workspace).
 #### *Any time you make changes to this file, you must reload the window.*
 
 Along with providing configuration options, the presence of this file tells the plugin that it
-should track your project's imports. The lack of a `vandelay-<js|py>.js` file in a given
+should track your project's imports. The lack of a `vandelay-*.js` file in a given
 project will simply cause the plugin not to run.
 
 The configuration file must be written in JavaScript and export an object (`module.exports = { ...
@@ -261,7 +263,7 @@ Files ending in `*.ts` will automatically be parsed as Typescript files. You onl
 configuration option to `true` if your Typescript files end in `*.js`.
 
 ## Multi-Root Workspace
-You must add a `.vandelay` directory to your workspace that contains a file named `vandelay-<js|py>.js`.
+You must add a `.vandelay` directory to your workspace that contains a file named `vandelay--*js`.
 Along with the above configuration options, you must also provide a `projectRoot` string that
 specifies the absolute path to the directory that should be considered the overall root of your
 project. This will be used for determining relative paths (these paths may always be adjusted via
@@ -342,8 +344,16 @@ module.exports = {
 ```
 
 ## Settings
-Vandelay has one setting that may be specified in your VS Code user settings:
+The following settings may be specified in your VS Code user settings (not the vandelay-*.js configuration file):
 
-### `autoImportSingleResult: boolean`
+### `autoImport: boolean`
+Defaults to `true`. When a supported linter, Typescript, or Flow reports an undefined variable, it
+will automatically be imported if available. In other words, import statements get automatically
+written as you type! For Python, saving the file is required because VS Code currently does not
+support re-linting Python files until the file is saved. If more than one import matches the name of
+the undefined variable, it will not be imported automatically and you'll need to use the
+[`Import`](#import) command.
+
+### `autoSelectSingleImportResult: boolean`
 Defaults to `true`. When the `Import active word` command is used, the import will be automatically
 written to the file if only a single result is found.

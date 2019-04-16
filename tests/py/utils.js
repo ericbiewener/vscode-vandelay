@@ -26,7 +26,7 @@ const getPlugin = async () => {
 }
 
 const getExportData = plugin =>
-  JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
+  JSON.parse(fs.readFileSync(plugin.cacheFilepath, 'utf-8'))
 
 const openFile = (...fileParts) =>
   window.showTextDocument(
@@ -92,7 +92,7 @@ const cacheTest = async (context, config) => {
   const [plugin] = await Promise.all([getPlugin(), openFile()])
   Object.assign(plugin, config)
   await commands.executeCommand('vandelay.cacheProject')
-  const data = JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
+  const data = JSON.parse(fs.readFileSync(plugin.cacheFilepath, 'utf-8'))
   expect(data).toMatchSnapshot(context)
 }
 

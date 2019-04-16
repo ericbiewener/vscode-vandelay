@@ -20,7 +20,7 @@ for (const ext of JS_EXTENSIONS) extensionToLang[ext] = 'js'
 export function writeCacheFile(plugin: Plugin, data: CachingData) {
   _.each(data.imp, d => (d.isExtraImport = true))
   return makeDir(plugin.cacheDirPath).then(() =>
-    fs.writeFileSync(plugin.cacheFilePath, JSON.stringify(data))
+    fs.writeFileSync(plugin.cacheFilepath, JSON.stringify(data))
   )
 }
 
@@ -33,17 +33,18 @@ export function isFile(file: string) {
   }
 }
 
-export function getLangFromFilePath(filePath: string) {
-  const ext = path.extname(filePath).slice(1)
+export function getLangFromFilepath(filepath: string) {
+  const ext = path.extname(filepath).slice(1)
   return extensionToLang[ext] || ext
 }
 
-export function getPluginForActiveFile() {
+export function getPluginForActiveFile(silent?: true) {
   if (!window.activeTextEditor) return
   const plugin =
-    PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)]
-  if (!plugin)
+    PLUGINS[getLangFromFilepath(window.activeTextEditor.document.fileName)]
+  if (!plugin && !silent)
     window.showErrorMessage("Vandelay doesn't support the current language.")
+
   return plugin
 }
 
