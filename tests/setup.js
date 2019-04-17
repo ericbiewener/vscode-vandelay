@@ -34,5 +34,5 @@ afterEach(async () => {
 
   await commands.executeCommand('workbench.action.closeAllEditors')
   // Prevents test failures caused by text editors not being in expected open or closed state
-  return sleep()
+  return sleep(50)
 })
