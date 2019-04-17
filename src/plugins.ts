@@ -38,8 +38,6 @@ export async function initializePlugin(
     return
   }
 
-  console.log(cacheDirPath)
-
   const plugin = Object.assign(defaultSettings, pluginConfig, userConfig, {
     configFile,
     cacheDirPath,

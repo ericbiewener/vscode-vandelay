@@ -30,6 +30,8 @@ Object {
     "src2/file1.py": Object {
       "exports": Array [
         "CONSTANT_SRC2_FILE1_1",
+        "CONSTANT_SRC2_FILE1_2",
+        "CONSTANT_SRC2_FILE1_3",
       ],
     },
     "src3/file1.py": Object {
@@ -86,8 +88,9 @@ Object {
     "package3": Object {
       "exports": Array [
         "package3_file1_1",
-        "package3_file1_2",
+        "package3_file1_2 as package3_file1_2_renamed",
         "package3_file1_3",
+        "package3_file1_2",
         "package3_file2_1",
         "package3_src2_file1_1",
       ],
@@ -96,7 +99,7 @@ Object {
     "package4": Object {
       "exports": Array [
         "package4_file1_1",
-        "package4_file1_2",
+        "package4_file1_2 as package4_file1_2_renamed",
         "package4_file1_3",
       ],
       "isExtraImport": true,

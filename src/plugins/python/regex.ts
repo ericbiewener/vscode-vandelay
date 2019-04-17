@@ -39,7 +39,10 @@ function parseImportsWithRegex(
     }
     if (match[2]) {
       const matchText = replacer ? match[2].replace(replacer, '') : match[2]
-      importData.imports = matchText.split(',').filter(Boolean)
+      importData.imports = matchText
+        .split(',')
+        .map(i => i.trim())
+        .filter(Boolean)
     }
     imports.push(importData)
   }
@@ -52,7 +55,7 @@ export function parseImports(text: string) {
   // Mutate imports
   const imports: ParsedImportPy[] = []
   parseImportsWithRegex(imports, text, importRegex.entirePackage)
-  parseImportsWithRegex(imports, text, importRegex.singleLine, /\s/g)
-  parseImportsWithRegex(imports, text, importRegex.multiline, /[\s()]/g)
+  parseImportsWithRegex(imports, text, importRegex.singleLine)
+  parseImportsWithRegex(imports, text, importRegex.multiline, /[()]/g)
   return imports.sort((a, b) => a.start - b.start)
 }

@@ -1,4 +1,4 @@
-from package3 import package3_file2_1
+from package3 import package3_file1_2, package3_file2_1
 
 def fn_file2_1():
   pass

@@ -131,6 +131,16 @@ Array [
     "label": "CONSTANT_SRC2_FILE1_1",
   },
   Object {
+    "description": "src2.file1",
+    "isExtraImport": undefined,
+    "label": "CONSTANT_SRC2_FILE1_2",
+  },
+  Object {
+    "description": "src2.file1",
+    "isExtraImport": undefined,
+    "label": "CONSTANT_SRC2_FILE1_3",
+  },
+  Object {
     "description": "src3.file1",
     "isExtraImport": undefined,
     "label": "CONSTANT_SRC3_FILE1_1",
@@ -158,7 +168,8 @@ from group2b.subdir_1 import group2b_1
 from src1.file2 import (Class_file2_1, Class_file2_2, CONSTANT_FILE2_1,
   fn_file2_1, fn_file2_2)
 from src1.subdir.file1 import CONSTANT_SUBDIR_FILE1_1
-from src2.file1 import CONSTANT_SRC2_FILE1_1
+from src2.file1 import (CONSTANT_SRC2_FILE1_1, CONSTANT_SRC2_FILE1_2,
+  CONSTANT_SRC2_FILE1_3)
 
 from src3.file1 import CONSTANT_SRC3_FILE1_1
 
@@ -187,7 +198,8 @@ from group2b.subdir_1 import group2b_1
 from src1.file2 import (Class_file2_1, Class_file2_2, CONSTANT_FILE2_1,
   fn_file2_1, fn_file2_2)
 from src1.subdir.file1 import CONSTANT_SUBDIR_FILE1_1
-from src2.file1 import CONSTANT_SRC2_FILE1_1
+from src2.file1 import (CONSTANT_SRC2_FILE1_1, CONSTANT_SRC2_FILE1_2,
+  CONSTANT_SRC2_FILE1_3)
 
 from src3.file1 import CONSTANT_SRC3_FILE1_1
 
@@ -215,7 +227,8 @@ from group2b.subdir_1 import group2b_1
 from src1.file2 import (Class_file2_1, Class_file2_2, CONSTANT_FILE2_1,
   fn_file2_1, fn_file2_2)
 from src1.subdir.file1 import CONSTANT_SUBDIR_FILE1_1
-from src2.file1 import CONSTANT_SRC2_FILE1_1
+from src2.file1 import (CONSTANT_SRC2_FILE1_1, CONSTANT_SRC2_FILE1_2,
+  CONSTANT_SRC2_FILE1_3)
 
 from src3.file1 import CONSTANT_SRC3_FILE1_1
 "
@@ -240,7 +253,8 @@ from group2b.subdir_1 import group2b_1
 from src1.file2 import (Class_file2_1, Class_file2_2, CONSTANT_FILE2_1,
   fn_file2_1, fn_file2_2)
 from src1.subdir.file1 import CONSTANT_SUBDIR_FILE1_1
-from src2.file1 import CONSTANT_SRC2_FILE1_1
+from src2.file1 import (CONSTANT_SRC2_FILE1_1, CONSTANT_SRC2_FILE1_2,
+  CONSTANT_SRC2_FILE1_3)
 
 from src3.file1 import CONSTANT_SRC3_FILE1_1
 
@@ -265,7 +279,8 @@ from package5 import package5_file1_1, package5_file1_2, package5_file1_3
 from src1.file2 import (Class_file2_1, Class_file2_2, CONSTANT_FILE2_1,
   fn_file2_1, fn_file2_2)
 from src1.subdir.file1 import CONSTANT_SUBDIR_FILE1_1
-from src2.file1 import CONSTANT_SRC2_FILE1_1
+from src2.file1 import (CONSTANT_SRC2_FILE1_1, CONSTANT_SRC2_FILE1_2,
+  CONSTANT_SRC2_FILE1_3)
 from src3.file1 import CONSTANT_SRC3_FILE1_1
 "
 `;
@@ -294,7 +309,10 @@ from src1.file2 import (Class_file2_1,
   fn_file2_1, fn_file2_2)
 from src1.subdir.file1 import (
   CONSTANT_SUBDIR_FILE1_1)
-from src2.file1 import CONSTANT_SRC2_FILE1_1
+from src2.file1 import (
+  CONSTANT_SRC2_FILE1_1,
+  CONSTANT_SRC2_FILE1_2,
+  CONSTANT_SRC2_FILE1_3)
 
 from src3.file1 import CONSTANT_SRC3_FILE1_1
 "
@@ -322,7 +340,8 @@ from group2b.subdir_1 import group2b_1
 from src1.file2 import (Class_file2_1, Class_file2_2, CONSTANT_FILE2_1,
   fn_file2_1, fn_file2_2)
 from src1.subdir.file1 import CONSTANT_SUBDIR_FILE1_1
-from src2.file1 import CONSTANT_SRC2_FILE1_1
+from src2.file1 import (CONSTANT_SRC2_FILE1_1, CONSTANT_SRC2_FILE1_2,
+  CONSTANT_SRC2_FILE1_3)
 
 from src3.file1 import CONSTANT_SRC3_FILE1_1
 "
@@ -348,14 +367,16 @@ from SRC1.file2 import (Class_file2_1, Class_file2_2, CONSTANT_FILE2_1,
   fn_file2_1, fn_file2_2)
 from SRC1.subdir.file1 import CONSTANT_SUBDIR_FILE1_1
 
-from src2.file1 import CONSTANT_SRC2_FILE1_1
+from src2.file1 import (CONSTANT_SRC2_FILE1_1, CONSTANT_SRC2_FILE1_2,
+  CONSTANT_SRC2_FILE1_3)
 
 from src3.file1 import CONSTANT_SRC3_FILE1_1
 "
 `;
 
 exports[`Import Tests | import - shouldIncludeImport 1`] = `
-"from src2.file1 import CONSTANT_SRC2_FILE1_1
+"from src2.file1 import (CONSTANT_SRC2_FILE1_1, CONSTANT_SRC2_FILE1_2,
+  CONSTANT_SRC2_FILE1_3)
 "
 `;
 
@@ -379,9 +400,62 @@ from group2b.subdir_1 import group2b_1
 from src1.file2 import (Class_file2_1, Class_file2_2, CONSTANT_FILE2_1,
   fn_file2_1, fn_file2_2)
 from src1.subdir.file1 import CONSTANT_SUBDIR_FILE1_1
-from src2.file1 import CONSTANT_SRC2_FILE1_1
+from src2.file1 import (CONSTANT_SRC2_FILE1_1, CONSTANT_SRC2_FILE1_2,
+  CONSTANT_SRC2_FILE1_3)
 
 from src3.file1 import CONSTANT_SRC3_FILE1_1
+"
+`;
+
+exports[`Import Tests | import - src1/file1.js - preserve file - original order 1`] = `
+"import full_package1
+from package3 import (package3_file1_1, package3_file1_2, package3_file1_3,
+  package3_file2_1, package3_src2_file1_1)
+from package4 import (package4_file1_1, package4_file1_2,
+package4_file1_3)
+from package5 import (
+  package5_file1_1,
+  package5_file1_2,
+  package5_file1_3,
+)
+import full_package2
+ 
+from group1a.subdir_1 import group1a_1
+from group1b.subdir_1 import group1b_1
+from group1a.subdir_2 import group1a_2
+
+from group2a.subdir_1 import group2a_1
+from group2b.subdir_1 import group2b_1
+from group2a.subdir_2 import group2a_2
+
+from src1.file1 import src1_file1_1
+from src1.subdir.file1 import CONSTANT_SUBDIR_FILE1_1
+from src2.file1 import (CONSTANT_SRC2_FILE1_1, CONSTANT_SRC2_FILE1_2,
+  CONSTANT_SRC2_FILE1_3, src2_file1_1)
+from src1.file2 import (Class_file2_1, Class_file2_2, CONSTANT_FILE2_1,
+  fn_file2_1, fn_file2_2, src1_file2_1)
+
+from src3.file1 import CONSTANT_SRC3_FILE1_1
+
+def fn_file1_1():
+  pass
+
+def fn_file1_2():
+  pass
+
+def _private_fn():
+  pass
+
+class Class_file1_1():
+  pass
+
+class Class_file1_2():
+  pass
+
+CONSTANT_FILE1_1 = 1
+CONSTANT_FILE1_2 = 2
+
+non_constant = 3
 "
 `;
 
@@ -405,7 +479,8 @@ from src1.file1 import (Class_file1_1, Class_file1_2, CONSTANT_FILE1_1,
     CONSTANT_FILE1_2, fn_file1_1, fn_file1_2)
 from src1.file2 import (Class_file2_1, Class_file2_2, CONSTANT_FILE2_1,
     fn_file2_1, fn_file2_2)
-from src2.file1 import CONSTANT_SRC2_FILE1_1
+from src2.file1 import (CONSTANT_SRC2_FILE1_1, CONSTANT_SRC2_FILE1_2,
+    CONSTANT_SRC2_FILE1_3)
 
 from src3.file1 import CONSTANT_SRC3_FILE1_1
 "

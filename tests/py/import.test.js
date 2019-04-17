@@ -1,14 +1,13 @@
 const { importTests } = require('../shared-tests')
 const { insertTest, configInsertTest } = require('../utils')
 
-describe("Import Tests", function() {
-
+describe.only('Import Tests', function() {
   importTests()
 
   it('import - has code', async function() {
     await insertTest(
       this,
-    `def foo():
+      `def foo():
     pass
 `
     )
@@ -17,7 +16,7 @@ describe("Import Tests", function() {
   it('import - single line comment', async function() {
     await insertTest(
       this,
-    `# I'm a comment
+      `# I'm a comment
 `
     )
   })
@@ -25,7 +24,7 @@ describe("Import Tests", function() {
   it('import - multiline comment', async function() {
     await insertTest(
       this,
-    `"""I'm a comment
+      `"""I'm a comment
     With multiple lines
 """ 
 `
@@ -35,7 +34,7 @@ describe("Import Tests", function() {
   it('import - comment with code right after', async function() {
     await insertTest(
       this,
-    `# I'm a comment
+      `# I'm a comment
 def foo():
     pass    
 `
@@ -45,12 +44,16 @@ def foo():
   it('import - comment with linebreak and code', async function() {
     await insertTest(
       this,
-    `# I'm a comment
+      `# I'm a comment
 
 def foo():
     pass
 `
     )
+  })
+
+  it.only('import - src1/file1.js - preserve file', async function() {
+    await insertTest(this, '', 'src1/file1.py', true)
   })
 
   it('import - src1/subdir/file1.js', async function() {
@@ -79,5 +82,4 @@ def foo():
       shouldIncludeImport: absImportPath => absImportPath.includes('src2'),
     })
   })
-
 })

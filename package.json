@@ -90,7 +90,7 @@
     "build": "NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.ts",
     "test": "yarn run compile && node ./node_modules/vscode/bin/test",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "prettier": "prettier-eslint --write \"**/*.ts\"",
+    "prettier": "prettier-eslint --write \"**/*.{ts,js}\"",
     "package": "vsce package --yarn",
     "ext": "rm -rf ~/.vscode/extensions/edb.vandelay-[0-9]* && rm -f *.vsix && yarn run package && code --install-extension *.vsix",
     "compare": "node compareSnapshotStructures",
@@ -138,7 +138,7 @@
     "make-dir": "3.0.0"
   },
   "lint-staged": {
-    "**/*.ts": [
+    "**/*.{ts,js}": [
       "prettier-eslint --prettier-last --write",
       "git add"
     ]

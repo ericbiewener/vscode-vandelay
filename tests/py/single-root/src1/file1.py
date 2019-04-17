@@ -1,6 +1,6 @@
 import full_package1
-from package3 import package3_file1_1, package3_file1_2, package3_file1_3
-from package4 import (package4_file1_1, package4_file1_2,
+from package3 import package3_file1_1, package3_file1_2 as package3_file1_2_renamed, package3_file1_3
+from package4 import (package4_file1_1, package4_file1_2 as package4_file1_2_renamed,
 package4_file1_3)
 from package5 import (
   package5_file1_1,

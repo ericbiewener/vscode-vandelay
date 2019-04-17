@@ -2,7 +2,14 @@ const fs = require('fs')
 const path = require('path')
 const _ = require('lodash')
 const { sleep } = require('utlz')
-const { window, Range, workspace, extensions, Uri, commands } = require('vscode')
+const {
+  window,
+  Range,
+  workspace,
+  extensions,
+  Uri,
+  commands,
+} = require('vscode')
 
 async function getPlugin() {
   const api = await extensions.getExtension('edb.vandelay').activate()
@@ -39,7 +46,7 @@ async function cacheTest(context, config) {
 }
 
 async function buildImportItems() {
-  await commands.executeCommand("vandelay.selectImport");
+  await commands.executeCommand('vandelay.selectImport')
   const items = window.showQuickPick.args[0][0]
   return items
 }
@@ -63,18 +70,23 @@ function replaceFileContents(newText = '') {
 async function insertItems(plugin, importItems) {
   for (const item of importItems) {
     window.showQuickPick.callsFake(() => Promise.resolve(item))
-    await commands.executeCommand("vandelay.selectImport");
+    await commands.executeCommand('vandelay.selectImport')
   }
-  
+
   return window.activeTextEditor.document.getText()
 }
 
-async function insertTest(context, startingText, filepath) {
+async function insertTest(
+  context,
+  startingText,
+  filepath,
+  preserveFileContents
+) {
   const open = () => (filepath ? openFile(filepath) : openFile())
 
   const [plugin] = await Promise.all([getPlugin(), open()])
-  await replaceFileContents(startingText)
-  
+  if (!preserveFileContents) await replaceFileContents(startingText)
+
   let importItems = await buildImportItems()
 
   const originalResult = await insertItems(plugin, importItems)
