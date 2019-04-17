@@ -1,12 +1,13 @@
 import _ from 'lodash'
 import {
+  Diagnostic,
   DiagnosticChangeEvent,
   languages,
+  Range,
+  TextDocument,
   TextEditor,
   window,
   workspace,
-  TextDocument,
-  Diagnostic,
 } from 'vscode'
 import { getDiagnosticsForActiveEditor } from './utils'
 import { getPluginForActiveFile } from './utils'
@@ -88,23 +89,55 @@ export async function onDidChangeDiagnostics(e: DiagnosticChangeEvent) {
         .getDiagnostics(uri)
         .filter(plugin.shouldIncludeDisgnostic)
 
-      const words = getUndefinedWords(editor.document, diagnostics)
+      // Ignores editor.selections so that words actively being typed don't get auto-imported
+      const words = getUndefinedWords(
+        editor.document,
+        diagnostics,
+        editor.selections
+      )
       for (const word of words) await selectImport(word, true)
     })
   )
 }
 
-function getUndefinedWords(document: TextDocument, diagnostics: Diagnostic[]) {
+function getUndefinedWords(
+  document: TextDocument,
+  diagnostics: Diagnostic[],
+  ignoreRanges?: Range[]
+) {
+  const ignoreOffsets = !ignoreRanges
+    ? null
+    : ignoreRanges.map(range => ({
+        start: document.offsetAt(range.start),
+        end: document.offsetAt(range.start),
+      }))
+
   // Must collect all words before inserting any because insertions will cause the diagnostic ranges
   // to no longer be correct, thus not allowing us to get subsequent words
-  const words = diagnostics.map(d => {
-    // Flake8 is returning a collapsed range, so expand it to the entire word
-    const range = _.isEqual(d.range.start, d.range.end)
-      ? document.getWordRangeAtPosition(d.range.start)
-      : d.range
+  const words = diagnostics
+    .map(d => {
+      // Flake8 is returning a collapsed range, so expand it to the entire word
+      const range = _.isEqual(d.range.start, d.range.end)
+        ? document.getWordRangeAtPosition(d.range.start)
+        : d.range
 
-    return document.getText(range)
-  })
+      if (!range) return null
+
+      // Don't import word if range overlaps at all
+      if (ignoreOffsets) {
+        for (const { start, end } of ignoreOffsets) {
+          if (
+            start >= document.offsetAt(range.end) ||
+            end <= document.offsetAt(range.start)
+          ) {
+            return null
+          }
+        }
+      }
+
+      return document.getText(range)
+    })
+    .filter(Boolean)
 
   return _.uniq(words)
 }
