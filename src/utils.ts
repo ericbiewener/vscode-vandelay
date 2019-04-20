@@ -148,6 +148,7 @@ export type DiagnosticsByFile = {
 
 export function getDiagnosticsForAllEditors(filter: DiagnosticFilter) {
   const diagnosticsByFile: DiagnosticsByFile = {}
+  const ds = languages.getDiagnostics()
   for (const [file, diagnostics] of languages.getDiagnostics()) {
     const remaining = diagnostics.filter(filter)
     if (remaining.length) diagnosticsByFile[file.fsPath] = remaining

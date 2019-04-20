@@ -19,7 +19,7 @@ let fileAccess: Promise<void>
 
 export function cacheFileManager(
   plugin: Plugin,
-  cb: (data: ExportData) => void
+  cb: (data: ExportData) => Promise<void>
 ) {
   fileAccess = fileAccess
     ? fileAccess.then(() => cb(parseCacheFile(plugin)))

@@ -69,28 +69,58 @@ export async function removeUnusedImports(plugin: PluginJs) {
 
     sortUnusedImportChanges(changes)
 
-    await editor.edit(builder => {
-      for (const change of changes) {
-        let newLine
-        const { match } = change
-        if (change.entireLine) {
-          newLine = ''
-        } else {
-          const { default: defaultImport, named, types } = change
-          newLine =
-            defaultImport || named.length || types.length
-              ? getNewLine(plugin, match.path, change)
-              : ''
-        }
+    // We make changes to a string outside of the edit builder so that we don't have to worry about
+    // overlapping edit ranges
+    const oldTextEnd = changes[0].match.end // +1 in case we need to remove the following \n
+    let newText = fullText.slice(0, oldTextEnd) // could just do this on the fullText
 
-        builder.replace(
-          new Range(
-            document.positionAt(newLine ? match.start : match.start - 1), // Delete previous \n if newLine is empty
-            document.positionAt(match.end)
-          ),
-          newLine
-        )
+    for (const change of changes) {
+      let newLine
+      const { match } = change
+      if (change.entireLine) {
+        newLine = ''
+      } else {
+        const { default: defaultImport, named, types } = change
+        newLine =
+          defaultImport || named.length || types.length
+            ? getNewLine(plugin, match.path, change)
+            : ''
       }
+
+      let { end } = match
+      if (!newLine) end += newText[end + 1] === '\n' ? 2 : 1
+      newText = newText.slice(0, match.start) + newLine + newText.slice(end)
+    }
+
+    // await editor.edit(builder => {
+    //   for (const change of changes) {
+    //     let newLine
+    //     const { match } = change
+    //     if (change.entireLine) {
+    //       newLine = ''
+    //     } else {
+    //       const { default: defaultImport, named, types } = change
+    //       newLine =
+    //         defaultImport || named.length || types.length
+    //           ? getNewLine(plugin, match.path, change)
+    //           : ''
+    //     }
+
+    //     builder.replace(
+    //       new Range(
+    //         document.positionAt(newLine ? match.start : match.start - 1), // Delete previous \n if newLine is empty
+    //         document.positionAt(match.end)
+    //       ),
+    //       newLine
+    //     )
+    //   }
+    // })
+
+    await editor.edit(builder => {
+      builder.replace(
+        new Range(document.positionAt(0), document.positionAt(oldTextEnd)),
+        newText
+      )
     })
 
     await document.save()
