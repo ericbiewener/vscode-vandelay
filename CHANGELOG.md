@@ -1,3 +1,6 @@
+### Version 2.3.0
+- Longer sleep
+
 ### Version 2.2.0
 - Preserve relative Python import paths
 - Fix bug in `Fix Imports` command that could cause active file's unused imports to not get removed

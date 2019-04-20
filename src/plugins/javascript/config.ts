@@ -16,7 +16,7 @@ function shouldIncludeDisgnostic({ code, source, message }: Diagnostic) {
   )
 }
 
-export const JS_EXTENSIONS = ['js', 'jsx', 'ts', 'tsx', 'mjs']
+export const JS_EXTENSIONS = ['js', 'jsx', 'ts', 'tsx', 'mjs', 'mdx']
 
 export const config: PluginConfigJs = {
   language: 'js',
