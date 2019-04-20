@@ -1,5 +1,5 @@
 ### Version 2.3.0
-- Longer sleep
+- Support *.mdx file extensions
 
 ### Version 2.2.0
 - Preserve relative Python import paths
