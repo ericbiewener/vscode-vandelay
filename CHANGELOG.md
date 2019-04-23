@@ -1,8 +1,5 @@
 ### Version 2.4.0
-- Support mdx file extensions
-- Update settings
-- Normalize import path for Windows
-- gitignore
+- Normalize import paths for Windows (write / to file rather than \)
 
 ### Version 2.3.0
 - Support *.mdx file extensions
