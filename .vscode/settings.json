@@ -14,8 +14,8 @@
     "python": true,
     "yarn-error.log": true,
     "yarn.lock": true,
-    "tests": true,
-    "test-workspaces": true
+    "tests": false,
+    "test-workspaces": false
   },
 
   "settingsOnFire.toggle": {
