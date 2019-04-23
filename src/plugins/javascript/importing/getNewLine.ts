@@ -42,10 +42,13 @@ export function getNewLine(
     newLineEnd += '}'
   }
 
+  // Replace \ with / for Windows
+  const normalizedImportPath = importPath.replace(/\\/g, '/')
+
   const quoteChar = useSingleQuotes ? "'" : '"'
   newLineEnd += ` ${
     plugin.useES5 ? '= require(' : 'from '
-  }${quoteChar}${importPath}${quoteChar}${plugin.useES5 ? ')' : ''}`
+  }${quoteChar}${normalizedImportPath}${quoteChar}${plugin.useES5 ? ')' : ''}`
   if (useSemicolons) newLineEnd += ';'
 
   // Split up line if necessary
