@@ -22,6 +22,7 @@ export type ParsedImportPy = {
   start: number
   end: number
   imports?: string[]
+  renamed?: { [originalName: string]: string }
 }
 
 function parseImportsWithRegex(
@@ -37,12 +38,23 @@ function parseImportsWithRegex(
       start: match.index,
       end: match.index + match[0].length,
     }
+    // if match[2] does not exist, it's a full package import (`import json`)
     if (match[2]) {
       const matchText = replacer ? match[2].replace(replacer, '') : match[2]
-      importData.imports = matchText
-        .split(',')
-        .map(i => i.trim())
-        .filter(Boolean)
+      importData.imports = []
+      for (const imp of matchText.split(',')) {
+        const parts = imp.split(' as ')
+        const name = parts[0].trim()
+        if (!name) continue
+        importData.imports.push(name)
+        if (parts[1]) {
+          // TODO: use defaultdict equivalent with Proxy https://stackoverflow.com/questions/19127650/defaultdict-equivalent-in-javascript
+          // many other places for defaultdict functionality as well
+          const renamed = importData.renamed || {}
+          importData.renamed = renamed || {}
+          renamed[name] = parts[1].trim()
+        }
+      }
     }
     imports.push(importData)
   }
