@@ -13,6 +13,27 @@
     "**/node_modules": true,
     "python": true,
     "yarn-error.log": true,
-    "yarn.lock": true
+    "yarn.lock": true,
+    "tests": true,
+    "test-workspaces": true
   },
+
+  "settingsOnFire.toggle": {
+    "Tests": {
+      "on": {
+        "_label": "Show",
+        "files.exclude": {
+          "tests": false,
+          "test-workspaces": false,
+        }
+      },
+      "off": {
+        "_label": "Hide",
+        "files.exclude": {
+          "tests": true,
+          "test-workspaces": true,
+        }
+      }
+    }
+  }
 }
