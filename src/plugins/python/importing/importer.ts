@@ -153,8 +153,18 @@ function getNewLineImports(
   const { match, indexModifier, isFirstImport } = importPosition
   if (indexModifier || isFirstImport) return [exportName]
 
-  const { imports } = match as ParsedImportPy
+  const { imports, renamed } = match as ParsedImportPy
   if (!imports) return [exportName]
   if (imports.includes(exportName)) return
-  return [...imports, exportName]
+
+  if (!renamed) return [...imports, exportName]
+
+  // Preserve the renaming of any existing imports
+  const newImports = imports.map(name => {
+    const renaming = renamed[name]
+    return renaming ? `${name} as ${renaming}` : name
+  })
+
+  newImports.push(exportName)
+  return newImports
 }

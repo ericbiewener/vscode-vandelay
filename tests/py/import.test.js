@@ -1,7 +1,7 @@
 const { importTests } = require('../shared-tests')
 const { insertTest, configInsertTest } = require('../utils')
 
-describe.only('Import Tests', function() {
+describe('Import Tests', function() {
   importTests()
 
   it('import - has code', async function() {
@@ -52,7 +52,7 @@ def foo():
     )
   })
 
-  it.only('import - src1/file1.js - preserve file', async function() {
+  it('import - src1/file1.js - preserve file', async function() {
     await insertTest(this, '', 'src1/file1.py', true)
   })
 
