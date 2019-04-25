@@ -33,9 +33,14 @@ export function showNewVersionAlert(context: ExtensionContext) {
 
   const CHANGELOG = 1
 
+  const msg =
+    newSemver[0] > oldSemver[0]
+      ? '🍔 VANDELAY BREAKING CHANGES: See Changelog.'
+      : 'Vandelay has been updated. Check out the new features!'
+
   window
     .showInformationMessage(
-      'Vandelay has been updated. Check out the new features!',
+      msg,
       { title: 'View Changelog', id: CHANGELOG },
       { title: "Don't show this again", id: 'noshow' }
     )

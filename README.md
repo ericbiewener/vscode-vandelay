@@ -178,6 +178,9 @@ processImportPath: importPath => (
 )
 ```
 
+### `processImportName(importPath: string, absImportPath: string, activeFilepath: string, projectRoot: string): ?string`
+TODO -- and add examples in py and js configs at bottom
+
 ### `shouldIncludeImport(absImportPath: string, activeFilepath: string): boolean`
 May be used to exclude certain imports from the list of options.
 
@@ -192,17 +195,6 @@ shouldIncludeImport: (absImportPath, activeFilepath) => (
 
 ## JavaScript Only Options
 
-### `processDefaultName(filepath: string): ?string` (JS only)
-Default exports will be tracked using the file name (i.e. a default export in `myFile.js` will be
-named `myFile`). This setting lets you modify this behavior on a file-by-file basis. By
-returning a falsey value, the default filename-based naming will still be used.
-
-* `filepath`: is the absolute path to the file on your computer.
-
-```js
-processDefaultName: filepath => filepath === "/Users/eric/my-project/src/foo/bar.js" ? "greatName" : null
-```
-  
 ### `padCurlyBraces: boolean` (JS only)
 Defaults to `true`. Whether import statements should include spaces between curly braces and import
 names.
@@ -292,11 +284,6 @@ module.exports = {
   nonModulePaths: ['src1'],
   processImportPath: (importPath, absImportPath, activeFilepath, projectRoot) => {
     if (absImportPath.startsWith(src1)) return absImportPath.slice(projectRoot.length + 1)
-  },
-  processDefaultName: (filepath) => {
-    if (filepath === path.join(src1, 'services/api.js')) return 'apiService'
-    if (filepath === path.join(src2, 'services/message.js')) return 'messageService'
-    if (filepath === 'react') return '* as React';
   },
   shouldIncludeImport: (absImportPath, activeFilepath) => {
     return (

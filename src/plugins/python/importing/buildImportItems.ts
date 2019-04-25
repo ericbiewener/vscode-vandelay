@@ -33,12 +33,13 @@ export function buildImportItems(
     } else {
       dotPath = removeExt(importPath).replace(/\//g, '.')
       if (plugin.processImportPath) {
-        dotPath = plugin.processImportPath(
-          dotPath,
-          absImportPath,
-          activeFilepath,
-          plugin.projectRoot
-        )
+        dotPath =
+          plugin.processImportPath(
+            dotPath,
+            absImportPath,
+            activeFilepath,
+            plugin.projectRoot
+          ) || dotPath
       }
     }
 
@@ -53,8 +54,18 @@ export function buildImportItems(
 
     // Don't sort data.exports because they were already sorted when caching. See python `cacheFile`
     for (const exportName of data.exports) {
+      const processedExportName = plugin.processImportName
+        ? plugin.processImportName(
+            exportName,
+            dotPath,
+            absImportPath,
+            activeFilepath,
+            plugin.projectRoot
+          )
+        : exportName
+
       items.push({
-        label: exportName,
+        label: processedExportName || exportName,
         description: dotPath,
         isExtraImport: data.isExtraImport,
       })

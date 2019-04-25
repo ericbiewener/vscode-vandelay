@@ -36,13 +36,7 @@ export function cacheFile(
     if (isPathNodeModule(plugin, importData.path)) {
       const existing = imp[importData.path] || {}
       imp[importData.path] = existing
-      if (importData.default) {
-        existing.default = processDefaultName(
-          plugin,
-          importData.default,
-          importData.path
-        )
-      }
+      if (importData.default) existing.default = importData.default
       if (importData.named)
         existing.named = _.union(existing.named, importData.named)
       if (importData.types)
@@ -75,10 +69,9 @@ export function cacheFile(
 
   while ((match = mainRegex.exec(fileText))) {
     if (match[1] === 'default' || (plugin.useES5 && match[1])) {
-      const proposedName = isIndexFile(filepath)
+      fileExports.default = isIndexFile(filepath)
         ? basenameNoExt(path.dirname(filepath))
         : basenameNoExt(filepath)
-      fileExports.default = processDefaultName(plugin, proposedName, filepath)
     } else if (!plugin.useES5 && !match[2] && !match[1].endsWith(',')) {
       // endsWith(',') — it's actually a reexport
       // export myVar  |  export myVar from ...
@@ -231,15 +224,6 @@ export function processCachedData(data: CachingDataJs) {
   }
 
   return data
-}
-
-function processDefaultName(
-  plugin: PluginJs,
-  defaultName: string,
-  importPath: string
-) {
-  if (!plugin.processDefaultName) return defaultName
-  return plugin.processDefaultName(importPath) || defaultName
 }
 
 function getSubfileExports(

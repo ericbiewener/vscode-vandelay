@@ -82,7 +82,13 @@ export function buildImportItems(
 
     if (defaultExport) {
       items.push({
-        label: defaultExport,
+        label: processImportName(
+          plugin,
+          defaultExport,
+          importPath,
+          absImportPath,
+          activeFilepath
+        ),
         description: importPathNoExt,
         exportType: ExportType.default,
         isExtraImport: data.isExtraImport,
@@ -93,7 +99,13 @@ export function buildImportItems(
     if (namedExports) {
       namedExports.forEach(exportName => {
         items.push({
-          label: exportName,
+          label: processImportName(
+            plugin,
+            exportName,
+            importPath,
+            absImportPath,
+            activeFilepath
+          ),
           description: importPathNoExt,
           exportType: ExportType.named,
           isExtraImport: data.isExtraImport,
@@ -105,7 +117,13 @@ export function buildImportItems(
     if (typeExports) {
       typeExports.forEach(exportName => {
         items.push({
-          label: exportName,
+          label: processImportName(
+            plugin,
+            exportName,
+            importPath,
+            absImportPath,
+            activeFilepath
+          ),
           description: importPathNoExt,
           exportType: ExportType.type,
           isExtraImport: data.isExtraImport,
@@ -116,4 +134,23 @@ export function buildImportItems(
   }
 
   return items
+}
+
+function processImportName(
+  plugin: PluginJs,
+  exportName: string,
+  importPath: string,
+  absImportPath: string,
+  activeFilepath: string
+) {
+  if (!plugin.processImportName) return exportName
+  return (
+    plugin.processImportName(
+      exportName,
+      importPath,
+      absImportPath,
+      activeFilepath,
+      plugin.projectRoot
+    ) || exportName
+  )
 }
