@@ -10,6 +10,7 @@ const {
   Uri,
   commands,
 } = require('vscode')
+const snapshotDiff = require('snapshot-diff')
 
 async function getPlugin() {
   const api = await extensions.getExtension('edb.vandelay').activate()
@@ -41,13 +42,13 @@ async function cacheTest(context, config) {
   const [plugin] = await Promise.all([getPlugin(), openFile()])
   Object.assign(plugin, config)
   await commands.executeCommand('vandelay.cacheProject')
-  const data = JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
+  const data = JSON.parlse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
   expect(data).toMatchSnapshot(context)
 }
 
 async function buildImportItems() {
   await commands.executeCommand('vandelay.selectImport')
-  const items = window.showQuickPick.args[0][0]
+  const items = _.last(window.showQuickPick.args)[0]
   return items
 }
 
@@ -105,6 +106,29 @@ async function insertTest(
   }
 }
 
+async function configInsertDiffTest(context, config) {
+  const [plugin] = await Promise.all([getPlugin(), openFile()])
+  await replaceFileContents()
+
+  if (!this.noConfig) {
+    // Cache for faster test running
+    const importItems = await buildImportItems()
+    this.noConfig = await insertItems(plugin, importItems)
+    await replaceFileContents()
+  }
+
+  Object.assign(plugin, config)
+  const importItems = await buildImportItems()
+  const withConfig = await insertItems(plugin, importItems)
+  expect(
+    snapshotDiff(this.noConfig, withConfig, {
+      aAnnotation: 'No Config',
+      bAnnotation: 'With Config',
+      contextLines: 0,
+    })
+  ).toMatchSnapshot(context)
+}
+
 async function configInsertTest(context, config, reCache) {
   if (reCache) await commands.executeCommand('vandelay.cacheProject')
   const [plugin] = await Promise.all([getPlugin(), openFile()])
@@ -125,4 +149,5 @@ module.exports = {
   saveFile,
   insertTest,
   configInsertTest,
+  configInsertDiffTest,
 }

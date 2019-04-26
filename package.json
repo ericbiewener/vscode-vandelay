@@ -123,6 +123,7 @@
     "log-all-the-things": "2.1.0",
     "prettier-eslint-cli": "4.7.1",
     "sinon": "7.3.1",
+    "snapshot-diff": "0.5.1",
     "ts-node": "8.0.3",
     "typescript": "3.4.2",
     "utlz": "1.2.0",

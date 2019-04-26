@@ -1,5 +1,10 @@
 const { importTests } = require('../shared-tests')
-const { insertTest, configInsertTest } = require('../utils')
+const {
+  insertTest,
+  configInsertTest,
+  configInsertDiffTest,
+} = require('../utils')
+const snapshotDiff = require('snapshot-diff')
 
 describe('Import Tests', function() {
   importTests()
@@ -66,14 +71,24 @@ def foo():
 
   it('import - maxImportLineLength', async function() {
     // Length of 46 needed to test lines that come up right against the limit
-    await configInsertTest(this, { maxImportLineLength: 46 })
+    await configInsertDiffTest(this, { maxImportLineLength: 46 })
   })
 
   it('import - processImportPath', async function() {
     // By changing the name of this importPath, we break its grouping with `src2`. This is the correct
     // result. Up to the user to fix the value in `importGroups`
-    await configInsertTest(this, {
+    await configInsertDiffTest(this, {
       processImportPath: importPath => importPath.replace('src1', 'SRC1'),
+    })
+  })
+
+  it('import - processImportName', async function() {
+    await configInsertDiffTest(this, {
+      processImportName: importName => {
+        return importName === 'package3_file1_1'
+          ? 'package3_file1_1 as package3_file1_1_renamed'
+          : null
+      },
     })
   })
 
