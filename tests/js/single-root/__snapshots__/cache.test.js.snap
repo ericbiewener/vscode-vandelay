@@ -1,10 +1,47 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Cache Tests | cacheProject - excludePatterns = [src2] 1`] = `
+"Snapshot Diff:
+- No Config
++ With Config
+
+@@ -244,6 +244,0 @@
+-     \\"src2/file1.js\\": Object {
+-       \\"named\\": Array [
+-         \\"src2_file1_1\\",
+-       ],
+-       \\"types\\": Array [],
+-     },
+@@ -272,1 +266,0 @@
+-         \\"module2_src2_1\\","
+`;
+
+exports[`Cache Tests | cacheProject - includePaths = [src2] 1`] = `
+Object {
+  "exp": Object {
+    "src2/file1.js": Object {
+      "named": Array [
+        "src2_file1_1",
+      ],
+      "types": Array [],
+    },
+  },
+  "imp": Object {
+    "module2": Object {
+      "isExtraImport": true,
+      "named": Array [
+        "module2_src2_1",
+      ],
+    },
+  },
+}
+`;
+
+exports[`Cache Tests | cacheProject - processDefaultName 1`] = `
 Object {
   "exp": Object {
     "src1/file1.js": Object {
-      "default": "file1",
+      "default": "DEFAULT",
       "named": Array [
         "src1_file1_1",
         "src1_file1_2",
@@ -28,7 +65,7 @@ Object {
       ],
     },
     "src1/file2.js": Object {
-      "default": "file2",
+      "default": "DEFAULT",
       "named": Array [
         "src1_file2_1",
         "src1_file2_2",
@@ -51,7 +88,7 @@ Object {
       ],
     },
     "src1/file3.js": Object {
-      "default": "file3",
+      "default": "DEFAULT",
       "named": Array [
         "src1_file3_1",
         "src1_file3_2",
@@ -75,7 +112,7 @@ Object {
       ],
     },
     "src1/file4.js": Object {
-      "default": "file4",
+      "default": "DEFAULT",
       "named": Array [
         "src1_file4_1",
         "src1_file4_2",
@@ -97,7 +134,7 @@ Object {
       ],
     },
     "src1/file5.js": Object {
-      "default": "file5",
+      "default": "DEFAULT",
       "named": Array [
         "src1_file5_1",
         "src1_file5_2",
@@ -121,7 +158,7 @@ Object {
       ],
     },
     "src1/file6.js": Object {
-      "default": "file6",
+      "default": "DEFAULT",
       "named": Array [
         "src1_file6_1",
         "src1_file6_2",
@@ -169,7 +206,7 @@ Object {
       ],
     },
     "src1/index.js": Object {
-      "default": "src1",
+      "default": "DEFAULT",
       "named": Array [
         "file5default",
         "file6default",
@@ -244,6 +281,12 @@ Object {
       ],
       "types": Array [],
     },
+    "src2/file1.js": Object {
+      "named": Array [
+        "src2_file1_1",
+      ],
+      "types": Array [],
+    },
     "src3/file1.js": Object {
       "named": Array [
         "src3_file1_1",
@@ -266,6 +309,7 @@ Object {
         "module2_1",
         "module2_2 as module2_2_renamed",
         "module2_3",
+        "module2_src2_1",
       ],
       "types": Array [
         "module2_t_1",
@@ -320,25 +364,10 @@ Object {
 }
 `;
 
-exports[`Cache Tests | cacheProject - includePaths = [src2] 1`] = `
-Object {
-  "exp": Object {
-    "src2/file1.js": Object {
-      "named": Array [
-        "src2_file1_1",
-      ],
-      "types": Array [],
-    },
-  },
-  "imp": Object {
-    "module2": Object {
-      "isExtraImport": true,
-      "named": Array [
-        "module2_src2_1",
-      ],
-    },
-  },
-}
+exports[`Cache Tests | cacheProject - processDefaultName 2`] = `
+Array [
+  "absRoot/src1/index.js",
+]
 `;
 
 exports[`Cache Tests | cacheProject 1`] = `

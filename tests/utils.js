@@ -12,6 +12,14 @@ const {
 } = require('vscode')
 const snapshotDiff = require('snapshot-diff')
 
+function diff(a, b) {
+  return snapshotDiff(a, b, {
+    aAnnotation: 'No Config',
+    bAnnotation: 'With Config',
+    contextLines: 0,
+  })
+}
+
 async function getPlugin() {
   const api = await extensions.getExtension('edb.vandelay').activate()
   return api._test.plugins[global.lang]
@@ -42,8 +50,21 @@ async function cacheTest(context, config) {
   const [plugin] = await Promise.all([getPlugin(), openFile()])
   Object.assign(plugin, config)
   await commands.executeCommand('vandelay.cacheProject')
-  const data = JSON.parlse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
+  const data = JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
   expect(data).toMatchSnapshot(context)
+}
+
+async function cacheDiffTest(context, config) {
+  const [plugin] = await Promise.all([getPlugin(), openFile()])
+  if (!this.noConfig) {
+    await commands.executeCommand('vandelay.cacheProject')
+    this.noConfig = JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
+  }
+
+  Object.assign(plugin, config)
+  await commands.executeCommand('vandelay.cacheProject')
+  const withConfig = JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
+  expect(diff(this.noConfig, withConfig)).toMatchSnapshot(context)
 }
 
 async function buildImportItems() {
@@ -120,13 +141,7 @@ async function configInsertDiffTest(context, config) {
   Object.assign(plugin, config)
   const importItems = await buildImportItems()
   const withConfig = await insertItems(plugin, importItems)
-  expect(
-    snapshotDiff(this.noConfig, withConfig, {
-      aAnnotation: 'No Config',
-      bAnnotation: 'With Config',
-      contextLines: 0,
-    })
-  ).toMatchSnapshot(context)
+  expect(diff(this.noConfig, withConfig)).toMatchSnapshot(context)
 }
 
 async function configInsertTest(context, config, reCache) {
@@ -145,6 +160,7 @@ module.exports = {
   getExportData,
   testSpyCall,
   cacheTest,
+  cacheDiffTest,
   buildImportItems,
   saveFile,
   insertTest,
