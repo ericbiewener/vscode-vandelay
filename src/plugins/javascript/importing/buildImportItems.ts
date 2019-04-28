@@ -51,10 +51,8 @@ export function buildImportItems(
       const { reexports } = data.reexported
       if (data.default && !reexports.includes('default'))
         defaultExport = data.default
-      if (data.named)
-        namedExports = data.named.filter(exp => !reexports.includes(exp))
-      if (data.types)
-        typeExports = data.types.filter(exp => !reexports.includes(exp))
+      namedExports = data.named.filter(exp => !reexports.includes(exp))
+      typeExports = data.types.filter(exp => !reexports.includes(exp))
     } else {
       defaultExport = data.default
       const { reexports } = data
@@ -63,12 +61,8 @@ export function buildImportItems(
       // adjacent to or in a subdirectory of the import file, eliminate the reexports because they'll just be imported
       // from their original locations
       if (reexports && activeFilepath.startsWith(path.dirname(absImportPath))) {
-        namedExports = data.named
-          ? data.named.filter(n => !reexports.includes(n))
-          : null
-        typeExports = data.types
-          ? data.types.filter(n => !reexports.includes(n))
-          : null
+        namedExports = data.named.filter(n => !reexports.includes(n))
+        typeExports = data.types.filter(n => !reexports.includes(n))
       } else {
         namedExports = data.named
         typeExports = data.types

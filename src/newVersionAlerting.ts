@@ -7,18 +7,10 @@ import {
   env,
   Uri,
 } from 'vscode'
+import { alertWithActions } from './alertWithActions'
 import { Plugin } from './types'
-import { last } from './utils'
 
 const SUPPRESS_ALERT = false
-
-enum AlertTypes {
-  INFO,
-  WARNING,
-  ERROR,
-}
-
-type AlertType = AlertTypes.INFO | AlertTypes.WARNING | AlertTypes.ERROR
 
 const CHANGELOG_BUTTON_CONFIG = {
   title: 'View Changelog',
@@ -30,7 +22,7 @@ const CHANGELOG_BUTTON_CONFIG = {
     ),
 }
 
-export async function showNewVersionAlert(context: ExtensionContext) {
+export async function alertNewVersion(context: ExtensionContext) {
   const extension = extensions.getExtension('edb.vandelay')
   if (!extension) return
 
@@ -52,54 +44,27 @@ export async function showNewVersionAlert(context: ExtensionContext) {
   const isMajor = newSemver[0] > oldSemver[0]
 
   const config = workspace.getConfiguration('vandelay')
-  if (!isMajor && !config.showNewVersionAlert) return
+  if (!isMajor && !config.alertNewVersion) return
 
-  show
-
-  showAlertWithActions(
-    AlertTypes.INFO,
-    'Vandelay has been updated. Check out the new features!',
-    CHANGELOG_BUTTON_CONFIG,
-    {
-      title: "Don't show this again",
-      action: () => config.update('showNewVersionAlert', false, true),
-    }
-  )
-
-  if (btn) btn.action()
+  alertWithActions({
+    msg: 'Vandelay has been updated. Check out the new features!',
+    actions: [
+      CHANGELOG_BUTTON_CONFIG,
+      {
+        title: "Don't show this again",
+        action: () => config.update('alertNewVersion', false, true),
+      },
+    ],
+  })
 }
 
-export async function showNewVersionConfigAlert(plugin: Plugin) {
+export async function alertNewVersionConfig(plugin: Plugin) {
   if (plugin.hasOwnProperty('processDefaultName')) {
-    const btn = await window.showWarningMessage(
-      'The Vandelay configuration option "processDefaultName" has been removed.',
-      { modal: true },
-      CHANGELOG_BUTTON_CONFIG
-    )
-
-    if (btn) btn.action()
+    alertWithActions({
+      msg:
+        'The Vandelay configuration option "processDefaultName" has been removed.',
+      modal: true,
+      actions: [CHANGELOG_BUTTON_CONFIG],
+    })
   }
-}
-
-type ActionT = { title: string; action: () => void }
-async function showAlertWithActions(
-  alertType: AlertType,
-  message: string,
-  ...actions: ActionT[]
-) {
-  let modal = false
-  if (typeof last(actions) === 'boolean') {
-    modal = actions.pop()
-  }
-
-  const fn =
-    alertType === AlertTypes.ERROR
-      ? 'showErrorMessage'
-      : alertType === AlertTypes.WARNING
-      ? 'showWarningMessage'
-      : 'showInformationMessage'
-
-  const btn = await window[fn](message, { modal }, ...actions)
-
-  if (btn) return btn.action()
 }

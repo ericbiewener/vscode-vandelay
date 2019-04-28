@@ -37,10 +37,8 @@ export function cacheFile(
       const existing = imp[importData.path] || {}
       imp[importData.path] = existing
       if (importData.default) existing.default = importData.default
-      if (importData.named)
-        existing.named = _.union(existing.named, importData.named)
-      if (importData.types)
-        existing.types = _.union(existing.types, importData.types)
+      existing.named = _.union(existing.named, importData.named)
+      existing.types = _.union(existing.types, importData.types)
     } else if (importData.default && importData.default.startsWith('* as')) {
       // import * as Foo from...
       const pathKey = getFilepathKey(
@@ -152,8 +150,8 @@ export function cacheFile(
     if (existing && existing.default && !fileExports.default) {
       fileExports.default = existing.default
     }
-    if (fileExports.named) fileExports.named.sort()
-    if (fileExports.types) fileExports.types.sort()
+    fileExports.named.sort()
+    fileExports.types.sort()
     exp[pathKey] = fileExports
   }
 

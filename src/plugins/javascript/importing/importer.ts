@@ -1,6 +1,13 @@
+import _ from 'lodash'
 import { window, TextEditor } from 'vscode'
 import path from 'path'
-import { insertLine, removeExt } from '../../../utils'
+import {
+  doesImportExist,
+  insertLine,
+  removeExt,
+  Renamed,
+  preserveRenamedImports,
+} from '../../../utils'
 import { Plugin } from '../../../types'
 import { parseImports, ParsedImportJs } from '../regex'
 import {
@@ -84,14 +91,17 @@ function getNewLineImports(
   const { match, indexModifier, isFirstImport } = importPosition
 
   let imports: FileExportsJs
+  let renamed: Renamed
 
   if (indexModifier || isFirstImport) {
     imports = { named: [], types: [] }
+    renamed = {}
   } else {
     const obj = match as ParsedImportJs
+    renamed = obj.renamed
     imports = {
-      named: obj.named || [],
-      types: obj.types || [],
+      named: obj.named,
+      types: obj.types,
       default: obj.default,
     }
   }
@@ -101,10 +111,12 @@ function getNewLineImports(
     imports.default = exportName
   } else {
     const arr = imports[exportType === ExportType.named ? 'named' : 'types']
-    if (arr.includes(exportName)) return
+    if (doesImportExist(arr, exportName, renamed)) return
     arr.push(exportName)
   }
 
+  imports.named = preserveRenamedImports(imports.named, renamed)
+  imports.types = preserveRenamedImports(imports.types, renamed)
   return imports
 }
 

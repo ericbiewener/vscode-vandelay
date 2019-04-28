@@ -18,7 +18,7 @@ export function cacheFile(
     if (isPathPackage(plugin, importData.path)) {
       const existing = imp[importData.path] || {}
       imp[importData.path] = existing
-      if (importData.imports) {
+      if (importData.imports.length) {
         existing.exports = _.union(existing.exports, importData.imports)
       } else {
         existing.importEntirePackage = true
@@ -26,7 +26,7 @@ export function cacheFile(
     }
     // If there are imports then they'll get added to the cache when that file gets cached. For
     // now, we only need to worry about whether then entire file is being imported
-    else if (!importData.imports) {
+    else if (!importData.imports.length) {
       exp[importData.path] = { importEntirePackage: true }
     }
   }
