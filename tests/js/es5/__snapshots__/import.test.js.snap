@@ -314,6 +314,43 @@ exports[`Import Tests | import - single line comment 1`] = `
   const defaultModule_file2 = require('module1_file2')"
 `;
 
+exports[`Import Tests | import - src1/file1.js - preserve file - original order 1`] = `
+"const defaultModule1 = require('module1')
+const defaultModule_file2 = require('module1_file2')
+const { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} = require('module2')
+const { src2_file1_1 } = require('../src2/file1')
+const { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5, src1_file2_t_1,
+  src1_file2_t_2 } = require('./file2')
+const file3 = require('./file3')
+const { src1_subdir_file1_1 } = require('./subdir/file1')
+const defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3 } = require('module3')
+const defaultModule4, { module4_1,
+  module4_2 as module4_2_renamed,
+  module4_3 } = require('module4')
+const defaultModule5, {
+  module5_1,
+  type module5_t_1,
+  module5_2 as module5_2_renamed,
+  module5_3,
+} = require('module5')
+
+module.exports = {
+  src1_file1_1,
+  src1_file1_2,
+  src1_file1_3,
+  src1_file1_4,
+  src1_file1_5,
+  src1_file1_t_1,
+  src1_file1_t_2,
+  src1_file1_other1: 10,
+  src1_file1_other2: [
+    5, 7, 9
+  ],
+}
+"
+`;
+
 exports[`Import Tests | import - src1/subdir/file1.js - original order 1`] = `
 "const defaultModule1 = require('module1')
 const defaultModule_file2 = require('module1_file2')

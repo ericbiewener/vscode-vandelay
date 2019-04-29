@@ -997,6 +997,73 @@ exports[`Import Tests | import - single line comment 1`] = `
   import defaultModule_file2 from 'module1_file2';"
 `;
 
+exports[`Import Tests | import - src1/file1.js - preserve file - original order 1`] = `
+"import 'noAssignment'
+import defaultModule1 from 'module1'
+import defaultModule_file2 from 'module1_file2';
+import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
+} from 'module2';
+import defaultModule3, { module3_1, module3_2 as module3_2_renamed, module3_3,
+  type module3_typeInside, type module3_typeOutside } from 'module3';
+import { type module3_typeInside, type module3_typeOutside } from 'module3';
+import defaultModule4, { module4_1,
+  module4_2 as module4_2_renamed,
+  module4_3 } from 'module4'
+import 'noAssignment2'
+import { src3_file1_1 } from \\"src3/file1\\"
+import defaultModule5, {
+  module5_1,
+  type module5_t_1,
+  module5_2 as module4_2_renamed,
+  module5_3,
+} from 'module5' // comment after import
+import * as FullModule from 'module6'
+import type { module7_typeOutside_1, module7_typeOutside_2 } from 'module7'
+import { src2_file1_1 } from '../src2/file1';
+import { src3_file1_1 } from '../src3/file1';
+import src1, { src1_file2_2_renamed, src1_file3_2_renamed, src1_file4_2_renamed,
+  src1_file5_2_renamed, src1_file6_2_renamed, src1_file7_2_renamed } from './';
+import * as AllFile2Exports, { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5,
+  type src1_file2_t_1, type src1_file2_t_2 } from './file2';
+import file3, { src1_file3_1, src1_file3_2, src1_file3_3, src1_file3_4, src1_file3_5,
+  type src1_file3_t_1, type src1_file3_t_2 } from './file3';
+import file4, { src1_file4_1, src1_file4_2, src1_file4_3, src1_file4_4, src1_file4_5,
+  type src1_file4_t_1, type src1_file4_t_2 } from './file4';
+import file5, { src1_file5_1, src1_file5_2, src1_file5_3, src1_file5_4, src1_file5_5,
+  type src1_file5_t_1, type src1_file5_t_2 } from './file5';
+import file6, { src1_file6_1, src1_file6_2, src1_file6_3, src1_file6_4, src1_file6_5,
+  type src1_file6_t_1, type src1_file6_t_2 } from './file6';
+import * as AllFile7Exports, { src1_file7_1, src1_file7_2, src1_file7_3, src1_file7_4, src1_file7_5,
+  type src1_file7_t_1, type src1_file7_t_2 } from './file7';
+import { src1_subdir_file1_1 } from './subdir/file1';
+
+export const src1_file1_1 = 'foo'
+export const src1_file1_2 = \\"bar\\";
+
+const src1_file1_3 = 7
+export src1_file1_3
+
+export function src1_file1_4() {
+
+}
+
+export class src1_file1_5 extends Component {
+
+}
+
+export type src1_file1_t_1 = {
+  foo: string,
+  bar: number,
+}
+
+export type src1_file1_t_2 = src1_file1_t_1 & { baz: 9 }
+
+export default function() {
+
+}
+"
+`;
+
 exports[`Import Tests | import - src1/subdir/file1.js - original order 1`] = `
 "import defaultModule1 from 'module1';
 import defaultModule_file2 from 'module1_file2';

@@ -68,6 +68,10 @@ const foo = 1
     )
   })
 
+  it.only('import - src1/file1.js - preserve file', async function() {
+    await insertTest(this, '', 'src1/file1.js', true)
+  })
+
   it('import - src1/subdir/file1.js', async function() {
     await insertTest(this, '', 'src1/subdir/file1.js')
   })
