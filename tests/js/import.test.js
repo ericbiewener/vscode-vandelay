@@ -9,7 +9,9 @@ const {
   buildImportItems,
   saveFile,
   insertTest,
+  insertDiffTest,
   configInsertTest,
+  configInsertDiffTest,
 } = require('../utils')
 
 function basenameNoExt(filepath) {
@@ -21,7 +23,7 @@ describe("Import Tests", function() {
   importTests()
 
   it('import - has code', async function() {
-    await insertTest(
+    await insertDiffTest(
       this,
     `const foo = 1
 `
@@ -29,7 +31,7 @@ describe("Import Tests", function() {
   })
 
   it('import - single line comment', async function() {
-    await insertTest(
+    await insertDiffTest(
       this,
     `// I'm a comment
 `
@@ -37,7 +39,7 @@ describe("Import Tests", function() {
   })
 
   it('import - multiline comment', async function() {
-    await insertTest(
+    await insertDiffTest(
       this,
     `/*
 I'm a comment
@@ -48,7 +50,7 @@ With multiple lines
   })
 
   it('import - comment with code right after', async function() {
-    await insertTest(
+    await insertDiffTest(
       this,
     `// I'm a comment
 const foo = 1
@@ -57,7 +59,7 @@ const foo = 1
   })
 
   it('import - comment with linebreak and code', async function() {
-    await insertTest(
+    await insertDiffTest(
       this,
     `// I'm a comment
 

@@ -12,12 +12,16 @@ const {
 } = require('vscode')
 const snapshotDiff = require('snapshot-diff')
 
-function diff(a, b) {
-  return snapshotDiff(a, b, {
-    aAnnotation: 'No Config',
-    bAnnotation: 'With Config',
-    contextLines: 0,
-  })
+function diff(context, a, b, options) {
+  expect(
+    snapshotDiff(a, b, {
+      aAnnotation: 'No Config',
+      bAnnotation: 'With Config',
+      stablePatchmarks: true,
+      contextLines: 0,
+      ...options,
+    })
+  ).toMatchSnapshot(context)
 }
 
 async function getPlugin() {
@@ -64,7 +68,7 @@ async function cacheDiffTest(context, config) {
   Object.assign(plugin, config)
   await commands.executeCommand('vandelay.cacheProject')
   const withConfig = JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
-  expect(diff(this.noConfig, withConfig)).toMatchSnapshot(context)
+  diff(context, this.noConfig, withConfig)
 }
 
 async function buildImportItems() {
@@ -127,6 +131,32 @@ async function insertTest(
   }
 }
 
+async function insertDiffTest(
+  context,
+  startingText,
+  filepath,
+  preserveFileContents
+) {
+  const open = () => (filepath ? openFile(filepath) : openFile())
+
+  const [plugin] = await Promise.all([getPlugin(), open()])
+  if (!preserveFileContents) await replaceFileContents(startingText)
+
+  const importItems = await buildImportItems()
+  const withContent = await insertItems(plugin, importItems)
+
+  if (!this.withoutContent) {
+    await replaceFileContents()
+    this.withoutContent = await insertItems(plugin, importItems)
+  }
+
+  diff(context, this.withoutContent, withContent, {
+    aAnnotation: 'Without Content',
+    bAnnotation: 'With Content',
+    contextLines: 2,
+  })
+}
+
 async function configInsertDiffTest(context, config) {
   const [plugin] = await Promise.all([getPlugin(), openFile()])
   await replaceFileContents()
@@ -141,7 +171,7 @@ async function configInsertDiffTest(context, config) {
   Object.assign(plugin, config)
   const importItems = await buildImportItems()
   const withConfig = await insertItems(plugin, importItems)
-  expect(diff(this.noConfig, withConfig)).toMatchSnapshot(context)
+  diff(context, this.noConfig, withConfig)
 }
 
 async function configInsertTest(context, config, reCache) {
@@ -164,6 +194,7 @@ module.exports = {
   buildImportItems,
   saveFile,
   insertTest,
+  insertDiffTest,
   configInsertTest,
   configInsertDiffTest,
 }

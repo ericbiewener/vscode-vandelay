@@ -1,5 +1,12 @@
 const { commands } = require('vscode')
-const { cacheTest, openFile, getExportData, activateVandelay, saveFile, buildImportItems, insertTest } = require('./utils')
+const {
+  cacheTest,
+  openFile,
+  getExportData,
+  saveFile,
+  buildImportItems,
+  insertTest,
+} = require('./utils')
 
 function cacheTests() {
   it('cacheProject', async function() {
@@ -21,7 +28,8 @@ function importTests() {
     const items = await buildImportItems()
 
     if (global.lang === 'js') {
-      for (const i of items) i.absImportPath = i.absImportPath.replace(TEST_ROOT, 'absRoot')
+      for (const i of items)
+        i.absImportPath = i.absImportPath.replace(TEST_ROOT, 'absRoot')
     }
     expect(items).toMatchSnapshot(this)
   })
