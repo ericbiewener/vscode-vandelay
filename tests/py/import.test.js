@@ -1,6 +1,7 @@
 const { importTests } = require('../shared-tests')
 const {
   insertTest,
+  insertDiffTest,
   configInsertTest,
   configInsertDiffTest,
 } = require('../utils')
@@ -10,7 +11,7 @@ describe('Import Tests', function() {
   importTests()
 
   it('import - has code', async function() {
-    await insertTest(
+    await insertDiffTest(
       this,
       `def foo():
     pass
@@ -19,7 +20,7 @@ describe('Import Tests', function() {
   })
 
   it('import - single line comment', async function() {
-    await insertTest(
+    await insertDiffTest(
       this,
       `# I'm a comment
 `
@@ -27,7 +28,7 @@ describe('Import Tests', function() {
   })
 
   it('import - multiline comment', async function() {
-    await insertTest(
+    await insertDiffTest(
       this,
       `"""I'm a comment
     With multiple lines
@@ -37,7 +38,7 @@ describe('Import Tests', function() {
   })
 
   it('import - comment with code right after', async function() {
-    await insertTest(
+    await insertDiffTest(
       this,
       `# I'm a comment
 def foo():
@@ -47,7 +48,7 @@ def foo():
   })
 
   it('import - comment with linebreak and code', async function() {
-    await insertTest(
+    await insertDiffTest(
       this,
       `# I'm a comment
 

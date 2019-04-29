@@ -9,7 +9,7 @@ const {
   cacheDiffTest,
 } = require('../utils')
 
-describe.only('Cache Tests', function() {
+describe('Cache Tests', function() {
   cacheTests()
 
   it('cacheProject - includePaths = [src2]', async function() {
