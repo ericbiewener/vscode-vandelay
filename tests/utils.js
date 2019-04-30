@@ -93,12 +93,13 @@ function replaceFileContents(newText = '') {
   })
 }
 
-async function insertItems(plugin, importItems) {
-  for (const item of importItems) {
-    window.showQuickPick.callsFake(() => Promise.resolve(item))
-    await commands.executeCommand('vandelay.selectImport')
-  }
+function insertItem(item) {
+  window.showQuickPick.callsFake(() => Promise.resolve(item))
+  return commands.executeCommand('vandelay.selectImport')
+}
 
+async function insertItems(plugin, importItems) {
+  for (const item of importItems) await insertItem(item)
   return window.activeTextEditor.document.getText()
 }
 
@@ -197,4 +198,5 @@ module.exports = {
   insertDiffTest,
   configInsertTest,
   configInsertDiffTest,
+  insertItem,
 }

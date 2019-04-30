@@ -198,20 +198,17 @@ export function doesImportExist(
   newImport: string,
   renamed: Renamed
 ) {
-  if (imports.includes(newImport)) return true
-
   const parts = newImport.split(' as ')
-  if (parts.length === 1) return false
+  const newImportName = parts[0].trim()
+  const newImportRename = parts[1] ? parts[1].trim() : null
 
-  const name = parts[0].trim()
-  if (!imports.includes(name)) return false
+  if (!imports.includes(newImportName)) return false
 
-  const rename = parts[1].trim()
-  const existingRename = renamed[name]
-
-  if (existingRename !== rename) {
-    // Import already exists but with a different name.
-    window.showWarningMessage(`Already imported as ${existingRename || name}.`)
+  const existingImportRename = renamed[newImportName]
+  if (newImportRename != existingImportRename) {
+    window.showWarningMessage(
+      `Already imported as \`${existingImportRename || newImportName}\`.`
+    )
   }
 
   return true

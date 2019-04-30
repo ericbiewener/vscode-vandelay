@@ -7,6 +7,7 @@ require('./toMatchSnapshot')
 global.sinon = sinon
 
 sinon.stub(window, 'showQuickPick')
+sinon.spy(window, 'showWarningMessage')
 
 before(async () => {
   const plugin = await getPlugin()
@@ -25,6 +26,7 @@ beforeEach(async () => {
 
 afterEach(async () => {
   window.showQuickPick.reset()
+  window.showWarningMessage.resetHistory()
 
   const plugin = await getPlugin()
   Object.assign(plugin, clone)

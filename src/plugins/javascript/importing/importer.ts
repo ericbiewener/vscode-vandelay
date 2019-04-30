@@ -8,7 +8,6 @@ import {
   Renamed,
   preserveRenamedImports,
 } from '../../../utils'
-import { Plugin } from '../../../types'
 import { parseImports, ParsedImportJs } from '../regex'
 import {
   FileExportsJs,

@@ -12,13 +12,14 @@ const {
   insertDiffTest,
   configInsertTest,
   configInsertDiffTest,
+  insertItem,
 } = require('../utils')
 
 function basenameNoExt(filepath) {
   return path.basename(filepath, path.extname(filepath));
 }
 
-describe("Import Tests", function() {
+describe.only("Import Tests", function() {
 
   importTests()
 
@@ -68,7 +69,7 @@ const foo = 1
     )
   })
 
-  it.only('import - src1/file1.js - preserve file', async function() {
+  it('import - src1/file1.js - preserve file', async function() {
     await insertTest(this, '', 'src1/file1.js', true)
   })
 
@@ -143,6 +144,30 @@ const foo = 1
     )
     await configInsertTest(this, { shouldIncludeImport })
     testSpyCall(this, _.last(shouldIncludeImport.getCalls()))
+  })
+
+  it.only('import already exists', async () => {
+    const itemProps = { description: 'module2', isExtraImport: true, exportType: 1 } // ExportType.named
+
+    await openFile()
+    await insertItem({ label: 'module2_2', ...itemProps })
+    expect(window.showWarningMessage.callCount).toBe(1)
+
+    window.showWarningMessage.resetHistory()
+    await insertItem({ label: 'module2_2 as module2_2_RENAMED', ...itemProps })
+    expect(window.showWarningMessage.callCount).toBe(1)
+
+    window.showWarningMessage.resetHistory()
+    await insertItem({ label: 'module2_2 as module2_1_renamed', ...itemProps })
+    expect(window.showWarningMessage.callCount).toBe(1)
+
+    window.showWarningMessage.resetHistory()
+    await insertItem({ label: 'module2_1', ...itemProps })
+    expect(window.showWarningMessage.callCount).toBe(0)
+    
+    window.showWarningMessage.resetHistory()
+    await insertItem({ label: 'module2_2 as module2_2_renamed', ...itemProps })
+    expect(window.showWarningMessage.callCount).toBe(0)
   })
 
   if (process.env.TEST_PROJECT !== 'es5') {

@@ -6,6 +6,7 @@ import {
   RichQuickPickItem,
 } from '../../types'
 
+// TODO: uppercase
 export enum ExportType {
   default = 0,
   named = 1,

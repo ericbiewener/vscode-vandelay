@@ -1,11 +1,15 @@
+const { window } = require('vscode')
 const { importTests } = require('../shared-tests')
 const {
   insertTest,
   insertDiffTest,
   configInsertTest,
   configInsertDiffTest,
+  openFile,
+  insertItem,
 } = require('../utils')
 const snapshotDiff = require('snapshot-diff')
+const { sleep} = require('utlz')
 
 describe('Import Tests', function() {
   importTests()
@@ -97,5 +101,27 @@ def foo():
     await configInsertTest(this, {
       shouldIncludeImport: absImportPath => absImportPath.includes('src2'),
     })
+  })
+
+  it('import already exists', async () => {
+    await openFile()
+    await insertItem({ label: 'package3_file1_2', description: 'package3', isExtraImport: true })
+    expect(window.showWarningMessage.callCount).toBe(1)
+
+    window.showWarningMessage.resetHistory()
+    await insertItem({ label: 'package3_file1_2 as package3_file1_2_RENAMED', description: 'package3', isExtraImport: true })
+    expect(window.showWarningMessage.callCount).toBe(1)
+
+    window.showWarningMessage.resetHistory()
+    await insertItem({ label: 'package3_file1_1 as package3_file1_1_renamed', description: 'package3', isExtraImport: true })
+    expect(window.showWarningMessage.callCount).toBe(1)
+
+    window.showWarningMessage.resetHistory()
+    await insertItem({ label: 'package3_file1_1', description: 'package3', isExtraImport: true })
+    expect(window.showWarningMessage.callCount).toBe(0)
+    
+    window.showWarningMessage.resetHistory()
+    await insertItem({ label: 'package3_file1_2 as package3_file1_2_renamed', description: 'package3', isExtraImport: true })
+    expect(window.showWarningMessage.callCount).toBe(0)
   })
 })
