@@ -15,11 +15,14 @@ const {
   insertItem,
 } = require('../utils')
 
+const file1 = `src1/file1.${global.lang}`
+const file2 = `src1/file2.${global.lang}`
+
 function basenameNoExt(filepath) {
   return path.basename(filepath, path.extname(filepath));
 }
 
-describe.only("Import Tests", function() {
+describe("Import Tests", function() {
 
   importTests()
 
@@ -124,6 +127,26 @@ const foo = 1
     testSpyCall(this, processImportPath.getCall(0))
   })
 
+  it('import - processImportName - default import', async function() {
+    await configInsertDiffTest(this, file1, {
+      processImportName: importName => {
+        return importName === 'defaultModule1'
+          ? 'defaultModule1_renamed'
+          : null
+      },
+    })
+  })
+
+  it('import - processImportName - named import', async function() {
+    await configInsertDiffTest(this, file1, {
+      processImportName: importName => {
+        return importName === 'module3_typeOutside'
+          ? 'module2_2 as module2_2_renamed_DIFFERENT'
+          : null
+      },
+    })
+  })
+
   it('import - nonModulePaths', async function() {
     await configInsertTest(
       this,
@@ -146,7 +169,7 @@ const foo = 1
     testSpyCall(this, _.last(shouldIncludeImport.getCalls()))
   })
 
-  it.only('import already exists', async () => {
+  it('import already exists', async () => {
     const itemProps = { description: 'module2', isExtraImport: true, exportType: 1 } // ExportType.named
 
     await openFile()

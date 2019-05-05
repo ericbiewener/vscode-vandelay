@@ -45,7 +45,13 @@ export function buildImportItems(
 
     if (data.importEntirePackage) {
       items.push({
-        label: importPath,
+        label: processImportName(
+          plugin,
+          importPath,
+          dotPath,
+          absImportPath,
+          activeFilepath
+        ),
         isExtraImport: data.isExtraImport,
       })
     }
@@ -54,18 +60,14 @@ export function buildImportItems(
 
     // Don't sort data.exports because they were already sorted when caching. See python `cacheFile`
     for (const exportName of data.exports) {
-      const processedExportName = plugin.processImportName
-        ? plugin.processImportName(
-            exportName,
-            dotPath,
-            absImportPath,
-            activeFilepath,
-            plugin.projectRoot
-          )
-        : exportName
-
       items.push({
-        label: processedExportName || exportName,
+        label: processImportName(
+          plugin,
+          exportName,
+          dotPath,
+          absImportPath,
+          activeFilepath
+        ),
         description: dotPath,
         isExtraImport: data.isExtraImport,
       })
@@ -73,4 +75,23 @@ export function buildImportItems(
   }
 
   return items
+}
+
+function processImportName(
+  plugin: PluginPy,
+  importName: string,
+  importPath: string,
+  absImportPath: string,
+  activeFilepath: string
+) {
+  if (!plugin.processImportName) return importName
+  return (
+    plugin.processImportName(
+      importName,
+      importPath,
+      absImportPath,
+      activeFilepath,
+      plugin.projectRoot
+    ) || importName
+  )
 }

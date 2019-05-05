@@ -153,11 +153,11 @@ non-relative paths (for example, all your imports are written relative to the pr
 falsey value will cause the standard relative path to be used.
 
 * `importPath`:
-	* **JavaScript:** relative import path that will be written if you don't return a value.
-	* **Python:** The dot-style import path that Vandelay is going to write (e.g. django.shortcuts)
-* `absImportPath`: absolute path of the import file
-* `activeFilepath`: absolute path to the active file open in your editor
-* `projectRoot`: absolute path to the root of your project
+	* **JavaScript:** Relative import path that will be written if you don't return a value
+	* **Python:** Dot-style import path that Vandelay is going to write (e.g. django.shortcuts)
+* `absImportPath`: Absolute path of the import file
+* `activeFilepath`: Absolute path to the active file open in your editor
+* `projectRoot`: Absolute path to the root of your project
 
 **JavaScript Example**
 
@@ -165,6 +165,7 @@ falsey value will cause the standard relative path to be used.
 processImportPath: (importPath, absImportPath, activeFilepath, projectRoot) => (
   absImportPath.startsWith("/Users/eric/my-project/absoluteImportDirectory")
     ? absImportPath.slice(projectRoot.length + 1)
+    : null
 )
 ```
 
@@ -178,14 +179,42 @@ processImportPath: importPath => (
 )
 ```
 
-### `processImportName(importPath: string, absImportPath: string, activeFilepath: string, projectRoot: string): ?string`
-TODO -- and add examples in py and js configs at bottom
+### `processImportName(importName: string, importPath: string, absImportPath: string, activeFilepath: string, projectRoot: string, isDefault: boolean): ?string`
+When selecting an import, this setting allows you to modify the names of the imports that will appear in the list and ultimately get written to the file.
+Returning a falsey value will cause the original import name to be used.
+
+* `importName`: Name of the import.
+* `importPath`:
+	* **JavaScript:** Relative import path
+	* **Python:** Dot-style import path (e.g. django.shortcuts)
+* `absImportPath`: Absolute path of the import file
+* `activeFilepath`: Absolute path to the active file open in your editor
+* `projectRoot`: Absolute path to the root of your project
+* `importPath`:
+	* **JavaScript:** Whether the 
+	* **Python:** N/A. This argument simply isn't available.
+
+**JavaScript Example**
+
+```js
+processImportName: (importName, importPath, absImportPath, activeFilepath, projectRoot, isDefault) => (
+  absImportPath === 'react' ? '* as React' : null
+)
+```
+
+**Python Example**
+
+```js
+processImportName: importName => (
+  importName === 'json' ? 'json as original_json' : null
+)
+```
 
 ### `shouldIncludeImport(absImportPath: string, activeFilepath: string): boolean`
 May be used to exclude certain imports from the list of options.
 
-* `absImportPath`: absolute path of the import file
-* `activeFilepath`: absolute path to the active file open in your editor
+* `absImportPath`: Absolute path of the import file
+* `activeFilepath`: Absolute path to the active file open in your editor
 
 ```js
 shouldIncludeImport: (absImportPath, activeFilepath) => (

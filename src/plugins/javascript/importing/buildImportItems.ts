@@ -81,7 +81,8 @@ export function buildImportItems(
           defaultExport,
           importPath,
           absImportPath,
-          activeFilepath
+          activeFilepath,
+          true
         ),
         description: importPathNoExt,
         exportType: ExportType.default,
@@ -98,7 +99,8 @@ export function buildImportItems(
             exportName,
             importPath,
             absImportPath,
-            activeFilepath
+            activeFilepath,
+            false
           ),
           description: importPathNoExt,
           exportType: ExportType.named,
@@ -116,7 +118,8 @@ export function buildImportItems(
             exportName,
             importPath,
             absImportPath,
-            activeFilepath
+            activeFilepath,
+            false
           ),
           description: importPathNoExt,
           exportType: ExportType.type,
@@ -132,19 +135,21 @@ export function buildImportItems(
 
 function processImportName(
   plugin: PluginJs,
-  exportName: string,
+  importName: string,
   importPath: string,
   absImportPath: string,
-  activeFilepath: string
+  activeFilepath: string,
+  isDefault: boolean
 ) {
-  if (!plugin.processImportName) return exportName
+  if (!plugin.processImportName) return importName
   return (
     plugin.processImportName(
-      exportName,
+      importName,
       importPath,
       absImportPath,
       activeFilepath,
-      plugin.projectRoot
-    ) || exportName
+      plugin.projectRoot,
+      isDefault
+    ) || importName
   )
 }

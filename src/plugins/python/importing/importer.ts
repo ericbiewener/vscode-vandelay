@@ -42,14 +42,14 @@ export async function insertImport(
   if (!importPosition.indexModifier && !importPosition.isFirstImport) {
     // We have an exact line match for position
     if (isPackageImport) {
-      if (importPosition.match.imports.length) {
+      if (!importPosition.match.isEntirePackage) {
         // partial imports exist
         window.showErrorMessage(
           "Can't import entire package when parts of the package are already being imported."
         )
       }
       return
-    } else if (!importPosition.match.imports.length) {
+    } else if (importPosition.match.isEntirePackage) {
       // partial imports don't exist
       window.showErrorMessage(
         "Can't import part of a package when the entire package is already being imported."
@@ -99,6 +99,7 @@ export async function insertImport(
       const afterLine = after
         ? `\n${fileText.slice(after.start, after.end)}`
         : ''
+
       return editor.edit(builder => {
         const beforeMatch =
           before || getLastInitialComment(fileText, commentRegex)

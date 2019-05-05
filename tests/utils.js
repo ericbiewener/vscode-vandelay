@@ -158,8 +158,8 @@ async function insertDiffTest(
   })
 }
 
-async function configInsertDiffTest(context, config) {
-  const [plugin] = await Promise.all([getPlugin(), openFile()])
+async function configInsertDiffTest(context, file, config) {
+  const [plugin] = await Promise.all([getPlugin(), openFile(file)])
   await replaceFileContents()
 
   if (!this.noConfig) {

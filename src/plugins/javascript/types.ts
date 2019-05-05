@@ -87,6 +87,14 @@ export type PluginConfigJs = PluginConfig & {
   useSemicolons: boolean
   trailingComma: boolean
   multilineImportStyle: 'single' | 'multiple'
+  processImportName?(
+    importName: string,
+    importPath: string,
+    absImportPath: string,
+    activeFilepath: string,
+    projectRoot: string,
+    isDefault: boolean
+  ): string | undefined
 }
 
 export type UserConfigJs = UserConfig & {

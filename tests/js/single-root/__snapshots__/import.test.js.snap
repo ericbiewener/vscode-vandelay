@@ -933,6 +933,16 @@ import { src1_subdir_file1_1 } from './subdir/file1';
 "
 `;
 
+exports[`Import Tests | import - processImportName - default import 1`] = `
+"Snapshot Diff:
+  Comparing two different types of values. Expected object but received string."
+`;
+
+exports[`Import Tests | import - processImportName - named import 1`] = `
+"Snapshot Diff:
+  Comparing two different types of values. Expected object but received string."
+`;
+
 exports[`Import Tests | import - processImportPath 1`] = `
 "import defaultModule1 from 'module1';
 import defaultModule_file2 from 'module1_file2';

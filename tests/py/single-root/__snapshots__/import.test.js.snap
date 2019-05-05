@@ -288,7 +288,22 @@ exports[`Import Tests | import - multiline comment 1`] = `
   import full_package2"
 `;
 
-exports[`Import Tests | import - processImportName 1`] = `
+exports[`Import Tests | import - processImportName - full module import 1`] = `
+"Snapshot Diff:
+- No Config
++ With Config
+
+@@ --- --- @@
+- import full_package1
++ import full_package1 as full_package1_renamed
+@@ --- --- @@
+- from src1.file2 import (Class_file2_1, Class_file2_2, CONSTANT_FILE2_1,
+-   fn_file2_1, fn_file2_2)
++ from src1.file1 import (Class_file1_1, Class_file1_2, CONSTANT_FILE1_1,
++   CONSTANT_FILE1_2, fn_file1_1, fn_file1_2)"
+`;
+
+exports[`Import Tests | import - processImportName - partial import 1`] = `
 "Snapshot Diff:
 - No Config
 + With Config

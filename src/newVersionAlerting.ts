@@ -12,14 +12,12 @@ import { Plugin } from './types'
 
 const SUPPRESS_ALERT = false
 
+const REPO_MASTER =
+  'https://github.com/ericbiewener/vscode-vandelay/blob/master/'
+
 const CHANGELOG_BUTTON_CONFIG = {
   title: 'View Changelog',
-  action: () =>
-    env.openExternal(
-      Uri.parse(
-        'https://github.com/ericbiewener/vscode-vandelay/blob/master/CHANGELOG.md'
-      )
-    ),
+  action: () => openUri(`${REPO_MASTER}CHANGELOG.md`),
 }
 
 export async function alertNewVersion(context: ExtensionContext) {
@@ -61,10 +59,24 @@ export async function alertNewVersion(context: ExtensionContext) {
 export async function alertNewVersionConfig(plugin: Plugin) {
   if (plugin.hasOwnProperty('processDefaultName')) {
     alertWithActions({
-      msg:
-        'The Vandelay configuration option "processDefaultName" has been removed.',
+      msg: `The Vandelay configuration option \`processDefaultName\` has been removed.\n\nPlease use the new \`processImportName\` option instead in your vandelay-${
+        plugin.language
+      }.js file.`,
       modal: true,
-      actions: [CHANGELOG_BUTTON_CONFIG],
+      actions: [
+        {
+          title: 'View README',
+          action: () =>
+            openUri(
+              `${REPO_MASTER}README.md#processimportnameimportpath-string-absimportpath-string-activefilepath-string-projectroot-string-string`
+            ),
+        },
+        CHANGELOG_BUTTON_CONFIG,
+      ],
     })
   }
+}
+
+function openUri(uri: string) {
+  env.openExternal(Uri.parse(uri))
 }
