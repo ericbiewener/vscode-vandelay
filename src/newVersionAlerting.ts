@@ -42,7 +42,7 @@ export async function alertNewVersion(context: ExtensionContext) {
   const isMajor = newSemver[0] > oldSemver[0]
 
   const config = workspace.getConfiguration('vandelay')
-  if (!isMajor && !config.alertNewVersion) return
+  if (!isMajor && !config.showNewVersionAlert) return
 
   alertWithActions({
     msg: 'Vandelay has been updated. Check out the new features!',
@@ -50,7 +50,7 @@ export async function alertNewVersion(context: ExtensionContext) {
       CHANGELOG_BUTTON_CONFIG,
       {
         title: "Don't show this again",
-        action: () => config.update('alertNewVersion', false, true),
+        action: () => config.update('showNewVersionAlert', false, true),
       },
     ],
   })

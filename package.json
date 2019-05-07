@@ -76,7 +76,7 @@
           "default": true,
           "description": "If only a single import name matches when importing the word on the cursor, automatically import it rather than showing the import picker."
         },
-        "vandelay.alertNewVersion": {
+        "vandelay.showNewVersionAlert": {
           "type": "boolean",
           "default": true,
           "description": "Get notified when a new version has been installed so that you can see what has changed."
