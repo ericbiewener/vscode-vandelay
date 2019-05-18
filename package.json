@@ -2,7 +2,7 @@
   "name": "vandelay",
   "displayName": "Vandelay",
   "description": "Automatically generate import statements for JavaScript and Python.",
-  "version": "2.4.0",
+  "version": "3.0.0",
   "publisher": "edb",
   "author": "Eric Biewener",
   "license": "MIT",
@@ -90,7 +90,7 @@
     "build": "NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.ts",
     "test": "yarn run compile && node ./node_modules/vscode/bin/test",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "prettier": "prettier-eslint --write \"**/*.ts\"",
+    "prettier": "prettier-eslint --write \"**/*.{ts,js}\"",
     "package": "vsce package --yarn",
     "ext": "rm -rf ~/.vscode/extensions/edb.vandelay-[0-9]* && rm -f *.vsix && yarn run package && code --install-extension *.vsix",
     "compare": "node compareSnapshotStructures",
@@ -123,6 +123,7 @@
     "log-all-the-things": "2.1.0",
     "prettier-eslint-cli": "4.7.1",
     "sinon": "7.3.1",
+    "snapshot-diff": "0.5.1",
     "ts-node": "8.0.3",
     "typescript": "3.4.2",
     "utlz": "1.2.0",
@@ -138,7 +139,7 @@
     "make-dir": "3.0.0"
   },
   "lint-staged": {
-    "**/*.ts": [
+    "**/*.{ts,js}": [
       "prettier-eslint --prettier-last --write",
       "git add"
     ]

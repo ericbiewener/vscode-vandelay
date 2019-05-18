@@ -1,5 +1,6 @@
 // TODO: use lodash-es fix in webpack
 import _ from 'lodash'
+import { addNamesAndRenames, Renamed } from '../../utils'
 
 export const commentRegex = /^(?:[ \t]*#|[ \t]*"""[^]*?""").*/gm
 
@@ -12,7 +13,7 @@ export const commentRegex = /^(?:[ \t]*#|[ \t]*"""[^]*?""").*/gm
  *    2. imports
  */
 export const importRegex = {
-  entirePackage: /^import ([^\s]+)/gm,
+  entirePackage: /^import ([^\s]+)(?: +as +([a-zA-Z_0-9]+))?/gm,
   singleLine: /^from +(.+) +import +([^(#"\n\r]+).*/gm,
   multiline: /^from +?(.+) +?import +\(([\S\s]*?)\).*/gm,
 }
@@ -21,13 +22,16 @@ export type ParsedImportPy = {
   path: string
   start: number
   end: number
-  imports?: string[]
+  imports: string[]
+  renamed: { [originalName: string]: string }
+  isEntirePackage: boolean
 }
 
 function parseImportsWithRegex(
   imports: ParsedImportPy[],
   text: string,
   regex: RegExp,
+  isEntirePackage: boolean,
   replacer?: RegExp
 ) {
   let match
@@ -36,10 +40,20 @@ function parseImportsWithRegex(
       path: match[1],
       start: match.index,
       end: match.index + match[0].length,
+      imports: [],
+      renamed: {},
+      isEntirePackage,
     }
-    if (match[2]) {
+
+    if (!isEntirePackage) {
       const matchText = replacer ? match[2].replace(replacer, '') : match[2]
-      importData.imports = matchText.split(',').filter(Boolean)
+      addNamesAndRenames(
+        matchText.split(','),
+        importData.imports,
+        importData.renamed
+      )
+    } else {
+      if (match[2]) importData.renamed[importData.path] = match[2]
     }
     imports.push(importData)
   }
@@ -51,8 +65,8 @@ function parseImportsWithRegex(
 export function parseImports(text: string) {
   // Mutate imports
   const imports: ParsedImportPy[] = []
-  parseImportsWithRegex(imports, text, importRegex.entirePackage)
-  parseImportsWithRegex(imports, text, importRegex.singleLine, /\s/g)
-  parseImportsWithRegex(imports, text, importRegex.multiline, /[\s()]/g)
+  parseImportsWithRegex(imports, text, importRegex.entirePackage, true)
+  parseImportsWithRegex(imports, text, importRegex.singleLine, false)
+  parseImportsWithRegex(imports, text, importRegex.multiline, false, /[()]/g)
   return imports.sort((a, b) => a.start - b.start)
 }

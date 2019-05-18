@@ -75,6 +75,7 @@ function getExportDataKeysByCachedDate(exportData: MergedExportData) {
     if (!createdA && !createdB) return a < b ? -1 : 1 // alphabetical
     if (createdA && !createdB) return -1
     if (createdB && !createdA) return 1
+    if (createdA === createdB) return 0
     // @ts-ignore
     return createdA < createdB ? 1 : -1
   })

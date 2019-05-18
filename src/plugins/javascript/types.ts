@@ -6,6 +6,7 @@ import {
   RichQuickPickItem,
 } from '../../types'
 
+// TODO: uppercase
 export enum ExportType {
   default = 0,
   named = 1,
@@ -86,10 +87,17 @@ export type PluginConfigJs = PluginConfig & {
   useSemicolons: boolean
   trailingComma: boolean
   multilineImportStyle: 'single' | 'multiple'
+  processImportName?(
+    importName: string,
+    importPath: string,
+    absImportPath: string,
+    activeFilepath: string,
+    projectRoot: string,
+    isDefault: boolean
+  ): string | undefined
 }
 
 export type UserConfigJs = UserConfig & {
-  processDefaultName?(path: string): string | undefined
   useES5?: boolean
   preferTypeOutside?: boolean
   padCurlyBraces?: boolean

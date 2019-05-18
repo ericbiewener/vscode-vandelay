@@ -15,7 +15,12 @@
     "yarn-error.log": true,
     "yarn.lock": true,
     "tests": false,
-    "test-workspaces": false
+    "test-workspaces": false,
+    "**/src/plugins/javascript": false,
+    "**/src/plugins/python": true,
+    "**/tests/js": false,
+    "**/tests/py": true,
+    "**/tests/typescript": false
   },
 
   "settingsOnFire.toggle": {
@@ -32,6 +37,28 @@
         "files.exclude": {
           "tests": true,
           "test-workspaces": true,
+        }
+      }
+    },
+    "Language": {
+      "on": {
+        "_label": "Python",
+        "files.exclude": {
+          "**/src/plugins/javascript": true,
+          "**/tests/js": true,
+          "**/tests/typescript": true,
+          "**/src/plugins/python": false,
+          "**/tests/py": false,
+        }
+      },
+      "off": {
+        "_label": "JavaScript",
+        "files.exclude": {
+          "**/src/plugins/javascript": false,
+          "**/tests/js": false,
+          "**/tests/typescript": false,
+          "**/src/plugins/python": true,
+          "**/tests/py": true,
         }
       }
     }

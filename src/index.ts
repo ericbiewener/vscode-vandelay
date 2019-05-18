@@ -10,7 +10,7 @@ import {
 import { config as jsConfig } from './plugins/javascript/config'
 import { config as pyConfig } from './plugins/python/config'
 import { removeUnusedImports } from './removeUnusedImports'
-import { showNewVersionAlert } from './showNewVersionMessage'
+import { alertNewVersion } from './newVersionAlerting'
 
 /*
  * VS Code has an error swallowing problem, so we catch and manually log.
@@ -31,7 +31,7 @@ function catchError(fn: (...args: any[]) => any) {
 }
 
 export const activate = async function activate(context: ExtensionContext) {
-  showNewVersionAlert(context)
+  alertNewVersion(context)
 
   const pluginConfigs = [jsConfig, pyConfig]
 

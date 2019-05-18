@@ -52,6 +52,13 @@ export type CachingDataPy = {
 
 export type PluginConfigPy = PluginConfig & {
   language: 'py'
+  processImportName?(
+    importName: string,
+    importPath: string,
+    absImportPath: string,
+    activeFilepath: string,
+    projectRoot: string
+  ): string | undefined
 }
 
 export type UserConfigPy = UserConfig & {

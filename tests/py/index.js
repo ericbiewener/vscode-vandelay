@@ -18,7 +18,7 @@ global.expect = require('expect')
 testRunner.configure({
   ui: 'bdd',
   useColors: true,
-  timeout: 1000 * 30,
+  timeout: 1000 * 300,
 })
 
 global.lang = 'py'

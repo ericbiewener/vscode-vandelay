@@ -1,10 +1,13 @@
+import _ from 'lodash'
 import { window, Range, TextEditor } from 'vscode'
 import path from 'path'
 import {
-  getTabChar,
-  strUntil,
+  doesImportExist,
   getLastInitialComment,
+  getTabChar,
   insertLine,
+  preserveRenamedImports,
+  strUntil,
 } from '../../../utils'
 import { commentRegex, parseImports, ParsedImportPy } from '../regex'
 import {
@@ -39,14 +42,14 @@ export async function insertImport(
   if (!importPosition.indexModifier && !importPosition.isFirstImport) {
     // We have an exact line match for position
     if (isPackageImport) {
-      if (importPosition.match.imports) {
+      if (!importPosition.match.isEntirePackage) {
         // partial imports exist
         window.showErrorMessage(
           "Can't import entire package when parts of the package are already being imported."
         )
       }
       return
-    } else if (!importPosition.match.imports) {
+    } else if (importPosition.match.isEntirePackage) {
       // partial imports don't exist
       window.showErrorMessage(
         "Can't import part of a package when the entire package is already being imported."
@@ -96,6 +99,7 @@ export async function insertImport(
       const afterLine = after
         ? `\n${fileText.slice(after.start, after.end)}`
         : ''
+
       return editor.edit(builder => {
         const beforeMatch =
           before || getLastInitialComment(fileText, commentRegex)
@@ -148,13 +152,16 @@ function getSurroundingImportPaths(
 
 function getNewLineImports(
   importPosition: ImportPositionPy,
-  exportName: string
+  newImport: string
 ) {
   const { match, indexModifier, isFirstImport } = importPosition
-  if (indexModifier || isFirstImport) return [exportName]
+  if (indexModifier || isFirstImport) return [newImport]
 
-  const { imports } = match as ParsedImportPy
-  if (!imports) return [exportName]
-  if (imports.includes(exportName)) return
-  return [...imports, exportName]
+  const { imports, renamed } = match as ParsedImportPy
+  if (!imports) return [newImport]
+  if (doesImportExist(imports, newImport, renamed)) return
+
+  const newImports = preserveRenamedImports(imports, renamed)
+  newImports.push(newImport)
+  return newImports
 }

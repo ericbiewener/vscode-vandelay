@@ -176,3 +176,49 @@ export function mergeObjectsWithArrays(obj1: {}, obj2: {}) {
 export function last(arr: any[]) {
   return arr[arr.length - 1]
 }
+
+export type Renamed = { [originalName: string]: string }
+
+export function addNamesAndRenames(
+  imports: string[],
+  names: string[],
+  renamed: Renamed
+) {
+  for (const imp of imports) {
+    const parts = imp.split(' as ')
+    const name = parts[0].trim()
+    if (!name) continue
+    names.push(name)
+    if (parts[1]) renamed[name] = parts[1].trim()
+  }
+}
+
+export function doesImportExist(
+  imports: string[],
+  newImport: string,
+  renamed: Renamed
+) {
+  const parts = newImport.split(' as ')
+  const newImportName = parts[0].trim()
+  const newImportRename = parts[1] ? parts[1].trim() : null
+
+  if (!imports.includes(newImportName)) return false
+
+  const existingImportRename = renamed[newImportName]
+  if (newImportRename != existingImportRename) {
+    window.showWarningMessage(
+      `Already imported as \`${existingImportRename || newImportName}\`.`
+    )
+  }
+
+  return true
+}
+
+export function preserveRenamedImports(imports: string[], renamed: Renamed) {
+  if (_.isEmpty(renamed)) return [...imports]
+
+  return imports.map(name => {
+    const renaming = renamed[name]
+    return renaming ? `${name} as ${renaming}` : name
+  })
+}

@@ -36,17 +36,9 @@ export function cacheFile(
     if (isPathNodeModule(plugin, importData.path)) {
       const existing = imp[importData.path] || {}
       imp[importData.path] = existing
-      if (importData.default) {
-        existing.default = processDefaultName(
-          plugin,
-          importData.default,
-          importData.path
-        )
-      }
-      if (importData.named)
-        existing.named = _.union(existing.named, importData.named)
-      if (importData.types)
-        existing.types = _.union(existing.types, importData.types)
+      if (importData.default) existing.default = importData.default
+      existing.named = _.union(existing.named, importData.named)
+      existing.types = _.union(existing.types, importData.types)
     } else if (importData.default && importData.default.startsWith('* as')) {
       // import * as Foo from...
       const pathKey = getFilepathKey(
@@ -75,10 +67,9 @@ export function cacheFile(
 
   while ((match = mainRegex.exec(fileText))) {
     if (match[1] === 'default' || (plugin.useES5 && match[1])) {
-      const proposedName = isIndexFile(filepath)
+      fileExports.default = isIndexFile(filepath)
         ? basenameNoExt(path.dirname(filepath))
         : basenameNoExt(filepath)
-      fileExports.default = processDefaultName(plugin, proposedName, filepath)
     } else if (!plugin.useES5 && !match[2] && !match[1].endsWith(',')) {
       // endsWith(',') — it's actually a reexport
       // export myVar  |  export myVar from ...
@@ -159,8 +150,8 @@ export function cacheFile(
     if (existing && existing.default && !fileExports.default) {
       fileExports.default = existing.default
     }
-    if (fileExports.named) fileExports.named.sort()
-    if (fileExports.types) fileExports.types.sort()
+    fileExports.named.sort()
+    fileExports.types.sort()
     exp[pathKey] = fileExports
   }
 
@@ -231,15 +222,6 @@ export function processCachedData(data: CachingDataJs) {
   }
 
   return data
-}
-
-function processDefaultName(
-  plugin: PluginJs,
-  defaultName: string,
-  importPath: string
-) {
-  if (!plugin.processDefaultName) return defaultName
-  return plugin.processDefaultName(importPath) || defaultName
 }
 
 function getSubfileExports(

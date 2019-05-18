@@ -33,18 +33,25 @@ export function buildImportItems(
     } else {
       dotPath = removeExt(importPath).replace(/\//g, '.')
       if (plugin.processImportPath) {
-        dotPath = plugin.processImportPath(
-          dotPath,
-          absImportPath,
-          activeFilepath,
-          plugin.projectRoot
-        )
+        dotPath =
+          plugin.processImportPath(
+            dotPath,
+            absImportPath,
+            activeFilepath,
+            plugin.projectRoot
+          ) || dotPath
       }
     }
 
     if (data.importEntirePackage) {
       items.push({
-        label: importPath,
+        label: processImportName(
+          plugin,
+          importPath,
+          dotPath,
+          absImportPath,
+          activeFilepath
+        ),
         isExtraImport: data.isExtraImport,
       })
     }
@@ -54,7 +61,13 @@ export function buildImportItems(
     // Don't sort data.exports because they were already sorted when caching. See python `cacheFile`
     for (const exportName of data.exports) {
       items.push({
-        label: exportName,
+        label: processImportName(
+          plugin,
+          exportName,
+          dotPath,
+          absImportPath,
+          activeFilepath
+        ),
         description: dotPath,
         isExtraImport: data.isExtraImport,
       })
@@ -62,4 +75,23 @@ export function buildImportItems(
   }
 
   return items
+}
+
+function processImportName(
+  plugin: PluginPy,
+  importName: string,
+  importPath: string,
+  absImportPath: string,
+  activeFilepath: string
+) {
+  if (!plugin.processImportName) return importName
+  return (
+    plugin.processImportName(
+      importName,
+      importPath,
+      absImportPath,
+      activeFilepath,
+      plugin.projectRoot
+    ) || importName
+  )
 }

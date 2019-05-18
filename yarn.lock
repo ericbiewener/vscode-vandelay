@@ -3118,7 +3118,7 @@ isstream@~0.1.2:
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
   integrity sha1-R+Y/evVa+m+S4VAOaQ64uFKcCZo=
 
-jest-diff@24.7.0, jest-diff@^24.7.0:
+jest-diff@24.7.0, jest-diff@^24.0.0, jest-diff@^24.7.0:
   version "24.7.0"
   resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-24.7.0.tgz#5d862899be46249754806f66e5729c07fcb3580f"
   integrity sha512-ULQZ5B1lWpH70O4xsANC4tf4Ko6RrpwhE3PtG6ERjMg1TiYTC2Wp4IntJVGro6a8HG9luYHhhmF4grF0Pltckg==
@@ -3178,7 +3178,7 @@ jest-resolve@^24.7.1:
     jest-pnp-resolver "^1.2.1"
     realpath-native "^1.1.0"
 
-jest-snapshot@24.7.1:
+jest-snapshot@24.7.1, jest-snapshot@^24.0.0:
   version "24.7.1"
   resolved "https://registry.yarnpkg.com/jest-snapshot/-/jest-snapshot-24.7.1.tgz#bd5a35f74aedff070975e9e9c90024f082099568"
   integrity sha512-8Xk5O4p+JsZZn4RCNUS3pxA+ORKpEKepE+a5ejIKrId9CwrVN0NY+vkqEkXqlstA5NMBkNahXkR/4qEBy0t5yA==
@@ -4419,7 +4419,7 @@ pretty-format@^23.0.1:
     ansi-regex "^3.0.0"
     ansi-styles "^3.2.0"
 
-pretty-format@^24.7.0:
+pretty-format@^24.0.0, pretty-format@^24.7.0:
   version "24.7.0"
   resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-24.7.0.tgz#d23106bc2edcd776079c2daa5da02bcb12ed0c10"
   integrity sha512-apen5cjf/U4dj7tHetpC7UEFCvtAgnNZnBDkfPv3fokzIqyOJckAG9OlAPC1BlFALnqT/lGB2tl9EJjlK6eCsA==
@@ -5053,6 +5053,16 @@ snapdragon@^0.8.1:
     source-map "^0.5.6"
     source-map-resolve "^0.5.0"
     use "^3.1.0"
+
+snapshot-diff@0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/snapshot-diff/-/snapshot-diff-0.5.1.tgz#8a74d11a4f89662d3f934dcbeccc4f773a817010"
+  integrity sha512-XBj1NE3oJiqdH/EcNzLSqSeCEnU458T57ZnbptrQ2/mKw+Z2Txu06vPMWG+morlbQp7nY6kkY7zPnHi1dgy6qg==
+  dependencies:
+    jest-diff "^24.0.0"
+    jest-snapshot "^24.0.0"
+    pretty-format "^24.0.0"
+    strip-ansi "^5.0.0"
 
 source-list-map@^2.0.0:
   version "2.0.1"

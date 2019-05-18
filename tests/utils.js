@@ -2,7 +2,27 @@ const fs = require('fs')
 const path = require('path')
 const _ = require('lodash')
 const { sleep } = require('utlz')
-const { window, Range, workspace, extensions, Uri, commands } = require('vscode')
+const {
+  window,
+  Range,
+  workspace,
+  extensions,
+  Uri,
+  commands,
+} = require('vscode')
+const snapshotDiff = require('snapshot-diff')
+
+function diff(context, a, b, options) {
+  expect(
+    snapshotDiff(a, b, {
+      aAnnotation: 'No Config',
+      bAnnotation: 'With Config',
+      stablePatchmarks: true,
+      contextLines: 0,
+      ...options,
+    })
+  ).toMatchSnapshot(context)
+}
 
 async function getPlugin() {
   const api = await extensions.getExtension('edb.vandelay').activate()
@@ -38,9 +58,22 @@ async function cacheTest(context, config) {
   expect(data).toMatchSnapshot(context)
 }
 
+async function cacheDiffTest(context, config) {
+  const [plugin] = await Promise.all([getPlugin(), openFile()])
+  if (!this.noConfig) {
+    await commands.executeCommand('vandelay.cacheProject')
+    this.noConfig = JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
+  }
+
+  Object.assign(plugin, config)
+  await commands.executeCommand('vandelay.cacheProject')
+  const withConfig = JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
+  diff(context, this.noConfig, withConfig)
+}
+
 async function buildImportItems() {
-  await commands.executeCommand("vandelay.selectImport");
-  const items = window.showQuickPick.args[0][0]
+  await commands.executeCommand('vandelay.selectImport')
+  const items = _.last(window.showQuickPick.args)[0]
   return items
 }
 
@@ -60,21 +93,27 @@ function replaceFileContents(newText = '') {
   })
 }
 
+function insertItem(item) {
+  window.showQuickPick.callsFake(() => Promise.resolve(item))
+  return commands.executeCommand('vandelay.selectImport')
+}
+
 async function insertItems(plugin, importItems) {
-  for (const item of importItems) {
-    window.showQuickPick.callsFake(() => Promise.resolve(item))
-    await commands.executeCommand("vandelay.selectImport");
-  }
-  
+  for (const item of importItems) await insertItem(item)
   return window.activeTextEditor.document.getText()
 }
 
-async function insertTest(context, startingText, filepath) {
+async function insertTest(
+  context,
+  startingText,
+  filepath,
+  preserveFileContents
+) {
   const open = () => (filepath ? openFile(filepath) : openFile())
 
   const [plugin] = await Promise.all([getPlugin(), open()])
-  await replaceFileContents(startingText)
-  
+  if (!preserveFileContents) await replaceFileContents(startingText)
+
   let importItems = await buildImportItems()
 
   const originalResult = await insertItems(plugin, importItems)
@@ -93,6 +132,49 @@ async function insertTest(context, startingText, filepath) {
   }
 }
 
+async function insertDiffTest(
+  context,
+  startingText,
+  filepath,
+  preserveFileContents
+) {
+  const open = () => (filepath ? openFile(filepath) : openFile())
+
+  const [plugin] = await Promise.all([getPlugin(), open()])
+  if (!preserveFileContents) await replaceFileContents(startingText)
+
+  const importItems = await buildImportItems()
+  const withContent = await insertItems(plugin, importItems)
+
+  if (!this.withoutContent) {
+    await replaceFileContents()
+    this.withoutContent = await insertItems(plugin, importItems)
+  }
+
+  diff(context, this.withoutContent, withContent, {
+    aAnnotation: 'Without Content',
+    bAnnotation: 'With Content',
+    contextLines: 2,
+  })
+}
+
+async function configInsertDiffTest(context, file, config) {
+  const [plugin] = await Promise.all([getPlugin(), openFile(file)])
+  await replaceFileContents()
+
+  if (!this.noConfig) {
+    // Cache for faster test running
+    const importItems = await buildImportItems()
+    this.noConfig = await insertItems(plugin, importItems)
+    await replaceFileContents()
+  }
+
+  Object.assign(plugin, config)
+  const importItems = await buildImportItems()
+  const withConfig = await insertItems(plugin, importItems)
+  diff(context, this.noConfig, withConfig)
+}
+
 async function configInsertTest(context, config, reCache) {
   if (reCache) await commands.executeCommand('vandelay.cacheProject')
   const [plugin] = await Promise.all([getPlugin(), openFile()])
@@ -109,8 +191,12 @@ module.exports = {
   getExportData,
   testSpyCall,
   cacheTest,
+  cacheDiffTest,
   buildImportItems,
   saveFile,
   insertTest,
+  insertDiffTest,
   configInsertTest,
+  configInsertDiffTest,
+  insertItem,
 }

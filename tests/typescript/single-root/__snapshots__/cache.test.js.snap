@@ -38,6 +38,8 @@ Object {
     "module1_file2": Object {
       "default": "defaultModule_file2",
       "isExtraImport": true,
+      "named": Array [],
+      "types": Array [],
     },
   },
 }

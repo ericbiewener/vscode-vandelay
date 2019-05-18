@@ -6,7 +6,6 @@ import {
 } from '../../utils'
 import { getNewLine } from './importing/getNewLine'
 import { parseImports, ParsedImportJs } from './regex'
-import { Plugin } from '../../types'
 import { PluginJs } from './types'
 
 const ENTIRE_LINE = 1

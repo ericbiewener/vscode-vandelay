@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { strUntil } from '../../utils'
+import { addNamesAndRenames, Renamed, strUntil } from '../../utils'
 import { Plugin } from '../../types'
 import { PluginJs } from './types'
 
@@ -33,8 +33,9 @@ export type ParsedImportJs = {
   end: number
   isTypeOutside: boolean
   default?: string | undefined | null
-  named?: string[]
-  types?: string[]
+  named: string[]
+  types: string[]
+  renamed: Renamed
 }
 
 export function parseImports(plugin: PluginJs, text: string) {
@@ -59,6 +60,9 @@ export function parseImports(plugin: PluginJs, text: string) {
       default:
         isTypeOutside || !match[1] ? null : strUntil(match[1], ',').trim(),
       isTypeOutside,
+      named: [],
+      types: [],
+      renamed: {},
     }
     if (match[2]) {
       const namedAndTypes = match[2]
@@ -68,12 +72,19 @@ export function parseImports(plugin: PluginJs, text: string) {
         .filter(Boolean)
 
       if (isTypeOutside) {
-        importData.types = namedAndTypes
+        addNamesAndRenames(namedAndTypes, importData.types, importData.renamed)
       } else {
         const groups = _.partition(namedAndTypes, i => i.startsWith('type '))
-        if (groups[0].length)
-          importData.types = groups[0].map(i => i.slice(5).trim())
-        if (groups[1].length) importData.named = groups[1]
+        if (groups[0].length) {
+          addNamesAndRenames(
+            groups[0].map(i => i.slice(5)),
+            importData.types,
+            importData.renamed
+          )
+        }
+        if (groups[1].length) {
+          addNamesAndRenames(groups[1], importData.named, importData.renamed)
+        }
       }
     }
     imports.push(importData)

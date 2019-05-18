@@ -1,5 +1,6 @@
 import { window, workspace, ExtensionContext } from 'vscode'
 import path from 'path'
+import { alertNewVersionConfig } from './newVersionAlerting'
 import { isFile, getFilepathKey } from './utils'
 import { Plugin, PluginConfig, UserConfig, DefaultPluginConfig } from './types'
 import { cacheProjectLanguage } from './cacher'
@@ -38,8 +39,6 @@ export async function initializePlugin(
     return
   }
 
-  console.log(cacheDirPath)
-
   const plugin = Object.assign(defaultSettings, pluginConfig, userConfig, {
     configFile,
     cacheDirPath,
@@ -50,6 +49,8 @@ export async function initializePlugin(
 
   plugin.excludePatterns.push(/.*\/\..*/) // exclude all folders starting with dot
   PLUGINS[language] = plugin
+
+  alertNewVersionConfig(plugin)
 
   console.info(`Vandelay language registered: ${language}`)
 
