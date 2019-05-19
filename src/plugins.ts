@@ -1,7 +1,8 @@
-import { window, workspace, ExtensionContext } from 'vscode'
+import _ from 'lodash'
+import { ExtensionContext, window, workspace } from 'vscode'
 import path from 'path'
 import { alertNewVersionConfig } from './newVersionAlerting'
-import { isFile, getFilepathKey } from './utils'
+import { isFile, isObject } from './utils'
 import { Plugin, PluginConfig, UserConfig, DefaultPluginConfig } from './types'
 import { cacheProjectLanguage } from './cacher'
 
@@ -12,10 +13,7 @@ const defaultSettings: DefaultPluginConfig = {
   excludePatterns: [],
 }
 
-export async function initializePlugin(
-  context: ExtensionContext,
-  pluginConfig: PluginConfig
-) {
+export async function initializePlugin(context: ExtensionContext, pluginConfig: PluginConfig) {
   if (!workspace.workspaceFolders) return
 
   const cacheDirPath = context.storagePath
@@ -24,27 +22,20 @@ export async function initializePlugin(
   const configWorkspaceFolder = workspace.workspaceFolders.find(
     f => path.basename(f.uri.fsPath) === '.vandelay'
   )
-  const configPath = (configWorkspaceFolder || workspace.workspaceFolders[0])
-    .uri.fsPath
+  const configPath = (configWorkspaceFolder || workspace.workspaceFolders[0]).uri.fsPath
 
   const { language } = pluginConfig
   const configFile = 'vandelay-' + language + '.js'
-  const userConfig = await getUserConfig(configPath, configFile)
+  const configFilepath = path.join(configPath, configFile)
+  const userConfig = await getUserConfig(configFilepath)
   if (!userConfig) return
-
-  if (!userConfig.includePaths || !userConfig.includePaths.length) {
-    window.showErrorMessage(
-      `You must specify the "includePaths" configuration option in your vandelay-${language}.js file.`
-    )
-    return
-  }
 
   const plugin = Object.assign(defaultSettings, pluginConfig, userConfig, {
     configFile,
+    configFilepath,
     cacheDirPath,
-    cacheFilePath: path.join(cacheDirPath, 'vandelay-v2-' + language + '.json'),
-    projectRoot:
-      userConfig.projectRoot || workspace.workspaceFolders[0].uri.fsPath,
+    cacheFilepath: path.join(cacheDirPath, 'vandelay-v2-' + language + '.json'),
+    projectRoot: userConfig.projectRoot || workspace.workspaceFolders[0].uri.fsPath,
   }) as Plugin
 
   plugin.excludePatterns.push(/.*\/\..*/) // exclude all folders starting with dot
@@ -54,23 +45,49 @@ export async function initializePlugin(
 
   console.info(`Vandelay language registered: ${language}`)
 
-  if (!isFile(plugin.cacheFilePath)) return cacheProjectLanguage(plugin)
+  if (!isFile(plugin.cacheFilepath)) return cacheProjectLanguage(plugin)
 }
 
-async function getUserConfig(vandelayDir: string, vandelayFile: string) {
+async function getUserConfig(configFilepath: string, ignoreModuleCache = false) {
   try {
-    const absPath = path.join(vandelayDir, vandelayFile)
-    console.log(`Loading vandelay config file from ${absPath}`)
-    // @ts-ignore -- use default `require` for dynamic imports
-    const userConfig = __non_webpack_require__(absPath)
-    if (typeof userConfig === 'object') return userConfig as UserConfig
-    window.showErrorMessage(
-      'Your Vandelay configuration file must export an object.'
-    )
+    console.log(`Loading vandelay config file from ${configFilepath}`)
+    if (ignoreModuleCache) {
+      // @ts-ignore
+      delete __non_webpack_require__.cache[configFilepath]
+    }
+    // @ts-ignore
+    const userConfig = __non_webpack_require__(configFilepath)
+    if (isObject(userConfig)) {
+      if (!userConfig.includePaths || !userConfig.includePaths.length) {
+        window.showErrorMessage(
+          `You must specify the "includePaths" configuration option in your ${path.basename(
+            configFilepath
+          )} file.`
+        )
+        return
+      }
+      return userConfig as UserConfig
+    }
+    window.showErrorMessage('Your Vandelay configuration file must export an object.')
   } catch (e) {
     if (e.code === 'MODULE_NOT_FOUND') return // All good. Vandelay simply won't be used for the given language
     window.showErrorMessage(
-      'Cound not parse your ' + vandelayFile + ' file. Error:\n\n' + e
+      `Cound not parse your ${path.basename(configFilepath)} file. Error:\n\n${e}`
     )
   }
+}
+
+function onConfigCreate() {
+  // initialize entire plugin, activate vandelay, etc!
+}
+
+export function watchForConfigChanges() {
+  workspace.onDidSaveTextDocument(async doc => {
+    for (const plugin of Object.values(PLUGINS)) {
+      if (doc.uri.fsPath !== plugin.configFilepath) continue
+      const userConfig = await getUserConfig(plugin.configFilepath, true)
+      Object.assign(plugin, userConfig)
+      break
+    }
+  })
 }

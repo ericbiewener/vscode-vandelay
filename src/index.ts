@@ -1,12 +1,8 @@
 import { window, commands, workspace, ExtensionContext } from 'vscode'
 import _ from 'lodash'
-import { initializePlugin, PLUGINS } from './plugins'
+import { initializePlugin, PLUGINS, watchForConfigChanges } from './plugins'
 import { cacheProject, watchForChanges } from './cacher'
-import {
-  importUndefinedVariables,
-  selectImport,
-  selectImportForActiveWord,
-} from './importer'
+import { importUndefinedVariables, selectImport, selectImportForActiveWord } from './importer'
 import { config as jsConfig } from './plugins/javascript/config'
 import { config as pyConfig } from './plugins/python/config'
 import { removeUnusedImports } from './removeUnusedImports'
@@ -41,10 +37,7 @@ export const activate = async function activate(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand('vandelay.cacheProject', catchError(cacheProject)),
-    commands.registerCommand(
-      'vandelay.selectImport',
-      catchError(() => selectImport())
-    ),
+    commands.registerCommand('vandelay.selectImport', catchError(() => selectImport())),
     commands.registerCommand(
       'vandelay.selectImportForActiveWord',
       catchError(() => selectImportForActiveWord())
@@ -53,10 +46,7 @@ export const activate = async function activate(context: ExtensionContext) {
       'vandelay.importUndefinedVariables',
       catchError(() => importUndefinedVariables())
     ),
-    commands.registerCommand(
-      'vandelay.removeUnusedImports',
-      catchError(removeUnusedImports)
-    ),
+    commands.registerCommand('vandelay.removeUnusedImports', catchError(removeUnusedImports)),
     commands.registerCommand(
       'vandelay.fixImports',
       catchError(async () => {
@@ -79,14 +69,14 @@ export const activate = async function activate(context: ExtensionContext) {
     watchForChanges()
   )
 
+  watchForConfigChanges()
+
   return {
     registerPlugin: async ({ language }: { language: string }) => {
       window.showErrorMessage(
         `Please uninstall extension Vandelay ${language.toUpperCase()}. Vandelay no longer requires langauge extensions to be installed separately.`
       )
-      await commands.executeCommand(
-        'workbench.extensions.action.showEnabledExtensions'
-      )
+      await commands.executeCommand('workbench.extensions.action.showEnabledExtensions')
     },
     _test: {
       plugins: PLUGINS,

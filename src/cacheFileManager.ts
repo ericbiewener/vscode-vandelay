@@ -3,8 +3,8 @@ import { isFile } from './utils'
 import { ExportData, Plugin } from './types'
 
 function parseCacheFile(plugin: Plugin) {
-  return isFile(plugin.cacheFilePath)
-    ? JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf-8'))
+  return isFile(plugin.cacheFilepath)
+    ? JSON.parse(fs.readFileSync(plugin.cacheFilepath, 'utf-8'))
     : {}
 }
 
@@ -17,10 +17,7 @@ function parseCacheFile(plugin: Plugin) {
  */
 let fileAccess: Promise<void>
 
-export function cacheFileManager(
-  plugin: Plugin,
-  cb: (data: ExportData) => void
-) {
+export function cacheFileManager(plugin: Plugin, cb: (data: ExportData) => void) {
   fileAccess = fileAccess
     ? fileAccess.then(() => cb(parseCacheFile(plugin)))
     : Promise.resolve(cb(parseCacheFile(plugin)))
