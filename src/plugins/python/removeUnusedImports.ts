@@ -1,11 +1,6 @@
 import _ from 'lodash'
 import { Range, Uri, window } from 'vscode'
-import {
-  strUntil,
-  getDiagnosticsForAllEditors,
-  sortUnusedImportChanges,
-  last,
-} from '../../utils'
+import { strUntil, getDiagnosticsForAllEditors, sortUnusedImportChanges, last } from '../../utils'
 import { importRegex, parseImports, ParsedImportPy } from './regex'
 import { PluginPy } from './types'
 import { getNewLine } from './importing/getNewLine'
@@ -16,9 +11,7 @@ interface Change {
 }
 
 export async function removeUnusedImports(plugin: PluginPy) {
-  const diagnostics = getDiagnosticsForAllEditors(
-    d => d.code === 'no-unused-vars'
-  )
+  const diagnostics = getDiagnosticsForAllEditors(d => d.code === 'no-unused-vars')
 
   for (const filepath in diagnostics) {
     const editor = await window.showTextDocument(Uri.file(filepath), {
@@ -33,9 +26,7 @@ export async function removeUnusedImports(plugin: PluginPy) {
 
     for (const diagnostic of diagnostics[filepath]) {
       const offset = document.offsetAt(diagnostic.range.start)
-      const importMatch = fileImports.find(
-        i => i.start <= offset && i.end >= offset
-      )
+      const importMatch = fileImports.find(i => i.start <= offset && i.end >= offset)
       if (!importMatch) return
 
       const { imports } = changesByPath[importMatch.path] || importMatch
@@ -61,9 +52,7 @@ export async function removeUnusedImports(plugin: PluginPy) {
 
     for (const change of changes) {
       const { imports, match } = change
-      const newLine = imports.length
-        ? getNewLine(plugin, match.path, imports)
-        : ''
+      const newLine = imports.length ? getNewLine(plugin, match.path, imports) : ''
 
       let { end } = match
       if (!newLine) end += newText[end + 1] === '\n' ? 2 : 1
@@ -71,10 +60,7 @@ export async function removeUnusedImports(plugin: PluginPy) {
     }
 
     await editor.edit(builder => {
-      builder.replace(
-        new Range(document.positionAt(0), document.positionAt(oldTextEnd)),
-        newText
-      )
+      builder.replace(new Range(document.positionAt(0), document.positionAt(oldTextEnd)), newText)
     })
 
     await document.save()

@@ -1,9 +1,6 @@
 import _ from 'lodash'
 import { Range, Uri, window } from 'vscode'
-import {
-  getDiagnosticsForAllEditors,
-  sortUnusedImportChanges,
-} from '../../utils'
+import { getDiagnosticsForAllEditors, sortUnusedImportChanges } from '../../utils'
 import { getNewLine } from './importing/getNewLine'
 import { parseImports, ParsedImportJs } from './regex'
 import { PluginJs } from './types'
@@ -40,16 +37,13 @@ export async function removeUnusedImports(plugin: PluginJs) {
 
     for (const diagnostic of diagnostics[filepath]) {
       const offset = document.offsetAt(diagnostic.range.start)
-      const importMatch = fileImports.find(
-        i => i.start <= offset && i.end >= offset
-      )
+      const importMatch = fileImports.find(i => i.start <= offset && i.end >= offset)
       if (!importMatch) continue
 
       const existingChange = changesByPath[importMatch.path]
       if (existingChange && existingChange.entireLine) continue // Not actually possible, but needed to appease TS
 
-      const { default: defaultImport, named, types } =
-        existingChange || importMatch
+      const { default: defaultImport, named, types } = existingChange || importMatch
       const unusedImport = document.getText(diagnostic.range)
       const entireLine = unusedImport.includes(' from ')
 

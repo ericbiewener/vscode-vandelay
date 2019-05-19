@@ -6,7 +6,7 @@ const log = require('log-all-the-things')
 const { detailedDiff } = require('deep-object-diff')
 const jestDiff = require('jest-diff')
 
-const DIFF_CHANGED = "DIFF CHANGED"
+const DIFF_CHANGED = 'DIFF CHANGED'
 
 function parseObj(snapshotData) {
   return JSON.parse(
@@ -15,8 +15,8 @@ function parseObj(snapshotData) {
       .replace(/Array /g, '')
       .replace(/: undefined,/g, ': " undefined",')
       .replace(/(?:,)(\n *[}\]])/g, '$1') // remove trailing commas
-    )
-} 
+  )
+}
 
 function transformBak(bak) {
   const extraImports = bak._extraImports
@@ -37,7 +37,7 @@ function highlightDiffChange(diff, ...keys) {
         log.error(keyArray.join('.'), v)
       }
     } else if (v) {
-      if (typeof v === "object") {
+      if (typeof v === 'object') {
         highlightDiffChange(v, ...keyArray)
       } else {
         log.error(DIFF_CHANGED)
@@ -54,17 +54,17 @@ function compareAll(newPath) {
   try {
     oldSnaps = require(`${newPath}.BAK`)
   } catch (e) {
-    if (e.code === "MODULE_NOT_FOUND") return;
+    if (e.code === 'MODULE_NOT_FOUND') return
     throw e
   }
 
   log.info('------------------------------------------------------------------')
   log.info(`comparing: ${newPath}`)
   log.info('------------------------------------------------------------------')
-  
+
   const newKeys = Object.keys(newSnaps)
   const oldKeys = Object.keys(oldSnaps)
-  
+
   // Make sure comparisons have same snapshots
   if (!_.isEqual(newKeys, oldKeys)) {
     log.e(DIFF_CHANGED)
@@ -87,7 +87,7 @@ function compareAll(newPath) {
     try {
       newObj = parseObj(newSnap)
       oldObj = parseObj(oldSnap)
-    } catch(e) {
+    } catch (e) {
       // Must be import insert tests
       if (newSnap === oldSnap) {
         log('output is equal!')
@@ -98,7 +98,8 @@ function compareAll(newPath) {
       continue
     }
 
-    if (Array.isArray(newObj)) { // buildImports tests
+    if (Array.isArray(newObj)) {
+      // buildImports tests
       newObj = newObj.map(o => JSON.stringify(o, null, 2)).sort()
       oldObj = oldObj.map(o => JSON.stringify(o, null, 2)).sort()
       if (_.isEqual(oldObj, newObj)) continue
@@ -125,14 +126,14 @@ function compareAll(newPath) {
 }
 
 function findSnapshots(snapshots, dir) {
-  const items = fs.readdirSync(dir);
+  const items = fs.readdirSync(dir)
 
   for (const item of items) {
-    const fullPath = path.join(dir, item);
+    const fullPath = path.join(dir, item)
     if (fs.lstatSync(fullPath).isFile()) {
       if (fullPath.endsWith('.snap')) snapshots.push(fullPath)
     } else {
-      findSnapshots(snapshots, fullPath);
+      findSnapshots(snapshots, fullPath)
     }
   }
 }

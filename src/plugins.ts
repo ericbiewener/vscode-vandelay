@@ -74,11 +74,14 @@ async function getUserConfig(configFilepath: string, ignoreModuleCache = false) 
     window.showErrorMessage(
       `Cound not parse your ${path.basename(configFilepath)} file. Error:\n\n${e}`
     )
+    console.error(e)
   }
 }
 
 function onConfigCreate() {
   // initialize entire plugin, activate vandelay, etc!
+  // should also init plugin if config file changes to become valid (e.g. it originally existed
+  // without `includePaths` defined but is changed to include it)
 }
 
 export function watchForConfigChanges() {

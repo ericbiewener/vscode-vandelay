@@ -47,11 +47,7 @@ function parseImportsWithRegex(
 
     if (!isEntirePackage) {
       const matchText = replacer ? match[2].replace(replacer, '') : match[2]
-      addNamesAndRenames(
-        matchText.split(','),
-        importData.imports,
-        importData.renamed
-      )
+      addNamesAndRenames(matchText.split(','), importData.imports, importData.renamed)
     } else {
       if (match[2]) importData.renamed[importData.path] = match[2]
     }

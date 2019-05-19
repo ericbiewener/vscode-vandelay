@@ -65,7 +65,4 @@ export type UserConfigPy = UserConfig & {
   importGroups?: string[][]
 }
 
-export type PluginPy = DefaultPluginConfig &
-  PluginConfigPy &
-  UserConfigPy &
-  RuntimePluginConfig
+export type PluginPy = DefaultPluginConfig & PluginConfigPy & UserConfigPy & RuntimePluginConfig

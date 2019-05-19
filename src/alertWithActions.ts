@@ -16,12 +16,7 @@ type AlertConfigT = {
   modal?: boolean
 }
 
-export async function alertWithActions({
-  alertType,
-  msg,
-  actions,
-  modal,
-}: AlertConfigT) {
+export async function alertWithActions({ alertType, msg, actions, modal }: AlertConfigT) {
   const fn =
     alertType === AlertTypes.ERROR
       ? 'showErrorMessage'

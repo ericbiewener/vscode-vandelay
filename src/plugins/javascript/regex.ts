@@ -48,8 +48,7 @@ export function parseImports(plugin: PluginJs, text: string) {
       // Must reset `lastIndex` to the end of the unassigned import statement because the match will
       // have gone beyond it
       const unassignedImportEnd = match[0].indexOf('\n')
-      if (unassignedImportEnd > -1)
-        regex.lastIndex -= match[0].length - unassignedImportEnd
+      if (unassignedImportEnd > -1) regex.lastIndex -= match[0].length - unassignedImportEnd
       continue
     }
     const isTypeOutside = !!match[2] && match[1] === 'type '
@@ -57,8 +56,7 @@ export function parseImports(plugin: PluginJs, text: string) {
       path: match[3],
       start: match.index,
       end: match.index + match[0].length,
-      default:
-        isTypeOutside || !match[1] ? null : strUntil(match[1], ',').trim(),
+      default: isTypeOutside || !match[1] ? null : strUntil(match[1], ',').trim(),
       isTypeOutside,
       named: [],
       types: [],
@@ -76,11 +74,7 @@ export function parseImports(plugin: PluginJs, text: string) {
       } else {
         const groups = _.partition(namedAndTypes, i => i.startsWith('type '))
         if (groups[0].length) {
-          addNamesAndRenames(
-            groups[0].map(i => i.slice(5)),
-            importData.types,
-            importData.renamed
-          )
+          addNamesAndRenames(groups[0].map(i => i.slice(5)), importData.types, importData.renamed)
         }
         if (groups[1].length) {
           addNamesAndRenames(groups[1], importData.named, importData.renamed)

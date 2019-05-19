@@ -24,9 +24,7 @@ export async function selectImport(word?: string | undefined | null) {
     if (word) items = items.filter(item => item.label === word)
 
     const selection =
-      !word ||
-      items.length > 1 ||
-      !workspace.getConfiguration('vandelay').autoImportSingleResult
+      !word || items.length > 1 || !workspace.getConfiguration('vandelay').autoImportSingleResult
         ? await window.showQuickPick(items, { matchOnDescription: true })
         : items[0]
 
@@ -48,9 +46,7 @@ export async function importUndefinedVariables() {
   const plugin = getPluginForActiveFile()
   if (!plugin) return
 
-  const diagnostics = getDiagnosticsForActiveEditor(
-    plugin.shouldIncludeDisgnostic
-  )
+  const diagnostics = getDiagnosticsForActiveEditor(plugin.shouldIncludeDisgnostic)
   if (!diagnostics.length) return
 
   const { document } = window.activeTextEditor as TextEditor

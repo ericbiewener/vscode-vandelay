@@ -10,19 +10,12 @@ import {
   strUntil,
 } from '../../../utils'
 import { commentRegex, parseImports, ParsedImportPy } from '../regex'
-import {
-  getImportPosition,
-  ImportPositionPy,
-  ImportPositionMatch,
-} from './getImportPosition'
+import { getImportPosition, ImportPositionPy, ImportPositionMatch } from './getImportPosition'
 import { PluginPy } from '../types'
 import { RichQuickPickItem } from '../../../types'
 import { getNewLine } from './getNewLine'
 
-export async function insertImport(
-  plugin: PluginPy,
-  importSelection: RichQuickPickItem
-) {
+export async function insertImport(plugin: PluginPy, importSelection: RichQuickPickItem) {
   const { label: exportName, isExtraImport } = importSelection
   const isPackageImport = !importSelection.description
   const importPath = importSelection.description || exportName
@@ -30,13 +23,7 @@ export async function insertImport(
 
   const fileText = editor.document.getText()
   const imports = parseImports(fileText)
-  const importPosition = getImportPosition(
-    plugin,
-    importPath,
-    isExtraImport,
-    imports,
-    fileText
-  )
+  const importPosition = getImportPosition(plugin, importPath, isExtraImport, imports, fileText)
 
   // Make sure we aren't importing a full package when it already has a partial import, or vice versa
   if (!importPosition.indexModifier && !importPosition.isFirstImport) {
@@ -84,25 +71,18 @@ export async function insertImport(
     )
 
     if (before || after) {
-      const beforeGroup = before
-        ? findImportPathGroup(plugin, before.path)
-        : null
+      const beforeGroup = before ? findImportPathGroup(plugin, before.path) : null
       const afterGroup = after ? findImportPathGroup(plugin, after.path) : null
       const newGroup = findImportPathGroup(plugin, importPath || exportName)
 
       if (before && newGroup != beforeGroup) newLine = '\n' + newLine
       if (after && newGroup != afterGroup) newLine += '\n'
       // Rewrite all 3 import lines
-      const beforeLine = before
-        ? `${fileText.slice(before.start, before.end)}\n`
-        : ''
-      const afterLine = after
-        ? `\n${fileText.slice(after.start, after.end)}`
-        : ''
+      const beforeLine = before ? `${fileText.slice(before.start, before.end)}\n` : ''
+      const afterLine = after ? `\n${fileText.slice(after.start, after.end)}` : ''
 
       return editor.edit(builder => {
-        const beforeMatch =
-          before || getLastInitialComment(fileText, commentRegex)
+        const beforeMatch = before || getLastInitialComment(fileText, commentRegex)
 
         builder.replace(
           new Range(
@@ -133,10 +113,7 @@ function findImportPathGroup(plugin: PluginPy, importPath: string) {
   }
 }
 
-function getSurroundingImportPaths(
-  imports: ParsedImportPy[],
-  importPosition: ImportPositionMatch
-) {
+function getSurroundingImportPaths(imports: ParsedImportPy[], importPosition: ImportPositionMatch) {
   const { match, indexModifier } = importPosition
   const matchIndex = imports.indexOf(match)
   const before = imports[matchIndex - (indexModifier > 0 ? 0 : 1)]
@@ -150,10 +127,7 @@ function getSurroundingImportPaths(
   }
 }
 
-function getNewLineImports(
-  importPosition: ImportPositionPy,
-  newImport: string
-) {
+function getNewLineImports(importPosition: ImportPositionPy, newImport: string) {
   const { match, indexModifier, isFirstImport } = importPosition
   if (indexModifier || isFirstImport) return [newImport]
 
