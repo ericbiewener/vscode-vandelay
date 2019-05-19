@@ -9,19 +9,11 @@ import {
   preserveRenamedImports,
 } from '../../../utils'
 import { parseImports, ParsedImportJs } from '../regex'
-import {
-  FileExportsJs,
-  PluginJs,
-  RichQuickPickItemJs,
-  ExportType,
-} from '../types'
+import { FileExportsJs, PluginJs, RichQuickPickItemJs, ExportType } from '../types'
 import { getImportPosition, ImportPositionJs } from './getImportPosition'
 import { getNewLine } from './getNewLine'
 
-export async function insertImport(
-  plugin: PluginJs,
-  selection: RichQuickPickItemJs
-) {
+export async function insertImport(plugin: PluginJs, selection: RichQuickPickItemJs) {
   const {
     label: exportName,
     description: importPath,
@@ -31,12 +23,7 @@ export async function insertImport(
   } = selection
   const editor = window.activeTextEditor
 
-  const finalImportPath = getFinalImportPath(
-    plugin,
-    importPath,
-    absImportPath,
-    isExtraImport
-  )
+  const finalImportPath = getFinalImportPath(plugin, importPath, absImportPath, isExtraImport)
   const fileText = (editor as TextEditor).document.getText()
   const imports = parseImports(plugin, fileText)
 
@@ -63,8 +50,7 @@ function getFinalImportPath(
 ) {
   if (isExtraImport) return importPath
 
-  const activeFilepath = (window.activeTextEditor as TextEditor).document
-    .fileName
+  const activeFilepath = (window.activeTextEditor as TextEditor).document.fileName
   importPath = getRelativeImportPath(activeFilepath, absImportPath)
 
   if (plugin.processImportPath) {
@@ -77,9 +63,7 @@ function getFinalImportPath(
     return removeExt(processedPath || importPath)
   }
 
-  return path.basename(importPath) === 'index.js'
-    ? path.dirname(importPath)
-    : removeExt(importPath)
+  return path.basename(importPath) === 'index.js' ? path.dirname(importPath) : removeExt(importPath)
 }
 
 function getNewLineImports(

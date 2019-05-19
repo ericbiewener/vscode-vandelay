@@ -1,11 +1,7 @@
 import { getTabChar } from '../../../utils'
 import { FileExportsJs, PluginJs } from '../types'
 
-export function getNewLine(
-  plugin: PluginJs,
-  importPath: string,
-  lineImports: FileExportsJs
-) {
+export function getNewLine(plugin: PluginJs, importPath: string, lineImports: FileExportsJs) {
   const {
     padCurlyBraces,
     useSingleQuotes,
@@ -20,9 +16,7 @@ export function getNewLine(
   lineImports.types.sort((a, b) => a.localeCompare(b, undefined, sensitivity))
 
   const putTypeOutside =
-    plugin.preferTypeOutside &&
-    !lineImports.default &&
-    !lineImports.named.length
+    plugin.preferTypeOutside && !lineImports.default && !lineImports.named.length
   const nonDefaultImports = putTypeOutside
     ? lineImports.types
     : lineImports.named.concat(lineImports.types.map(t => 'type ' + t))
@@ -54,8 +48,7 @@ export function getNewLine(
   // Split up line if necessary
 
   const tabChar = getTabChar()
-  const newLineLength =
-    newLineStart.length + newLineMiddle.length + newLineEnd.length
+  const newLineLength = newLineStart.length + newLineMiddle.length + newLineEnd.length
 
   // If line is short enough OR there are no named/type imports, no need to split into multiline
   if (newLineLength <= maxImportLineLength || !nonDefaultImports.length) {

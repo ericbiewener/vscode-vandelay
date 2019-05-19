@@ -1,12 +1,7 @@
 import _ from 'lodash'
 import path from 'path'
 import { TextEditor, window } from 'vscode'
-import {
-  getLastInitialComment,
-  strUntil,
-  getImportOrderPosition,
-  last,
-} from '../../../utils'
+import { getLastInitialComment, strUntil, getImportOrderPosition, last } from '../../../utils'
 import { commentRegex, ParsedImportPy } from '../regex'
 import { isPathPackage } from '../utils'
 import { PluginPy } from '../types'
@@ -55,12 +50,8 @@ export function getImportPosition(
     if (existingImportPath[0] === '.') {
       // relative path
       if (!dirDotPath) {
-        const filepath = (window.activeTextEditor as TextEditor).document
-          .fileName
-        const relativeDirPath = path.relative(
-          plugin.projectRoot,
-          path.dirname(filepath)
-        )
+        const filepath = (window.activeTextEditor as TextEditor).document.fileName
+        const relativeDirPath = path.relative(plugin.projectRoot, path.dirname(filepath))
         dirDotPath = relativeDirPath.replace(/\//g, '.')
       }
       existingImportPath = `${dirDotPath}${existingImportPath}`
@@ -79,18 +70,14 @@ export function getImportPosition(
     const lineIsPackage = isPathPackage(plugin, importData.path)
     if (lineIsPackage && !isExtraImport) continue
 
-    const lineImportPos = getImportOrderPosition(
-      plugin,
-      strUntil(importData.path, '.')
-    )
+    const lineImportPos = getImportOrderPosition(plugin, strUntil(importData.path, '.'))
 
     // Both have import orders
     if (importPos != null && lineImportPos != null) {
       if (importPos > lineImportPos) continue
       return {
         match: importData,
-        indexModifier:
-          importPos < lineImportPos || importPath < importData.path ? -1 : 1,
+        indexModifier: importPos < lineImportPos || importPath < importData.path ? -1 : 1,
         isFirstImport: false,
       }
     }
@@ -106,10 +93,7 @@ export function getImportPosition(
     if (importPos != null || lineImportPos != null) {
       // Package imports without a group get sorted to the top, non-package imports without a group
       // get sorted to the end
-      if (
-        (isExtraImport && importPos != null) ||
-        (!isExtraImport && lineImportPos != null)
-      )
+      if ((isExtraImport && importPos != null) || (!isExtraImport && lineImportPos != null))
         continue
       return {
         match: importData,

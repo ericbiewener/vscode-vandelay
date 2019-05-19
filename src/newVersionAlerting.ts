@@ -1,19 +1,11 @@
 import _ from 'lodash'
-import {
-  extensions,
-  window,
-  workspace,
-  ExtensionContext,
-  env,
-  Uri,
-} from 'vscode'
+import { extensions, window, workspace, ExtensionContext, env, Uri } from 'vscode'
 import { alertWithActions } from './alertWithActions'
 import { Plugin } from './types'
 
 const SUPPRESS_ALERT = false
 
-const REPO_MASTER =
-  'https://github.com/ericbiewener/vscode-vandelay/blob/master/'
+const REPO_MASTER = 'https://github.com/ericbiewener/vscode-vandelay/blob/master/'
 
 const CHANGELOG_BUTTON_CONFIG = {
   title: 'View Changelog',
@@ -33,10 +25,7 @@ export async function alertNewVersion(context: ExtensionContext) {
   const oldSemver = oldVersion.split('.')
   const newSemver = version.split('.')
   // Only compare major and minor versions
-  if (
-    newSemver[0] < oldSemver[0] ||
-    (newSemver[0] === oldSemver[0] && newSemver[1] < oldSemver[1])
-  )
+  if (newSemver[0] < oldSemver[0] || (newSemver[0] === oldSemver[0] && newSemver[1] < oldSemver[1]))
     return
 
   const isMajor = newSemver[0] > oldSemver[0]

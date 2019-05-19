@@ -1,11 +1,6 @@
 import { window, TextEditor } from 'vscode'
 import path from 'path'
-import {
-  PluginJs,
-  MergedExportDataJs,
-  RichQuickPickItemJs,
-  ExportType,
-} from '../types'
+import { PluginJs, MergedExportDataJs, RichQuickPickItemJs, ExportType } from '../types'
 import { isIndexFile } from '../utils'
 
 export function buildImportItems(
@@ -21,10 +16,7 @@ export function buildImportItems(
   for (const importPath of sortedKeys) {
     let absImportPath = path.join(projectRoot, importPath)
     if (absImportPath === activeFilepath) continue
-    if (
-      shouldIncludeImport &&
-      !shouldIncludeImport(absImportPath, activeFilepath)
-    ) {
+    if (shouldIncludeImport && !shouldIncludeImport(absImportPath, activeFilepath)) {
       continue
     }
 
@@ -42,15 +34,11 @@ export function buildImportItems(
       // because the import might be getting reexported multiple directories higher up, in which case it should not be
       // imported from that reexport location if the active file is adjacent/in a subdirectory.
       !activeFilepath.startsWith(
-        path.join(
-          plugin.projectRoot,
-          path.dirname(data.reexported.reexportPath)
-        )
+        path.join(plugin.projectRoot, path.dirname(data.reexported.reexportPath))
       )
     ) {
       const { reexports } = data.reexported
-      if (data.default && !reexports.includes('default'))
-        defaultExport = data.default
+      if (data.default && !reexports.includes('default')) defaultExport = data.default
       namedExports = data.named.filter(exp => !reexports.includes(exp))
       typeExports = data.types.filter(exp => !reexports.includes(exp))
     } else {

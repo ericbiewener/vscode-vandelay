@@ -1,9 +1,5 @@
 import _ from 'lodash'
-import {
-  getImportOrderPosition,
-  getLastInitialComment,
-  last,
-} from '../../../utils'
+import { getImportOrderPosition, getLastInitialComment, last } from '../../../utils'
 import { commentRegex } from '../regex'
 import { isPathNodeModule } from '../utils'
 import { ParsedImportJs } from '../regex'

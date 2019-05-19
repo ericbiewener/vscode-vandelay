@@ -11,7 +11,7 @@
       "request": "launch",
       "runtimeExecutable": "${execPath}",
       "args": [
-        "/Users/ericbiewener/dev/mumbai",
+        "${workspaceFolder}/../_test_workspaces/mumbai",
         "--extensionDevelopmentPath=${workspaceFolder}"
       ]
     },
@@ -21,7 +21,7 @@
       "request": "launch",
       "runtimeExecutable": "${execPath}",
       "args": [
-        "/Users/ericbiewener/dev/nairobi",
+        "${workspaceFolder}/../_test_workspaces/nairobi",
         "--extensionDevelopmentPath=${workspaceFolder}"
       ]
     },

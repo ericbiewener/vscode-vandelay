@@ -1,11 +1,7 @@
 import { PluginPy } from '../types'
 import { getTabChar } from '../../../utils'
 
-export function getNewLine(
-  plugin: PluginPy,
-  importPath: string,
-  lineImports: string[]
-) {
+export function getNewLine(plugin: PluginPy, importPath: string, lineImports: string[]) {
   const { maxImportLineLength } = plugin
 
   const sensitivity = { sensitivity: 'base' }

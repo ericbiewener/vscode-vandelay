@@ -14,11 +14,7 @@ import {
 } from './types'
 
 // TODO: Break this function up
-export function cacheFile(
-  plugin: PluginJs,
-  filepath: string,
-  data: CachingDataJs
-) {
+export function cacheFile(plugin: PluginJs, filepath: string, data: CachingDataJs) {
   const { imp, exp } = data
   const reexportsToProcess: ReexportsToProcess = {
     fullModules: [],
@@ -60,9 +56,7 @@ export function cacheFile(
     mainRegex = exportRegex.moduleExports
   } else {
     isTypescript = filepath.endsWith('.ts') || plugin.typescript
-    mainRegex = isTypescript
-      ? exportRegex.standardTypescript
-      : exportRegex.standard
+    mainRegex = isTypescript ? exportRegex.standardTypescript : exportRegex.standard
   }
 
   while ((match = mainRegex.exec(fileText))) {
@@ -108,8 +102,7 @@ export function cacheFile(
 
   if (!plugin.useES5) {
     const { fullModules, selective } = reexportsToProcess
-    while ((match = exportRegex.fullRexport.exec(fileText)))
-      fullModules.push(match[1])
+    while ((match = exportRegex.fullRexport.exec(fileText))) fullModules.push(match[1])
 
     // match[1] = default
     // match[2] = export names
@@ -224,11 +217,7 @@ export function processCachedData(data: CachingDataJs) {
   return data
 }
 
-function getSubfileExports(
-  mainFilepath: string,
-  filename: string,
-  exp: NonFinalExportDataJs
-) {
+function getSubfileExports(mainFilepath: string, filename: string, exp: NonFinalExportDataJs) {
   const filepathWithoutExt = path.join(path.dirname(mainFilepath), filename)
   for (const ext of ['.js', '.jsx']) {
     const subfileExports = exp[filepathWithoutExt + ext]

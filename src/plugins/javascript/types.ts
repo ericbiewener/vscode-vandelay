@@ -109,7 +109,4 @@ export type UserConfigJs = UserConfig & {
   typescript?: boolean
 }
 
-export type PluginJs = DefaultPluginConfig &
-  PluginConfigJs &
-  UserConfigJs &
-  RuntimePluginConfig
+export type PluginJs = DefaultPluginConfig & PluginConfigJs & UserConfigJs & RuntimePluginConfig

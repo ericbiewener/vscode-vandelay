@@ -2,14 +2,7 @@ import fs from 'fs'
 import makeDir from 'make-dir'
 import path from 'path'
 import _ from 'lodash'
-import {
-  languages,
-  Position,
-  Range,
-  window,
-  TextEditor,
-  Diagnostic,
-} from 'vscode'
+import { languages, Position, Range, window, TextEditor, Diagnostic } from 'vscode'
 import { JS_EXTENSIONS } from './plugins/javascript/config'
 import { Plugin, CachingData, ImportPosition } from './types'
 import { PLUGINS } from './plugins'
@@ -20,7 +13,7 @@ for (const ext of JS_EXTENSIONS) extensionToLang[ext] = 'js'
 export function writeCacheFile(plugin: Plugin, data: CachingData) {
   _.each(data.imp, d => (d.isExtraImport = true))
   return makeDir(plugin.cacheDirPath).then(() =>
-    fs.writeFileSync(plugin.cacheFilePath, JSON.stringify(data))
+    fs.writeFileSync(plugin.cacheFilepath, JSON.stringify(data))
   )
 }
 
@@ -40,10 +33,8 @@ export function getLangFromFilePath(filePath: string) {
 
 export function getPluginForActiveFile() {
   if (!window.activeTextEditor) return
-  const plugin =
-    PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)]
-  if (!plugin)
-    window.showErrorMessage("Vandelay doesn't support the current language.")
+  const plugin = PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)]
+  if (!plugin) window.showErrorMessage("Vandelay doesn't support the current language.")
   return plugin
 }
 
@@ -55,19 +46,13 @@ export function basenameNoExt(filepath: string) {
   return path.basename(filepath, path.extname(filepath))
 }
 
-export async function insertLine(
-  newLine: string,
-  importPosition: ImportPosition
-) {
+export async function insertLine(newLine: string, importPosition: ImportPosition) {
   const { match, indexModifier, isFirstImport } = importPosition
   const editor = window.activeTextEditor as TextEditor
   const { document } = editor
 
   // If this is the first import and the line after where we're inserting it has content, add an extra line break
-  if (
-    isFirstImport &&
-    document.lineAt(document.positionAt(match ? match.end + 1 : 0)).text
-  ) {
+  if (isFirstImport && document.lineAt(document.positionAt(match ? match.end + 1 : 0)).text) {
     newLine += '\n'
   }
 
@@ -76,10 +61,7 @@ export async function insertLine(
       builder.insert(new Position(0, 0), newLine + '\n')
     } else if (!indexModifier) {
       builder.replace(
-        new Range(
-          document.positionAt(match.start),
-          document.positionAt(match.end)
-        ),
+        new Range(document.positionAt(match.start), document.positionAt(match.end)),
         newLine
       )
     } else if (indexModifier === 1) {
@@ -93,14 +75,11 @@ export async function insertLine(
 
 export function getTabChar() {
   const { options } = window.activeTextEditor as TextEditor
-  return options.insertSpaces
-    ? _.repeat(' ', Number(options.tabSize) || 2)
-    : '\t'
+  return options.insertSpaces ? _.repeat(' ', Number(options.tabSize) || 2) : '\t'
 }
 
 export function strUntil(str: string, endChar: string | RegExp) {
-  const index =
-    typeof endChar === 'string' ? str.indexOf(endChar) : str.search(endChar)
+  const index = typeof endChar === 'string' ? str.indexOf(endChar) : str.search(endChar)
   return index < 0 ? str : str.slice(0, index)
 }
 
@@ -172,18 +151,9 @@ export function mergeObjectsWithArrays(obj1: {}, obj2: {}) {
   })
 }
 
-// _.last always makes TS think the value could be undefeind
-export function last(arr: any[]) {
-  return arr[arr.length - 1]
-}
-
 export type Renamed = { [originalName: string]: string }
 
-export function addNamesAndRenames(
-  imports: string[],
-  names: string[],
-  renamed: Renamed
-) {
+export function addNamesAndRenames(imports: string[], names: string[], renamed: Renamed) {
   for (const imp of imports) {
     const parts = imp.split(' as ')
     const name = parts[0].trim()
@@ -193,11 +163,7 @@ export function addNamesAndRenames(
   }
 }
 
-export function doesImportExist(
-  imports: string[],
-  newImport: string,
-  renamed: Renamed
-) {
+export function doesImportExist(imports: string[], newImport: string, renamed: Renamed) {
   const parts = newImport.split(' as ')
   const newImportName = parts[0].trim()
   const newImportRename = parts[1] ? parts[1].trim() : null
@@ -206,9 +172,7 @@ export function doesImportExist(
 
   const existingImportRename = renamed[newImportName]
   if (newImportRename != existingImportRename) {
-    window.showWarningMessage(
-      `Already imported as \`${existingImportRename || newImportName}\`.`
-    )
+    window.showWarningMessage(`Already imported as \`${existingImportRename || newImportName}\`.`)
   }
 
   return true
@@ -221,4 +185,16 @@ export function preserveRenamedImports(imports: string[], renamed: Renamed) {
     const renaming = renamed[name]
     return renaming ? `${name} as ${renaming}` : name
   })
+}
+
+// Lodash replacements for Typescript support
+// TODO: figure out why the lodash fns aren't working
+
+// _.last always makes TS think the value could be undefeind
+export function last(arr: any[]) {
+  return arr[arr.length - 1]
+}
+
+export function isObject(obj: any) {
+  return obj && typeof obj === 'object'
 }

@@ -5,11 +5,7 @@ import { isPathPackage } from './utils'
 import { parseImports } from './regex'
 import { PluginPy, CachingDataPy } from './types'
 
-export function cacheFile(
-  plugin: PluginPy,
-  filepath: string,
-  data: CachingDataPy
-) {
+export function cacheFile(plugin: PluginPy, filepath: string, data: CachingDataPy) {
   const { imp, exp } = data
   const fileText = fs.readFileSync(filepath, 'utf8')
   const imports = parseImports(fileText)
@@ -51,13 +47,8 @@ export function cacheFile(
     }
   }
 
-  const fileExports = [
-    ...classes.sort(),
-    ...functions.sort(),
-    ...constants.sort(),
-  ]
-  if (fileExports.length)
-    exp[getFilepathKey(plugin, filepath)] = { exports: fileExports }
+  const fileExports = [...classes.sort(), ...functions.sort(), ...constants.sort()]
+  if (fileExports.length) exp[getFilepathKey(plugin, filepath)] = { exports: fileExports }
 
   return data
 }
