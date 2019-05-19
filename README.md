@@ -84,8 +84,6 @@ options demonstrate, this allows the plugin to be fully customized to your proje
 You must create a file at the root of your project named `vandelay-js.js` to automate JavaScript imports, or `vandelay-py.js` to automate Python imports. If using a multi-root
 workspace, see [those instructions](#multi-root-workspace).
 
-#### *Any time you make changes to this file, you must reload the window.*
-
 Along with providing configuration options, the presence of this file tells the plugin that it
 should track your project's imports. The lack of a `vandelay-<js|py>.js` file in a given
 project will simply cause the plugin not to run.
