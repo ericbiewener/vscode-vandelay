@@ -1,3 +1,4 @@
+import { registerPluginConfig } from '../../registerPluginConfig'
 import { removeUnusedImports } from './removeUnusedImports'
 import { cacheFile, processCachedData } from './cacher'
 import { buildImportItems } from './importing/buildImportItems'
@@ -18,7 +19,7 @@ function shouldIncludeDisgnostic({ code, source, message }: Diagnostic) {
 
 export const JS_EXTENSIONS = ['js', 'jsx', 'ts', 'tsx', 'mjs', 'mdx']
 
-export const config: PluginConfigJs = {
+const config: PluginConfigJs = {
   language: 'js',
   cacheFile,
   processCachedData,
@@ -33,3 +34,5 @@ export const config: PluginConfigJs = {
   multilineImportStyle: 'multiple',
   excludePatterns: [/.*\/node_modules(\/.*)?/],
 }
+
+registerPluginConfig(config)

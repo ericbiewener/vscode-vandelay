@@ -130,7 +130,7 @@ function findSnapshots(snapshots, dir) {
 
   for (const item of items) {
     const fullPath = path.join(dir, item)
-    if (fs.lstatSync(fullPath).isFile()) {
+    if (fs.statSync(fullPath).isFile()) {
       if (fullPath.endsWith('.snap')) snapshots.push(fullPath)
     } else {
       findSnapshots(snapshots, fullPath)

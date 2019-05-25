@@ -1,12 +1,15 @@
+import fs from 'fs-extra'
 import _ from 'lodash'
 import { ExtensionContext, window, workspace } from 'vscode'
 import path from 'path'
+import { VANDELAY_CONFIG_DIR } from './constants'
 import { alertNewVersionConfig } from './newVersionAlerting'
+import { pluginConfigs } from './registerPluginConfig'
 import { isFile, isObject } from './utils'
-import { Plugin, PluginConfig, UserConfig, DefaultPluginConfig } from './types'
+import { DefaultPluginConfig, Language, Plugin, PluginConfig, UserConfig } from './types'
 import { cacheProjectLanguage } from './cacher'
 
-export const PLUGINS: { [lang: string]: Plugin } = {}
+export const PLUGINS: { [key in Language]?: Plugin } = {}
 
 const defaultSettings: DefaultPluginConfig = {
   maxImportLineLength: 100,
@@ -14,15 +17,16 @@ const defaultSettings: DefaultPluginConfig = {
 }
 
 export async function initializePlugin(context: ExtensionContext, pluginConfig: PluginConfig) {
-  if (!workspace.workspaceFolders) return
+  const { workspaceFolders } = workspace
+  if (!workspaceFolders) return
 
   const cacheDirPath = context.storagePath
   if (!cacheDirPath) return
 
-  const configWorkspaceFolder = workspace.workspaceFolders.find(
-    f => path.basename(f.uri.fsPath) === '.vandelay'
+  const configWorkspaceFolder = workspaceFolders.find(
+    f => path.basename(f.uri.fsPath) === VANDELAY_CONFIG_DIR
   )
-  const configPath = (configWorkspaceFolder || workspace.workspaceFolders[0]).uri.fsPath
+  const configPath = (configWorkspaceFolder || workspaceFolders[0]).uri.fsPath
 
   const { language } = pluginConfig
   const configFile = 'vandelay-' + language + '.js'
@@ -35,7 +39,7 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
     configFilepath,
     cacheDirPath,
     cacheFilepath: path.join(cacheDirPath, 'vandelay-v2-' + language + '.json'),
-    projectRoot: userConfig.projectRoot || workspace.workspaceFolders[0].uri.fsPath,
+    projectRoot: userConfig.projectRoot || workspaceFolders[0].uri.fsPath,
   }) as Plugin
 
   plugin.excludePatterns.push(/.*\/\..*/) // exclude all folders starting with dot
@@ -48,27 +52,27 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
   if (!isFile(plugin.cacheFilepath)) return cacheProjectLanguage(plugin)
 }
 
-async function getUserConfig(configFilepath: string, ignoreModuleCache = false) {
+async function getUserConfig(configFilepath: string) {
   try {
     console.log(`Loading vandelay config file from ${configFilepath}`)
-    if (ignoreModuleCache) {
-      // @ts-ignore
-      delete __non_webpack_require__.cache[configFilepath]
-    }
+    // @ts-ignore
+    delete __non_webpack_require__.cache[configFilepath]
     // @ts-ignore
     const userConfig = __non_webpack_require__(configFilepath)
-    if (isObject(userConfig)) {
-      if (!userConfig.includePaths || !userConfig.includePaths.length) {
-        window.showErrorMessage(
-          `You must specify the "includePaths" configuration option in your ${path.basename(
-            configFilepath
-          )} file.`
-        )
-        return
-      }
-      return userConfig as UserConfig
+
+    if (!isObject(userConfig)) {
+      window.showErrorMessage('Your Vandelay configuration file must export an object.')
+      return
     }
-    window.showErrorMessage('Your Vandelay configuration file must export an object.')
+
+    if (!userConfig.includePaths || !userConfig.includePaths.length) {
+      window.showErrorMessage(
+        `You must specify the "includePaths" configuration option in your ${path.basename(
+          configFilepath
+        )} file.`
+      )
+    }
+    return userConfig as UserConfig
   } catch (e) {
     if (e.code === 'MODULE_NOT_FOUND') return // All good. Vandelay simply won't be used for the given language
     window.showErrorMessage(
@@ -78,19 +82,7 @@ async function getUserConfig(configFilepath: string, ignoreModuleCache = false) 
   }
 }
 
-function onConfigCreate() {
-  // initialize entire plugin, activate vandelay, etc!
-  // should also init plugin if config file changes to become valid (e.g. it originally existed
-  // without `includePaths` defined but is changed to include it)
-}
-
-export function watchForConfigChanges() {
-  workspace.onDidSaveTextDocument(async doc => {
-    for (const plugin of Object.values(PLUGINS)) {
-      if (doc.uri.fsPath !== plugin.configFilepath) continue
-      const userConfig = await getUserConfig(plugin.configFilepath, true)
-      Object.assign(plugin, userConfig)
-      break
-    }
-  })
+export async function initializePluginForLang(context: ExtensionContext, lang: string) {
+  const config = pluginConfigs[lang]
+  if (config) return initializePlugin(context, config)
 }

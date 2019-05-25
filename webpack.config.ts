@@ -1,12 +1,15 @@
 const path = require('path')
 import { Configuration } from 'webpack'
 
+const SRC = path.resolve(__dirname, 'src')
+const DIST = path.resolve(__dirname, 'dist')
+
 const config: Configuration = {
   mode: process.env.NODE_ENV as 'development' | 'production',
   target: 'node',
-  entry: './src/index.ts',
+  entry: path.join(SRC, 'main.ts'),
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: DIST,
     filename: 'extension.js',
     libraryTarget: 'commonjs2',
     devtoolModuleFilenameTemplate: '../[resource-path]',

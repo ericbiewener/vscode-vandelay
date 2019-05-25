@@ -1,3 +1,4 @@
+import { registerPluginConfig } from '../../registerPluginConfig'
 import { cacheFile } from './cacher'
 import { insertImport } from './importing/importer'
 import { buildImportItems } from './importing/buildImportItems'
@@ -9,7 +10,7 @@ function shouldIncludeDisgnostic({ code }: Diagnostic) {
   return code === 'F821'
 }
 
-export const config: PluginConfigPy = {
+const config: PluginConfigPy = {
   language: 'py',
   cacheFile,
   buildImportItems,
@@ -17,3 +18,5 @@ export const config: PluginConfigPy = {
   removeUnusedImports,
   shouldIncludeDisgnostic,
 }
+
+registerPluginConfig(config)

@@ -17,6 +17,8 @@ import {
 import { ImportPositionPy } from './plugins/python/importing/getImportPosition'
 import { ImportPositionJs } from './plugins/javascript/importing/getImportPosition'
 
+export type Language = 'js' | 'py'
+
 export type RichQuickPickItem = {
   label: string
   description?: string | undefined
@@ -59,7 +61,7 @@ export type UserConfig = {
 }
 
 export type PluginConfig = {
-  language: string
+  language: Language
   shouldIncludeDisgnostic: DiagnosticFilter
   excludePatterns?: ExcludePatterns
   cacheFile(plugin: Plugin, path: string, data: CachingData): CachingData

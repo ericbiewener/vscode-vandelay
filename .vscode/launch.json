@@ -36,6 +36,26 @@
       ]
     },
     {
+      "name": "No Config",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "${workspaceFolder}/test-workspaces/no-config",
+        "--extensionDevelopmentPath=${workspaceFolder}"
+      ]
+    },
+    {
+      "name": "No Config Multiroot",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "${workspaceFolder}/test-workspaces/no-config-multi-root/multi-root.code-workspace",
+        "--extensionDevelopmentPath=${workspaceFolder}"
+      ]
+    },
+    {
       "name": "Bad Config",
       "type": "extensionHost",
       "request": "launch",
