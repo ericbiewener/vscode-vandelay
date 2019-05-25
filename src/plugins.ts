@@ -5,7 +5,7 @@ import path from 'path'
 import { VANDELAY_CONFIG_DIR } from './constants'
 import { alertNewVersionConfig } from './newVersionAlerting'
 import { pluginConfigs } from './registerPluginConfig'
-import { isFile, isObject } from './utils'
+import { findVandelayConfigDir, isFile, isObject } from './utils'
 import { DefaultPluginConfig, Language, Plugin, PluginConfig, UserConfig } from './types'
 import { cacheProjectLanguage } from './cacher'
 
@@ -23,9 +23,7 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
   const cacheDirPath = context.storagePath
   if (!cacheDirPath) return
 
-  const configWorkspaceFolder = workspaceFolders.find(
-    f => path.basename(f.uri.fsPath) === VANDELAY_CONFIG_DIR
-  )
+  const configWorkspaceFolder = findVandelayConfigDir(workspaceFolders)
   const configPath = (configWorkspaceFolder || workspaceFolders[0]).uri.fsPath
 
   const { language } = pluginConfig
@@ -49,7 +47,10 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
 
   console.info(`Vandelay language registered: ${language}`)
 
-  if (!isFile(plugin.cacheFilepath)) return cacheProjectLanguage(plugin)
+  if (!isFile(plugin.cacheFilepath)) {
+    await cacheProjectLanguage(plugin)
+    return true
+  }
 }
 
 async function getUserConfig(configFilepath: string) {

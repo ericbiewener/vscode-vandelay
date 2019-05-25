@@ -15,6 +15,7 @@ import { VANDELAY_CONFIG_DIR } from '../constants'
 import { finalizeExtensionActivation } from '../initialization/finalizeExtensionActivation'
 import { initializePlugin } from '../plugins'
 import { pluginConfigs } from '../registerPluginConfig'
+import { showProjectExportsCachedMessage } from '../utils'
 
 type IncludePathQuickPickItem = { label: string; pathStr: string }
 
@@ -179,8 +180,9 @@ async function createAndOpenFile(
     const lang = file.split('-')[1]
     const config = pluginConfigs[lang]
     if (config) {
-      initializePlugin(context, config)
+      await initializePlugin(context, config)
       finalizeExtensionActivation(context)
+      showProjectExportsCachedMessage()
     }
   }
 }

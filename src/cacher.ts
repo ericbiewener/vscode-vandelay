@@ -4,10 +4,11 @@ import fs from 'fs-extra'
 import _ from 'lodash'
 import anymatch from 'anymatch'
 import {
-  writeCacheFile,
-  getLangFromFilePath,
   getFilepathKey,
+  getLangFromFilePath,
   mergeObjectsWithArrays,
+  showProjectExportsCachedMessage,
+  writeCacheFile,
 } from './utils'
 import { cacheFileManager } from './cacheFileManager'
 import { PLUGINS } from './plugins'
@@ -68,15 +69,7 @@ export async function cacheProjectLanguage(plugin: Plugin) {
 }
 
 export function cacheProject() {
-  if (_.isEmpty(PLUGINS)) {
-    window.showErrorMessage(
-      'No Vandelay configuration files found. If you just added one, reload the window.'
-    )
-    return
-  }
-  return Promise.all(_.map(PLUGINS, cacheProjectLanguage)).then(results => {
-    window.showInformationMessage('Project exports have been cached. 🐔')
-  })
+  return Promise.all(_.map(PLUGINS, cacheProjectLanguage)).then(showProjectExportsCachedMessage)
 }
 
 function onChangeOrCreate(doc: Uri) {

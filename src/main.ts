@@ -1,12 +1,15 @@
 import path from 'path'
 import { commands, ExtensionContext, window, workspace } from 'vscode'
 import _ from 'lodash'
+import { cacheProjectLanguage } from './cacher'
 import { catchError } from './initialization/catchError'
 import { finalizeExtensionActivation } from './initialization/finalizeExtensionActivation'
 import { initConfigFile } from './initialization/initConfigFile'
 import { initializePlugin, initializePluginForLang, PLUGINS } from './plugins'
 import { pluginConfigs } from './registerPluginConfig'
 import { alertNewVersion } from './newVersionAlerting'
+import { Language } from './types'
+import { findVandelayConfigDir, showProjectExportsCachedMessage } from './utils'
 
 export const activate = async function activate(context: ExtensionContext) {
   alertNewVersion(context)
@@ -20,8 +23,28 @@ export const activate = async function activate(context: ExtensionContext) {
   workspace.onDidSaveTextDocument(async doc => {
     const file = path.basename(doc.fileName, '.js')
     if (!file.startsWith('vandelay-')) return
-    initializePluginForLang(context, file.split('-')[1])
+
+    const lang = file.split('-')[1] as Language
+    const didCache = await initializePluginForLang(context, lang)
     finalizeExtensionActivation(context)
+    if (didCache) {
+      showProjectExportsCachedMessage()
+      return
+    }
+    // If they changed something like `includePaths` then we'd need to re-cache. So just do it
+    // anyway. This will cache silently (no success message)
+    const plugin = PLUGINS[lang]
+    if (plugin) cacheProjectLanguage(plugin)
+    // No need to alert about having cached here because the user has already had their project
+    // cached before, so we can just update silently.
+  })
+
+  workspace.onDidChangeWorkspaceFolders(async ({ added }) => {
+    const configWorkspaceFolder = findVandelayConfigDir(added)
+    if (!configWorkspaceFolder) return
+    const didCache = await initializePlugins(context)
+    finalizeExtensionActivation(context)
+    if (didCache) showProjectExportsCachedMessage()
   })
 
   await initializePlugins(context)

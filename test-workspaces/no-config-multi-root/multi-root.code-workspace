@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "src3"
+		},
+		{
+			"path": ".vandelay"
 		}
 	],
 	"settings": {}
