@@ -34,7 +34,10 @@ whatever style guide your project requires for how import statements get written
 [Configuration](#configuration)). Multi-root workspaces are supported ([documentation](#multi-root-workspace)).
 
 ## Quick Start
-See [How to Use](#how-to-use).
+1. Run the [`Initialize Configuration File`](#initialize-configuration-file) command.
+2. Profit! Use the "Import" command to start importing all the things.
+
+The above will be enough for most projects to get off the ground. More complex use-cases may need to further customize the configuration file. See [How to Use](#how-to-use).
 
 ## Typescript & Flow Support
 Both Typescript and Flow are supported.
