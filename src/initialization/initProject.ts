@@ -11,7 +11,6 @@ import {
   workspace,
   WorkspaceFolder,
 } from 'vscode'
-import { VANDELAY_CONFIG_DIR } from '../constants'
 import { finalizeExtensionActivation } from '../initialization/finalizeExtensionActivation'
 import { initializePlugin } from '../plugins'
 import { pluginConfigs } from '../registerPluginConfig'
