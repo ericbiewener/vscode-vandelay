@@ -86,7 +86,7 @@ Vandelay relies on JavaScript configuration files, not simply JSON, so that the 
 
 ## Configuration
 You must create a file at the root of your project named `vandelay-js.js` to automate JavaScript imports, or `vandelay-py.js` to automate Python imports. If using a multi-root
-workspace, see [those instructions](#multi-root-workspace). We recommend using [`Initialize Configuration File`](#initialize-configuration-file) command to create an initial version of this file.
+workspace, see [those instructions](#multi-root-workspace). We recommend using the [`Initialize Configuration File`](#initialize-configuration-file) command to create an initial version of this file.
 
 Along with providing configuration options, the presence of this file tells the plugin that it
 should track your project's imports. The lack of a `vandelay-<js|py>.js` file in a given
