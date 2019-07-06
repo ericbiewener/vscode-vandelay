@@ -1,5 +1,10 @@
 ### Version 3.0.0
 - New `Initialize Project` command to get started with Vandelay more easily.
+- Improved import renaming (`import numpy as np`, `import { foo as bar }`)
+- New `processImportName` configuration option.
+
+**Breaking Changes**
+- JavaScript configuration option `processDefaultName` has been removed. Use the new `processImportName` option.
 
 ### Version 2.4.0
 - Normalize import paths for Windows (write / to file rather than \)
