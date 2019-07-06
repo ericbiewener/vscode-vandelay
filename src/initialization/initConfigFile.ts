@@ -19,7 +19,7 @@ import { findVandelayConfigDir, showProjectExportsCachedMessage } from '../utils
 
 type IncludePathQuickPickItem = { label: string; pathStr: string }
 
-export async function initConfigFile(context: ExtensionContext) {
+export async function initProject(context: ExtensionContext) {
   const { workspaceFolders } = workspace
 
   if (!workspaceFolders) {
@@ -30,11 +30,11 @@ export async function initConfigFile(context: ExtensionContext) {
   }
 
   return workspaceFolders.length > 1
-    ? initConfigFileMultiRoot(context, workspaceFolders)
-    : initConfigFileSingleRoot(context, workspaceFolders)
+    ? initProjectMultiRoot(context, workspaceFolders)
+    : initProjectSingleRoot(context, workspaceFolders)
 }
 
-async function initConfigFileSingleRoot(
+async function initProjectSingleRoot(
   context: ExtensionContext,
   workspaceFolders: WorkspaceFolder[]
 ) {
@@ -60,7 +60,7 @@ async function initConfigFileSingleRoot(
   await createAndOpenFile(context, configFilepath, text, !!includePaths.length)
 }
 
-async function initConfigFileMultiRoot(
+async function initProjectMultiRoot(
   context: ExtensionContext,
   workspaceFolders: WorkspaceFolder[]
 ) {

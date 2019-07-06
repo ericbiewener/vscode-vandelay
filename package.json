@@ -35,7 +35,7 @@
   "activationEvents": [
     "workspaceContains:vandelay-*.js",
     "workspaceContains:.vandelay/vandelay-*.js",
-    "onCommand:vandelay.initConfigFile"
+    "onCommand:vandelay.initProject"
   ],
   "engines": {
     "vscode": "^1.31.0"
@@ -68,8 +68,8 @@
         "command": "vandelay.fixImports"
       },
       {
-        "title": "Vandelay: Initialize Configuration File",
-        "command": "vandelay.initConfigFile"
+        "title": "Vandelay: Initialize Project",
+        "command": "vandelay.initProject"
       }
     ],
     "configuration": {

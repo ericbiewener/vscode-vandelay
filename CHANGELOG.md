@@ -1,3 +1,6 @@
+### Version 3.0.0
+- New `Initialize Project` command to get started with Vandelay more easily.
+
 ### Version 2.4.0
 - Normalize import paths for Windows (write / to file rather than \)
 

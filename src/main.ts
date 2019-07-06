@@ -4,7 +4,7 @@ import _ from 'lodash'
 import { cacheProjectLanguage } from './cacher'
 import { catchError } from './initialization/catchError'
 import { finalizeExtensionActivation } from './initialization/finalizeExtensionActivation'
-import { initConfigFile } from './initialization/initConfigFile'
+import { initProject } from './initialization/initProject'
 import { initializePlugin, initializePluginForLang, PLUGINS } from './plugins'
 import { pluginConfigs } from './registerPluginConfig'
 import { alertNewVersion } from './newVersionAlerting'
@@ -16,7 +16,7 @@ export const activate = async function activate(context: ExtensionContext) {
 
   // We need these commands active regardless of whether any plugins exist
   context.subscriptions.push(
-    commands.registerCommand('vandelay.initConfigFile', catchError(() => initConfigFile(context)))
+    commands.registerCommand('vandelay.initProject', catchError(() => initProject(context)))
   )
 
   // Watch for config changes.
