@@ -2,7 +2,8 @@ import fs from 'fs'
 import makeDir from 'make-dir'
 import path from 'path'
 import _ from 'lodash'
-import { languages, Position, Range, window, TextEditor, Diagnostic } from 'vscode'
+import { languages, Position, Range, window, TextEditor, Diagnostic, WorkspaceFolder } from 'vscode'
+import { VANDELAY_CONFIG_DIR } from './constants'
 import { JS_EXTENSIONS } from './plugins/javascript/config'
 import { Plugin, CachingData, ImportPosition } from './types'
 import { PLUGINS } from './plugins'
@@ -31,9 +32,13 @@ export function getLangFromFilePath(filePath: string) {
   return extensionToLang[ext] || ext
 }
 
+export function getPluginForFile(filePath: string): Plugin | undefined {
+  return PLUGINS[getLangFromFilePath(filePath)]
+}
+
 export function getPluginForActiveFile() {
   if (!window.activeTextEditor) return
-  const plugin = PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)]
+  const plugin = getPluginForFile(window.activeTextEditor.document.fileName)
   if (!plugin) window.showErrorMessage("Vandelay doesn't support the current language.")
   return plugin
 }
@@ -185,6 +190,14 @@ export function preserveRenamedImports(imports: string[], renamed: Renamed) {
     const renaming = renamed[name]
     return renaming ? `${name} as ${renaming}` : name
   })
+}
+
+export function findVandelayConfigDir(workspaceFolders: WorkspaceFolder[]) {
+  return workspaceFolders.find(f => f.name === VANDELAY_CONFIG_DIR)
+}
+
+export function showProjectExportsCachedMessage() {
+  window.showInformationMessage('Project exports have been cached. 🐔')
 }
 
 // Lodash replacements for Typescript support

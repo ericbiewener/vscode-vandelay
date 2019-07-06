@@ -34,13 +34,19 @@ whatever style guide your project requires for how import statements get written
 [Configuration](#configuration)). Multi-root workspaces are supported ([documentation](#multi-root-workspace)).
 
 ## Quick Start
-See [How to Use](#how-to-use).
+1. Run the `Initialize Configuration File` command.
+2. Profit! Use the `Import` command to start importing all the things.
+
+The above will be enough for most projects to get off the ground. More complex use-cases may need to further customize the configuration file. See [How to Use](#how-to-use).
 
 ## Typescript & Flow Support
 Both Typescript and Flow are supported.
 
 ## Commands
 The following commands are available from the Command Palette. Feel free to set your own keyboard shortcuts.
+
+### Initialize Configuration File
+Run this command to get started with Vandelay. It will create an initial Vandelay configuration file that you can then [further customize](#configuration).
 
 ### Cache Project Exports
 Caches all project exports in all languages that have a Vandelay configuration file (see 
@@ -72,17 +78,18 @@ Vandelay will remove all unused imports reported by the linter. This command req
 Combination of the previous two commands. Imports all undefined variables and removes unused imports.
 
 ## Importing external and environment packages
-Rather than try to actually parse and track all the possible imports in your project's runtime environment, `node_modules` folder, or virtualenv,  Vandelay JS simply tracks the ones you use. This means you'll need to
-write the import statement yourself the very first time you use something from an external package, but the
-plugin will remember after that and make it available for automatic importing.
+Rather than try to actually parse and track all the possible imports in your project's runtime
+environment, `node_modules` folder, or virtualenv,  Vandelay JS simply tracks the ones you use. This
+means you'll need to write the import statement yourself the very first time you use something from
+an external package, but the plugin will remember after that and make it available for automatic
+importing.
 
 ## How to Use
-Vandelay relies on JavaScript configuration files, not simply JSON. As the below configuration
-options demonstrate, this allows the plugin to be fully customized to your project's needs.
+Vandelay relies on JavaScript configuration files, not simply JSON, so that the plugin can be fully customized to your project's needs. This means the setup is a bit more complex, but the resulting capability is far more powerful.
 
 ## Configuration
 You must create a file at the root of your project named `vandelay-js.js` to automate JavaScript imports, or `vandelay-py.js` to automate Python imports. If using a multi-root
-workspace, see [those instructions](#multi-root-workspace).
+workspace, see [those instructions](#multi-root-workspace). We recommend using the [`Initialize Configuration File`](#initialize-configuration-file) command to create an initial version of this file.
 
 Along with providing configuration options, the presence of this file tells the plugin that it
 should track your project's imports. The lack of a `vandelay-<js|py>.js` file in a given

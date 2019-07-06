@@ -34,7 +34,8 @@
   },
   "activationEvents": [
     "workspaceContains:vandelay-*.js",
-    "workspaceContains:.vandelay/vandelay-*.js"
+    "workspaceContains:.vandelay/vandelay-*.js",
+    "onCommand:vandelay.initConfigFile"
   ],
   "engines": {
     "vscode": "^1.31.0"
@@ -65,6 +66,10 @@
       {
         "title": "Fix Imports",
         "command": "vandelay.fixImports"
+      },
+      {
+        "title": "Vandelay: Initialize Configuration File",
+        "command": "vandelay.initConfigFile"
       }
     ],
     "configuration": {
@@ -89,6 +94,7 @@
     "start": "NODE_ENV=development ./node_modules/.bin/webpack --config webpack.config.ts -w",
     "build": "NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.ts",
     "test": "yarn run compile && node ./node_modules/vscode/bin/test",
+    "tw": "tsc -w --noEmit",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "prettier": "prettier-eslint --write \"**/*.{ts,js}\"",
     "package": "vsce package --yarn",

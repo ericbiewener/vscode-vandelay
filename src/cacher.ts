@@ -4,10 +4,12 @@ import fs from 'fs-extra'
 import _ from 'lodash'
 import anymatch from 'anymatch'
 import {
-  writeCacheFile,
-  getLangFromFilePath,
   getFilepathKey,
+  getLangFromFilePath,
+  getPluginForFile,
   mergeObjectsWithArrays,
+  showProjectExportsCachedMessage,
+  writeCacheFile,
 } from './utils'
 import { cacheFileManager } from './cacheFileManager'
 import { PLUGINS } from './plugins'
@@ -31,10 +33,11 @@ async function cacheDir(
     if (item === plugin.configFile || shouldIgnore(plugin, fullPath)) continue
 
     readDirPromises.push(
-      fs.lstat(fullPath).then(async stats => {
+      fs.stat(fullPath).then(async stats => {
         if (stats.isFile()) {
-          if (plugin.language === getLangFromFilePath(item))
+          if (plugin.language === getLangFromFilePath(item)) {
             await plugin.cacheFile(plugin, fullPath, data)
+          }
         } else if (recursive) {
           await cacheDir(plugin, fullPath, true, data)
         }
@@ -49,6 +52,8 @@ async function cacheDir(
 }
 
 export async function cacheProjectLanguage(plugin: Plugin) {
+  if (!plugin.includePaths.length) return
+
   let cacher = Promise.all(
     plugin.includePaths.map(p => cacheDir(plugin, p, true, { imp: {}, exp: {} }))
   ).then(cachedDirTrees => {
@@ -66,19 +71,11 @@ export async function cacheProjectLanguage(plugin: Plugin) {
 }
 
 export function cacheProject() {
-  if (_.isEmpty(PLUGINS)) {
-    window.showErrorMessage(
-      'No Vandelay configuration files found. If you just added one, reload the window.'
-    )
-    return
-  }
-  return Promise.all(_.map(PLUGINS, cacheProjectLanguage)).then(results => {
-    window.showInformationMessage('Project exports have been cached. 🐔')
-  })
+  return Promise.all(_.map(PLUGINS, cacheProjectLanguage)).then(showProjectExportsCachedMessage)
 }
 
 function onChangeOrCreate(doc: Uri) {
-  const plugin: Plugin | undefined = PLUGINS[getLangFromFilePath(doc.fsPath)]
+  const plugin = getPluginForFile(doc.fsPath)
   if (
     !plugin ||
     shouldIgnore(plugin, doc.fsPath) ||
@@ -116,7 +113,7 @@ export function watchForChanges() {
   watcher.onDidCreate(onChangeOrCreate)
 
   watcher.onDidDelete(doc => {
-    const plugin = PLUGINS[getLangFromFilePath(doc.fsPath)]
+    const plugin = getPluginForFile(doc.fsPath)
     if (!plugin) return
 
     cacheFileManager(plugin, cachedData => {
