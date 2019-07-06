@@ -6,6 +6,7 @@ import anymatch from 'anymatch'
 import {
   getFilepathKey,
   getLangFromFilePath,
+  getPluginForFile,
   mergeObjectsWithArrays,
   showProjectExportsCachedMessage,
   writeCacheFile,
@@ -32,10 +33,11 @@ async function cacheDir(
     if (item === plugin.configFile || shouldIgnore(plugin, fullPath)) continue
 
     readDirPromises.push(
-      fs.lstat(fullPath).then(async stats => {
+      fs.stat(fullPath).then(async stats => {
         if (stats.isFile()) {
-          if (plugin.language === getLangFromFilePath(item))
+          if (plugin.language === getLangFromFilePath(item)) {
             await plugin.cacheFile(plugin, fullPath, data)
+          }
         } else if (recursive) {
           await cacheDir(plugin, fullPath, true, data)
         }
@@ -73,7 +75,7 @@ export function cacheProject() {
 }
 
 function onChangeOrCreate(doc: Uri) {
-  const plugin: Plugin | undefined = PLUGINS[getLangFromFilePath(doc.fsPath)]
+  const plugin = getPluginForFile(doc.fsPath)
   if (
     !plugin ||
     shouldIgnore(plugin, doc.fsPath) ||
@@ -111,7 +113,7 @@ export function watchForChanges() {
   watcher.onDidCreate(onChangeOrCreate)
 
   watcher.onDidDelete(doc => {
-    const plugin = PLUGINS[getLangFromFilePath(doc.fsPath)]
+    const plugin = getPluginForFile(doc.fsPath)
     if (!plugin) return
 
     cacheFileManager(plugin, cachedData => {

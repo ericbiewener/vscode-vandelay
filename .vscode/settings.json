@@ -11,11 +11,12 @@
     "**/.svn": true,
     "**/CVS": true,
     "**/node_modules": true,
+    "artwork": true,
     "python": true,
-    "yarn-error.log": true,
-    "yarn.lock": true,
-    "tests": false,
     "test-workspaces": false,
+    "tests": false,
+    "yarn-error.log": true,
+    "yarn.lock": true
   },
 
   "settingsOnFire.toggle": {

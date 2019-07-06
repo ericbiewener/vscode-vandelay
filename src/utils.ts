@@ -32,9 +32,13 @@ export function getLangFromFilePath(filePath: string) {
   return extensionToLang[ext] || ext
 }
 
+export function getPluginForFile(filePath: string): Plugin | undefined {
+  return PLUGINS[getLangFromFilePath(filePath)]
+}
+
 export function getPluginForActiveFile() {
   if (!window.activeTextEditor) return
-  const plugin = PLUGINS[getLangFromFilePath(window.activeTextEditor.document.fileName)]
+  const plugin = getPluginForFile(window.activeTextEditor.document.fileName)
   if (!plugin) window.showErrorMessage("Vandelay doesn't support the current language.")
   return plugin
 }
@@ -189,7 +193,7 @@ export function preserveRenamedImports(imports: string[], renamed: Renamed) {
 }
 
 export function findVandelayConfigDir(workspaceFolders: WorkspaceFolder[]) {
-  return workspaceFolders.find(f => path.basename(f.uri.fsPath) === VANDELAY_CONFIG_DIR)
+  return workspaceFolders.find(f => f.name === VANDELAY_CONFIG_DIR)
 }
 
 export function showProjectExportsCachedMessage() {

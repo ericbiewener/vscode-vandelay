@@ -9,7 +9,8 @@ import { findVandelayConfigDir, isFile, isObject } from './utils'
 import { DefaultPluginConfig, Language, Plugin, PluginConfig, UserConfig } from './types'
 import { cacheProjectLanguage } from './cacher'
 
-export const PLUGINS: { [key in Language]?: Plugin } = {}
+// & { [key: string]: undefined } is just to quiet unneeded TS errors
+export const PLUGINS: { [key in Language]?: Plugin } & { [key: string]: undefined } = {}
 
 const defaultSettings: DefaultPluginConfig = {
   maxImportLineLength: 100,

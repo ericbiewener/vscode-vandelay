@@ -15,7 +15,7 @@ import { VANDELAY_CONFIG_DIR } from '../constants'
 import { finalizeExtensionActivation } from '../initialization/finalizeExtensionActivation'
 import { initializePlugin } from '../plugins'
 import { pluginConfigs } from '../registerPluginConfig'
-import { showProjectExportsCachedMessage } from '../utils'
+import { findVandelayConfigDir, showProjectExportsCachedMessage } from '../utils'
 
 type IncludePathQuickPickItem = { label: string; pathStr: string }
 
@@ -64,11 +64,19 @@ async function initConfigFileMultiRoot(
   context: ExtensionContext,
   workspaceFolders: WorkspaceFolder[]
 ) {
+  const configDir = findVandelayConfigDir(workspaceFolders)
+  if (!configDir) {
+    window.showErrorMessage(
+      'You must create a folder named `.vandelay` and add that to your workspace before you can initialize a new Vandelay project.',
+      { modal: true }
+    )
+    return
+  }
+
   const selection = await getLanguageSelection()
   if (!selection) return
 
   const { language, configFile } = selection
-  const configDir = workspaceFolders.find(f => f.name === VANDELAY_CONFIG_DIR)
   const configFilepath = configDir ? path.join(configDir.uri.fsPath, configFile) : null
 
   const openPromise = configFilepath ? openExistingConfigFile(configFilepath) : null
