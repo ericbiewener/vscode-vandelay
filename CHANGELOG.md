@@ -1,3 +1,6 @@
+### Version 3.0.1
+- Fixed Python plugin. Whoops.
+
 ### Version 3.0.0
 - New `Initialize Project` command to get started with Vandelay more easily.
 - Improved import renaming (`import numpy as np`, `import { foo as bar }`)
