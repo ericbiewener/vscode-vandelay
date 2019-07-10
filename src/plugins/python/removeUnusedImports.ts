@@ -11,7 +11,7 @@ interface Change {
 }
 
 export async function removeUnusedImports(plugin: PluginPy) {
-  const diagnostics = getDiagnosticsForAllEditors(d => d.code === 'no-unused-vars')
+  const diagnostics = getDiagnosticsForAllEditors(d => d.code === 'F401')
 
   for (const filepath in diagnostics) {
     const editor = await window.showTextDocument(Uri.file(filepath), {
