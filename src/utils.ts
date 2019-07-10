@@ -142,8 +142,8 @@ export function getDiagnosticsForAllEditors(filter: DiagnosticFilter) {
 /**
  * Sort in reverse order so that modifying a line doesn't effect the other line locations that need to be changed
  */
-interface Change {
-  match: { start: number }
+type Change = {
+  match: { start: number; end: number }
 }
 
 export function sortUnusedImportChanges(changes: Change[]) {
@@ -198,6 +198,33 @@ export function findVandelayConfigDir(workspaceFolders: WorkspaceFolder[]) {
 
 export function showProjectExportsCachedMessage() {
   window.showInformationMessage('Project exports have been cached. 🐔')
+}
+
+export async function removeUnusedImportChanges<C extends Change, P>(
+  plugin: P,
+  editor: TextEditor,
+  changes: C[],
+  getNewLineFromChange: (plugin: P, change: C) => string
+) {
+  sortUnusedImportChanges(changes)
+
+  const { document } = editor
+  const fullText = document.getText()
+  const oldTextEnd = changes[0].match.end
+  let newText = fullText.slice(0, oldTextEnd)
+  for (const change of changes) {
+    const newLine = getNewLineFromChange(plugin, change)
+    const { match } = change
+    let { end } = match
+    if (!newLine) end += newText[end + 1] === '\n' ? 2 : 1
+    newText = newText.slice(0, match.start) + newLine + newText.slice(end)
+  }
+
+  await editor.edit(builder => {
+    builder.replace(new Range(document.positionAt(0), document.positionAt(oldTextEnd)), newText)
+  })
+
+  await document.save()
 }
 
 // Lodash replacements for Typescript support

@@ -1,7 +1,7 @@
 import _ from 'lodash'
-import { Range, Uri, window } from 'vscode'
-import { strUntil, getDiagnosticsForAllEditors, sortUnusedImportChanges, last } from '../../utils'
-import { importRegex, parseImports, ParsedImportPy } from './regex'
+import { Uri, window } from 'vscode'
+import { getDiagnosticsForAllEditors, last, removeUnusedImportChanges, strUntil } from '../../utils'
+import { parseImports, ParsedImportPy } from './regex'
 import { PluginPy } from './types'
 import { getNewLine } from './importing/getNewLine'
 
@@ -11,7 +11,7 @@ interface Change {
 }
 
 export async function removeUnusedImports(plugin: PluginPy) {
-  const diagnostics = getDiagnosticsForAllEditors(d => d.code === 'no-unused-vars')
+  const diagnostics = getDiagnosticsForAllEditors(d => d.code === 'F401')
 
   for (const filepath in diagnostics) {
     const editor = await window.showTextDocument(Uri.file(filepath), {
@@ -43,26 +43,11 @@ export async function removeUnusedImports(plugin: PluginPy) {
       changes.push(change)
     }
 
-    sortUnusedImportChanges(changes)
-
-    // We make changes to a string outside of the edit builder so that we don't have to worry about
-    // overlapping edit ranges
-    const oldTextEnd = changes[0].match.end + 1 // +1 in case we need to remove the following \n
-    let newText = fullText.slice(0, oldTextEnd) // could just do this on the fullText
-
-    for (const change of changes) {
-      const { imports, match } = change
-      const newLine = imports.length ? getNewLine(plugin, match.path, imports) : ''
-
-      let { end } = match
-      if (!newLine) end += newText[end + 1] === '\n' ? 2 : 1
-      newText = newText.slice(0, match.start) + newLine + newText.slice(end)
-    }
-
-    await editor.edit(builder => {
-      builder.replace(new Range(document.positionAt(0), document.positionAt(oldTextEnd)), newText)
-    })
-
-    await document.save()
+    await removeUnusedImportChanges(plugin, editor, changes, getNewLineFromChange)
   }
+}
+
+function getNewLineFromChange(plugin: PluginPy, change: Change) {
+  const { imports, match } = change
+  return imports.length ? getNewLine(plugin, match.path, imports) : ''
 }
