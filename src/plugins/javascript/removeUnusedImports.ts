@@ -1,11 +1,9 @@
 import _ from 'lodash'
-import { Range, Uri, window } from 'vscode'
-import { getDiagnosticsForAllEditors, sortUnusedImportChanges } from '../../utils'
+import { Uri, window } from 'vscode'
+import { getDiagnosticsForAllEditors, removeUnusedImportChanges } from '../../utils'
 import { getNewLine } from './importing/getNewLine'
 import { parseImports, ParsedImportJs } from './regex'
 import { PluginJs } from './types'
-
-const ENTIRE_LINE = 1
 
 type Change =
   | {
@@ -60,32 +58,13 @@ export async function removeUnusedImports(plugin: PluginJs) {
       changes.push(change)
     }
 
-    sortUnusedImportChanges(changes)
-
-    await editor.edit(builder => {
-      for (const change of changes) {
-        let newLine
-        const { match } = change
-        if (change.entireLine) {
-          newLine = ''
-        } else {
-          const { default: defaultImport, named, types } = change
-          newLine =
-            defaultImport || named.length || types.length
-              ? getNewLine(plugin, match.path, change)
-              : ''
-        }
-
-        builder.replace(
-          new Range(
-            document.positionAt(newLine ? match.start : match.start - 1), // Delete previous \n if newLine is empty
-            document.positionAt(match.end)
-          ),
-          newLine
-        )
-      }
-    })
-
-    await document.save()
+    await removeUnusedImportChanges(plugin, editor, changes, getNewLineFromChange)
   }
+}
+
+function getNewLineFromChange(plugin: PluginJs, change: Change) {
+  if (change.entireLine) return ''
+
+  const { default: defaultImport, named, types, match } = change
+  return defaultImport || named.length || types.length ? getNewLine(plugin, match.path, change) : ''
 }
