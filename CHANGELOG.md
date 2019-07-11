@@ -1,13 +1,16 @@
+### Version 3.1.0
+- New command `Import and Insert at Cursor`.
+
 ### Version 3.0.2
-- Fixed command `removeUnusedImports`.
+- Fixed command `Remove Unused Imports`.
 
 ### Version 3.0.1
 - Fixed Python plugin. Whoops.
 
 ### Version 3.0.0
-- New `Initialize Project` command to get started with Vandelay more easily.
+- New command `Initialize Project` to get started with Vandelay more easily.
 - Improved import renaming (`import numpy as np`, `import { foo as bar }`)
-- New `processImportName` configuration option.
+- New configuration option `processImportName`.
 
 **Breaking Changes**
 - JavaScript configuration option `processDefaultName` has been removed. Use the new `processImportName` option.

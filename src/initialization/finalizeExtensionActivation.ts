@@ -21,6 +21,10 @@ export function finalizeExtensionActivation(context: ExtensionContext) {
       catchError(() => selectImportForActiveWord())
     ),
     commands.registerCommand(
+      'vandelay.selectImportAndInsertAtCursor',
+      catchError(() => selectImport(null, true))
+    ),
+    commands.registerCommand(
       'vandelay.importUndefinedVariables',
       catchError(() => importUndefinedVariables())
     ),

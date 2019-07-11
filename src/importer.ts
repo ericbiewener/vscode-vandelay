@@ -1,36 +1,48 @@
 import _ from 'lodash'
-import { window, workspace, TextEditor } from 'vscode'
+import { Range, Selection, TextEditor, window, workspace } from 'vscode'
 import { getDiagnosticsForActiveEditor } from './utils'
 import { getPluginForActiveFile } from './utils'
 import { cacheFileManager } from './cacheFileManager'
-import { MergedExportData } from './types'
+import { MergedExportData, RichQuickPickItem } from './types'
 
-// FIXME: all @ts-ignores
-
-export async function selectImport(word?: string | undefined | null) {
+export async function selectImport(word?: string | undefined | null, alsoInsertAtCursor?: boolean) {
   const plugin = getPluginForActiveFile()
   if (!plugin) return
 
   return await cacheFileManager(plugin, async exportData => {
     if (!exportData) return
-    // @ts-ignore
-    const mergedData: MergedExportData = {
+
+    const mergedData = {
       ...exportData.imp,
       ...exportData.exp,
-    }
+    } as MergedExportData
+
     const sortedKeys = getExportDataKeysByCachedDate(mergedData)
     let items = plugin.buildImportItems(plugin, mergedData, sortedKeys)
     if (!items) return
     if (word) items = items.filter(item => item.label === word)
 
-    const selection =
+    const item =
       !word || items.length > 1 || !workspace.getConfiguration('vandelay').autoImportSingleResult
         ? await window.showQuickPick(items, { matchOnDescription: true })
         : items[0]
 
-    if (!selection) return
-    return plugin.insertImport(plugin, selection)
+    if (!item) return
+    await plugin.insertImport(plugin, item)
+    if (alsoInsertAtCursor) await insertImportAtCursor(item)
   })
+}
+
+async function insertImportAtCursor(item: RichQuickPickItem) {
+  const editor = window.activeTextEditor
+  if (!editor) return
+
+  await editor.edit(builder => {
+    const { selection } = editor
+    builder.replace(new Range(selection.start, selection.end), item.label)
+  })
+
+  editor.selection = new Selection(editor.selection.end, editor.selection.end)
 }
 
 export async function selectImportForActiveWord() {
