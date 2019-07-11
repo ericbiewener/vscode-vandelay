@@ -145,7 +145,7 @@
     "@types/make-dir": "2.1.0",
     "anymatch": "3.0.2",
     "fs-extra": "8.0.1",
-    "lodash": "4.17.11",
+    "lodash": "4.17.14",
     "make-dir": "3.0.0"
   },
   "lint-staged": {
