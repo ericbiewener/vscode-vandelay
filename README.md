@@ -56,11 +56,13 @@ switching, file deletion, etc) in order to update its cache of available imports
 to manually run this command if files are changed while VS Code is not running.
 
 ### Import
-Select an import from your project.
+Generates an import statement for the selected import from your project.
 
 ### Import active word
-A shortcut to automatically import the word under the carat. If more than one import matching the
-active word are found, you'll be asked to choose.
+A shortcut to automatically import the word under the cursor. If more than one import matching the active word are found, you'll be asked to choose.
+
+### Import and Insert at Cursor...
+Generates an import statement for the selected import from your project. Also inserts the value at the cursor.
 
 ### Import undefined variables
 Vandelay will attempt to find imports for all undefined variables reported by the linter for the
