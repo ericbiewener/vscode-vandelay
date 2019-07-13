@@ -55,7 +55,7 @@ export function cacheFile(plugin: PluginJs, filepath: string, data: CachingDataJ
   if (plugin.useES5) {
     mainRegex = exportRegex.moduleExports
   } else {
-    isTypescript = filepath.endsWith('.ts') || plugin.typescript
+    isTypescript = plugin.typescript || ['.ts', '.tsx'].includes(path.extname(filepath))
     mainRegex = isTypescript ? exportRegex.standardTypescript : exportRegex.standard
   }
 

@@ -26,6 +26,16 @@
       ]
     },
     {
+      "name": "Rise",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "${workspaceFolder}/../_test_workspaces/rise",
+        "--extensionDevelopmentPath=${workspaceFolder}"
+      ]
+    },
+    {
       "name": "Multi Root",
       "type": "extensionHost",
       "request": "launch",

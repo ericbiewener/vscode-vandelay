@@ -1,3 +1,6 @@
+### Version 3.1.1
+- Parse *.tsx automatically as Typescript.
+
 ### Version 3.1.0
 - New command `Import and Insert at Cursor`.
 
