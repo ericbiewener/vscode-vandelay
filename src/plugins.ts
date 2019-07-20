@@ -1,8 +1,6 @@
-import fs from 'fs-extra'
 import _ from 'lodash'
 import { ExtensionContext, window, workspace } from 'vscode'
 import path from 'path'
-import { VANDELAY_CONFIG_DIR } from './constants'
 import { alertNewVersionConfig } from './newVersionAlerting'
 import { pluginConfigs } from './registerPluginConfig'
 import { findVandelayConfigDir, isFile, isObject } from './utils'
@@ -43,6 +41,7 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
 
   plugin.excludePatterns.push(/.*\/\..*/) // exclude all folders starting with dot
   PLUGINS[language] = plugin
+  context.subscriptions.push(...plugin.registerCompletionItemProvider())
 
   alertNewVersionConfig(plugin)
 

@@ -1,3 +1,4 @@
+import { TextEdit } from 'vscode'
 import {
   FileExportsJs,
   PluginJs,
@@ -19,7 +20,7 @@ import { ImportPositionJs } from './plugins/javascript/importing/getImportPositi
 
 export type Language = 'js' | 'py'
 
-export type RichQuickPickItem = {
+export interface RichQuickPickItem {
   label: string
   description?: string | undefined
   isExtraImport: boolean | undefined
@@ -45,7 +46,7 @@ export type Plugin = PluginJs | PluginPy
 
 type ExcludePatterns = (string | RegExp)[]
 
-export type UserConfig = {
+export interface UserConfig {
   includePaths: string[]
   maxImportLineLength?: number
   nonModulePaths?: string[]
@@ -60,27 +61,28 @@ export type UserConfig = {
   shouldIncludeImport?(absImportPath: string, activeFilepath: string): boolean
 }
 
-export type PluginConfig = {
+export type InsertImport = (
+  plugin: Plugin,
+  selection: AllRichQuickPickItem,
+  shouldApplyEdit?: boolean
+) => Thenable<boolean> | TextEdit | void
+
+export interface PluginConfig {
   language: Language
   shouldIncludeDisgnostic: DiagnosticFilter
   excludePatterns?: ExcludePatterns
   cacheFile(plugin: Plugin, path: string, data: CachingData): CachingData
   processCachedData?(data: any): any
   removeUnusedImports(plugin: Plugin): Promise<any>
-  buildImportItems(
-    plugin: Plugin,
-    data: MergedExportData,
-    sortedKeys: string[]
-  ): AllRichQuickPickItem[]
-  insertImport(plugin: Plugin, selection: AllRichQuickPickItem): Promise<any>
+  insertImport: InsertImport
 }
 
-export type DefaultPluginConfig = {
+export interface DefaultPluginConfig {
   maxImportLineLength: number
   excludePatterns: ExcludePatterns[]
 }
 
-export type RuntimePluginConfig = {
+export interface RuntimePluginConfig {
   configFile: string
   configFilepath: string
   cacheFilepath: string

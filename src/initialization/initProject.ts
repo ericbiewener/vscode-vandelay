@@ -16,7 +16,10 @@ import { initializePlugin } from '../plugins'
 import { pluginConfigs } from '../registerPluginConfig'
 import { findVandelayConfigDir, showProjectExportsCachedMessage } from '../utils'
 
-type IncludePathQuickPickItem = { label: string; pathStr: string }
+interface IncludePathQuickPickItem {
+  label: string
+  pathStr: string
+}
 
 export async function initProject(context: ExtensionContext) {
   const { workspaceFolders } = workspace
@@ -59,6 +62,7 @@ async function initProjectSingleRoot(
   await createAndOpenFile(context, configFilepath, text, !!includePaths.length)
 }
 
+// FIXME: make context a globally importable constant, stop passing it around
 async function initProjectMultiRoot(
   context: ExtensionContext,
   workspaceFolders: WorkspaceFolder[]

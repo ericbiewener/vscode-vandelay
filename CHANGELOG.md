@@ -1,3 +1,5 @@
+### Version 3.2.0
+
 ### Version 3.1.1
 - Parse *.tsx automatically as Typescript.
 

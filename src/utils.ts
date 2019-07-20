@@ -2,7 +2,18 @@ import fs from 'fs'
 import makeDir from 'make-dir'
 import path from 'path'
 import _ from 'lodash'
-import { languages, Position, Range, window, TextEditor, Diagnostic, WorkspaceFolder } from 'vscode'
+import {
+  Diagnostic,
+  languages,
+  Position,
+  TextEditorEdit,
+  TextEdit,
+  Range,
+  TextDocument,
+  TextEditor,
+  window,
+  WorkspaceFolder,
+} from 'vscode'
 import { VANDELAY_CONFIG_DIR } from './constants'
 import { JS_EXTENSIONS } from './plugins/javascript/config'
 import { Plugin, CachingData, ImportPosition } from './types'
@@ -36,10 +47,10 @@ export function getPluginForFile(filePath: string): Plugin | undefined {
   return PLUGINS[getLangFromFilePath(filePath)]
 }
 
-export function getPluginForActiveFile() {
+export function getPluginForActiveFile(silent = false) {
   if (!window.activeTextEditor) return
   const plugin = getPluginForFile(window.activeTextEditor.document.fileName)
-  if (!plugin) window.showErrorMessage("Vandelay doesn't support the current language.")
+  if (!plugin && !silent) window.showErrorMessage("Vandelay doesn't support the current language.")
   return plugin
 }
 
@@ -51,8 +62,12 @@ export function basenameNoExt(filepath: string) {
   return path.basename(filepath, path.extname(filepath))
 }
 
-export async function insertLine(newLine: string, importPosition: ImportPosition) {
-  const { match, indexModifier, isFirstImport } = importPosition
+export function insertLine(
+  newLine: string,
+  importPosition: ImportPosition,
+  shouldApplyEdit = true
+) {
+  const { match, isFirstImport } = importPosition
   const editor = window.activeTextEditor as TextEditor
   const { document } = editor
 
@@ -61,21 +76,32 @@ export async function insertLine(newLine: string, importPosition: ImportPosition
     newLine += '\n'
   }
 
-  return await editor.edit(builder => {
-    if (!match) {
-      builder.insert(new Position(0, 0), newLine + '\n')
-    } else if (!indexModifier) {
-      builder.replace(
-        new Range(document.positionAt(match.start), document.positionAt(match.end)),
-        newLine
-      )
-    } else if (indexModifier === 1) {
-      builder.insert(document.positionAt(match.end), '\n' + newLine)
-    } else {
-      // -1
-      builder.insert(document.positionAt(match.start), newLine + '\n')
-    }
-  })
+  return shouldApplyEdit
+    ? editor.edit(builder => createEdit(builder, document, newLine, importPosition))
+    : createEdit(TextEdit, document, newLine, importPosition)
+}
+
+function createEdit(
+  edit: TextEditorEdit | typeof TextEdit,
+  document: TextDocument,
+  newLine: string,
+  importPosition: ImportPosition
+) {
+  const { match, indexModifier } = importPosition
+
+  if (!match) {
+    return edit.insert(new Position(0, 0), newLine + '\n')
+  } else if (!indexModifier) {
+    return edit.replace(
+      new Range(document.positionAt(match.start), document.positionAt(match.end)),
+      newLine
+    )
+  } else if (indexModifier === 1) {
+    return edit.insert(document.positionAt(match.end), '\n' + newLine)
+  } else {
+    // -1
+    return edit.insert(document.positionAt(match.start), newLine + '\n')
+  }
 }
 
 export function getTabChar() {
@@ -126,28 +152,8 @@ export function getDiagnosticsForActiveEditor(filter: DiagnosticFilter) {
   return languages.getDiagnostics(editor.document.uri).filter(filter)
 }
 
-export type DiagnosticsByFile = {
+export interface DiagnosticsByFile {
   [path: string]: Diagnostic[]
-}
-
-export function getDiagnosticsForAllEditors(filter: DiagnosticFilter) {
-  const diagnosticsByFile: DiagnosticsByFile = {}
-  for (const [file, diagnostics] of languages.getDiagnostics()) {
-    const remaining = diagnostics.filter(filter)
-    if (remaining.length) diagnosticsByFile[file.fsPath] = remaining
-  }
-  return diagnosticsByFile
-}
-
-/**
- * Sort in reverse order so that modifying a line doesn't effect the other line locations that need to be changed
- */
-type Change = {
-  match: { start: number; end: number }
-}
-
-export function sortUnusedImportChanges(changes: Change[]) {
-  changes.sort((a, b) => (a.match.start < b.match.start ? 1 : -1))
 }
 
 export function mergeObjectsWithArrays(obj1: {}, obj2: {}) {
@@ -156,7 +162,9 @@ export function mergeObjectsWithArrays(obj1: {}, obj2: {}) {
   })
 }
 
-export type Renamed = { [originalName: string]: string }
+export interface Renamed {
+  [originalName: string]: string
+}
 
 export function addNamesAndRenames(imports: string[], names: string[], renamed: Renamed) {
   for (const imp of imports) {
@@ -200,33 +208,6 @@ export function showProjectExportsCachedMessage() {
   window.showInformationMessage('Project exports have been cached. 🐔')
 }
 
-export async function removeUnusedImportChanges<C extends Change, P>(
-  plugin: P,
-  editor: TextEditor,
-  changes: C[],
-  getNewLineFromChange: (plugin: P, change: C) => string
-) {
-  sortUnusedImportChanges(changes)
-
-  const { document } = editor
-  const fullText = document.getText()
-  const oldTextEnd = changes[0].match.end
-  let newText = fullText.slice(0, oldTextEnd)
-  for (const change of changes) {
-    const newLine = getNewLineFromChange(plugin, change)
-    const { match } = change
-    let { end } = match
-    if (!newLine) end += newText[end + 1] === '\n' ? 2 : 1
-    newText = newText.slice(0, match.start) + newLine + newText.slice(end)
-  }
-
-  await editor.edit(builder => {
-    builder.replace(new Range(document.positionAt(0), document.positionAt(oldTextEnd)), newText)
-  })
-
-  await document.save()
-}
-
 // Lodash replacements for Typescript support
 // TODO: figure out why the lodash fns aren't working
 
@@ -237,4 +218,9 @@ export function last(arr: any[]) {
 
 export function isObject(obj: any) {
   return obj && typeof obj === 'object'
+}
+
+export function getWordAtPosition(document: TextDocument, position: Position) {
+  const range = document.getWordRangeAtPosition(position)
+  return range ? document.getText(range) : null
 }

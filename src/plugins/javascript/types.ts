@@ -1,9 +1,11 @@
+import { Disposable } from 'vscode'
 import {
-  UserConfig,
-  PluginConfig,
   DefaultPluginConfig,
-  RuntimePluginConfig,
+  MergedExportData,
+  PluginConfig,
   RichQuickPickItem,
+  RuntimePluginConfig,
+  UserConfig,
 } from '../../types'
 
 // TODO: uppercase
@@ -23,7 +25,7 @@ export type RichQuickPickItemJs = RichQuickPickItem & {
  * Cached Data Structurs
  */
 
-export type FileExportsJs = {
+export interface FileExportsJs {
   default?: string | null | undefined
   named: string[]
   types: string[]
@@ -41,7 +43,7 @@ export type ExportDatumJs = FileExportsJs & {
   }
 }
 
-export type ReexportsToProcess = {
+export interface ReexportsToProcess {
   fullModules: string[]
   selective: { [path: string]: string[] }
 }
@@ -50,26 +52,26 @@ export type NonFinalExportDatumJs = ExportDatumJs & {
   reexportsToProcess?: ReexportsToProcess
 }
 
-export type NonFinalExportDataJs = {
+export interface NonFinalExportDataJs {
   [path: string]: NonFinalExportDatumJs
 }
 
-export type ExportDataImportsJs = {
+export interface ExportDataImportsJs {
   [path: string]: FileExportsJs
 }
-export type ExportDataExportsJs = {
+export interface ExportDataExportsJs {
   [path: string]: ExportDatumJs
 }
-export type MergedExportDataJs = {
+export interface MergedExportDataJs {
   [path: string]: ExportDatumJs & { isExtraImport?: true }
 }
 
-export type ExportDataJs = {
+export interface ExportDataJs {
   imp: ExportDataImportsJs
   exp: ExportDataExportsJs
 }
 
-export type CachingDataJs = {
+export interface CachingDataJs {
   exp: NonFinalExportDataJs
   imp: {
     [path: string]: FileExportsJs & { isExtraImport?: true }
@@ -87,14 +89,12 @@ export type PluginConfigJs = PluginConfig & {
   useSemicolons: boolean
   trailingComma: boolean
   multilineImportStyle: 'single' | 'multiple'
-  processImportName?(
-    importName: string,
-    importPath: string,
-    absImportPath: string,
-    activeFilepath: string,
-    projectRoot: string,
-    isDefault: boolean
-  ): string | undefined
+  buildImportItems(
+    plugin: PluginJs,
+    data: MergedExportData,
+    sortedKeys: string[]
+  ): RichQuickPickItemJs[]
+  registerCompletionItemProvider(): Disposable[]
 }
 
 export type UserConfigJs = UserConfig & {
@@ -107,6 +107,14 @@ export type UserConfigJs = UserConfig & {
   trailingComma?: boolean
   importGroups?: string[]
   typescript?: boolean
+  processImportName?(
+    importName: string,
+    importPath: string,
+    absImportPath: string,
+    activeFilepath: string,
+    projectRoot: string,
+    isDefault: boolean
+  ): string | undefined
 }
 
 export type PluginJs = DefaultPluginConfig & PluginConfigJs & UserConfigJs & RuntimePluginConfig

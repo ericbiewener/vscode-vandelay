@@ -15,9 +15,9 @@ function parseCacheFile(plugin: Plugin) {
  * `cb` should return a promise (e.g. any file writing operations) so that it completes before the next call
  * to the cacheFileManager
  */
-let fileAccess: Promise<void>
+let fileAccess: Promise<any>
 
-export function cacheFileManager(plugin: Plugin, cb: (data: ExportData) => void) {
+export function cacheFileManager(plugin: Plugin, cb: (data: ExportData) => any) {
   fileAccess = fileAccess
     ? fileAccess.then(() => cb(parseCacheFile(plugin)))
     : Promise.resolve(cb(parseCacheFile(plugin)))

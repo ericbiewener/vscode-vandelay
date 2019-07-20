@@ -1,6 +1,7 @@
 import _ from 'lodash'
-import { Uri, window } from 'vscode'
-import { getDiagnosticsForAllEditors, last, removeUnusedImportChanges, strUntil } from '../../utils'
+import { window } from 'vscode'
+import { findImportMatch, removeUnusedImportChanges } from '../../removeUnusedImports'
+import { getDiagnosticsForActiveEditor, last, strUntil } from '../../utils'
 import { parseImports, ParsedImportPy } from './regex'
 import { PluginPy } from './types'
 import { getNewLine } from './importing/getNewLine'
@@ -11,40 +12,36 @@ interface Change {
 }
 
 export async function removeUnusedImports(plugin: PluginPy) {
-  const diagnostics = getDiagnosticsForAllEditors(d => d.code === 'F401')
+  const editor = window.activeTextEditor
+  if (!editor) return
 
-  for (const filepath in diagnostics) {
-    const editor = await window.showTextDocument(Uri.file(filepath), {
-      preserveFocus: true,
-      preview: false,
-    })
-    const { document } = editor
-    const fullText = document.getText()
-    const fileImports = parseImports(fullText)
-    const changes: Change[] = []
-    const changesByPath: { [path: string]: Change } = {}
+  const diagnostics = getDiagnosticsForActiveEditor(d => d.code === 'F401')
 
-    for (const diagnostic of diagnostics[filepath]) {
-      const offset = document.offsetAt(diagnostic.range.start)
-      const importMatch = fileImports.find(i => i.start <= offset && i.end >= offset)
-      if (!importMatch) return
+  const { document } = editor
+  const fullText = document.getText()
+  const fileImports = parseImports(fullText)
+  const changes: Change[] = []
+  const changesByPath: { [path: string]: Change } = {}
 
-      const { imports } = changesByPath[importMatch.path] || importMatch
-      // diagnostic.range only points to the start of the line, so we have to parse the import name
-      // from diagnostic.message
-      const lastDotPath = last(diagnostic.message.split('.'))
-      const unusedImport = strUntil(lastDotPath, "'")
+  for (const diagnostic of diagnostics) {
+    const importMatch = findImportMatch(document, diagnostic, fileImports)
+    if (!importMatch) continue
 
-      const change = {
-        imports: imports ? imports.filter(n => n !== unusedImport) : [],
-        match: importMatch,
-      }
-      changesByPath[importMatch.path] = change
-      changes.push(change)
+    const { imports } = changesByPath[importMatch.path] || importMatch
+    // diagnostic.range only points to the start of the line, so we have to parse the import name
+    // from diagnostic.message
+    const lastDotPath = last(diagnostic.message.split('.'))
+    const unusedImport = strUntil(lastDotPath, "'")
+
+    const change = {
+      imports: imports ? imports.filter(n => n !== unusedImport) : [],
+      match: importMatch,
     }
-
-    await removeUnusedImportChanges(plugin, editor, changes, getNewLineFromChange)
+    changesByPath[importMatch.path] = change
+    changes.push(change)
   }
+
+  await removeUnusedImportChanges(plugin, editor, changes, getNewLineFromChange)
 }
 
 function getNewLineFromChange(plugin: PluginPy, change: Change) {

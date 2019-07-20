@@ -1,16 +1,18 @@
+import { Disposable } from 'vscode'
 import {
-  UserConfig,
-  PluginConfig,
   DefaultPluginConfig,
-  RuntimePluginConfig,
+  MergedExportData,
+  PluginConfig,
   RichQuickPickItem,
+  RuntimePluginConfig,
+  UserConfig,
 } from '../../types'
 
 /**
  * Cached Data Structures
  */
 
-export type FileExportsPy = {
+export interface FileExportsPy {
   importEntirePackage?: boolean
   exports?: string[]
 }
@@ -19,27 +21,27 @@ export type ExportDatumPy = FileExportsPy & {
   cached?: number
 }
 
-export type ReexportsToProcess = {
+export interface ReexportsToProcess {
   fullModules: string[]
   selective: { [path: string]: string[] }
 }
 
-export type ExportDataImportsPy = {
+export interface ExportDataImportsPy {
   [path: string]: FileExportsPy
 }
-export type ExportDataExportsPy = {
+export interface ExportDataExportsPy {
   [path: string]: ExportDatumPy
 }
-export type MergedExportDataPy = {
+export interface MergedExportDataPy {
   [path: string]: ExportDatumPy & { isExtraImport?: true }
 }
 
-export type ExportDataPy = {
+export interface ExportDataPy {
   imp: ExportDataImportsPy
   exp: ExportDataExportsPy
 }
 
-export type CachingDataPy = {
+export interface CachingDataPy {
   exp: ExportDataExportsPy
   imp: {
     [path: string]: FileExportsPy & { isExtraImport?: true }
@@ -52,6 +54,16 @@ export type CachingDataPy = {
 
 export type PluginConfigPy = PluginConfig & {
   language: 'py'
+  buildImportItems(
+    plugin: PluginPy,
+    data: MergedExportData,
+    sortedKeys: string[]
+  ): RichQuickPickItem[]
+  registerCompletionItemProvider(): Disposable[]
+}
+
+export type UserConfigPy = UserConfig & {
+  importGroups?: string[][]
   processImportName?(
     importName: string,
     importPath: string,
@@ -59,10 +71,6 @@ export type PluginConfigPy = PluginConfig & {
     activeFilepath: string,
     projectRoot: string
   ): string | undefined
-}
-
-export type UserConfigPy = UserConfig & {
-  importGroups?: string[][]
 }
 
 export type PluginPy = DefaultPluginConfig & PluginConfigPy & UserConfigPy & RuntimePluginConfig

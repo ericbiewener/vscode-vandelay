@@ -1,6 +1,8 @@
 import _ from 'lodash'
-import { Range, Selection, TextEditor, window, workspace } from 'vscode'
-import { getDiagnosticsForActiveEditor } from './utils'
+import { Diagnostic, Range, Selection, TextEditor, window, workspace, TextDocument } from 'vscode'
+import { PluginJs } from './plugins/javascript/types'
+import { PluginPy } from './plugins/python/types'
+import { getDiagnosticsForActiveEditor, getWordAtPosition } from './utils'
 import { getPluginForActiveFile } from './utils'
 import { cacheFileManager } from './cacheFileManager'
 import { MergedExportData, RichQuickPickItem } from './types'
@@ -18,9 +20,9 @@ export async function selectImport(word?: string | undefined | null, alsoInsertA
     } as MergedExportData
 
     const sortedKeys = getExportDataKeysByCachedDate(mergedData)
-    let items = plugin.buildImportItems(plugin, mergedData, sortedKeys)
+    let items = plugin.buildImportItems(plugin as any, mergedData, sortedKeys)
     if (!items) return
-    if (word) items = items.filter(item => item.label === word)
+    if (word) items = items.filter((item: RichQuickPickItem) => item.label === word)
 
     const item =
       !word || items.length > 1 || !workspace.getConfiguration('vandelay').autoImportSingleResult
@@ -48,10 +50,7 @@ async function insertImportAtCursor(item: RichQuickPickItem) {
 export async function selectImportForActiveWord() {
   const editor = window.activeTextEditor
   if (!editor) return
-
-  const range = editor.document.getWordRangeAtPosition(editor.selection.active)
-  const activeWord = range ? editor.document.getText(range) : null
-  selectImport(activeWord)
+  selectImport(getWordAtPosition(editor.document, editor.selection.active))
 }
 
 export async function importUndefinedVariables() {
@@ -62,18 +61,8 @@ export async function importUndefinedVariables() {
   if (!diagnostics.length) return
 
   const { document } = window.activeTextEditor as TextEditor
-  // Must collect all words before inserting any because insertions will cause the diagnostic ranges
-  // to no longer be correct, thus not allowing us to get subsequent words
-  const words = []
-  for (const d of diagnostics) {
-    // Flake8 is returning a collapsed range, so expand it to the entire word
-    const range = _.isEqual(d.range.start, d.range.end)
-      ? document.getWordRangeAtPosition(d.range.start)
-      : d.range
-    words.push(document.getText(range))
-  }
-
-  for (const word of _.uniq(words)) await selectImport(word)
+  const words = getUndefinedWords(document, diagnostics)
+  for (const word of words) await selectImport(word)
 }
 
 function getExportDataKeysByCachedDate(exportData: MergedExportData) {
@@ -87,4 +76,32 @@ function getExportDataKeysByCachedDate(exportData: MergedExportData) {
     // @ts-ignore
     return createdA < createdB ? 1 : -1
   })
+}
+
+export function getUndefinedWords(
+  document: TextDocument,
+  diagnostics: Diagnostic[],
+  ignoreRanges: Range[] = []
+) {
+  // Must collect all words before inserting any because insertions will cause the diagnostic ranges
+  // to no longer be correct, thus not allowing us to get subsequent words
+  const words = diagnostics
+    .map(d => {
+      // Flake8 is returning a collapsed range, so expand it to the entire word
+      const range = _.isEqual(d.range.start, d.range.end)
+        ? document.getWordRangeAtPosition(d.range.start)
+        : d.range
+
+      if (!range) return null
+
+      // Don't import word if range overlaps at all
+      for (const ignoreRange of ignoreRanges) {
+        if (ignoreRange.intersection(range)) return null
+      }
+
+      return document.getText(range)
+    })
+    .filter(Boolean)
+
+  return _.uniq(words)
 }

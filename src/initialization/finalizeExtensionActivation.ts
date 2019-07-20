@@ -1,9 +1,7 @@
-import path from 'path'
 import { commands, ExtensionContext, workspace } from 'vscode'
 import { cacheProject, watchForChanges } from '../cacher'
 import { importUndefinedVariables, selectImport, selectImportForActiveWord } from '../importer'
 import { initializePlugins } from '../main'
-import { initializePluginForLang } from '../plugins'
 import { removeUnusedImports } from '../removeUnusedImports'
 import { catchError } from './catchError'
 
@@ -38,6 +36,8 @@ export function finalizeExtensionActivation(context: ExtensionContext) {
     )
   )
 
+  context.subscriptions.push()
+
   context.subscriptions.push(
     workspace.onDidChangeConfiguration(e => {
       if (
@@ -49,5 +49,7 @@ export function finalizeExtensionActivation(context: ExtensionContext) {
     }),
 
     watchForChanges()
+    // languages.onDidChangeDiagnostics(onDidChangeDiagnostics),
+    // window.onDidChangeTextEditorSelection(importUndefinedVariablesButIgnoreEditorSelectionRanges)
   )
 }
