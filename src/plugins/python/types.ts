@@ -1,12 +1,5 @@
-import { Disposable } from 'vscode'
-import {
-  DefaultPluginConfig,
-  MergedExportData,
-  PluginConfig,
-  RichQuickPickItem,
-  RuntimePluginConfig,
-  UserConfig,
-} from '../../types'
+import { DefaultPluginConfig, Plugin, PluginConfig, RichQuickPickItem, RuntimePluginConfig,
+  UserConfig } from '../../types'
 
 /**
  * Cached Data Structures
@@ -52,14 +45,8 @@ export type CachingDataPy = {
  * Plugin Config
  */
 
-export type PluginConfigPy = PluginConfig & {
+export type PluginConfigPy = PluginConfig<RichQuickPickItem> & {
   language: 'py'
-  buildImportItems(
-    plugin: PluginPy,
-    data: MergedExportData,
-    sortedKeys: string[]
-  ): RichQuickPickItem[]
-  registerCompletionItemProvider(): Disposable[]
 }
 
 export type UserConfigPy = UserConfig & {
@@ -73,4 +60,4 @@ export type UserConfigPy = UserConfig & {
   ): string | undefined
 }
 
-export type PluginPy = DefaultPluginConfig & PluginConfigPy & UserConfigPy & RuntimePluginConfig
+export type PluginPy = Plugin<RichQuickPickItem> & PluginConfigPy & UserConfigPy

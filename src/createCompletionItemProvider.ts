@@ -1,11 +1,10 @@
 // FIXME: notify user that they should turn off auto-import JS & TS if it is on now that Vandelay supports this
 import { CompletionItem, CompletionItemKind, Position, TextDocument, TextEdit } from 'vscode'
 import { cacheFileManager } from './cacheFileManager'
-import { MergedExportData } from './types'
+import { MergedExportData, PluginConfig } from './types'
 import { getPluginForActiveFile } from './utils'
-import { InsertImport } from './types'
 
-export function createCompletionProvider<P extends Plugin>(insertImport: InsertImport<P>) {
+export function createCompletionProvider(insertImport: PluginConfig['insertImport']) {
   return {
     async provideCompletionItems(
       document: TextDocument,

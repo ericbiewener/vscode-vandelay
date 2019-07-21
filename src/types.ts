@@ -1,4 +1,4 @@
-import { TextEdit } from 'vscode'
+import { Disposable, TextEdit } from 'vscode'
 import {
   FileExportsJs,
   PluginJs,
@@ -25,7 +25,6 @@ export type RichQuickPickItem = {
   description?: string | undefined
   isExtraImport: boolean | undefined
 }
-type AllRichQuickPickItem = RichQuickPickItem | RichQuickPickItemJs
 
 export type ImportPosition = ImportPositionJs | ImportPositionPy
 
@@ -42,9 +41,43 @@ export type ExportData = ExportDataJs | ExportDataPy
  * Plugin Config
  */
 
-export type Plugin = PluginJs | PluginPy
+type ExcludePattern = string | RegExp
 
-type ExcludePatterns = (string | RegExp)[]
+export type DefaultPluginConfig = {
+  maxImportLineLength: number,
+  excludePatterns: ExcludePattern[]
+}
+
+export type RuntimePluginConfig = {
+  configFile: string
+  configFilepath: string
+  cacheFilepath: string
+  projectRoot: string
+  cacheDirPath: string
+}
+
+export interface PluginConfig<Q extends RichQuickPickItem = RichQuickPickItem> {
+  language: Language
+  shouldIncludeDisgnostic: DiagnosticFilter
+  cacheFile(plugin: this, path: string, data: CachingData): CachingData
+  processCachedData?(data: any): any
+  removeUnusedImports(plugin: this): Promise<any>
+  insertImport(
+    plugin: this,
+    selection: Q,
+    shouldApplyEdit?: boolean
+  ): Thenable<boolean> | TextEdit | void
+  buildImportItems(
+    plugin: this,
+    data: MergedExportData,
+    sortedKeys: string[]
+  ): Q[]
+  registerCompletionItemProvider(): Disposable[]
+  // maxImportLineLength?: number 
+  // excludePatterns?: ExcludePattern[]
+  importGroups?: string[] | string[][]
+  excludePatterns?: ExcludePattern[]
+}
 
 export type UserConfig = {
   includePaths: string[]
@@ -57,35 +90,12 @@ export type UserConfig = {
     activeFilepath: string,
     projectRoot: string
   ): string | undefined
-  excludePatterns?: ExcludePatterns
+  excludePatterns?: ExcludePattern[]
   shouldIncludeImport?(absImportPath: string, activeFilepath: string): boolean
 }
 
-export type InsertImport = (
-  plugin: Plugin,
-  selection: AllRichQuickPickItem,
-  shouldApplyEdit?: boolean
-) => Thenable<boolean> | TextEdit | void
+type MergedConfigs = Omit<UserConfig, 'excludePatterns'> & DefaultPluginConfig & RuntimePluginConfig
+type PluginConfigToExtend<Q extends RichQuickPickItem = RichQuickPickItem> = Omit<PluginConfig<Q>, 'excludePatterns'>
 
-export type PluginConfig = {
-  language: Language
-  shouldIncludeDisgnostic: DiagnosticFilter
-  excludePatterns?: ExcludePatterns
-  cacheFile(plugin: Plugin, path: string, data: CachingData): CachingData
-  processCachedData?(data: any): any
-  removeUnusedImports(plugin: Plugin): Promise<any>
-  insertImport: InsertImport
-}
+export interface Plugin<Q extends RichQuickPickItem = RichQuickPickItem> extends PluginConfigToExtend<Q>, MergedConfigs {}
 
-export type DefaultPluginConfig = {
-  maxImportLineLength: number
-  excludePatterns: ExcludePatterns[]
-}
-
-export type RuntimePluginConfig = {
-  configFile: string
-  configFilepath: string
-  cacheFilepath: string
-  projectRoot: string
-  cacheDirPath: string
-}

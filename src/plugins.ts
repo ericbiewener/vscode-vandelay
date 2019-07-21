@@ -4,16 +4,13 @@ import path from 'path'
 import { alertNewVersionConfig } from './newVersionAlerting'
 import { pluginConfigs } from './registerPluginConfig'
 import { findVandelayConfigDir, isFile, isObject } from './utils'
-import { DefaultPluginConfig, Language, Plugin, PluginConfig, UserConfig } from './types'
+import { Language, Plugin, PluginConfig, RuntimePluginConfig, UserConfig } from './types'
 import { cacheProjectLanguage } from './cacher'
 
 // & { [key: string]: undefined } is just to quiet unneeded TS errors
 export const PLUGINS: { [key in Language]?: Plugin } & { [key: string]: undefined } = {}
 
-const defaultSettings: DefaultPluginConfig = {
-  maxImportLineLength: 100,
-  excludePatterns: [],
-}
+const HIDDEN_FOLDERS_REGEX = /.*\/\..*/
 
 export async function initializePlugin(context: ExtensionContext, pluginConfig: PluginConfig) {
   const { workspaceFolders } = workspace
@@ -31,15 +28,17 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
   const userConfig = await getUserConfig(configFilepath)
   if (!userConfig) return
 
-  const plugin = Object.assign(defaultSettings, pluginConfig, userConfig, {
+  const runtimeConfig: RuntimePluginConfig = {
     configFile,
     configFilepath,
     cacheDirPath,
     cacheFilepath: path.join(cacheDirPath, 'vandelay-v2-' + language + '.json'),
     projectRoot: userConfig.projectRoot || workspaceFolders[0].uri.fsPath,
-  }) as Plugin
+  }
 
-  plugin.excludePatterns.push(/.*\/\..*/) // exclude all folders starting with dot
+  const plugin = Object.assign({ maxImportLineLength: 100 }, pluginConfig, userConfig, runtimeConfig) as Plugin
+  plugin.excludePatterns.push(HIDDEN_FOLDERS_REGEX)
+
   PLUGINS[language] = plugin
   context.subscriptions.push(...plugin.registerCompletionItemProvider())
 

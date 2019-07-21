@@ -1,4 +1,4 @@
-import { window, workspace, Uri } from 'vscode'
+import { Uri, workspace } from 'vscode'
 import path from 'path'
 import fs from 'fs-extra'
 import _ from 'lodash'

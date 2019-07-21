@@ -15,7 +15,7 @@ import { PluginPy } from '../types'
 import { RichQuickPickItem } from '../../../types'
 import { getNewLine } from './getNewLine'
 
-export async function insertImport(
+export function insertImport(
   plugin: PluginPy,
   importSelection: RichQuickPickItem,
   shouldApplyEdit = true

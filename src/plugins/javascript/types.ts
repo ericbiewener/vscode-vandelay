@@ -1,12 +1,5 @@
-import { Disposable } from 'vscode'
-import {
-  DefaultPluginConfig,
-  MergedExportData,
-  PluginConfig,
-  RichQuickPickItem,
-  RuntimePluginConfig,
-  UserConfig,
-} from '../../types'
+import { DefaultPluginConfig, Plugin, PluginConfig, RichQuickPickItem, RuntimePluginConfig,
+  UserConfig } from '../../types'
 
 // TODO: uppercase
 export enum ExportType {
@@ -82,19 +75,13 @@ export type CachingDataJs = {
  * Plugin Config
  */
 
-export type PluginConfigJs = PluginConfig & {
+export type PluginConfigJs = PluginConfig<RichQuickPickItemJs> & {
   language: 'js'
   useSingleQuotes: boolean
   padCurlyBraces: boolean
   useSemicolons: boolean
   trailingComma: boolean
   multilineImportStyle: 'single' | 'multiple'
-  buildImportItems(
-    plugin: PluginJs,
-    data: MergedExportData,
-    sortedKeys: string[]
-  ): RichQuickPickItemJs[]
-  registerCompletionItemProvider(): Disposable[]
 }
 
 export type UserConfigJs = UserConfig & {
@@ -117,4 +104,4 @@ export type UserConfigJs = UserConfig & {
   ): string | undefined
 }
 
-export type PluginJs = DefaultPluginConfig & PluginConfigJs & UserConfigJs & RuntimePluginConfig
+export type PluginJs = Plugin<RichQuickPickItemJs> & PluginConfigJs & UserConfigJs

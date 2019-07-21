@@ -4,13 +4,14 @@ import { cacheFileManager } from '../../cacheFileManager'
 import { MergedExportData } from '../../types'
 import { getPluginForActiveFile } from '../../utils'
 import { insertImport } from './importing/importer'
+import { PluginJs } from './types'
 
 async function provideCompletionItems(
   document: TextDocument,
   position: Position
 ): Promise<CompletionItem[]> {
-  const plugin = getPluginForActiveFile()
-  if (!plugin || plugin.language !== 'js') return []
+  const plugin = getPluginForActiveFile() as PluginJs | undefined
+  if (!plugin) return []
 
   return await cacheFileManager(plugin, async exportData => {
     if (!exportData) return []

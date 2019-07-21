@@ -1,6 +1,5 @@
-import { Diagnostic, Disposable, languages } from 'vscode'
+import { Diagnostic, languages } from 'vscode'
 import { createCompletionProvider } from '../../createCompletionItemProvider'
-import { CompletionItemProviderJs } from './CompletionItemProvider'
 import { removeUnusedImports } from './removeUnusedImports'
 import { cacheFile, processCachedData } from './cacher'
 import { buildImportItems } from './importing/buildImportItems'

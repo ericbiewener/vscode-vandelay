@@ -43,7 +43,7 @@ async function initProjectSingleRoot(
   const selection = await getLanguageSelection()
   if (!selection) return
 
-  const { language, configFile } = selection
+  const { configFile } = selection
   const configFilepath = path.join(workspaceFolders[0].uri.fsPath, configFile)
 
   const openPromise = openExistingConfigFile(configFilepath)
@@ -51,7 +51,7 @@ async function initProjectSingleRoot(
 
   // Select includePaths
   const subdirs = await getSubdirs(workspaceFolders[0].uri.fsPath)
-  const includePathOptions:  =[] = subdirs.map(s => ({
+  const includePathOptions: IncludePathQuickPickItem[] = subdirs.map(s => ({
     label: s,
     pathStr: `path.join(__dirname, '${s}')`,
   }))
