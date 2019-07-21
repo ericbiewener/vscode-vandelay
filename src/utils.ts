@@ -152,7 +152,7 @@ export function getDiagnosticsForActiveEditor(filter: DiagnosticFilter) {
   return languages.getDiagnostics(editor.document.uri).filter(filter)
 }
 
-export interface DiagnosticsByFile {
+export type DiagnosticsByFile = {
   [path: string]: Diagnostic[]
 }
 
@@ -162,7 +162,7 @@ export function mergeObjectsWithArrays(obj1: {}, obj2: {}) {
   })
 }
 
-export interface Renamed {
+export type Renamed = {
   [originalName: string]: string
 }
 

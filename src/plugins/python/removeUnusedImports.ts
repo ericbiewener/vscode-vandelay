@@ -6,7 +6,7 @@ import { parseImports, ParsedImportPy } from './regex'
 import { PluginPy } from './types'
 import { getNewLine } from './importing/getNewLine'
 
-interface Change {
+type Change = {
   imports: string[]
   match: ParsedImportPy
 }

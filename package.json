@@ -150,7 +150,6 @@
   },
   "lint-staged": {
     "**/*.{ts,js}": [
-      "prettier-eslint --prettier-last --write",
       "git add"
     ]
   },

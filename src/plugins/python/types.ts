@@ -12,7 +12,7 @@ import {
  * Cached Data Structures
  */
 
-export interface FileExportsPy {
+export type FileExportsPy = {
   importEntirePackage?: boolean
   exports?: string[]
 }
@@ -21,27 +21,27 @@ export type ExportDatumPy = FileExportsPy & {
   cached?: number
 }
 
-export interface ReexportsToProcess {
+export type ReexportsToProcess = {
   fullModules: string[]
   selective: { [path: string]: string[] }
 }
 
-export interface ExportDataImportsPy {
+export type ExportDataImportsPy = {
   [path: string]: FileExportsPy
 }
-export interface ExportDataExportsPy {
+export type ExportDataExportsPy = {
   [path: string]: ExportDatumPy
 }
-export interface MergedExportDataPy {
+export type MergedExportDataPy = {
   [path: string]: ExportDatumPy & { isExtraImport?: true }
 }
 
-export interface ExportDataPy {
+export type ExportDataPy = {
   imp: ExportDataImportsPy
   exp: ExportDataExportsPy
 }
 
-export interface CachingDataPy {
+export type CachingDataPy = {
   exp: ExportDataExportsPy
   imp: {
     [path: string]: FileExportsPy & { isExtraImport?: true }

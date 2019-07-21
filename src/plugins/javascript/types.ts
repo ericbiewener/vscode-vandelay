@@ -25,7 +25,7 @@ export type RichQuickPickItemJs = RichQuickPickItem & {
  * Cached Data Structurs
  */
 
-export interface FileExportsJs {
+export type FileExportsJs = {
   default?: string | null | undefined
   named: string[]
   types: string[]
@@ -43,7 +43,7 @@ export type ExportDatumJs = FileExportsJs & {
   }
 }
 
-export interface ReexportsToProcess {
+export type ReexportsToProcess = {
   fullModules: string[]
   selective: { [path: string]: string[] }
 }
@@ -52,26 +52,26 @@ export type NonFinalExportDatumJs = ExportDatumJs & {
   reexportsToProcess?: ReexportsToProcess
 }
 
-export interface NonFinalExportDataJs {
+export type NonFinalExportDataJs = {
   [path: string]: NonFinalExportDatumJs
 }
 
-export interface ExportDataImportsJs {
+export type ExportDataImportsJs = {
   [path: string]: FileExportsJs
 }
-export interface ExportDataExportsJs {
+export type ExportDataExportsJs = {
   [path: string]: ExportDatumJs
 }
-export interface MergedExportDataJs {
+export type MergedExportDataJs = {
   [path: string]: ExportDatumJs & { isExtraImport?: true }
 }
 
-export interface ExportDataJs {
+export type ExportDataJs = {
   imp: ExportDataImportsJs
   exp: ExportDataExportsJs
 }
 
-export interface CachingDataJs {
+export type CachingDataJs = {
   exp: NonFinalExportDataJs
   imp: {
     [path: string]: FileExportsJs & { isExtraImport?: true }

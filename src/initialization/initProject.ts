@@ -16,7 +16,7 @@ import { initializePlugin } from '../plugins'
 import { pluginConfigs } from '../registerPluginConfig'
 import { findVandelayConfigDir, showProjectExportsCachedMessage } from '../utils'
 
-interface IncludePathQuickPickItem {
+type IncludePathQuickPickItem = {
   label: string
   pathStr: string
 }
@@ -51,7 +51,7 @@ async function initProjectSingleRoot(
 
   // Select includePaths
   const subdirs = await getSubdirs(workspaceFolders[0].uri.fsPath)
-  const includePathOptions: IncludePathQuickPickItem[] = subdirs.map(s => ({
+  const includePathOptions:  =[] = subdirs.map(s => ({
     label: s,
     pathStr: `path.join(__dirname, '${s}')`,
   }))

@@ -60,7 +60,7 @@ export async function removeUnusedImportChanges<C extends Change, P>(
 /**
  * Sort in reverse order so that modifying a line doesn't effect the other line locations that need to be changed
  */
-interface Change {
+type Change = {
   match: { start: number; end: number }
 }
 

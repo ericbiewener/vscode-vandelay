@@ -20,7 +20,7 @@ import { ImportPositionJs } from './plugins/javascript/importing/getImportPositi
 
 export type Language = 'js' | 'py'
 
-export interface RichQuickPickItem {
+export type RichQuickPickItem = {
   label: string
   description?: string | undefined
   isExtraImport: boolean | undefined
@@ -46,7 +46,7 @@ export type Plugin = PluginJs | PluginPy
 
 type ExcludePatterns = (string | RegExp)[]
 
-export interface UserConfig {
+export type UserConfig = {
   includePaths: string[]
   maxImportLineLength?: number
   nonModulePaths?: string[]
@@ -67,7 +67,7 @@ export type InsertImport = (
   shouldApplyEdit?: boolean
 ) => Thenable<boolean> | TextEdit | void
 
-export interface PluginConfig {
+export type PluginConfig = {
   language: Language
   shouldIncludeDisgnostic: DiagnosticFilter
   excludePatterns?: ExcludePatterns
@@ -77,12 +77,12 @@ export interface PluginConfig {
   insertImport: InsertImport
 }
 
-export interface DefaultPluginConfig {
+export type DefaultPluginConfig = {
   maxImportLineLength: number
   excludePatterns: ExcludePatterns[]
 }
 
-export interface RuntimePluginConfig {
+export type RuntimePluginConfig = {
   configFile: string
   configFilepath: string
   cacheFilepath: string
