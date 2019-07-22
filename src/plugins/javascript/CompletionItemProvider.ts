@@ -13,7 +13,9 @@ async function provideCompletionItems(
   const plugin = getPluginForActiveFile() as PluginJs | undefined
   if (!plugin) return []
 
+
   return await cacheFileManager(plugin, async exportData => {
+    debugger
     if (!exportData) return []
 
     const mergedData = {

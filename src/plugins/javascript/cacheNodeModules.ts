@@ -1,7 +1,8 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
 import path from 'path'
-import { isFile } from '../../utils'
+import { cacheFileManager } from '../../cacheFileManager'
+import { isFile, mergeObjectsWithArrays, writeCacheFile } from '../../utils'
 import { ExportDataImportsJs, FileExportsJs, PluginJs } from './types'
 
 type Dep = Record<string, string>
@@ -19,7 +20,6 @@ export async function cacheNodeModules(plugin: PluginJs) {
     )
   }
 
-  debugger
   const jsons = (await Promise.all(readDirPromises)).filter(Boolean) as PackageJson[]
 
   if (!jsons.length) {
@@ -31,6 +31,11 @@ export async function cacheNodeModules(plugin: PluginJs) {
   await Promise.all(jsons.map(j => cacheDependencies(plugin, j, cachedData)))
 
   console.log(cachedData)
+
+  return cacheFileManager(plugin, cachedData => {
+    mergeObjectsWithArrays(cachedData, cachedData.imp)
+    return writeCacheFile(plugin, cachedData)
+  })
 }
 
 async function cacheDependencies(
@@ -65,8 +70,7 @@ export async function cacheDependency(
     const fileText = await fs.readFile(packageJsonPath, 'utf-8')
     packageJson = JSON.parse(fileText)
   } catch (e) {
-    console.error(`Vandelay: Failed to parse dependency package.json file: ${dep}`)
-    console.error(e)
+    console.info(`Vandelay: Failed to parse dependency package.json file: ${dep}`)
     return
   }
 
@@ -80,8 +84,7 @@ export async function cacheDependency(
     // @ts-ignore
     depExports = __non_webpack_require__(path.join(dir, packageJson.main))
   } catch (e) {
-    console.error(`Vandelay: Failed to parse main dependency file: ${dep}`)
-    console.error(e)
+    console.info(`Vandelay: Failed to parse main dependency file: ${dep}`)
     return
   }
 
@@ -110,7 +113,6 @@ function getPackageJsonData(dir: string) {
   try {
     return JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'))
   } catch (e) {
-    console.error('Vandelay: Failed to parse package.json file: ${packageJsonPath}')
-    console.error(e)
+    console.info('Vandelay: Failed to parse package.json file: ${packageJsonPath}')
   }
 }

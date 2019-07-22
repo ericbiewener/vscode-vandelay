@@ -48,10 +48,10 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
 
   console.info(`Vandelay language registered: ${language}`)
 
-  cacheNodeModules(plugin)
-
   const isInitialCache = isFile(plugin.cacheFilepath)
   await cacheProjectLanguage(plugin)
+  // Don't await this, its completion isn't necessary for the extension to continue initializing
+  cacheNodeModules(plugin)
   return isInitialCache
 }
 
