@@ -1,6 +1,7 @@
 import _ from 'lodash'
-import { ExtensionContext, window, workspace } from 'vscode'
+import { ExtensionContext, languages, window, workspace } from 'vscode'
 import path from 'path'
+import { createCompletionItemProvider } from './createCompletionItemProvider'
 import { alertNewVersionConfig } from './newVersionAlerting'
 import { pluginConfigs } from './registerPluginConfig'
 import { findVandelayConfigDir, isFile, isObject } from './utils'
@@ -36,11 +37,25 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
     projectRoot: userConfig.projectRoot || workspaceFolders[0].uri.fsPath,
   }
 
-  const plugin = Object.assign({ maxImportLineLength: 100 }, pluginConfig, userConfig, runtimeConfig) as Plugin
+  const plugin = Object.assign(
+    { maxImportLineLength: 100 },
+    pluginConfig,
+    userConfig,
+    runtimeConfig
+  ) as Plugin
   plugin.excludePatterns.push(HIDDEN_FOLDERS_REGEX)
 
   PLUGINS[language] = plugin
-  context.subscriptions.push(...plugin.registerCompletionItemProvider())
+
+  // CompletionItemProvider
+  const { includePaths, extensions, insertImport } = plugin
+  const pattern = `${maybeCreateGlobOr(includePaths)}/**/*.${maybeCreateGlobOr(extensions)}}`
+  context.subscriptions.push(
+    languages.registerCompletionItemProvider(
+      { pattern, scheme: 'file' },
+      createCompletionItemProvider(insertImport)
+    )
+  )
 
   alertNewVersionConfig(plugin)
 
@@ -85,4 +100,8 @@ async function getUserConfig(configFilepath: string) {
 export async function initializePluginForLang(context: ExtensionContext, lang: string) {
   const config = pluginConfigs[lang]
   if (config) return initializePlugin(context, config)
+}
+
+function maybeCreateGlobOr(options: string[]) {
+  return options.length > 1 ? `{${options.join(',')}}` : options[0]
 }
