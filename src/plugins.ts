@@ -1,7 +1,9 @@
+import fs from 'fs-extra'
 import _ from 'lodash'
 import { ExtensionContext, window, workspace } from 'vscode'
 import path from 'path'
 import { alertNewVersionConfig } from './newVersionAlerting'
+import { cacheNodeModules } from './plugins/javascript/cacheNodeModules'
 import { pluginConfigs } from './registerPluginConfig'
 import { findVandelayConfigDir, isFile, isObject } from './utils'
 import { Language, Plugin, PluginConfig, RuntimePluginConfig, UserConfig } from './types'
@@ -46,10 +48,11 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
 
   console.info(`Vandelay language registered: ${language}`)
 
-  if (!isFile(plugin.cacheFilepath)) {
-    await cacheProjectLanguage(plugin)
-    return true
-  }
+  cacheNodeModules(plugin)
+
+  const isInitialCache = isFile(plugin.cacheFilepath)
+  await cacheProjectLanguage(plugin)
+  return isInitialCache
 }
 
 async function getUserConfig(configFilepath: string) {

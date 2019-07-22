@@ -1,16 +1,17 @@
 import fs from 'fs-extra'
 import path from 'path'
 import _ from 'lodash'
-import { basenameNoExt, getFilepathKey, last } from '../../utils'
+import { basenameNoExt, getFilepathKey, isFile, last } from '../../utils'
 import { isPathNodeModule, isIndexFile } from './utils'
 import { parseImports, exportRegex } from './regex'
 import {
-  PluginJs,
-  NonFinalExportDatumJs,
   CachingDataJs,
-  NonFinalExportDataJs,
-  ReexportsToProcess,
   ExportType,
+  FileExportsJs,
+  NonFinalExportDataJs,
+  NonFinalExportDatumJs,
+  PluginJs,
+  ReexportsToProcess,
 } from './types'
 
 // TODO: Break this function up
@@ -224,3 +225,4 @@ function getSubfileExports(mainFilepath: string, filename: string, exp: NonFinal
     if (subfileExports) return subfileExports
   }
 }
+

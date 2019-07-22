@@ -34,7 +34,7 @@ export async function alertNewVersion(context: ExtensionContext) {
   if (!isMajor && !config.showNewVersionAlert) return
 
   alertWithActions({
-    msg: 'Vandelay has been updated. Check out the new features!',
+    msg: 'Vandelay has been updated. See what has changed.',
     actions: [
       CHANGELOG_BUTTON_CONFIG,
       {
