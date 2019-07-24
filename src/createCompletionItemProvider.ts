@@ -4,7 +4,7 @@ import { cacheFileManager } from './cacheFileManager'
 import { MergedExportData, PluginConfig } from './types'
 import { getPluginForActiveFile } from './utils'
 
-export function createCompletionProvider(insertImport: PluginConfig['insertImport']) {
+export function createCompletionItemProvider(insertImport: PluginConfig['insertImport']) {
   return {
     async provideCompletionItems(
       document: TextDocument,

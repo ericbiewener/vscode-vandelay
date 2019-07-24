@@ -4,17 +4,24 @@ import { findImportMatch, removeUnusedImportChanges } from '../../removeUnusedIm
 import { getDiagnosticsForActiveEditor } from '../../utils'
 import { getNewLine } from './importing/getNewLine'
 import { parseImports, ParsedImportJs } from './regex'
-import { PluginJs } from './types'
+import { FileExportsJs, PluginJs } from './types'
 
-type Change =
-  | {
-      default: string | null | undefined
-      named: string[]
-      types: string[]
-      match: ParsedImportJs
-      entireLine: false
-    }
-  | { entireLine: true; match: ParsedImportJs }
+type Change = {
+  imports?: FileExportsJs
+  match: ParsedImportJs
+  fullLine?: boolean
+}
+
+function getRemainingImports(
+  { default: defaultImport, named, types }: FileExportsJs | ParsedImportJs,
+  unusedImport: string
+): FileExportsJs {
+  return {
+    default: defaultImport !== unusedImport ? defaultImport : null,
+    named: named ? named.filter(n => n !== unusedImport) : [],
+    types: types ? types.filter(n => n !== unusedImport) : [],
+  }
+}
 
 export async function removeUnusedImports(plugin: PluginJs) {
   const editor = window.activeTextEditor
@@ -30,38 +37,41 @@ export async function removeUnusedImports(plugin: PluginJs) {
   const fullText = document.getText()
   const fileImports = parseImports(plugin, fullText)
   const changes: Change[] = []
-  const changesByPath: { [path: string]: Change | undefined } = {}
+  const changesByMatch: Map<ParsedImportJs, Change> = new Map()
 
   for (const diagnostic of diagnostics) {
     const importMatch = findImportMatch(document, diagnostic, fileImports)
     if (!importMatch) continue
 
-    const existingChange = changesByPath[importMatch.path]
-    if (existingChange && existingChange.entireLine) continue // Not actually possible, but needed to appease TS
-
-    const { default: defaultImport, named, types } = existingChange || importMatch
     const unusedImport = document.getText(diagnostic.range)
-    const entireLine = unusedImport.includes(' from ')
+    const fullLine = unusedImport.includes(' from ')
+    if (fullLine) {
+      // Don't need to add to `changesByMatch` since that is only needed to track non full-line matches
+      changes.push({ match: importMatch, fullLine: true })
+      continue
+    }
 
-    const change: Change = entireLine
-      ? { entireLine: true, match: importMatch }
-      : {
-          default: defaultImport !== unusedImport ? defaultImport : null,
-          named: named ? named.filter(n => n !== unusedImport) : [],
-          types: types ? types.filter(n => n !== unusedImport) : [],
-          match: importMatch,
-          entireLine: false,
-        }
-    changesByPath[importMatch.path] = change
-    changes.push(change)
+    const existingChange = changesByMatch.get(importMatch)
+    const currentImports = existingChange && existingChange.imports
+    const imports = getRemainingImports(currentImports || importMatch, unusedImport)
+
+    if (existingChange) {
+      existingChange.imports = imports
+    } else {
+      const newChange = { imports, match: importMatch }
+      changesByMatch.set(newChange.match, newChange)
+      changes.push(newChange)
+    }
   }
 
   await removeUnusedImportChanges(plugin, editor, changes, getNewLineFromChange)
 }
 
 function getNewLineFromChange(plugin: PluginJs, change: Change) {
-  if (change.entireLine) return ''
+  if (change.fullLine || !change.imports) return ''
 
-  const { default: defaultImport, named, types, match } = change
-  return defaultImport || named.length || types.length ? getNewLine(plugin, match.path, change) : ''
+  const { default: defaultImport, named, types } = change.imports
+  return defaultImport || named.length || types.length
+    ? getNewLine(plugin, change.match.path, change.imports)
+    : ''
 }
