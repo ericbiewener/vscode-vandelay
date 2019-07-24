@@ -25,11 +25,11 @@ export function createCompletionItemProvider(insertImport: PluginConfig['insertI
 
         return items.map(item => {
           const completionItem = new CompletionItem(item.label, CompletionItemKind.Event)
-          completionItem.detail = item.description
+          completionItem.detail = `Import from:\n${item.description}`
           const edit = insertImport(plugin, item, false) as TextEdit | void
           if (edit && !edit.range.contains(position)) completionItem.additionalTextEdits = [edit]
           return completionItem
-        })
+        }).filter(Boolean)
       })
     },
   }

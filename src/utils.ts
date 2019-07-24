@@ -22,11 +22,10 @@ import { PLUGINS } from './plugins'
 const extensionToLang: { [ext: string]: string } = {}
 for (const ext of JS_EXTENSIONS) extensionToLang[ext] = 'js'
 
-export function writeCacheFile(plugin: Plugin, data: CachingData) {
+export async function writeCacheFile(plugin: Plugin, data: CachingData) {
   _.each(data.imp, d => (d.isExtraImport = true))
-  return makeDir(plugin.cacheDirPath).then(() =>
-    fs.writeFileSync(plugin.cacheFilepath, JSON.stringify(data))
-  )
+  await makeDir(plugin.cacheDirPath)
+  fs.writeFileSync(plugin.cacheFilepath, JSON.stringify(data))
 }
 
 export function isFile(file: string) {

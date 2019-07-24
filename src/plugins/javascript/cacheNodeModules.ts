@@ -27,13 +27,13 @@ export async function cacheNodeModules(plugin: PluginJs) {
     if (json) jsons.push(json)
   }
 
-  const cachedData: ExportDataImportsJs = {}
-  await Promise.all(jsons.map(j => cacheDependencies(plugin, j, cachedData)))
+  const data: ExportDataImportsJs = {}
+  await Promise.all(jsons.map(j => cacheDependencies(plugin, j, data)))
 
-  console.log(cachedData)
+  console.log(data)
 
   return cacheFileManager(plugin, cachedData => {
-    mergeObjectsWithArrays(cachedData, cachedData.imp)
+    mergeObjectsWithArrays(cachedData.imp, data)
     return writeCacheFile(plugin, cachedData)
   })
 }
@@ -89,21 +89,15 @@ export async function cacheDependency(
   }
 
   if (!depExports.__esModule) {
-    const packageName = _.last(dep.split('/')) as string
-    const parts = packageName.split('-')
-    const capitalized = parts
-      .slice(1)
-      .map(_.upperFirst)
-      .join('')
-    return { default: `${parts[0]}${capitalized}`, named: [], types: [] }
-  } else {
-    const { default: defaultExport, ...rest } = depExports
-    // Assume anything with an underscore is not desired, even if the underscore isn't the first
-    // letter. For example, ReactDOM exports some stuff with the name `unstable_...`.
-    const named = Object.keys(rest).filter(k => !k.includes('_'))
-    if (!named.length) return
-    return { default: defaultExport, named, types: [] }
+    return { default: getDefaultName(dep), named: [], types: [] }
   }
+
+  const { default: defaultExport, ...rest } = depExports
+  // Assume anything with an underscore is not desired, even if the underscore isn't the first
+  // letter. For example, ReactDOM exports some stuff with the name `unstable_...`.
+  const named = Object.keys(rest).filter(k => !k.includes('_'))
+  if (!named.length) return
+  return { default: defaultExport ? getDefaultName(dep) : null, named, types: [] }
 }
 
 function getPackageJsonData(dir: string) {
@@ -115,4 +109,15 @@ function getPackageJsonData(dir: string) {
   } catch (e) {
     console.info('Vandelay: Failed to parse package.json file: ${packageJsonPath}')
   }
+}
+
+function getDefaultName(dep: string) {
+  const packageName = _.last(dep.split('/')) as string
+  const parts = packageName.split('-')
+  const capitalized = parts
+    .slice(1)
+    .map(_.upperFirst)
+    .join('')
+
+  return `${parts[0]}${capitalized}`
 }
