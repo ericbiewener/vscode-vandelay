@@ -26,6 +26,7 @@ export async function removeUnusedImportChanges<C extends Change, P>(
   changes: C[],
   getNewLineFromChange: (plugin: P, change: C) => string
 ) {
+  if (!changes.length) return
   sortUnusedImportChanges(changes)
 
   const { document } = editor
