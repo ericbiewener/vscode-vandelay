@@ -55,7 +55,7 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
   context.subscriptions.push(
     languages.registerCompletionItemProvider(
       { pattern, scheme: 'file' },
-      createCompletionItemProvider(insertImport)
+      createCompletionItemProvider(plugin, insertImport)
     )
   )
 
