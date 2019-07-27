@@ -7,6 +7,10 @@ import { catchError } from './catchError'
 
 let hasFinalized = false
 
+export function isActivationComplete() {
+  return hasFinalized
+}
+
 export function finalizeExtensionActivation(context: ExtensionContext) {
   if (hasFinalized) return
   hasFinalized = true
@@ -49,7 +53,5 @@ export function finalizeExtensionActivation(context: ExtensionContext) {
     }),
 
     watchForChanges()
-    // languages.onDidChangeDiagnostics(onDidChangeDiagnostics),
-    // window.onDidChangeTextEditorSelection(importUndefinedVariablesButIgnoreEditorSelectionRanges)
   )
 }

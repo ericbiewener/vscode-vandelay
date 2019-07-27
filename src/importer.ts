@@ -1,7 +1,5 @@
 import _ from 'lodash'
 import { Diagnostic, Range, Selection, TextEditor, window, workspace, TextDocument } from 'vscode'
-import { PluginJs } from './plugins/javascript/types'
-import { PluginPy } from './plugins/python/types'
 import { getDiagnosticsForActiveEditor, getWordAtPosition } from './utils'
 import { getPluginForActiveFile } from './utils'
 import { cacheFileManager } from './cacheFileManager'
@@ -14,11 +12,7 @@ export async function selectImport(word?: string | undefined | null, alsoInsertA
   return await cacheFileManager(plugin, async exportData => {
     if (!exportData) return
 
-    const mergedData = {
-      ...exportData.imp,
-      ...exportData.exp,
-    } as MergedExportData
-
+    const mergedData = plugin.mergeExportData(exportData)
     const sortedKeys = getExportDataKeysByCachedDate(mergedData)
     let items = plugin.buildImportItems(plugin as any, mergedData, sortedKeys)
     if (!items) return

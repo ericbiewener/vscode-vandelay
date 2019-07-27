@@ -80,6 +80,7 @@ Vandelay will remove all unused imports reported by the linter. This command req
 Combination of the previous two commands. Imports all undefined variables and removes unused imports.
 
 ## Importing external and environment packages
+For JavaScript, Vandelay does its best to parse your `package.json` file (or files, if you're using Yarn workspaces) and gather the available imports from the listed dependencies. Depending on how an NPM package is organized, this sometimes isn't possible. However, Vandelay will track your use of package imports and automatically make those available as well. 
 Rather than try to actually parse and track all the possible imports in your project's runtime
 environment, `node_modules` folder, or virtualenv,  Vandelay JS simply tracks the ones you use. This
 means you'll need to write the import statement yourself the very first time you use something from

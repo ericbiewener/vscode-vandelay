@@ -1,17 +1,10 @@
 import fs from 'fs-extra'
 import path from 'path'
 import _ from 'lodash'
-import { basenameNoExt, getFilepathKey, isFile, last } from '../../utils'
+import { basenameNoExt, getFilepathKey, last } from '../../utils'
 import { isPathNodeModule, isIndexFile } from './utils'
 import { parseImports, exportRegex } from './regex'
-import {
-  CachingDataJs,
-  ExportType,
-  FileExportsJs,
-  NonFinalExportDataJs,
-  NonFinalExportDatumJs,
-  PluginJs,
-  ReexportsToProcess,
+import { CachingDataJs, NonFinalExportDataJs, NonFinalExportDatumJs, PluginJs, ReexportsToProcess
 } from './types'
 
 // TODO: Break this function up
@@ -36,6 +29,7 @@ export function cacheFile(plugin: PluginJs, filepath: string, data: CachingDataJ
       if (importData.default) existing.default = importData.default
       existing.named = _.union(existing.named, importData.named)
       existing.types = _.union(existing.types, importData.types)
+      existing.isExtraImport = true
     } else if (importData.default && importData.default.startsWith('* as')) {
       // import * as Foo from...
       const pathKey = getFilepathKey(

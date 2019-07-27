@@ -67,7 +67,9 @@ export async function cacheProjectLanguage(plugin: Plugin) {
   })
 
   if (plugin.processCachedData) cacher = cacher.then(plugin.processCachedData)
-  return cacher.then(data => writeCacheFile(plugin, data))
+  const data = await cacher
+  await writeCacheFile(plugin, data)
+  if (plugin.finalizeCacheLanguage) await plugin.finalizeCacheLanguage(plugin)
 }
 
 export function cacheProject() {

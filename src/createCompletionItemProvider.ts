@@ -40,14 +40,11 @@ export function createCompletionItemProvider(
   insertImport: PluginConfig['insertImport']
 ) {
   return {
-    async provideCompletionItems(
-      document: TextDocument,
-      position: Position
-    ): Promise<CompletionItem[]> {
+    async provideCompletionItems(document: TextDocument, position: Position) {
       return await cacheFileManager(plugin, async exportData => {
-        if (!exportData) return []
+        if (!exportData) return [1]
 
-        const mergedData = { ...exportData.imp, ...exportData.exp } as MergedExportData
+        const mergedData = plugin.mergeExportData(exportData)
         const items = plugin.buildImportItems(plugin as any, mergedData, Object.keys(mergedData))
 
         return items.map(item => {
@@ -62,7 +59,7 @@ export function createCompletionItemProvider(
       })
     },
 
-    resolveCompletionItem(completionItem: RichCompletionItem, token: CancellationToken) {
+    resolveCompletionItem(completionItem: RichCompletionItem) {
       const { importItem, position } = completionItem
       completionItem.detail = `Import from:\n${importItem.description}`
       const edit = insertImport(plugin, importItem, false) as TextEdit | void

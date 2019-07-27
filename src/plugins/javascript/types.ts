@@ -24,6 +24,8 @@ export type FileExportsJs = {
   types: string[]
 }
 
+export type NodeModuleExports = FileExportsJs & { isExtraImport: true }
+
 export type ExportDatumJs = FileExportsJs & {
   cached?: number
   // TODO: rename `reexports` and `reexported` to make clearer
@@ -49,9 +51,6 @@ export type NonFinalExportDataJs = {
   [path: string]: NonFinalExportDatumJs
 }
 
-export type ExportDataImportsJs = {
-  [path: string]: FileExportsJs
-}
 export type ExportDataExportsJs = {
   [path: string]: ExportDatumJs
 }
@@ -59,16 +58,22 @@ export type MergedExportDataJs = {
   [path: string]: ExportDatumJs & { isExtraImport?: true }
 }
 
+export type ExportDataNodeModulesJs = {
+  [path: string]: NodeModuleExports
+}
+
 export type ExportDataJs = {
-  imp: ExportDataImportsJs
-  exp: ExportDataExportsJs
+  exp: {
+    [path: string]: FileExportsJs
+  }
+  imp: ExportDataNodeModulesJs
+  nodeModules: ExportDataNodeModulesJs
 }
 
 export type CachingDataJs = {
   exp: NonFinalExportDataJs
-  imp: {
-    [path: string]: FileExportsJs & { isExtraImport?: true }
-  }
+  imp: ExportDataNodeModulesJs
+  nodeModules: ExportDataNodeModulesJs
 }
 
 /**

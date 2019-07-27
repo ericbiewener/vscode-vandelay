@@ -2,7 +2,6 @@
 node_modules
 .vscode-test/
 *.vsix
-TODO.md
 yarn-error.log
 dist/
 .vscode

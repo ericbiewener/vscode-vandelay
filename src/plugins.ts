@@ -66,7 +66,7 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
   const isInitialCache = isFile(plugin.cacheFilepath)
   await cacheProjectLanguage(plugin)
   // Don't await this, its completion isn't necessary for the extension to continue initializing
-  cacheNodeModules(plugin)
+  if (plugin.finalizeInit) plugin.finalizeInit(context, plugin)
   return isInitialCache
 }
 

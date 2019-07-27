@@ -23,7 +23,6 @@ const extensionToLang: { [ext: string]: string } = {}
 for (const ext of JS_EXTENSIONS) extensionToLang[ext] = 'js'
 
 export async function writeCacheFile(plugin: Plugin, data: CachingData) {
-  _.each(data.imp, d => (d.isExtraImport = true))
   await makeDir(plugin.cacheDirPath)
   fs.writeFileSync(plugin.cacheFilepath, JSON.stringify(data))
 }

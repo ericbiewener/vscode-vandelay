@@ -1,9 +1,12 @@
-import { Diagnostic } from 'vscode'
+import { Diagnostic, ExtensionContext, workspace } from 'vscode'
+import { cacheProjectLanguage } from '../../cacher'
+import { isActivationComplete } from '../../initialization/finalizeExtensionActivation'
+import { cacheNodeModules, findPackageJsonFiles } from './cacheNodeModules'
 import { removeUnusedImports } from './removeUnusedImports'
 import { cacheFile, processCachedData } from './cacher'
 import { buildImportItems } from './importing/buildImportItems'
 import { insertImport } from './importing/importer'
-import { PluginConfigJs } from './types'
+import { PluginConfigJs, PluginJs, ExportDataJs } from './types'
 
 export const JS_EXTENSIONS = ['js', 'jsx', 'ts', 'tsx', 'mjs', 'mdx']
 
@@ -18,6 +21,34 @@ function shouldIncludeDisgnostic({ code, source, message }: Diagnostic) {
     (source === 'flow' && message.startsWith('Cannot resolve name')) ||
     (source === 'ts' && TYPESCRIPT_CODES.includes(code))
   )
+}
+
+async function watchForPackageJsonChanges(context: ExtensionContext, plugin: PluginJs) {
+  const packageJsonFiles = findPackageJsonFiles(plugin)
+
+  const pattern =
+    packageJsonFiles.length > 1 ? `{${packageJsonFiles.join(',')}}` : packageJsonFiles[0]
+
+  const watcher = workspace.createFileSystemWatcher(pattern)
+  context.subscriptions.push(watcher)
+
+  watcher.onDidChange(async () => console.log("PACKAGEJSON CHANGED") || cacheNodeModules(plugin))
+}
+
+function mergeExportData(exportData: ExportDataJs) {
+  return {
+    ...exportData.nodeModules,
+    ...exportData.imp,
+    ...exportData.exp,
+  }
+}
+
+function finalizeCacheLanguage(plugin: PluginJs) {
+  const caching = cacheNodeModules(plugin)
+  // Don't return if we are still activating because that will delay the final steps of activation.
+  // Return once activated, however, so that "Project exports cached" notification waits until node
+  // modules are done.
+  if (isActivationComplete()) return caching
 }
 
 export const jsConfig: PluginConfigJs = {
@@ -35,4 +66,7 @@ export const jsConfig: PluginConfigJs = {
   multilineImportStyle: 'multiple',
   excludePatterns: [/.*\/node_modules(\/.*)?/],
   extensions: JS_EXTENSIONS,
+  finalizeInit: watchForPackageJsonChanges,
+  finalizeCacheLanguage,
+  mergeExportData,
 }
