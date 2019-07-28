@@ -1,4 +1,5 @@
 import { Diagnostic, ExtensionContext, workspace } from 'vscode'
+import { alertWithActions } from '../../alertWithActions'
 import { isActivationComplete } from '../../initialization/finalizeExtensionActivation'
 import { cacheNodeModules, findPackageJsonFiles } from './cacheNodeModules'
 import { cacheFile, processCachedData } from './cacher'
@@ -22,16 +23,40 @@ function shouldIncludeDisgnostic({ code, source, message }: Diagnostic) {
   )
 }
 
-async function watchForPackageJsonChanges(context: ExtensionContext, plugin: PluginJs) {
+function watchForPackageJsonChanges(context: ExtensionContext, plugin: PluginJs) {
   const packageJsonFiles = findPackageJsonFiles(plugin)
-
   const pattern =
     packageJsonFiles.length > 1 ? `{${packageJsonFiles.join(',')}}` : packageJsonFiles[0]
-
   const watcher = workspace.createFileSystemWatcher(pattern)
   context.subscriptions.push(watcher)
-
   watcher.onDidChange(() => cacheNodeModules(plugin))
+}
+
+function turnOfDefaultAutoImports(context: ExtensionContext, plugin: PluginJs) {
+  const languages = ['javascript', 'typescript']
+  const configs = languages.map(l => workspace.getConfiguration(l))
+  const configKey = 'suggest.autoImports'
+  if (!configs.some(c => c.get(configKey))) return
+
+  const fullConfigKeys = languages.map(l => `${l}.${configKey}`)
+
+  alertWithActions({
+    msg: `Vandelay now supports auto import suggestions as you type. We recommend you turn off VS Code's version of this so that you don't get duplicate suggestions.\n\nFor reference, the VS Code settings are named "${fullConfigKeys.join('" and "')}".`,
+    modal: true,
+    actions: [
+      {
+        title: "Turn it off!",
+        action: () => {
+          for (const c of configs) c.update('suggest.autoImports', false, true)
+        }
+      },
+    ],
+  })
+}
+
+async function finalizeInit(context: ExtensionContext, plugin: PluginJs) {
+  watchForPackageJsonChanges(context, plugin)
+  turnOfDefaultAutoImports(context, plugin)
 }
 
 function mergeExportData(exportData: ExportDataJs) {
@@ -65,7 +90,7 @@ export const jsConfig: PluginConfigJs = {
   multilineImportStyle: 'multiple',
   excludePatterns: [/.*\/node_modules(\/.*)?/],
   extensions: JS_EXTENSIONS,
-  finalizeInit: watchForPackageJsonChanges,
+  finalizeInit,
   finalizeCacheLanguage,
   mergeExportData,
 }
