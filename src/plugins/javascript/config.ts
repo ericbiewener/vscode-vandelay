@@ -1,7 +1,7 @@
 import { Diagnostic, ExtensionContext, workspace } from 'vscode'
 import { alertWithActions } from '../../alertWithActions'
 import { isActivationComplete } from '../../initialization/finalizeExtensionActivation'
-import { cacheNodeModules, findPackageJsonFiles } from './cacheNodeModules'
+import { cacheNodeModules, findPackageJsonFiles } from './cacheNodeModules/cacheNodeModules'
 import { cacheFile, processCachedData } from './cacher'
 import { buildImportItems } from './importing/buildImportItems'
 import { insertImport } from './importing/importer'
@@ -34,7 +34,7 @@ function watchForPackageJsonChanges(context: ExtensionContext, plugin: PluginJs)
 
 function turnOfDefaultAutoImports(context: ExtensionContext, plugin: PluginJs) {
   const languages = ['javascript', 'typescript']
-  const configs = languages.map(l => workspace.getConfiguration(l))
+  const configs = languages.map(l => workspace.getConfiguration(l, null))
   const configKey = 'suggest.autoImports'
   if (!configs.some(c => c.get(configKey))) return
 

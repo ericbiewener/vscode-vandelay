@@ -41,7 +41,7 @@ function openFile(...fileParts) {
 
 async function getExportData() {
   const plugin = await getPlugin()
-  return JSON.parse(fs.readFileSync(plugin.cacheFilepath, 'utf-8'))
+  return JSON.parse(fs.readFileSync(plugin.cacheFilepath, 'utf8'))
 }
 
 function testSpyCall(context, call) {
@@ -54,7 +54,7 @@ async function cacheTest(context, config) {
   const [plugin] = await Promise.all([getPlugin(), openFile()])
   Object.assign(plugin, config)
   await commands.executeCommand('vandelay.cacheProject')
-  const data = JSON.parse(fs.readFileSync(plugin.cacheFilepath, 'utf-8'))
+  const data = JSON.parse(fs.readFileSync(plugin.cacheFilepath, 'utf8'))
   expect(data).toMatchSnapshot(context)
 }
 
@@ -62,12 +62,12 @@ async function cacheDiffTest(context, config) {
   const [plugin] = await Promise.all([getPlugin(), openFile()])
   if (!this.noConfig) {
     await commands.executeCommand('vandelay.cacheProject')
-    this.noConfig = JSON.parse(fs.readFileSync(plugin.cacheFilepath, 'utf-8'))
+    this.noConfig = JSON.parse(fs.readFileSync(plugin.cacheFilepath, 'utf8'))
   }
 
   Object.assign(plugin, config)
   await commands.executeCommand('vandelay.cacheProject')
-  const withConfig = JSON.parse(fs.readFileSync(plugin.cacheFilepath, 'utf-8'))
+  const withConfig = JSON.parse(fs.readFileSync(plugin.cacheFilepath, 'utf8'))
   diff(context, this.noConfig, withConfig)
 }
 

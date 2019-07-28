@@ -1,35 +1,29 @@
 import fs from 'fs-extra'
-import _ from 'lodash'
 import path from 'path'
-import { cacheFileManager } from '../../cacheFileManager'
-import { isFile, writeCacheFile } from '../../utils'
-import { ExportDataJs, ExportDataNodeModulesJs, NodeModuleExports, PluginJs } from './types'
+import { ExportDataNodeModulesJs, NodeModuleExports } from '../types'
+import { Dep } from './cacheNodeModules'
 
-type Dep = Record<string, string>
 type PackageJson = { dependencies?: Dep; devDependencies?: Dep; peerDependencies?: Dep }
 
-export async function cacheNodeModules(plugin: PluginJs) {
+const projectRoot = process.argv[2]
+const packageJsonPaths = JSON.parse(process.argv[3])
+
+async function main() {
   const jsons = []
-  for (const packageJsonPath of findPackageJsonFiles(plugin)) {
+  for (const packageJsonPath of packageJsonPaths) {
     try {
-      jsons.push(JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8')))
+      jsons.push(JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')))
     } catch (e) {
       console.info('Vandelay: Failed to parse package.json file: ${packageJsonPath}')
     }
   }
 
   const data: ExportDataNodeModulesJs = {}
-  await Promise.all(jsons.map(j => cacheDependencies(plugin, j, data)))
-
-  await cacheFileManager(plugin, async cachedData => {
-    const newData = cachedData as ExportDataJs
-    newData.nodeModules = data
-    await writeCacheFile(plugin, newData)
-  })
+  await Promise.all(jsons.map(j => cacheDependencies(j, data)))
+  process.stdout.write(`__vandelay__stdout__${JSON.stringify(data)}__vandelay__stdout__`)
 }
 
 async function cacheDependencies(
-  plugin: PluginJs,
   packageJson: PackageJson,
   data: ExportDataNodeModulesJs
 ) {
@@ -42,24 +36,26 @@ async function cacheDependencies(
   await Promise.all(
     deps.map(async d => {
       if (d.startsWith('@types')) return
-      const fileExports = await cacheDependency(plugin, d)
+      const fileExports = await cacheDependency(d)
       if (fileExports) data[d] = fileExports
     })
   )
 }
 
+
+
 // FIXME: possible to make `plugin` global as well, like context, so that i don't have to pass it
 // around? The difference would be that it gets set at the start of each command, whereas context
 // would never change.
 export async function cacheDependency(
-  plugin: PluginJs,
   dep: string
 ): Promise<NodeModuleExports | undefined> {
-  const dir = path.join(plugin.projectRoot, 'node_modules', dep)
+  const dir = path.join(projectRoot, 'node_modules', dep)
   const packageJsonPath = path.join(dir, 'package.json')
+
   let packageJson
   try {
-    const fileText = await fs.readFile(packageJsonPath, 'utf-8')
+    const fileText = await fs.readFile(packageJsonPath, 'utf8')
     packageJson = JSON.parse(fileText)
   } catch (e) {
     console.info(`Vandelay: Failed to parse dependency package.json file: ${dep}`)
@@ -91,6 +87,7 @@ export async function cacheDependency(
   // letter. For example, ReactDOM exports some stuff with the name `unstable_...`.
   const named = Object.keys(rest).filter(k => !k.includes('_'))
   if (!named.length) return
+  
   return {
     default: defaultExport ? getDefaultName(dep) : null,
     named,
@@ -100,40 +97,24 @@ export async function cacheDependency(
 }
 
 function getDefaultName(dep: string) {
-  const packageName = _.last(dep.split('/')) as string
+  const pathParts = dep.split('/')
+  const packageName = pathParts[pathParts.length -1]
   const parts = packageName.split('-')
   const capitalized = parts
     .slice(1)
-    .map(_.upperFirst)
+    .map(s => `${s[0].toUpperCase()}${s.slice(1)}`)
     .join('')
 
   return `${parts[0]}${capitalized}`
 }
 
-export function findPackageJsonFiles(plugin: PluginJs) {
-  const results = []
-  // First check if subdirectories of root have `package.json` files. If they do, we're looking at a
-  // yarn workspace and we probably want to parse the subdirectory modules rather than those in the
-  // project root.
-  for (const item of fs.readdirSync(plugin.projectRoot)) {
-    if (item === 'node_modules' || item.startsWith('.')) continue
-    const fullPath = path.join(plugin.projectRoot, item)
-    if (isFile(fullPath)) continue
-    
-    const packageJsonPath = getPackageJsonPath(fullPath)
-    if (packageJsonPath) results.push(packageJsonPath)
+function isFile(file: string) {
+  try {
+    return fs.statSync(file).isFile()
+  } catch (e) {
+    if (e.code !== 'ENOENT') throw e // File might exist, but something else went wrong (e.g. permissions error)
+    return false
   }
-
-  // If no results yet, then look in project root.
-  if (!results.length) {
-    const packageJsonPath = getPackageJsonPath(plugin.projectRoot)
-    if (packageJsonPath) results.push(packageJsonPath)
-  }
-
-  return results
 }
 
-function getPackageJsonPath(dir: string) {
-  const packageJsonPath = path.join(dir, 'package.json')
-  return isFile(packageJsonPath) ? packageJsonPath : null
-}
+main()

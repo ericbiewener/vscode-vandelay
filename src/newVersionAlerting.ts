@@ -30,7 +30,7 @@ export async function alertNewVersion(context: ExtensionContext) {
 
   const isMajor = newSemver[0] > oldSemver[0]
 
-  const config = workspace.getConfiguration('vandelay')
+  const config = workspace.getConfiguration('vandelay', null)
   if (!isMajor && !config.showNewVersionAlert) return
 
   alertWithActions({

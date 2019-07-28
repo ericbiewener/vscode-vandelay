@@ -2,6 +2,7 @@ import path from 'path'
 import { commands, ExtensionContext, window, workspace } from 'vscode'
 import _ from 'lodash'
 import { cacheProjectLanguage } from './cacher'
+import * as globals from './globals'
 import { catchError } from './initialization/catchError'
 import { finalizeExtensionActivation } from './initialization/finalizeExtensionActivation'
 import { initProject } from './initialization/initProject'
@@ -12,6 +13,8 @@ import { Language } from './types'
 import { findVandelayConfigDir, showProjectExportsCachedMessage } from './utils'
 
 export const activate = async function activate(context: ExtensionContext) {
+  console.log("context initializing")
+  globals.context(context)
   alertNewVersion(context)
 
   // We need these commands active regardless of whether any plugins exist

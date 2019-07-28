@@ -19,7 +19,7 @@ export async function selectImport(word?: string | undefined | null) {
     if (word) items = items.filter((item: RichQuickPickItem) => item.label === word)
 
     const item =
-      !word || items.length > 1 || !workspace.getConfiguration('vandelay').autoImportSingleResult
+      !word || items.length > 1 || !workspace.getConfiguration('vandelay', null).autoImportSingleResult
         ? await window.showQuickPick(items, { matchOnDescription: true })
         : items[0]
 
