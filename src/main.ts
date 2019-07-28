@@ -13,7 +13,6 @@ import { Language } from './types'
 import { findVandelayConfigDir, showProjectExportsCachedMessage } from './utils'
 
 export const activate = async function activate(context: ExtensionContext) {
-  console.log("context initializing")
   globals.context(context)
   alertNewVersion(context)
 

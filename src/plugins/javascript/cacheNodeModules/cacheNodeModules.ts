@@ -13,8 +13,6 @@ export async function cacheNodeModules(plugin: PluginJs) {
   const packageJsonPaths = findPackageJsonFiles(plugin)
   if (!packageJsonPaths.length) return
 
-  
-
   const cacheScript = path.join(context().extensionPath, 'dist', 'cacheNodeModulesSandbox.js')
   const { error, stdout } = spawnSync('node', [cacheScript, plugin.projectRoot, JSON.stringify(packageJsonPaths)]);
   if (error) throw error
