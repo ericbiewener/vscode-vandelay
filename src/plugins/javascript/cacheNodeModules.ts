@@ -20,7 +20,6 @@ export async function cacheNodeModules(plugin: PluginJs) {
 
   const data: ExportDataNodeModulesJs = {}
   await Promise.all(jsons.map(j => cacheDependencies(plugin, j, data)))
-  console.log('DONE CACHING DEPENDENCY')
 
   await cacheFileManager(plugin, async cachedData => {
     const newData = cachedData as ExportDataJs
@@ -56,7 +55,6 @@ export async function cacheDependency(
   plugin: PluginJs,
   dep: string
 ): Promise<NodeModuleExports | undefined> {
-  console.log('CACHING DEPENDENCY')
   const dir = path.join(plugin.projectRoot, 'node_modules', dep)
   const packageJsonPath = path.join(dir, 'package.json')
   let packageJson
@@ -121,19 +119,21 @@ export function findPackageJsonFiles(plugin: PluginJs) {
     if (item === 'node_modules' || item.startsWith('.')) continue
     const fullPath = path.join(plugin.projectRoot, item)
     if (isFile(fullPath)) continue
+    
+    const packageJsonPath = getPackageJsonPath(fullPath)
+    if (packageJsonPath) results.push(packageJsonPath)
+  }
 
-        t packageJsonPath = getPackageJsonPath(fullPath)
-        packageJsonPath) results.push(packageJsonPath)
+  // If no results yet, then look in project root.
+  if (!results.length) {
+    const packageJsonPath = getPackageJsonPath(plugin.projectRoot)
+    if (packageJsonPath) results.push(packageJsonPath)
   }
-   // If no results yet, then look in project root.
-  if  !results.length) {
-        t packageJsonPath = getPackageJsonPath(plugin.projectRoot)
-        packageJsonPath) results.push(packageJsonPath)
-  }
-   re  rn results
+
+  return results
 }
 
 function getPackageJsonPath(dir: string) {
-  co  t packageJsonPath = path.join(dir, 'package.json')
-  re  rn isFile(packageJsonPath) ? packageJsonPath : null
+  const packageJsonPath = path.join(dir, 'package.json')
+  return isFile(packageJsonPath) ? packageJsonPath : null
 }

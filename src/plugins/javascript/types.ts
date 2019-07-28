@@ -1,11 +1,7 @@
-import {
-  DefaultPluginConfig,
-  Plugin,
-  PluginConfig,
-  RichQuickPickItem,
-  RuntimePlug  Config,
-  U serConfig,
-} from '../// TODO: uppercase
+import { DefaultPluginConfig, Plugin, PluginConfig, RichQuickPickItem, RuntimePluginConfig,
+  UserConfig } from '../../types'
+
+// TODO: uppercase
 export enum ExportType {
   default = 0,
   named = 1,
@@ -15,7 +11,10 @@ export enum ExportType {
 export type RichQuickPickItemJs = RichQuickPickItem & {
   absImportPath: string
   exportType: ExportType
-  description: str/**
+  description: string
+}
+
+/**
  * Cached Data Structurs
  */
 
@@ -74,7 +73,10 @@ export type ExportDataJs = {
 export type CachingDataJs = {
   exp: NonFinalExportDataJs
   imp: ExportDataNodeModulesJs
-  nodeModules: ExportDataNodeModule/**
+  nodeModules: ExportDataNodeModulesJs
+}
+
+/**
  * Plugin Config
  */
 

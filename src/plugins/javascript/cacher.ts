@@ -4,145 +4,148 @@ import _ from 'lodash'
 import { basenameNoExt, getFilepathKey, last } from '../../utils'
 import { isPathNodeModule, isIndexFile } from './utils'
 import { parseImports, exportRegex } from './regex'
-import {
-  CachingDataJs,
-  NonFinalExportDataJs,
-  NonFinalExportDatumJs,
-  PluginJs,
-  Reexport,sToProcess,
+import { CachingDataJs, NonFinalExportDataJs, NonFinalExportDatumJs, PluginJs, ReexportsToProcess
 } from './types'
 
-export function cacheFile(plugin: PluginJs, filepath: string, data: Cachin  ataJs)  {
-  const { imp, ex  } = data
-  const reexportsToProcess: ReexportsToP    ss = {
-    fullMo    s: [],
-    sele  iv   {},
+// TODO: Break this function up
+export function cacheFile(plugin: PluginJs, filepath: string, data: CachingDataJs) {
+  const { imp, exp } = data
+  const reexportsToProcess: ReexportsToProcess = {
+    fullModules: [],
+    selective: {},
   }
-  const fileExports: NonFinalExportD    Js = {
-        d: [],
-        s: [],
-    reexports  Pr  ess,
+  const fileExports: NonFinalExportDatumJs = {
+    named: [],
+    types: [],
+    reexportsToProcess,
   }
-  const fileText = fs.readFileSync(filepat   'utf8')
-  const fileImports = parseImports(plugin,   leText)
+  const fileText = fs.readFileSync(filepath, 'utf8')
+  const fileImports = parseImports(plugin, fileText)
 
-  for (const importData of file    rts) {
-    if (isPathNodeModule(plugin, importDat      )) {
-      const existing = imp[importData.p      | {}
-      imp[importData.path]       ting
-      if (importData.default) existing.default = importDa      ault
-      existing.named = _.union(existing.named, importD      med)
-      existing.types = _.union(existing.types, importD      pes)
-      existing.isExtraImp    = true
-    } else if (importData.default && importData.default.startsWith(      // import * as Foo from...
-      const pathKey = getFi        y(
-             n,
-        path.resolve(path.dirname(filepath), `${importData.path}.js`) // Just guess at the file extension. Doesn't actually matter if i      gh         )
-      const existing = exp[path      | {}
-      if (existing.default) continue // don't overwrite default if it alre      ists
-      exp[pathKey]       ting
-      existing.default = importDa    ef  lt
+  for (const importData of fileImports) {
+    if (isPathNodeModule(plugin, importData.path)) {
+      const existing = imp[importData.path] || {}
+      imp[importData.path] = existing
+      if (importData.default) existing.default = importData.default
+      existing.named = _.union(existing.named, importData.named)
+      existing.types = _.union(existing.types, importData.types)
+      existing.isExtraImport = true
+    } else if (importData.default && importData.default.startsWith('* as')) {
+      // import * as Foo from...
+      const pathKey = getFilepathKey(
+        plugin,
+        path.resolve(path.dirname(filepath), `${importData.path}.js`) // Just guess at the file extension. Doesn't actually matter if it's right.
+      )
+      const existing = exp[pathKey] || {}
+      if (existing.default) continue // don't overwrite default if it already exists
+      exp[pathKey] = existing
+      existing.default = importData.default
     }
   }
 
-   et match
-  let  ainRegex
-  let isT  escript
+  let match
+  let mainRegex
+  let isTypescript
 
-  if (plugin    ES5) {
-    mainRegex = exportRegex.mod  eExports
-    else {
-    isTypescript = plugin.typescript || ['.ts', '.tsx'].includes(path.extname(    path))
-    mainRegex = isTypescript ? exportRegex.standardTypescript : exportRege  sta  ard
+  if (plugin.useES5) {
+    mainRegex = exportRegex.moduleExports
+  } else {
+    isTypescript = plugin.typescript || ['.ts', '.tsx'].includes(path.extname(filepath))
+    mainRegex = isTypescript ? exportRegex.standardTypescript : exportRegex.standard
   }
 
-  while ((match = mainRegex.exec(fil    t))) {
-    if (match[1] === 'default' || (plugin.useES5 && ma      )) {
-      fileExports.default = isIndexFile        h)
-        ? basenameNoExt(path.dirname(        ))
-        : basenameNoExt    epath)
+  while ((match = mainRegex.exec(fileText))) {
+    if (match[1] === 'default' || (plugin.useES5 && match[1])) {
+      fileExports.default = isIndexFile(filepath)
+        ? basenameNoExt(path.dirname(filepath))
+        : basenameNoExt(filepath)
     } else if (!plugin.useES5 && !match[2] && !match[1].endsWith(',')) {
       // endsWith(',') — it's actually a reexport
-      // export myVar  |  export myVa       ...
-      fileExports.named.push    ch[1])
+      // export myVar  |  export myVar from ...
+      fileExports.named.push(match[1])
     } else if (plugin.useES5 && match[2]) {
       // If any array or object exports were defined inline, strip those out so that our comm-based
-      // string splitting will correctly split after e      port
-      const text         2]
-        .replace(/\[[^]*?        ')
-        .replace(/{[^]*        ')
-        .replace(       '')
-      fileExports.n        h(
-               
-          .          
-          .filte          
-          .map(exp => exp.spli      [0         )
+      // string splitting will correctly split after each export
+      const text = match[2]
+        .replace(/\[[^]*?\]/gm, '')
+        .replace(/{[^]*?}/gm, '')
+        .replace(/\s/g, '')
+      fileExports.named.push(
+        ...text
+          .split(',')
+          .filter(Boolean)
+          .map(exp => exp.split(':')[0])
+      )
     } else if (match[2] && match[2] !== 'from') {
       // from — it's actually a reexport
-      // `export class Foo extends`, `export class Foo i      nts`
-      if (match[3] && match[3] !== 'extends' && match[3] !== 'impl         {
-        if (!isTypescript        ue
-        const exportType         2]
+      // `export class Foo extends`, `export class Foo implements`
+      if (match[3] && match[3] !== 'extends' && match[3] !== 'implements') {
+        if (!isTypescript) continue
+        const exportType = match[2]
         const exportName = match[3]
-        // `const enum Foo`, `export declare function declare_function(        )`
-        if (exportName && ['enum', 'function'].includes(expo          
-          fileExports.named.push        ])         }
-             {
-        const key = match[1] === 'type' && !isTypescript ? 'types'        d'
-        fileExports[key] = fileExports[        []
-        fileExports[key].push      [2         }
+        // `const enum Foo`, `export declare function declare_function(arg: any)`
+        if (exportName && ['enum', 'function'].includes(exportType)) {
+          fileExports.named.push(match[3])
+        }
+      } else {
+        const key = match[1] === 'type' && !isTypescript ? 'types' : 'named'
+        fileExports[key] = fileExports[key] || []
+        fileExports[key].push(match[2])
+      }
     }
   }
 
-  if (!plugin    ES5) {
-    const { fullModules,  selective } = reexport    rocess
+  if (!plugin.useES5) {
+    const { fullModules, selective } = reexportsToProcess
     while ((match = exportRegex.fullRexport.exec(fileText))) fullModules.push(match[1])
 
     // match[1] = default
     // match[2] = export names
-    // match    = path
-    while ((match = exportRegex.selectiveRexport.exec(fil      )) {
-      const subPath       h[3]
-      if (!selective[subPath]) selective[sub      = []
-      const reexports = selective      th]
+    // match[3] = path
+    while ((match = exportRegex.selectiveRexport.exec(fileText))) {
+      const subPath = match[3]
+      if (!selective[subPath]) selective[subPath] = []
+      const reexports = selective[subPath]
 
-      if (m         {
-        fileExports.named = fileExports.n        []
+      if (match[1]) {
+        fileExports.named = fileExports.named || []
         fileExports.named.push(match[1])
         // 'default' string used so that `buildImportItems` can suppress the subfile's default
         // export regardless of how the reexport location has named the variable
         // (https://goo.gl/SeH6MV). `match[1]` needed so that `buildImportItems` can suppress it when
-        // importing from an adjacent/subfile (https://goo.        g)
-        reexports.push('default',      [1]        }
+        // importing from an adjacent/subfile (https://goo.gl/Ayk5Cg)
+        reexports.push('default', match[1])
+      }
 
-      for (const exp of match[2].spl         {
-        const trimmed =         ()
-        if (!trimmed        ue
-        const words = trimmed.s        /)
-        const isType = words[0]         e'
-        const key = isType ? 'types'        d'
-        reexports.push(words[isType        ])
-        fileExports[key] = fileExports[        []
-        const word = l        s)
-        if (word) fileExports[key].      or         }
+      for (const exp of match[2].split(',')) {
+        const trimmed = exp.trim()
+        if (!trimmed) continue
+        const words = trimmed.split(/ +/)
+        const isType = words[0] === 'type'
+        const key = isType ? 'types' : 'named'
+        reexports.push(words[isType ? 1 : 0])
+        fileExports[key] = fileExports[key] || []
+        const word = last(words)
+        if (word) fileExports[key].push(word)
+      }
     }
   }
 
-  if (!_.isEmpty(fileE    ts)) {
-    const pathKey = getFilepathKey(plugin,    epath)
+  if (!_.isEmpty(fileExports)) {
+    const pathKey = getFilepathKey(plugin, filepath)
     const existing = exp[pathKey]
-    // An existing default could be there from an earlier processed "import * as Foo from.." See https://goo    JXXskw
-    if (existing && existing.default && !fileExports.      t) {
-      fileExports.default = existi    ef    
+    // An existing default could be there from an earlier processed "import * as Foo from.." See https://goo.gl/JXXskw
+    if (existing && existing.default && !fileExports.default) {
+      fileExports.default = existing.default
     }
-    fileExports.na    sort()
-    fileExports.ty    sort()
-    exp[pathKey] = f  eEx  rts
+    fileExports.named.sort()
+    fileExports.types.sort()
+    exp[pathKey] = fileExports
   }
 
-  exportRegex.standard.las  ndex = 0
-  exportRegex.fullRexport.las  ndex = 0
-  exportRegex.selectiveRexport.last  dex = 0
+  exportRegex.standard.lastIndex = 0
+  exportRegex.fullRexport.lastIndex = 0
+  exportRegex.selectiveRexport.lastIndex = 0
 
   return data
 }
@@ -157,52 +160,63 @@ export function cacheFile(plugin: PluginJs, filepath: string, data: Cachin  ataJ
  * importing from an adjacent/subfile. While solveable, this is probably an edge case to be ignored
  * (not to mention an undesireable API being created by the developer)
  */
-export function processCachedData(data: Cachin  ataJs)  {
-  c onst { ex  } = data
-  for (const mainFilepath    exp) {
-    const fileExports = exp[mai    epath]
-    if (!fileExports.reexportsToProcess)    tinue
+export function processCachedData(data: CachingDataJs) {
+  const { exp } = data
+  for (const mainFilepath in exp) {
+    const fileExports = exp[mainFilepath]
+    if (!fileExports.reexportsToProcess) continue
 
-    const { fullModules,  selective } = fileExports.reexport    rocess
-    delete fileExports.reexport    rocess
-    const reexportNames: stri     = []
+    const { fullModules, selective } = fileExports.reexportsToProcess
+    delete fileExports.reexportsToProcess
+    const reexportNames: string[] = []
 
-    if (se      e) {
-      for (const subfilePath in se         {
-        const subfileExportNames = selective[su        h]
-        reexportNames.push(...subfileEx        s)
-        const subfileExports = getSubfileExports(mainFilepath, subfile        p)
-        if (subfile          
-          if (!subfileExports.ree                       subfileExports.reex                         reex                         reexportPath: mai                        
-           
-          subfileExports.reexported.reexports.push(...subfileEx        s)                       }
-
-    if (full      s) {
-      for (const subfilePath of full         {
-        const subfileExports = getSubfileExports(mainFilepath, subfile        p)
-        if (!subfileExports || !subfileExports.nam        rn
-        if (fileExport          
-          fileExports.named.push(...subfileExpo        d)
-                
-          fileExports.named = subfileExp        ed         }
-        reexportNames.push(...subfileExports.named)
-        // flag names in original expor        on
-        subfileExports.reex          
-          reexports: subfileExpo          
-          reexportPath: mai        h,                 }
+    if (selective) {
+      for (const subfilePath in selective) {
+        const subfileExportNames = selective[subfilePath]
+        reexportNames.push(...subfileExportNames)
+        const subfileExports = getSubfileExports(mainFilepath, subfilePath, exp)
+        if (subfileExports) {
+          if (!subfileExports.reexported) {
+            subfileExports.reexported = {
+              reexports: [],
+              reexportPath: mainFilepath,
+            }
+          }
+          subfileExports.reexported.reexports.push(...subfileExportNames)
+        }
+      }
     }
 
-    // flag names in `ind    s` key
-    if (reexportNames.length) fileExports.reexports = ree  ort  mes
+    if (fullModules) {
+      for (const subfilePath of fullModules) {
+        const subfileExports = getSubfileExports(mainFilepath, subfilePath, exp)
+        if (!subfileExports || !subfileExports.named) return
+        if (fileExports.named) {
+          fileExports.named.push(...subfileExports.named)
+        } else {
+          fileExports.named = subfileExports.named
+        }
+        reexportNames.push(...subfileExports.named)
+        // flag names in original export location
+        subfileExports.reexported = {
+          reexports: subfileExports.named,
+          reexportPath: mainFilepath,
+        }
+      }
+    }
+
+    // flag names in `index.js` key
+    if (reexportNames.length) fileExports.reexports = reexportNames
   }
 
   return data
 }
 
-function getSubfileExports(mainFilepath: string, filename: string, exp: NonFinalExpor  ataJs) {
-  const filepathWithoutExt = path.join(path.dirname(mainFilepath),  ilename)
-  for (const ext of ['.js',     x']) {
-    const subfileExports = exp[filepathWithout    + ext]
-    if (subfileExports) return subf  eExports
+function getSubfileExports(mainFilepath: string, filename: string, exp: NonFinalExportDataJs) {
+  const filepathWithoutExt = path.join(path.dirname(mainFilepath), filename)
+  for (const ext of ['.js', '.jsx']) {
+    const subfileExports = exp[filepathWithoutExt + ext]
+    if (subfileExports) return subfileExports
   }
 }
+

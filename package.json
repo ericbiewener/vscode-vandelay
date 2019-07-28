@@ -97,6 +97,7 @@
     "tw": "tsc -w --noEmit",
     "postinstall": "node ./node_modules/vscode/bin/install; cd ./tests/js/single-root && yarn install; cd ../es5 && yarn install; cd ../../../",
     "prettier": "prettier-eslint --write \"**/*.{ts,js}\"",
+    "p": "prettier-eslint --write",
     "lint": "eslint \"**/*.{ts,js}\"",
     "package": "vsce package --yarn",
     "ext": "rm -rf ~/.vscode/extensions/edb.vandelay-[0-9]* && rm -f *.vsix && yarn run package && code --install-extension *.vsix",

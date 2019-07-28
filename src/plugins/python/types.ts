@@ -1,11 +1,7 @@
-import {
-  DefaultPluginConfig,
-  Plugin,
-  PluginConfig,
-  RichQuickPickItem,
-  RuntimePlug  Config,
-  U serConfig,
-} from '../../t/**
+import { DefaultPluginConfig, Plugin, PluginConfig, RichQuickPickItem, RuntimePluginConfig,
+  UserConfig } from '../../types'
+
+/**
  * Cached Data Structures
  */
 
@@ -42,6 +38,9 @@ export type CachingDataPy = {
   exp: ExportDataExportsPy
   imp: {
     [path: string]: FileExportsPy & { isExtraImport?: true }
+  }
+}
+
 /**
  * Plugin Config
  */
