@@ -138,8 +138,8 @@ exports[`Import Tests | import - comment with code right after 1`] = `
 
 @@ --- --- @@
 + // I'm a comment
+  const chalk = require('chalk')
   const defaultModule1 = require('module1')
-  const defaultModule_file2 = require('module1_file2')
 @@ --- --- @@
   const file3 = require('./file3')
   const { src1_subdir_file1_1 } = require('./subdir/file1')
@@ -155,8 +155,8 @@ exports[`Import Tests | import - comment with linebreak and code 1`] = `
 
 @@ --- --- @@
 + // I'm a comment
+  const chalk = require('chalk')
   const defaultModule1 = require('module1')
-  const defaultModule_file2 = require('module1_file2')
 @@ --- --- @@
   const file3 = require('./file3')
   const { src1_subdir_file1_1 } = require('./subdir/file1')
@@ -166,7 +166,8 @@ exports[`Import Tests | import - comment with linebreak and code 1`] = `
 `;
 
 exports[`Import Tests | import - empty - original order 1`] = `
-"const defaultModule1 = require('module1')
+"const chalk = require('chalk')
+const defaultModule1 = require('module1')
 const defaultModule_file2 = require('module1_file2')
 const { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } = require('module2')
 const { src2_file1_1 } = require('../src2/file1')
@@ -191,6 +192,7 @@ exports[`Import Tests | import - has code 1`] = `
 
 exports[`Import Tests | import - importGroups 1`] = `
 "const { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } = require('module2')
+const chalk = require('chalk')
 const defaultModule1 = require('module1')
 const defaultModule_file2 = require('module1_file2')
 const { src2_file1_1 } = require('../src2/file1')
@@ -202,7 +204,8 @@ const { src1_subdir_file1_1 } = require('./subdir/file1')
 `;
 
 exports[`Import Tests | import - maxImportLineLength 1`] = `
-"const defaultModule1 = require('module1')
+"const chalk = require('chalk')
+const defaultModule1 = require('module1')
 const defaultModule_file2 = require('module1_file2')
 const { module2_1, module2_2, module2_3,
   module2_src2_1, type module2_t_1
@@ -229,12 +232,13 @@ exports[`Import Tests | import - multiline comment 1`] = `
 + I'm a comment
 + With multiple lines
 + */
-  const defaultModule1 = require('module1')
-  const defaultModule_file2 = require('module1_file2')"
+  const chalk = require('chalk')
+  const defaultModule1 = require('module1')"
 `;
 
 exports[`Import Tests | import - multilineImportStyle = single 1`] = `
-"const defaultModule1 = require('module1')
+"const chalk = require('chalk')
+const defaultModule1 = require('module1')
 const defaultModule_file2 = require('module1_file2')
 const { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } = require('module2')
 const { src2_file1_1 } = require('../src2/file1')
@@ -253,7 +257,8 @@ const { src1_subdir_file1_1 } = require('./subdir/file1')
 `;
 
 exports[`Import Tests | import - nonModulePaths 1`] = `
-"const defaultModule1 = require('module1')
+"const chalk = require('chalk')
+const defaultModule1 = require('module1')
 const defaultModule_file2 = require('module1_file2')
 const { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } = require('module2')
 const { src1_file2_1, src1_file2_2, src1_file2_3, src1_file2_4, src1_file2_5, src1_file2_t_1,
@@ -265,7 +270,8 @@ const { src1_subdir_file1_1 } = require('./subdir/file1')
 `;
 
 exports[`Import Tests | import - padCurlyBraces = false 1`] = `
-"const defaultModule1 = require('module1')
+"const chalk = require('chalk')
+const defaultModule1 = require('module1')
 const defaultModule_file2 = require('module1_file2')
 const {module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1} = require('module2')
 const {src2_file1_1} = require('../src2/file1')
@@ -276,8 +282,19 @@ const {src1_subdir_file1_1} = require('./subdir/file1')
 "
 `;
 
+exports[`Import Tests | import - processImportName - default import 1`] = `
+"Snapshot Diff:
+  Comparing two different types of values. Expected object but received string."
+`;
+
+exports[`Import Tests | import - processImportName - named import 1`] = `
+"Snapshot Diff:
+  Comparing two different types of values. Expected object but received string."
+`;
+
 exports[`Import Tests | import - processImportPath 1`] = `
-"const defaultModule1 = require('module1')
+"const chalk = require('chalk')
+const defaultModule1 = require('module1')
 const defaultModule_file2 = require('module1_file2')
 const { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } = require('module2')
 const { src2_file1_1 } = require('../src2/FILE1')
@@ -317,12 +334,13 @@ exports[`Import Tests | import - single line comment 1`] = `
 
 @@ --- --- @@
 + // I'm a comment
-  const defaultModule1 = require('module1')
-  const defaultModule_file2 = require('module1_file2')"
+  const chalk = require('chalk')
+  const defaultModule1 = require('module1')"
 `;
 
 exports[`Import Tests | import - src1/file1.js - preserve file - original order 1`] = `
-"const defaultModule1 = require('module1')
+"const chalk = require('chalk')
+const defaultModule1 = require('module1')
 const defaultModule_file2 = require('module1_file2')
 const { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
 } = require('module2')
@@ -359,7 +377,8 @@ module.exports = {
 `;
 
 exports[`Import Tests | import - src1/subdir/file1.js - original order 1`] = `
-"const defaultModule1 = require('module1')
+"const chalk = require('chalk')
+const defaultModule1 = require('module1')
 const defaultModule_file2 = require('module1_file2')
 const { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } = require('module2')
 const { src2_file1_1 } = require('../../src2/file1')
@@ -372,7 +391,8 @@ const file3 = require('../file3')
 `;
 
 exports[`Import Tests | import - src2/file1.js - original order 1`] = `
-"const defaultModule1 = require('module1')
+"const chalk = require('chalk')
+const defaultModule1 = require('module1')
 const defaultModule_file2 = require('module1_file2')
 const { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } = require('module2')
 const { src1_file1_1, src1_file1_2, src1_file1_3, src1_file1_4, src1_file1_5, src1_file1_other1,
@@ -385,7 +405,8 @@ const { src1_subdir_file1_1 } = require('../src1/subdir/file1')
 `;
 
 exports[`Import Tests | import - trailingComma = false 1`] = `
-"const defaultModule1 = require('module1')
+"const chalk = require('chalk')
+const defaultModule1 = require('module1')
 const defaultModule_file2 = require('module1_file2')
 const { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } = require('module2')
 const { src2_file1_1 } = require('../src2/file1')
@@ -404,7 +425,8 @@ const { src1_subdir_file1_1 } = require('./subdir/file1')
 `;
 
 exports[`Import Tests | import - useSemicolons = false 1`] = `
-"const defaultModule1 = require('module1')
+"const chalk = require('chalk')
+const defaultModule1 = require('module1')
 const defaultModule_file2 = require('module1_file2')
 const { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } = require('module2')
 const { src2_file1_1 } = require('../src2/file1')
@@ -416,7 +438,8 @@ const { src1_subdir_file1_1 } = require('./subdir/file1')
 `;
 
 exports[`Import Tests | import - useSingleQuotes = false 1`] = `
-"const defaultModule1 = require(\\"module1\\")
+"const chalk = require(\\"chalk\\")
+const defaultModule1 = require(\\"module1\\")
 const defaultModule_file2 = require(\\"module1_file2\\")
 const { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } = require(\\"module2\\")
 const { src2_file1_1 } = require(\\"../src2/file1\\")

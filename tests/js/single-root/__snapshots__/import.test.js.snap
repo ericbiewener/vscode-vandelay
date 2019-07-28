@@ -600,8 +600,8 @@ exports[`Import Tests | import - comment with code right after 1`] = `
 
 @@ --- --- @@
 + // I'm a comment
+  import chalk from 'chalk';
   import defaultModule1 from 'module1';
-  import defaultModule_file2 from 'module1_file2';
 @@ --- --- @@
     type src1_file7_t_1, type src1_file7_t_2 } from './file7';
   import { src1_subdir_file1_1 } from './subdir/file1';
@@ -617,8 +617,8 @@ exports[`Import Tests | import - comment with linebreak and code 1`] = `
 
 @@ --- --- @@
 + // I'm a comment
+  import chalk from 'chalk';
   import defaultModule1 from 'module1';
-  import defaultModule_file2 from 'module1_file2';
 @@ --- --- @@
     type src1_file7_t_1, type src1_file7_t_2 } from './file7';
   import { src1_subdir_file1_1 } from './subdir/file1';
@@ -673,6 +673,7 @@ exports[`Import Tests | import - has code 1`] = `
 exports[`Import Tests | import - importGroups 1`] = `
 "import defaultModule4, { module4_1, module4_2, module4_3 } from 'module4';
 import { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } from 'module2';
+import chalk from 'chalk';
 import defaultModule1 from 'module1';
 import defaultModule_file2 from 'module1_file2';
 import defaultModule3, { module3_1, module3_2, module3_3, type module3_typeInside,
@@ -701,7 +702,8 @@ import { src1_subdir_file1_1 } from './subdir/file1';
 `;
 
 exports[`Import Tests | import - maxImportLineLength 1`] = `
-"import defaultModule1 from 'module1';
+"import chalk from 'chalk';
+import defaultModule1 from 'module1';
 import defaultModule_file2 from 'module1_file2';
 import { module2_1, module2_2, module2_3,
   module2_src2_1, type module2_t_1
@@ -764,12 +766,13 @@ exports[`Import Tests | import - multiline comment 1`] = `
 + I'm a comment
 + With multiple lines
 + */
-  import defaultModule1 from 'module1';
-  import defaultModule_file2 from 'module1_file2';"
+  import chalk from 'chalk';
+  import defaultModule1 from 'module1';"
 `;
 
 exports[`Import Tests | import - multilineImportStyle = single 1`] = `
-"import defaultModule1 from 'module1';
+"import chalk from 'chalk';
+import defaultModule1 from 'module1';
 import defaultModule_file2 from 'module1_file2';
 import { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } from 'module2';
 import defaultModule3, {
@@ -852,7 +855,8 @@ import { src1_subdir_file1_1 } from './subdir/file1';
 `;
 
 exports[`Import Tests | import - nonModulePaths 1`] = `
-"import defaultModule1 from 'module1';
+"import chalk from 'chalk';
+import defaultModule1 from 'module1';
 import defaultModule_file2 from 'module1_file2';
 import { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } from 'module2';
 import defaultModule3, { module3_1, module3_2, module3_3, type module3_typeInside,
@@ -882,7 +886,8 @@ import { src1_subdir_file1_1 } from './subdir/file1';
 `;
 
 exports[`Import Tests | import - padCurlyBraces = false 1`] = `
-"import defaultModule1 from 'module1';
+"import chalk from 'chalk';
+import defaultModule1 from 'module1';
 import defaultModule_file2 from 'module1_file2';
 import {module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1} from 'module2';
 import defaultModule3, {module3_1, module3_2, module3_3, type module3_typeInside,
@@ -912,7 +917,8 @@ import {src1_subdir_file1_1} from './subdir/file1';
 `;
 
 exports[`Import Tests | import - preferTypeOutside = true 1`] = `
-"import defaultModule1 from 'module1';
+"import chalk from 'chalk';
+import defaultModule1 from 'module1';
 import defaultModule_file2 from 'module1_file2';
 import { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } from 'module2';
 import defaultModule3, { module3_1, module3_2, module3_3, type module3_typeInside,
@@ -952,7 +958,8 @@ exports[`Import Tests | import - processImportName - named import 1`] = `
 `;
 
 exports[`Import Tests | import - processImportPath 1`] = `
-"import defaultModule1 from 'module1';
+"import chalk from 'chalk';
+import defaultModule1 from 'module1';
 import defaultModule_file2 from 'module1_file2';
 import { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } from 'module2';
 import defaultModule3, { module3_1, module3_2, module3_3, type module3_typeInside,
@@ -1011,12 +1018,13 @@ exports[`Import Tests | import - single line comment 1`] = `
 
 @@ --- --- @@
 + // I'm a comment
-  import defaultModule1 from 'module1';
-  import defaultModule_file2 from 'module1_file2';"
+  import chalk from 'chalk';
+  import defaultModule1 from 'module1';"
 `;
 
 exports[`Import Tests | import - src1/file1.js - preserve file - original order 1`] = `
 "import 'noAssignment'
+import chalk from 'chalk';
 import defaultModule1 from 'module1'
 import defaultModule_file2 from 'module1_file2';
 import { module2_1, module2_2 as module2_2_renamed, module2_3, module2_src2_1, type module2_t_1
@@ -1083,7 +1091,8 @@ export default function() {
 `;
 
 exports[`Import Tests | import - src1/subdir/file1.js - original order 1`] = `
-"import defaultModule1 from 'module1';
+"import chalk from 'chalk';
+import defaultModule1 from 'module1';
 import defaultModule_file2 from 'module1_file2';
 import { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } from 'module2';
 import defaultModule3, { module3_1, module3_2, module3_3, type module3_typeInside,
@@ -1114,7 +1123,8 @@ import * as AllFile7Exports, { src1_file7_1, src1_file7_2, src1_file7_3, src1_fi
 `;
 
 exports[`Import Tests | import - src2/file1.js - original order 1`] = `
-"import defaultModule1 from 'module1';
+"import chalk from 'chalk';
+import defaultModule1 from 'module1';
 import defaultModule_file2 from 'module1_file2';
 import { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } from 'module2';
 import defaultModule3, { module3_1, module3_2, module3_3, type module3_typeInside,
@@ -1146,7 +1156,8 @@ import { src3_file1_1 } from '../src3/file1';
 `;
 
 exports[`Import Tests | import - trailingComma = false 1`] = `
-"import defaultModule1 from 'module1';
+"import chalk from 'chalk';
+import defaultModule1 from 'module1';
 import defaultModule_file2 from 'module1_file2';
 import { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } from 'module2';
 import defaultModule3, {
@@ -1229,7 +1240,8 @@ import { src1_subdir_file1_1 } from './subdir/file1';
 `;
 
 exports[`Import Tests | import - useSemicolons = false 1`] = `
-"import defaultModule1 from 'module1'
+"import chalk from 'chalk'
+import defaultModule1 from 'module1'
 import defaultModule_file2 from 'module1_file2'
 import { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } from 'module2'
 import defaultModule3, { module3_1, module3_2, module3_3, type module3_typeInside,
@@ -1259,7 +1271,8 @@ import { src1_subdir_file1_1 } from './subdir/file1'
 `;
 
 exports[`Import Tests | import - useSingleQuotes = false 1`] = `
-"import defaultModule1 from \\"module1\\";
+"import chalk from \\"chalk\\";
+import defaultModule1 from \\"module1\\";
 import defaultModule_file2 from \\"module1_file2\\";
 import { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } from \\"module2\\";
 import defaultModule3, { module3_1, module3_2, module3_3, type module3_typeInside,
