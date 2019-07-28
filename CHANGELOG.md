@@ -6,7 +6,6 @@
 **Breaking Changes**
 - Removed command `Import and Insert at Cursor`. It was just a lazy alternative to providing suggestions as you type.
 
-
 ### Version 3.1.1
 - Parse *.tsx automatically as Typescript.
 

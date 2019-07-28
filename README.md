@@ -78,7 +78,7 @@ Combination of the previous two commands. Imports all undefined variables and re
 
 ## Importing external and environment packages
 **JavaScript**<br>
-Vandelay does its best to parse your `package.json` file (or files, if you're using Yarn workspaces) and gather the available imports from the listed dependencies. Depending on how an NPM package is organized, this sometimes isn't possible. However, Vandelay will track your use of package imports and automatically make those available as well. In other words, after manually writing an import statement for a node module, Vandelay will then pick up on that and make it available for automatic imports in the future.
+Vandelay does its best to parse your `package.json` file (or files, if you're using Yarn workspaces) and gather the available imports from the listed dependencies. Depending on how an NPM package is organized, this sometimes isn't possible. In these cases, however, Vandelay will track your use of package imports and automatically make those available as well. In other words, after manually writing an import statement for a node module, Vandelay will then pick up on that and make it available for automatic imports in the future.
 
 **Python**<br> Vandelay tracks the packages you use. This means you'll need to write the import statement yourself the very first time you use something from an external package, but the plugin will remember after that and make it available for automatic importing.
 
