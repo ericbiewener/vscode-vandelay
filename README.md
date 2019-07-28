@@ -35,7 +35,7 @@ whatever style guide your project requires for how import statements get written
 
 ## Quick Start
 1. Run the `Initialize Project` command.
-2. Profit! Use the `Import` command to start importing all the things.
+2. Profit! Vandelay will suggest imports as you type, or use the `Import` command to start importing all the things.
 
 The above will be enough for most projects to get off the ground. More complex use-cases may need to further customize the configuration file. See [How to Use](#how-to-use).
 
@@ -60,9 +60,6 @@ Generates an import statement for the selected import from your project.
 
 ### Import active word
 A shortcut to automatically import the word under the cursor. If more than one import matching the active word are found, you'll be asked to choose.
-
-### Import and Insert at Cursor...
-Generates an import statement for the selected import from your project. Also inserts the value at the cursor.
 
 ### Import undefined variables
 Vandelay will attempt to find imports for all undefined variables reported by the linter for the

@@ -1,4 +1,11 @@
-### Version 3.2.0
+### Version 4.0.0
+- Import suggestions will now appear as you type!
+- `package.json` parsing for Improved caching of node modules
+- More fixes to command `Remove Unused Imports`.
+
+**Breaking Changes**
+- Removed command `Import and Insert at Cursor`. It was just a lazy alternative to providing suggestions as you type.
+
 
 ### Version 3.1.1
 - Parse *.tsx automatically as Typescript.

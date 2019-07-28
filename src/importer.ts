@@ -5,7 +5,7 @@ import { getPluginForActiveFile } from './utils'
 import { cacheFileManager } from './cacheFileManager'
 import { MergedExportData, RichQuickPickItem } from './types'
 
-export async function selectImport(word?: string | undefined | null, alsoInsertAtCursor?: boolean) {
+export async function selectImport(word?: string | undefined | null) {
   const plugin = getPluginForActiveFile()
   if (!plugin) return
 
@@ -25,20 +25,7 @@ export async function selectImport(word?: string | undefined | null, alsoInsertA
 
     if (!item) return
     await plugin.insertImport(plugin, item)
-    if (alsoInsertAtCursor) await insertImportAtCursor(item)
   })
-}
-
-async function insertImportAtCursor(item: RichQuickPickItem) {
-  const editor = window.activeTextEditor
-  if (!editor) return
-
-  await editor.edit(builder => {
-    const { selection } = editor
-    builder.replace(new Range(selection.start, selection.end), item.label)
-  })
-
-  editor.selection = new Selection(editor.selection.end, editor.selection.end)
 }
 
 export async function selectImportForActiveWord() {
