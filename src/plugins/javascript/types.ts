@@ -1,10 +1,5 @@
-import {
-  UserConfig,
-  PluginConfig,
-  DefaultPluginConfig,
-  RuntimePluginConfig,
-  RichQuickPickItem,
-} from '../../types'
+import { DefaultPluginConfig, Plugin, PluginConfig, RichQuickPickItem, RuntimePluginConfig,
+  UserConfig } from '../../types'
 
 // TODO: uppercase
 export enum ExportType {
@@ -28,6 +23,8 @@ export type FileExportsJs = {
   named: string[]
   types: string[]
 }
+
+export type NodeModuleExports = FileExportsJs & { isExtraImport: true }
 
 export type ExportDatumJs = FileExportsJs & {
   cached?: number
@@ -54,9 +51,6 @@ export type NonFinalExportDataJs = {
   [path: string]: NonFinalExportDatumJs
 }
 
-export type ExportDataImportsJs = {
-  [path: string]: FileExportsJs
-}
 export type ExportDataExportsJs = {
   [path: string]: ExportDatumJs
 }
@@ -64,37 +58,35 @@ export type MergedExportDataJs = {
   [path: string]: ExportDatumJs & { isExtraImport?: true }
 }
 
+export type ExportDataNodeModulesJs = {
+  [path: string]: NodeModuleExports
+}
+
 export type ExportDataJs = {
-  imp: ExportDataImportsJs
-  exp: ExportDataExportsJs
+  exp: {
+    [path: string]: FileExportsJs
+  }
+  imp: ExportDataNodeModulesJs
+  nodeModules: ExportDataNodeModulesJs
 }
 
 export type CachingDataJs = {
   exp: NonFinalExportDataJs
-  imp: {
-    [path: string]: FileExportsJs & { isExtraImport?: true }
-  }
+  imp: ExportDataNodeModulesJs
+  nodeModules: ExportDataNodeModulesJs
 }
 
 /**
  * Plugin Config
  */
 
-export type PluginConfigJs = PluginConfig & {
+export type PluginConfigJs = PluginConfig<RichQuickPickItemJs> & {
   language: 'js'
   useSingleQuotes: boolean
   padCurlyBraces: boolean
   useSemicolons: boolean
   trailingComma: boolean
   multilineImportStyle: 'single' | 'multiple'
-  processImportName?(
-    importName: string,
-    importPath: string,
-    absImportPath: string,
-    activeFilepath: string,
-    projectRoot: string,
-    isDefault: boolean
-  ): string | undefined
 }
 
 export type UserConfigJs = UserConfig & {
@@ -107,6 +99,14 @@ export type UserConfigJs = UserConfig & {
   trailingComma?: boolean
   importGroups?: string[]
   typescript?: boolean
+  processImportName?(
+    importName: string,
+    importPath: string,
+    absImportPath: string,
+    activeFilepath: string,
+    projectRoot: string,
+    isDefault: boolean
+  ): string | undefined
 }
 
-export type PluginJs = DefaultPluginConfig & PluginConfigJs & UserConfigJs & RuntimePluginConfig
+export type PluginJs = Plugin<RichQuickPickItemJs> & PluginConfigJs & UserConfigJs

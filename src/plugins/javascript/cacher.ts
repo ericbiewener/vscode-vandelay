@@ -4,13 +4,7 @@ import _ from 'lodash'
 import { basenameNoExt, getFilepathKey, last } from '../../utils'
 import { isPathNodeModule, isIndexFile } from './utils'
 import { parseImports, exportRegex } from './regex'
-import {
-  PluginJs,
-  NonFinalExportDatumJs,
-  CachingDataJs,
-  NonFinalExportDataJs,
-  ReexportsToProcess,
-  ExportType,
+import { CachingDataJs, NonFinalExportDataJs, NonFinalExportDatumJs, PluginJs, ReexportsToProcess
 } from './types'
 
 // TODO: Break this function up
@@ -35,6 +29,7 @@ export function cacheFile(plugin: PluginJs, filepath: string, data: CachingDataJ
       if (importData.default) existing.default = importData.default
       existing.named = _.union(existing.named, importData.named)
       existing.types = _.union(existing.types, importData.types)
+      existing.isExtraImport = true
     } else if (importData.default && importData.default.startsWith('* as')) {
       // import * as Foo from...
       const pathKey = getFilepathKey(
@@ -224,3 +219,4 @@ function getSubfileExports(mainFilepath: string, filename: string, exp: NonFinal
     if (subfileExports) return subfileExports
   }
 }
+

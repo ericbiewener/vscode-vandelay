@@ -35,7 +35,7 @@ whatever style guide your project requires for how import statements get written
 
 ## Quick Start
 1. Run the `Initialize Project` command.
-2. Profit! Use the `Import` command to start importing all the things.
+2. Profit! Vandelay will suggest imports as you type, or use the `Import` command to start importing all the things.
 
 The above will be enough for most projects to get off the ground. More complex use-cases may need to further customize the configuration file. See [How to Use](#how-to-use).
 
@@ -61,9 +61,6 @@ Generates an import statement for the selected import from your project.
 ### Import active word
 A shortcut to automatically import the word under the cursor. If more than one import matching the active word are found, you'll be asked to choose.
 
-### Import and Insert at Cursor...
-Generates an import statement for the selected import from your project. Also inserts the value at the cursor.
-
 ### Import undefined variables
 Vandelay will attempt to find imports for all undefined variables reported by the linter for the
 active file. Like the "Import active word" command, if only a single possible import is found for a
@@ -80,11 +77,10 @@ Vandelay will remove all unused imports reported by the linter. This command req
 Combination of the previous two commands. Imports all undefined variables and removes unused imports.
 
 ## Importing external and environment packages
-Rather than try to actually parse and track all the possible imports in your project's runtime
-environment, `node_modules` folder, or virtualenv,  Vandelay JS simply tracks the ones you use. This
-means you'll need to write the import statement yourself the very first time you use something from
-an external package, but the plugin will remember after that and make it available for automatic
-importing.
+**JavaScript**<br>
+Vandelay does its best to parse your `package.json` file (or files, if you're using Yarn workspaces) and gather the available imports from the listed dependencies. Depending on how an NPM package is organized, this sometimes isn't possible. In these cases, however, Vandelay will track your use of package imports and automatically make those available as well. In other words, after manually writing an import statement for a node module, Vandelay will then pick up on that and make it available for automatic imports in the future.
+
+**Python**<br> Vandelay tracks the packages you use. This means you'll need to write the import statement yourself the very first time you use something from an external package, but the plugin will remember after that and make it available for automatic importing.
 
 ## How to Use
 Vandelay relies on JavaScript configuration files, not simply JSON, so that the plugin can be fully customized to your project's needs. This means the setup is a bit more complex, but the resulting capability is far more powerful.

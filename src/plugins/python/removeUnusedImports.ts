@@ -1,50 +1,72 @@
 import _ from 'lodash'
-import { Uri, window } from 'vscode'
-import { getDiagnosticsForAllEditors, last, removeUnusedImportChanges, strUntil } from '../../utils'
+import { languages, TextDocument, window } from 'vscode'
+import { findImportMatch, removeUnusedImportChanges } from '../../removeUnusedImports'
+import { getDiagnosticsForActiveEditor, last, strUntil } from '../../utils'
 import { parseImports, ParsedImportPy } from './regex'
 import { PluginPy } from './types'
 import { getNewLine } from './importing/getNewLine'
 
-interface Change {
+type Change = {
   imports: string[]
   match: ParsedImportPy
 }
 
 export async function removeUnusedImports(plugin: PluginPy) {
-  const diagnostics = getDiagnosticsForAllEditors(d => d.code === 'F401')
+  const editor = window.activeTextEditor
+  if (!editor) return
 
-  for (const filepath in diagnostics) {
-    const editor = await window.showTextDocument(Uri.file(filepath), {
-      preserveFocus: true,
-      preview: false,
-    })
-    const { document } = editor
-    const fullText = document.getText()
-    const fileImports = parseImports(fullText)
-    const changes: Change[] = []
-    const changesByPath: { [path: string]: Change } = {}
-
-    for (const diagnostic of diagnostics[filepath]) {
-      const offset = document.offsetAt(diagnostic.range.start)
-      const importMatch = fileImports.find(i => i.start <= offset && i.end >= offset)
-      if (!importMatch) return
-
-      const { imports } = changesByPath[importMatch.path] || importMatch
-      // diagnostic.range only points to the start of the line, so we have to parse the import name
-      // from diagnostic.message
-      const lastDotPath = last(diagnostic.message.split('.'))
-      const unusedImport = strUntil(lastDotPath, "'")
-
-      const change = {
-        imports: imports ? imports.filter(n => n !== unusedImport) : [],
-        match: importMatch,
-      }
-      changesByPath[importMatch.path] = change
-      changes.push(change)
-    }
-
-    await removeUnusedImportChanges(plugin, editor, changes, getNewLineFromChange)
+  const { document } = editor
+  if (!document.isDirty) {
+    removeUnusedImportsOnDidChangeDiagnostics(plugin, document)
+    return
   }
+
+  // Must save document and wait for diagnostics to update since they don't update in real time for
+  // Python.
+  const disposable = languages.onDidChangeDiagnostics(() => {
+    // Just in case we somehow get in here before the document finishes saving, bail out.
+    if (document.isDirty) return
+    removeUnusedImportsOnDidChangeDiagnostics(plugin, document)
+  })
+
+  setTimeout(() => disposable.dispose(), 5000)
+  await document.save()
+}
+
+async function removeUnusedImportsOnDidChangeDiagnostics(plugin: PluginPy, document: TextDocument) {
+  const editor = window.activeTextEditor
+  if (!editor || editor.document !== document) return
+
+  const diagnostics = getDiagnosticsForActiveEditor(d => d.code === 'F401')
+
+  const fullText = document.getText()
+  const fileImports = parseImports(fullText)
+  const changes: Change[] = []
+  const changesByMatch: Map<ParsedImportPy, Change> = new Map()
+
+  for (const diagnostic of diagnostics) {
+    const importMatch = findImportMatch(document, diagnostic, fileImports)
+    if (!importMatch) continue
+
+    // diagnostic.range only points to the start of the line, so we have to parse the import name
+    // from diagnostic.message
+    const lastDotPath = last(diagnostic.message.split('.'))
+    const unusedImport = strUntil(lastDotPath, "'")
+
+    const existingChange = changesByMatch.get(importMatch)
+    const currentImports = existingChange ? existingChange.imports : importMatch.imports
+    const imports = currentImports.filter(i => i !== unusedImport)
+
+    if (existingChange) {
+      existingChange.imports = imports
+    } else {
+      const newChange = { imports, match: importMatch }
+      changesByMatch.set(newChange.match, newChange)
+      changes.push(newChange)
+    }
+  }
+
+  await removeUnusedImportChanges(plugin, editor, changes, getNewLineFromChange)
 }
 
 function getNewLineFromChange(plugin: PluginPy, change: Change) {

@@ -36,6 +36,14 @@ Object {
       "types": Array [],
     },
   },
+  "nodeModules": Object {
+    "chalk": Object {
+      "default": "chalk",
+      "isExtraImport": true,
+      "named": Array [],
+      "types": Array [],
+    },
+  },
 }
 `;
 
@@ -112,6 +120,14 @@ Object {
       ],
     },
   },
+  "nodeModules": Object {
+    "chalk": Object {
+      "default": "chalk",
+      "isExtraImport": true,
+      "named": Array [],
+      "types": Array [],
+    },
+  },
 }
 `;
 
@@ -165,6 +181,14 @@ Object {
   "imp": Object {
     "module1_file2": Object {
       "default": "defaultModule_file2",
+      "isExtraImport": true,
+      "named": Array [],
+      "types": Array [],
+    },
+  },
+  "nodeModules": Object {
+    "chalk": Object {
+      "default": "chalk",
       "isExtraImport": true,
       "named": Array [],
       "types": Array [],

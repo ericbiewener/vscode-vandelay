@@ -1,13 +1,15 @@
-import path from 'path'
 import { commands, ExtensionContext, workspace } from 'vscode'
 import { cacheProject, watchForChanges } from '../cacher'
 import { importUndefinedVariables, selectImport, selectImportForActiveWord } from '../importer'
 import { initializePlugins } from '../main'
-import { initializePluginForLang } from '../plugins'
 import { removeUnusedImports } from '../removeUnusedImports'
 import { catchError } from './catchError'
 
 let hasFinalized = false
+
+export function isActivationComplete() {
+  return hasFinalized
+}
 
 export function finalizeExtensionActivation(context: ExtensionContext) {
   if (hasFinalized) return
@@ -21,10 +23,6 @@ export function finalizeExtensionActivation(context: ExtensionContext) {
       catchError(() => selectImportForActiveWord())
     ),
     commands.registerCommand(
-      'vandelay.selectImportAndInsertAtCursor',
-      catchError(() => selectImport(null, true))
-    ),
-    commands.registerCommand(
       'vandelay.importUndefinedVariables',
       catchError(() => importUndefinedVariables())
     ),
@@ -35,10 +33,8 @@ export function finalizeExtensionActivation(context: ExtensionContext) {
         await removeUnusedImports()
         await importUndefinedVariables()
       })
-    )
-  )
+    ),
 
-  context.subscriptions.push(
     workspace.onDidChangeConfiguration(e => {
       if (
         e.affectsConfiguration('vandelay.configLocation') ||

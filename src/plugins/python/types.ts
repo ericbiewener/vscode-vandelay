@@ -1,10 +1,5 @@
-import {
-  UserConfig,
-  PluginConfig,
-  DefaultPluginConfig,
-  RuntimePluginConfig,
-  RichQuickPickItem,
-} from '../../types'
+import { DefaultPluginConfig, Plugin, PluginConfig, RichQuickPickItem, RuntimePluginConfig,
+  UserConfig } from '../../types'
 
 /**
  * Cached Data Structures
@@ -50,8 +45,12 @@ export type CachingDataPy = {
  * Plugin Config
  */
 
-export type PluginConfigPy = PluginConfig & {
+export type PluginConfigPy = PluginConfig<RichQuickPickItem> & {
   language: 'py'
+}
+
+export type UserConfigPy = UserConfig & {
+  importGroups?: string[][]
   processImportName?(
     importName: string,
     importPath: string,
@@ -61,8 +60,4 @@ export type PluginConfigPy = PluginConfig & {
   ): string | undefined
 }
 
-export type UserConfigPy = UserConfig & {
-  importGroups?: string[][]
-}
-
-export type PluginPy = DefaultPluginConfig & PluginConfigPy & UserConfigPy & RuntimePluginConfig
+export type PluginPy = Plugin<RichQuickPickItem> & PluginConfigPy & UserConfigPy

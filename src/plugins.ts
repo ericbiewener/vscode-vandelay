@@ -1,21 +1,19 @@
 import fs from 'fs-extra'
 import _ from 'lodash'
-import { ExtensionContext, window, workspace } from 'vscode'
+import { ExtensionContext, languages, window, workspace } from 'vscode'
 import path from 'path'
-import { VANDELAY_CONFIG_DIR } from './constants'
+import { createCompletionItemProvider } from './createCompletionItemProvider'
 import { alertNewVersionConfig } from './newVersionAlerting'
+import { cacheNodeModules } from './plugins/javascript/cacheNodeModules/cacheNodeModules'
 import { pluginConfigs } from './registerPluginConfig'
 import { findVandelayConfigDir, isFile, isObject } from './utils'
-import { DefaultPluginConfig, Language, Plugin, PluginConfig, UserConfig } from './types'
+import { Language, Plugin, PluginConfig, RuntimePluginConfig, UserConfig } from './types'
 import { cacheProjectLanguage } from './cacher'
 
 // & { [key: string]: undefined } is just to quiet unneeded TS errors
 export const PLUGINS: { [key in Language]?: Plugin } & { [key: string]: undefined } = {}
 
-const defaultSettings: DefaultPluginConfig = {
-  maxImportLineLength: 100,
-  excludePatterns: [],
-}
+const HIDDEN_FOLDERS_REGEX = /.*\/\..*/
 
 export async function initializePlugin(context: ExtensionContext, pluginConfig: PluginConfig) {
   const { workspaceFolders } = workspace
@@ -33,25 +31,43 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
   const userConfig = await getUserConfig(configFilepath)
   if (!userConfig) return
 
-  const plugin = Object.assign(defaultSettings, pluginConfig, userConfig, {
+  const runtimeConfig: RuntimePluginConfig = {
     configFile,
     configFilepath,
     cacheDirPath,
     cacheFilepath: path.join(cacheDirPath, 'vandelay-v2-' + language + '.json'),
     projectRoot: userConfig.projectRoot || workspaceFolders[0].uri.fsPath,
-  }) as Plugin
+  }
 
-  plugin.excludePatterns.push(/.*\/\..*/) // exclude all folders starting with dot
+  const plugin = Object.assign(
+    { maxImportLineLength: 100 },
+    pluginConfig,
+    userConfig,
+    runtimeConfig
+  ) as Plugin
+  plugin.excludePatterns.push(HIDDEN_FOLDERS_REGEX)
+
   PLUGINS[language] = plugin
+
+  // CompletionItemProvider
+  const { includePaths, extensions, insertImport } = plugin
+  const pattern = `${maybeCreateGlobOr(includePaths)}/**/*.${maybeCreateGlobOr(extensions)}}`
+  context.subscriptions.push(
+    languages.registerCompletionItemProvider(
+      { pattern, scheme: 'file' },
+      createCompletionItemProvider(plugin, insertImport)
+    )
+  )
 
   alertNewVersionConfig(plugin)
 
   console.info(`Vandelay language registered: ${language}`)
 
-  if (!isFile(plugin.cacheFilepath)) {
-    await cacheProjectLanguage(plugin)
-    return true
-  }
+  const isInitialCache = isFile(plugin.cacheFilepath)
+  await cacheProjectLanguage(plugin)
+  // Don't await this, its completion isn't necessary for the extension to continue initializing
+  if (plugin.finalizeInit) plugin.finalizeInit(context, plugin)
+  return isInitialCache
 }
 
 async function getUserConfig(configFilepath: string) {
@@ -87,4 +103,8 @@ async function getUserConfig(configFilepath: string) {
 export async function initializePluginForLang(context: ExtensionContext, lang: string) {
   const config = pluginConfigs[lang]
   if (config) return initializePlugin(context, config)
+}
+
+function maybeCreateGlobOr(options: string[]) {
+  return options.length > 1 ? `{${options.join(',')}}` : options[0]
 }

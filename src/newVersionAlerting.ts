@@ -30,11 +30,11 @@ export async function alertNewVersion(context: ExtensionContext) {
 
   const isMajor = newSemver[0] > oldSemver[0]
 
-  const config = workspace.getConfiguration('vandelay')
+  const config = workspace.getConfiguration('vandelay', null)
   if (!isMajor && !config.showNewVersionAlert) return
 
   alertWithActions({
-    msg: 'Vandelay has been updated. Check out the new features!',
+    msg: 'Vandelay has been updated. See what has changed.',
     actions: [
       CHANGELOG_BUTTON_CONFIG,
       {

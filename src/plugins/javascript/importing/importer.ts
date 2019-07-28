@@ -13,7 +13,11 @@ import { FileExportsJs, PluginJs, RichQuickPickItemJs, ExportType } from '../typ
 import { getImportPosition, ImportPositionJs } from './getImportPosition'
 import { getNewLine } from './getNewLine'
 
-export async function insertImport(plugin: PluginJs, selection: RichQuickPickItemJs) {
+export function insertImport(
+  plugin: PluginJs,
+  selection: RichQuickPickItemJs,
+  shouldApplyEdit = true
+) {
   const {
     label: exportName,
     description: importPath,
@@ -39,7 +43,7 @@ export async function insertImport(plugin: PluginJs, selection: RichQuickPickIte
   if (!lineImports) return
   const newLine = getNewLine(plugin, finalImportPath, lineImports)
 
-  return insertLine(newLine, importPosition)
+  return insertLine(newLine, importPosition, shouldApplyEdit)
 }
 
 function getFinalImportPath(

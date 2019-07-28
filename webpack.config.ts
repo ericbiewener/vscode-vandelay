@@ -1,16 +1,20 @@
+/* eslint-ignore */
 const path = require('path')
 import { Configuration } from 'webpack'
 
-const SRC = path.resolve(__dirname, 'src')
-const DIST = path.resolve(__dirname, 'dist')
+const SRC = path.join(__dirname, 'src')
+const DIST = path.join(__dirname, 'dist')
 
 const config: Configuration = {
   mode: process.env.NODE_ENV as 'development' | 'production',
   target: 'node',
-  entry: path.join(SRC, 'main.ts'),
+  entry: {
+    extension: path.join(SRC, 'main.ts'),
+    cacheNodeModulesSandbox: path.join(SRC, 'plugins/javascript/cacheNodeModules/cacheNodeModulesSandbox.ts')
+  },
   output: {
     path: DIST,
-    filename: 'extension.js',
+    filename: '[name].js',
     libraryTarget: 'commonjs2',
     devtoolModuleFilenameTemplate: '../[resource-path]',
   },

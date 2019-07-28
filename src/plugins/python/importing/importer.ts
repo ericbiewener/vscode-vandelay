@@ -15,7 +15,11 @@ import { PluginPy } from '../types'
 import { RichQuickPickItem } from '../../../types'
 import { getNewLine } from './getNewLine'
 
-export async function insertImport(plugin: PluginPy, importSelection: RichQuickPickItem) {
+export function insertImport(
+  plugin: PluginPy,
+  importSelection: RichQuickPickItem,
+  shouldApplyEdit = true
+) {
   const { label: exportName, isExtraImport } = importSelection
   const isPackageImport = !importSelection.description
   const importPath = importSelection.description || exportName
@@ -99,7 +103,7 @@ export async function insertImport(plugin: PluginPy, importSelection: RichQuickP
     }
   }
 
-  return insertLine(newLine, importPosition)
+  return insertLine(newLine, importPosition, shouldApplyEdit)
 }
 
 function findImportPathGroup(plugin: PluginPy, importPath: string) {

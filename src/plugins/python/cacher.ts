@@ -14,6 +14,7 @@ export function cacheFile(plugin: PluginPy, filepath: string, data: CachingDataP
     if (isPathPackage(plugin, importData.path)) {
       const existing = imp[importData.path] || {}
       imp[importData.path] = existing
+      existing.isExtraImport = true
       if (importData.isEntirePackage) {
         existing.importEntirePackage = true
       } else {

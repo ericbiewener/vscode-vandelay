@@ -2,7 +2,8 @@
 node_modules
 .vscode-test/
 *.vsix
-TODO.md
 yarn-error.log
 dist/
 .vscode
+archetype-exceptions.log
+archetype-debug.log

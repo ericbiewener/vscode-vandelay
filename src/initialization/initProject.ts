@@ -16,7 +16,10 @@ import { initializePlugin } from '../plugins'
 import { pluginConfigs } from '../registerPluginConfig'
 import { findVandelayConfigDir, showProjectExportsCachedMessage } from '../utils'
 
-type IncludePathQuickPickItem = { label: string; pathStr: string }
+type IncludePathQuickPickItem = {
+  label: string
+  pathStr: string
+}
 
 export async function initProject(context: ExtensionContext) {
   const { workspaceFolders } = workspace
@@ -40,7 +43,7 @@ async function initProjectSingleRoot(
   const selection = await getLanguageSelection()
   if (!selection) return
 
-  const { language, configFile } = selection
+  const { configFile } = selection
   const configFilepath = path.join(workspaceFolders[0].uri.fsPath, configFile)
 
   const openPromise = openExistingConfigFile(configFilepath)
@@ -59,6 +62,7 @@ async function initProjectSingleRoot(
   await createAndOpenFile(context, configFilepath, text, !!includePaths.length)
 }
 
+// FIXME: make context a globally importable constant, stop passing it around
 async function initProjectMultiRoot(
   context: ExtensionContext,
   workspaceFolders: WorkspaceFolder[]
@@ -141,7 +145,8 @@ function buildIncludePathText(includePaths: IncludePathQuickPickItem[]) {
 }
 
 function buildText(text: string, includePathText: string) {
-  return `${text}/**
+  return `/* eslint-disable */
+${text}/**
  * Configuration file for VS Code Vandelay extension.
  * https://github.com/ericbiewener/vscode-vandelay#configuration
  */
