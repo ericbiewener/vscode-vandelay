@@ -24,5 +24,5 @@ export const pyConfig: PluginConfigPy = {
   removeUnusedImports,
   shouldIncludeDisgnostic,
   extensions: ['py'],
-  mergeExportData
+  mergeExportData,,
 }

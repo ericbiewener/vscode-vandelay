@@ -131,9 +131,9 @@ export function getLastInitialComment(text: string, commentRegex: RegExp) {
 
   return lastMatch
     ? {
-        start: lastMatch.index,
-        end: lastMatch.index + lastMatch[0].length,
-      }
+      start: lastMatch.index,
+      end: lastMatch.index + lastMatch[0].length,
+    }
     : null
 }
 

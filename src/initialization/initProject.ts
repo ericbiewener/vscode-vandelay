@@ -145,7 +145,8 @@ function buildIncludePathText(includePaths: IncludePathQuickPickItem[]) {
 }
 
 function buildText(text: string, includePathText: string) {
-  return `${text}/**
+  return `/* eslint-disable */
+${text}/**
  * Configuration file for VS Code Vandelay extension.
  * https://github.com/ericbiewener/vscode-vandelay#configuration
  */

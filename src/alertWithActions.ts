@@ -21,8 +21,8 @@ export async function alertWithActions({ alertType, msg, actions, modal }: Alert
     alertType === AlertTypes.ERROR
       ? 'showErrorMessage'
       : alertType === AlertTypes.WARNING
-      ? 'showWarningMessage'
-      : 'showInformationMessage'
+        ? 'showWarningMessage'
+        : 'showInformationMessage'
 
   const btn = await window[fn](msg, { modal }, ...actions)
 

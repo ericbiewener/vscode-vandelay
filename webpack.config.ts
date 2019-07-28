@@ -1,3 +1,4 @@
+/* eslint-ignore */
 const path = require('path')
 import { Configuration } from 'webpack'
 

@@ -48,24 +48,14 @@ export async function alertNewVersion(context: ExtensionContext) {
 export async function alertNewVersionConfig(plugin: Plugin) {
   if (plugin.hasOwnProperty('processDefaultName')) {
     alertWithActions({
-      msg: `The Vandelay configuration option \`processDefaultName\` has been removed.\n\nPlease use the new \`processImportName\` option instead in your vandelay-${
-        plugin.language
-      }.js file.`,
-      modal: true,
-      actions: [
-        {
-          title: 'View README',
-          action: () =>
-            openUri(
-              `${REPO_MASTER}README.md#processimportnameimportpath-string-absimportpath-string-activefilepath-string-projectroot-string-string`
+      msg: `The Vandelay configuration option \`processDefaultName\` has been removed.\n\nPlease use the new \`processImportName\` option instead in your vandelay-${p        nguage}.js file.         modal: tru         actions: [         {
+              e:          DME',
+          action                    open                   `$              EADME.md#processimportnameimportpath-string-absimportpath-string-activefilepath-string-projectroot-string-string`
             ),
-        },
-        CHANGELOG_BUTTON_CONFIG,
+                        ELO        _CONFIG,
       ],
     })
-  }
-}
-
-function openUri(uri: string) {
-  env.openExternal(Uri.parse(uri))
+      
+fu    on   enUri(uri: string) {
+  env.openExtern  (Uri.parse(uri))
 }

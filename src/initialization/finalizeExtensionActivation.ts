@@ -33,12 +33,8 @@ export function finalizeExtensionActivation(context: ExtensionContext) {
         await removeUnusedImports()
         await importUndefinedVariables()
       })
-    )
-  )
+    ),
 
-  context.subscriptions.push()
-
-  context.subscriptions.push(
     workspace.onDidChangeConfiguration(e => {
       if (
         e.affectsConfiguration('vandelay.configLocation') ||

@@ -1,3 +1,4 @@
+/* eslint-disable */
 const path = require('path')
 
 const src = path.join(__dirname, 'src')

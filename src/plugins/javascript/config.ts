@@ -41,14 +41,16 @@ function turnOfDefaultAutoImports(context: ExtensionContext, plugin: PluginJs) {
   const fullConfigKeys = languages.map(l => `${l}.${configKey}`)
 
   alertWithActions({
-    msg: `Vandelay now supports auto import suggestions as you type. We recommend you turn off VS Code's version of this so that you don't get duplicate suggestions.\n\nFor reference, the VS Code settings are named "${fullConfigKeys.join('" and "')}".`,
+    msg: `Vandelay now supports auto import suggestions as you type. We recommend you turn off VS Code's version of this so that you don't get duplicate suggestions.\n\nFor reference, the VS Code settings are named "${fullConfigKeys.join(
+      '" and "'
+    )}".`,
     modal: true,
     actions: [
       {
-        title: "Turn it off!",
+        title: 'Turn it off!',
         action: () => {
           for (const c of configs) c.update('suggest.autoImports', false, true)
-        }
+        },
       },
     ],
   })

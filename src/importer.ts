@@ -3,7 +3,7 @@ import { Diagnostic, Range, Selection, TextEditor, window, workspace, TextDocume
 import { getDiagnosticsForActiveEditor, getWordAtPosition } from './utils'
 import { getPluginForActiveFile } from './utils'
 import { cacheFileManager } from './cacheFileManager'
-import { MergedExportData, RichQuickPickItem } from './types'
+import { MergedExportData, Plugin, RichQuickPickItem } from './types'
 
 export async function selectImport(word?: string | undefined | null) {
   const plugin = getPluginForActiveFile()
@@ -14,7 +14,7 @@ export async function selectImport(word?: string | undefined | null) {
 
     const mergedData = plugin.mergeExportData(exportData)
     const sortedKeys = getExportDataKeysByCachedDate(mergedData)
-    let items = plugin.buildImportItems(plugin as any, mergedData, sortedKeys)
+    let items = plugin.buildImportItems(plugin as Plugin, mergedData, sortedKeys)
     if (!items) return
     if (word) items = items.filter((item: RichQuickPickItem) => item.label === word)
 
