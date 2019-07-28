@@ -1,11 +1,10 @@
 import { Diagnostic, ExtensionContext, workspace } from 'vscode'
-import { cacheProjectLanguage } from '../../cacher'
 import { isActivationComplete } from '../../initialization/finalizeExtensionActivation'
 import { cacheNodeModules, findPackageJsonFiles } from './cacheNodeModules'
-import { removeUnusedImports } from './removeUnusedImports'
 import { cacheFile, processCachedData } from './cacher'
 import { buildImportItems } from './importing/buildImportItems'
 import { insertImport } from './importing/importer'
+import { removeUnusedImports } from './removeUnusedImports'
 import { PluginConfigJs, PluginJs, ExportDataJs } from './types'
 
 export const JS_EXTENSIONS = ['js', 'jsx', 'ts', 'tsx', 'mjs', 'mdx']
@@ -13,7 +12,7 @@ export const JS_EXTENSIONS = ['js', 'jsx', 'ts', 'tsx', 'mjs', 'mdx']
 type DiagnosticCode = string | number | undefined
 
 const ESLINT_CODES: DiagnosticCode[] = ['no-undef', 'react/jsx-no-undef']
-const TYPESCRIPT_CODES: DiagnosticCode[] = [2304, 2552]
+const TYPESCRIPT_CODES: DiagnosticCode[] = [2304, 2552, 18004]
 
 function shouldIncludeDisgnostic({ code, source, message }: Diagnostic) {
   return (
@@ -32,7 +31,7 @@ async function watchForPackageJsonChanges(context: ExtensionContext, plugin: Plu
   const watcher = workspace.createFileSystemWatcher(pattern)
   context.subscriptions.push(watcher)
 
-  watcher.onDidChange(async () => console.log("PACKAGEJSON CHANGED") || cacheNodeModules(plugin))
+  watcher.onDidChange(() => cacheNodeModules(plugin))
 }
 
 function mergeExportData(exportData: ExportDataJs) {

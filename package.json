@@ -99,7 +99,7 @@
     "build": "NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.ts",
     "test": "yarn run compile && node ./node_modules/vscode/bin/test",
     "tw": "tsc -w --noEmit",
-    "postinstall": "node ./node_modules/vscode/bin/install",
+    "postinstall": "node ./node_modules/vscode/bin/install; cd ./tests/js/single-root && yarn install; cd ../es5 && yarn install; cd ../../../",
     "prettier": "prettier-eslint --write \"**/*.{ts,js}\"",
     "p": "prettier-eslint --write",
     "lint": "eslint",

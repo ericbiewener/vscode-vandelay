@@ -59,6 +59,13 @@ Array [
     "label": "src1_file2_t_2",
   },
   Object {
+    "absImportPath": "absRoot/chalk",
+    "description": "chalk",
+    "exportType": 0,
+    "isExtraImport": true,
+    "label": "chalk",
+  },
+  Object {
     "absImportPath": "absRoot/module1",
     "description": "module1",
     "exportType": 0,
@@ -621,7 +628,8 @@ exports[`Import Tests | import - comment with linebreak and code 1`] = `
 `;
 
 exports[`Import Tests | import - empty - original order 1`] = `
-"import defaultModule1 from 'module1';
+"import chalk from 'chalk';
+import defaultModule1 from 'module1';
 import defaultModule_file2 from 'module1_file2';
 import { module2_1, module2_2, module2_3, module2_src2_1, type module2_t_1 } from 'module2';
 import defaultModule3, { module3_1, module3_2, module3_3, type module3_typeInside,

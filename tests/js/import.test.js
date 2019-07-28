@@ -34,7 +34,7 @@ describe("Import Tests", function() {
     )
   })
 
-  it('import - single line comment', async function() {
+  it.only('import - single line comment', async function() {
     await insertDiffTest(
       this,
     `// I'm a comment

@@ -52,6 +52,13 @@ Array [
     "label": "src1_file2_t_2",
   },
   Object {
+    "absImportPath": "absRoot/chalk",
+    "description": "chalk",
+    "exportType": 0,
+    "isExtraImport": true,
+    "label": "chalk",
+  },
+  Object {
     "absImportPath": "absRoot/module1",
     "description": "module1",
     "exportType": 0,

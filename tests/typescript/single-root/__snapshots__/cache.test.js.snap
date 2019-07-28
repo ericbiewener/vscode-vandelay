@@ -42,5 +42,6 @@ Object {
       "types": Array [],
     },
   },
+  "nodeModules": Object {},
 }
 `;

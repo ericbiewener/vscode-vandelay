@@ -80,12 +80,10 @@ Vandelay will remove all unused imports reported by the linter. This command req
 Combination of the previous two commands. Imports all undefined variables and removes unused imports.
 
 ## Importing external and environment packages
-For JavaScript, Vandelay does its best to parse your `package.json` file (or files, if you're using Yarn workspaces) and gather the available imports from the listed dependencies. Depending on how an NPM package is organized, this sometimes isn't possible. However, Vandelay will track your use of package imports and automatically make those available as well. 
-Rather than try to actually parse and track all the possible imports in your project's runtime
-environment, `node_modules` folder, or virtualenv,  Vandelay JS simply tracks the ones you use. This
-means you'll need to write the import statement yourself the very first time you use something from
-an external package, but the plugin will remember after that and make it available for automatic
-importing.
+**JavaScript**<br>
+Vandelay does its best to parse your `package.json` file (or files, if you're using Yarn workspaces) and gather the available imports from the listed dependencies. Depending on how an NPM package is organized, this sometimes isn't possible. However, Vandelay will track your use of package imports and automatically make those available as well. In other words, after manually writing an import statement for a node module, Vandelay will then pick up on that and make it available for automatic imports in the future.
+
+**Python**<br> Vandelay tracks the packages you use. This means you'll need to write the import statement yourself the very first time you use something from an external package, but the plugin will remember after that and make it available for automatic importing.
 
 ## How to Use
 Vandelay relies on JavaScript configuration files, not simply JSON, so that the plugin can be fully customized to your project's needs. This means the setup is a bit more complex, but the resulting capability is far more powerful.

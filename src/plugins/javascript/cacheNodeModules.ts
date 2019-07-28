@@ -19,7 +19,6 @@ type Dep = Record<string, string>
 type PackageJson = { dependencies?: Dep; devDependencies?: Dep; peerDependencies?: Dep }
 
 export async function cacheNodeModules(plugin: PluginJs) {
-  console.log("CACHINGNODE MODULES")
   const jsons = []
   for (const packageJsonPath of findPackageJsonFiles(plugin)) {
     try {
@@ -28,8 +27,6 @@ export async function cacheNodeModules(plugin: PluginJs) {
       console.info('Vandelay: Failed to parse package.json file: ${packageJsonPath}')
     }
   }
-
-  console.log("CACHINGNODE MODULES", jsons)
 
   const data: ExportDataNodeModulesJs = {}
   await Promise.all(jsons.map(j => cacheDependencies(plugin, j, data)))
@@ -77,17 +74,19 @@ export async function cacheDependency(
     return
   }
 
-  if (!packageJson.main) {
-    console.info(`Vandelay: No "main" property in dependency package.json file: ${dep}`)
+  const mainFile = path.join(dir, packageJson.main || 'index.js')
+
+  if (!isFile(mainFile)) {
+    console.info(`Vandelay: Couldn't determine entry point for node module: ${dep}`)
     return
   }
 
   let depExports
   try {
     // @ts-ignore
-    depExports = __non_webpack_require__(path.join(dir, packageJson.main))
+    depExports = __non_webpack_require__(mainFile)
   } catch (e) {
-    console.info(`Vandelay: Failed to parse main dependency file: ${dep}`)
+    console.info(`Vandelay: Failed to parse main dependency file: ${mainFile}`)
     return
   }
 
