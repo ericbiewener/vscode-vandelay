@@ -1,10 +1,9 @@
-import fs from 'fs-extra'
 import _ from 'lodash'
-import { ExtensionContext, languages, window, workspace } from 'vscode'
+import { languages, window, workspace } from 'vscode'
 import path from 'path'
 import { createCompletionItemProvider } from './createCompletionItemProvider'
+import { globals } from './globals'
 import { alertNewVersionConfig } from './newVersionAlerting'
-import { cacheNodeModules } from './plugins/javascript/cacheNodeModules/cacheNodeModules'
 import { pluginConfigs } from './registerPluginConfig'
 import { findVandelayConfigDir, isFile, isObject } from './utils'
 import { Language, Plugin, PluginConfig, RuntimePluginConfig, UserConfig } from './types'
@@ -15,11 +14,11 @@ export const PLUGINS: { [key in Language]?: Plugin } & { [key: string]: undefine
 
 const HIDDEN_FOLDERS_REGEX = /.*\/\..*/
 
-export async function initializePlugin(context: ExtensionContext, pluginConfig: PluginConfig) {
+export async function initializePlugin(pluginConfig: PluginConfig) {
   const { workspaceFolders } = workspace
   if (!workspaceFolders) return
 
-  const cacheDirPath = context.storagePath
+  const cacheDirPath = globals.ctx.storagePath
   if (!cacheDirPath) return
 
   const configWorkspaceFolder = findVandelayConfigDir(workspaceFolders)
@@ -52,7 +51,7 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
   // CompletionItemProvider
   const { includePaths, extensions, insertImport } = plugin
   const pattern = `${maybeCreateGlobOr(includePaths)}/**/*.${maybeCreateGlobOr(extensions)}}`
-  context.subscriptions.push(
+  globals.ctx.subscriptions.push(
     languages.registerCompletionItemProvider(
       { pattern, scheme: 'file' },
       createCompletionItemProvider(plugin, insertImport)
@@ -66,7 +65,7 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
   const isInitialCache = isFile(plugin.cacheFilepath)
   await cacheProjectLanguage(plugin)
   // Don't await this, its completion isn't necessary for the extension to continue initializing
-  if (plugin.finalizeInit) plugin.finalizeInit(context, plugin)
+  if (plugin.finalizeInit) plugin.finalizeInit(plugin)
   return isInitialCache
 }
 
@@ -100,9 +99,9 @@ async function getUserConfig(configFilepath: string) {
   }
 }
 
-export async function initializePluginForLang(context: ExtensionContext, lang: string) {
+export async function initializePluginForLang(lang: string) {
   const config = pluginConfigs[lang]
-  if (config) return initializePlugin(context, config)
+  if (config) return initializePlugin(config)
 }
 
 function maybeCreateGlobOr(options: string[]) {

@@ -1,9 +1,11 @@
-import { Diagnostic, ExtensionContext, workspace } from 'vscode'
+import { Diagnostic, workspace } from 'vscode'
 import { alertWithActions } from '../../alertWithActions'
+import { globals } from '../../globals'
 import { isActivationComplete } from '../../initialization/finalizeExtensionActivation'
 import { cacheNodeModules, findPackageJsonFiles } from './cacheNodeModules/cacheNodeModules'
 import { cacheFile, processCachedData } from './cacher'
 import { buildImportItems } from './importing/buildImportItems'
+import { findUnusedExports } from './importing/findUnusedExports'
 import { insertImport } from './importing/importer'
 import { removeUnusedImports } from './removeUnusedImports'
 import { PluginConfigJs, PluginJs, ExportDataJs } from './types'
@@ -23,16 +25,16 @@ function shouldIncludeDisgnostic({ code, source, message }: Diagnostic) {
   )
 }
 
-function watchForPackageJsonChanges(context: ExtensionContext, plugin: PluginJs) {
+function watchForPackageJsonChanges(plugin: PluginJs) {
   const packageJsonFiles = findPackageJsonFiles(plugin)
   const pattern =
     packageJsonFiles.length > 1 ? `{${packageJsonFiles.join(',')}}` : packageJsonFiles[0]
   const watcher = workspace.createFileSystemWatcher(pattern)
-  context.subscriptions.push(watcher)
+  globals.ctx.subscriptions.push(watcher)
   watcher.onDidChange(() => cacheNodeModules(plugin))
 }
 
-function turnOfDefaultAutoImports(context: ExtensionContext, plugin: PluginJs) {
+function turnOfDefaultAutoImports() {
   const languages = ['javascript', 'typescript']
   const configs = languages.map(l => workspace.getConfiguration(l, null))
   const configKey = 'suggest.autoImports'
@@ -56,9 +58,9 @@ function turnOfDefaultAutoImports(context: ExtensionContext, plugin: PluginJs) {
   })
 }
 
-async function finalizeInit(context: ExtensionContext, plugin: PluginJs) {
-  watchForPackageJsonChanges(context, plugin)
-  turnOfDefaultAutoImports(context, plugin)
+async function finalizeInit(plugin: PluginJs) {
+  watchForPackageJsonChanges(plugin)
+  turnOfDefaultAutoImports()
 }
 
 function mergeExportData(exportData: ExportDataJs) {
@@ -95,4 +97,5 @@ export const jsConfig: PluginConfigJs = {
   finalizeInit,
   finalizeCacheLanguage,
   mergeExportData,
+  findUnusedExports,
 }

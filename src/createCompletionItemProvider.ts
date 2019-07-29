@@ -35,7 +35,7 @@ export function createCompletionItemProvider(
 ) {
   return {
     async provideCompletionItems(document: TextDocument, position: Position) {
-      return await cacheFileManager(plugin, async exportData => {
+      return cacheFileManager(plugin, async exportData => {
         if (!exportData) return []
 
         const mergedData = plugin.mergeExportData(exportData)

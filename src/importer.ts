@@ -9,7 +9,7 @@ export async function selectImport(word?: string | undefined | null) {
   const plugin = getPluginForActiveFile()
   if (!plugin) return
 
-  return await cacheFileManager(plugin, async exportData => {
+  return cacheFileManager(plugin, async exportData => {
     if (!exportData) return
 
     const mergedData = plugin.mergeExportData(exportData)

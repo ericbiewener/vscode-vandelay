@@ -1,8 +1,7 @@
 import path from 'path'
 import { commands, ExtensionContext, window, workspace } from 'vscode'
 import _ from 'lodash'
-import { cacheProjectLanguage } from './cacher'
-import * as globals from './globals'
+import {globals} from './globals'
 import { catchError } from './initialization/catchError'
 import { finalizeExtensionActivation } from './initialization/finalizeExtensionActivation'
 import { initProject } from './initialization/initProject'
@@ -12,13 +11,13 @@ import { alertNewVersion } from './newVersionAlerting'
 import { Language } from './types'
 import { findVandelayConfigDir, showProjectExportsCachedMessage } from './utils'
 
-export const activate = async function activate(context: ExtensionContext) {
-  globals.context(context)
-  alertNewVersion(context)
+export const activate = async function activate(ctx: ExtensionContext) {
+  globals.ctx = ctx
+  alertNewVersion()
 
   // We need these commands active regardless of whether any plugins exist
-  context.subscriptions.push(
-    commands.registerCommand('vandelay.initProject', catchError(() => initProject(context)))
+  ctx.subscriptions.push(
+    commands.registerCommand('vandelay.initProject', catchError(() => initProject()))
   )
 
   // Watch for config changes.
@@ -27,21 +26,21 @@ export const activate = async function activate(context: ExtensionContext) {
     if (!file.startsWith('vandelay-')) return
 
     const lang = file.split('-')[1] as Language
-    const isInitialCache = await initializePluginForLang(context, lang)
-    finalizeExtensionActivation(context)
+    const isInitialCache = await initializePluginForLang(lang)
+    finalizeExtensionActivation()
     if (isInitialCache) showProjectExportsCachedMessage()
   })
 
   workspace.onDidChangeWorkspaceFolders(async ({ added }) => {
     const configWorkspaceFolder = findVandelayConfigDir(added)
     if (!configWorkspaceFolder) return
-    await initializePlugins(context)
-    finalizeExtensionActivation(context)
+    await initializePlugins()
+    finalizeExtensionActivation()
     showProjectExportsCachedMessage()
   })
 
-  await initializePlugins(context)
-  if (!_.isEmpty(PLUGINS)) finalizeExtensionActivation(context)
+  await initializePlugins()
+  if (!_.isEmpty(PLUGINS)) finalizeExtensionActivation()
 
   return {
     registerPlugin: async ({ language }: { language: string }) => {
@@ -58,7 +57,7 @@ export const activate = async function activate(context: ExtensionContext) {
   }
 }
 
-export function initializePlugins(context: ExtensionContext) {
+export function initializePlugins() {
   const configs = Object.values(pluginConfigs)
-  return Promise.all(configs.map(c => initializePlugin(context, c)))
+  return Promise.all(configs.map(initializePlugin))
 }

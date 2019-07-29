@@ -3,9 +3,9 @@ import _ from 'lodash'
 import path from 'path'
 import { spawnSync } from 'child_process'
 import { cacheFileManager } from '../../../cacheFileManager'
-import { context } from '../../../globals'
+import { globals } from '../../../globals'
 import { isFile, writeCacheFile } from '../../../utils'
-import { ExportDataJs, ExportDataNodeModulesJs, NodeModuleExports, PluginJs } from '../types'
+import { ExportDataJs, PluginJs } from '../types'
 
 export type Dep = Record<string, string>
 
@@ -13,7 +13,7 @@ export async function cacheNodeModules(plugin: PluginJs) {
   const packageJsonPaths = findPackageJsonFiles(plugin)
   if (!packageJsonPaths.length) return
 
-  const cacheScript = path.join(context().extensionPath, 'dist', 'cacheNodeModulesSandbox.js')
+  const cacheScript = path.join(globals.ctx.extensionPath, 'dist', 'cacheNodeModulesSandbox.js')
   const { error, stdout } = spawnSync('node', [cacheScript, plugin.projectRoot, JSON.stringify(packageJsonPaths)]);
   if (error) throw error
 

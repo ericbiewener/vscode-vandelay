@@ -1,16 +1,8 @@
 import fs from 'fs-extra'
 import path from 'path'
-import {
-  commands,
-  ExtensionContext,
-  languages,
-  Position,
-  TextEditor,
-  Uri,
-  window,
-  workspace,
-  WorkspaceFolder,
+import { commands, languages, Position, TextEditor, Uri, window, workspace, WorkspaceFolder
 } from 'vscode'
+import { globals } from '../globals'
 import { finalizeExtensionActivation } from '../initialization/finalizeExtensionActivation'
 import { initializePlugin } from '../plugins'
 import { pluginConfigs } from '../registerPluginConfig'
@@ -21,7 +13,7 @@ type IncludePathQuickPickItem = {
   pathStr: string
 }
 
-export async function initProject(context: ExtensionContext) {
+export async function initProject() {
   const { workspaceFolders } = workspace
 
   if (!workspaceFolders) {
@@ -32,12 +24,11 @@ export async function initProject(context: ExtensionContext) {
   }
 
   return workspaceFolders.length > 1
-    ? initProjectMultiRoot(context, workspaceFolders)
-    : initProjectSingleRoot(context, workspaceFolders)
+    ? initProjectMultiRoot(workspaceFolders)
+    : initProjectSingleRoot(workspaceFolders)
 }
 
 async function initProjectSingleRoot(
-  context: ExtensionContext,
   workspaceFolders: WorkspaceFolder[]
 ) {
   const selection = await getLanguageSelection()
@@ -59,12 +50,11 @@ async function initProjectSingleRoot(
   if (!includePaths) return
 
   const text = buildText("const path = require('path')\n\n", buildIncludePathText(includePaths))
-  await createAndOpenFile(context, configFilepath, text, !!includePaths.length)
+  await createAndOpenFile(configFilepath, text, !!includePaths.length)
 }
 
 // FIXME: make context a globally importable constant, stop passing it around
 async function initProjectMultiRoot(
-  context: ExtensionContext,
   workspaceFolders: WorkspaceFolder[]
 ) {
   const configDir = findVandelayConfigDir(workspaceFolders)
@@ -106,7 +96,7 @@ async function initProjectMultiRoot(
 
   // If `configFilepath` exists, that means a `.vandelay` directory exists in which we can create
   // the file
-  if (configFilepath) return createAndOpenFile(context, configFilepath, text, !!includePaths.length)
+  if (configFilepath) return createAndOpenFile(configFilepath, text, !!includePaths.length)
 
   await commands.executeCommand('workbench.action.files.newUntitledFile')
   const editor = window.activeTextEditor as TextEditor
@@ -179,7 +169,6 @@ function pathExists(testPath: string) {
 }
 
 async function createAndOpenFile(
-  context: ExtensionContext,
   filepath: string,
   text: string,
   hasIncludePaths: boolean
@@ -192,8 +181,8 @@ async function createAndOpenFile(
     const lang = file.split('-')[1]
     const config = pluginConfigs[lang]
     if (config) {
-      await initializePlugin(context, config)
-      finalizeExtensionActivation(context)
+      await initializePlugin(config)
+      finalizeExtensionActivation()
       showProjectExportsCachedMessage()
     }
   }

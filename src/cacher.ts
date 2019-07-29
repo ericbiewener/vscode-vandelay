@@ -15,10 +15,11 @@ import { cacheFileManager } from './cacheFileManager'
 import { PLUGINS } from './plugins'
 import { Plugin, CachingData } from './types'
 
-function shouldIgnore(plugin: Plugin, filePath: string) {
-  return anymatch(plugin.excludePatterns, filePath)
+export function shouldIgnore(plugin: Plugin, filepath: string) {
+  return path.basename(filepath) === plugin.configFile || anymatch(plugin.excludePatterns, filepath)
 }
 
+// TODO: convert to using recurive-readdir
 async function cacheDir(
   plugin: Plugin,
   dir: string,
@@ -29,17 +30,17 @@ async function cacheDir(
   const readDirPromises: Promise<any>[] = []
 
   for (const item of items) {
-    const fullPath = path.join(dir, item)
-    if (item === plugin.configFile || shouldIgnore(plugin, fullPath)) continue
+    const filepath = path.join(dir, item)
+    if (shouldIgnore(plugin, filepath)) continue
 
     readDirPromises.push(
-      fs.stat(fullPath).then(async stats => {
+      fs.stat(filepath).then(async stats => {
         if (stats.isFile()) {
           if (plugin.language === getLangFromFilePath(item)) {
-            await plugin.cacheFile(plugin, fullPath, data)
+            await plugin.cacheFile(plugin, filepath, data)
           }
         } else if (recursive) {
-          await cacheDir(plugin, fullPath, true, data)
+          await cacheDir(plugin, filepath, true, data)
         }
 
         return Promise.resolve()
@@ -72,8 +73,9 @@ export async function cacheProjectLanguage(plugin: Plugin) {
   if (plugin.finalizeCacheLanguage) await plugin.finalizeCacheLanguage(plugin)
 }
 
-export function cacheProject() {
-  return Promise.all(_.map(PLUGINS, cacheProjectLanguage)).then(showProjectExportsCachedMessage)
+export async function cacheProject() {
+  for (const lang in PLUGINS) await cacheProjectLanguage(PLUGINS[lang] as any)
+  showProjectExportsCachedMessage()
 }
 
 function onChangeOrCreate(doc: Uri) {

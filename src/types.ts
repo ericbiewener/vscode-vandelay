@@ -1,19 +1,16 @@
-import { CompletionItemProvider, Disposable, ExtensionContext, TextEdit } from 'vscode'
+import { TextEdit } from 'vscode'
 import {
-  FileExportsJs,
-  PluginJs,
-  MergedExportDataJs,
   CachingDataJs,
   ExportDataJs,
-  RichQuickPickItemJs,
+  FileExportsJs,
+  MergedExportDataJs,
 } from './plugins/javascript/types'
 import { DiagnosticFilter } from './utils'
 import {
-  PluginPy,
   CachingDataPy,
+  ExportDataPy,
   FileExportsPy,
   MergedExportDataPy,
-  ExportDataPy,
 } from './plugins/python/types'
 import { ImportPositionPy } from './plugins/python/importing/getImportPosition'
 import { ImportPositionJs } from './plugins/javascript/importing/getImportPosition'
@@ -27,6 +24,9 @@ export type RichQuickPickItem = {
 }
 
 export type ImportPosition = ImportPositionJs | ImportPositionPy
+
+export type UnusedExport = { name: string; line: number }
+export type UnusedExports = Record<string, UnusedExport>
 
 /**
  * Cached Data Structurs
@@ -68,9 +68,10 @@ export interface PluginConfig<Q extends RichQuickPickItem = RichQuickPickItem> {
     shouldApplyEdit?: boolean
   ): Thenable<boolean> | TextEdit | void
   buildImportItems(plugin: this, data: MergedExportData, sortedKeys: string[]): Q[]
-  finalizeInit?(context: ExtensionContext, plugin: this): void
+  finalizeInit?(plugin: this): void
   mergeExportData(exportData: ExportData): MergedExportData
-  finalizeCacheLanguage?(plugin: this): unknown
+  finalizeCacheLanguage?(plugin: this): void
+  findUnusedExports?(plugin: this): void
   extensions: string[]
   importGroups?: string[] | string[][]
   excludePatterns?: ExcludePattern[]

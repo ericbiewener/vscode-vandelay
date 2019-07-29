@@ -1,6 +1,7 @@
 import _ from 'lodash'
-import { extensions, window, workspace, ExtensionContext, env, Uri } from 'vscode'
+import { env, extensions, Uri, workspace } from 'vscode'
 import { alertWithActions } from './alertWithActions'
+import { globals } from './globals'
 import { Plugin } from './types'
 
 const SUPPRESS_ALERT = false
@@ -12,12 +13,12 @@ const CHANGELOG_BUTTON_CONFIG = {
   action: () => openUri(`${REPO_MASTER}CHANGELOG.md`),
 }
 
-export async function alertNewVersion(context: ExtensionContext) {
+export async function alertNewVersion() {
   const extension = extensions.getExtension('edb.vandelay')
   if (!extension) return
 
   const { version } = extension.packageJSON
-  const { globalState } = context
+  const { globalState } = globals.ctx
   const oldVersion: string | undefined = globalState.get('lastVersion')
   if (oldVersion !== version) globalState.update('lastVersion', version)
   if (!oldVersion || oldVersion === version || SUPPRESS_ALERT) return

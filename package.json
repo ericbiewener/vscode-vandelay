@@ -68,6 +68,10 @@
         "command": "vandelay.fixImports"
       },
       {
+        "title": "Find Unused Exports",
+        "command": "vandelay.findUnusedExports"
+      },
+      {
         "title": "Vandelay: Initialize Project",
         "command": "vandelay.initProject"
       }
@@ -114,6 +118,7 @@
     "@types/lodash": "4.14.136",
     "@types/mocha": "5.2.7",
     "@types/node": "12.6.8",
+    "@types/recursive-readdir": "2.2.0",
     "@types/webpack": "4.32.1",
     "@typescript-eslint/eslint-plugin": "1.13.0",
     "@typescript-eslint/parser": "1.13.0",
@@ -144,7 +149,8 @@
     "anymatch": "3.0.3",
     "fs-extra": "8.1.0",
     "lodash": "4.17.15",
-    "make-dir": "3.0.0"
+    "make-dir": "3.0.0",
+    "recursive-readdir": "2.2.2"
   },
   "lint-staged": {
     "**/*.{ts,js}": [

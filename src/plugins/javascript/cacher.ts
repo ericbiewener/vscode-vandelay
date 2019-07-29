@@ -1,15 +1,16 @@
 import fs from 'fs-extra'
 import path from 'path'
 import _ from 'lodash'
+import * as globals from '../../globals'
 import { basenameNoExt, getFilepathKey, last } from '../../utils'
 import { isPathNodeModule, isIndexFile } from './utils'
-import { parseImports, exportRegex } from './regex'
+import { exportRegex, ParsedImportJs, parseImports } from './regex'
 import { CachingDataJs, NonFinalExportDataJs, NonFinalExportDatumJs, PluginJs, ReexportsToProcess
 } from './types'
 
 // TODO: Break this function up
 export function cacheFile(plugin: PluginJs, filepath: string, data: CachingDataJs) {
-  const { imp, exp } = data
+  const { exp } = data
   const reexportsToProcess: ReexportsToProcess = {
     fullModules: [],
     selective: {},
@@ -20,28 +21,7 @@ export function cacheFile(plugin: PluginJs, filepath: string, data: CachingDataJ
     reexportsToProcess,
   }
   const fileText = fs.readFileSync(filepath, 'utf8')
-  const fileImports = parseImports(plugin, fileText)
-
-  for (const importData of fileImports) {
-    if (isPathNodeModule(plugin, importData.path)) {
-      const existing = imp[importData.path] || {}
-      imp[importData.path] = existing
-      if (importData.default) existing.default = importData.default
-      existing.named = _.union(existing.named, importData.named)
-      existing.types = _.union(existing.types, importData.types)
-      existing.isExtraImport = true
-    } else if (importData.default && importData.default.startsWith('* as')) {
-      // import * as Foo from...
-      const pathKey = getFilepathKey(
-        plugin,
-        path.resolve(path.dirname(filepath), `${importData.path}.js`) // Just guess at the file extension. Doesn't actually matter if it's right.
-      )
-      const existing = exp[pathKey] || {}
-      if (existing.default) continue // don't overwrite default if it already exists
-      exp[pathKey] = existing
-      existing.default = importData.default
-    }
-  }
+  processFileImports(plugin, filepath, fileText, data)
 
   let match
   let mainRegex
@@ -148,6 +128,33 @@ export function cacheFile(plugin: PluginJs, filepath: string, data: CachingDataJ
   exportRegex.selectiveRexport.lastIndex = 0
 
   return data
+}
+
+export function processFileImports(plugin: PluginJs, filepath: string, fileText: string, data: CachingDataJs, skipNodeModules?: boolean) {
+  const { imp, exp } = data
+  const fileImports = parseImports(plugin, fileText)
+  
+  for (const importData of fileImports) {
+    if (isPathNodeModule(plugin, importData.path)) {
+      if (skipNodeModules) continue
+      const existing = imp[importData.path] || {}
+      imp[importData.path] = existing
+      if (importData.default) existing.default = importData.default
+      existing.named = _.union(existing.named, importData.named)
+      existing.types = _.union(existing.types, importData.types)
+      existing.isExtraImport = true
+    } else if (importData.default && importData.default.startsWith('* as')) {
+      // import * as Foo from...
+      const pathKey = getFilepathKey(
+        plugin,
+        path.resolve(path.dirname(filepath), `${importData.path}.js`) // Just guess at the file extension. Doesn't actually matter if it's right.
+      )
+      const existing = exp[pathKey] || {}
+      if (existing.default) continue // don't overwrite default if it already exists
+      exp[pathKey] = existing
+      existing.default = importData.default
+    }
+  }
 }
 
 /**
