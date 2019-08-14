@@ -16,16 +16,6 @@
       ]
     },
     {
-      "name": "Github Issue",
-      "type": "extensionHost",
-      "request": "launch",
-      "runtimeExecutable": "${execPath}",
-      "args": [
-        "${workspaceFolder}/../_test_workspaces/vandelay",
-        "--extensionDevelopmentPath=${workspaceFolder}"
-      ]
-    },
-    {
       "name": "Nairobi",
       "type": "extensionHost",
       "request": "launch",
