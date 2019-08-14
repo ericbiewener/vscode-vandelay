@@ -25,4 +25,5 @@ export const pyConfig: PluginConfigPy = {
   shouldIncludeDisgnostic,
   extensions: ['py'],
   mergeExportData,
+  excludePatterns: [],
 }

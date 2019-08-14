@@ -73,7 +73,7 @@ export interface PluginConfig<Q extends RichQuickPickItem = RichQuickPickItem> {
   finalizeCacheLanguage?(plugin: this): unknown
   extensions: string[]
   importGroups?: string[] | string[][]
-  excludePatterns?: ExcludePattern[]
+  excludePatterns: ExcludePattern[]
 }
 
 export type UserConfig = {

@@ -1,3 +1,6 @@
+### Version 4.0.1
+- Fix bug that prevented Python support from activating if no `excludePatterns` were provided.
+
 ### Version 4.0.0
 - Import suggestions will now appear as you type!
 - `package.json` parsing for Improved caching of node modules.
