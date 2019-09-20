@@ -1,3 +1,6 @@
+### Version 4.1.0
+- Added configuration option for turning autocomplete suggestions on/off.
+
 ### Version 4.0.1
 - Fix bug that prevented Python support from activating if no `excludePatterns` were provided.
 

@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { Diagnostic, Range, Selection, TextEditor, window, workspace, TextDocument } from 'vscode'
-import { getDiagnosticsForActiveEditor, getWordAtPosition } from './utils'
+import { getConfiguration, getDiagnosticsForActiveEditor, getWordAtPosition } from './utils'
 import { getPluginForActiveFile } from './utils'
 import { cacheFileManager } from './cacheFileManager'
 import { MergedExportData, Plugin, RichQuickPickItem } from './types'
@@ -19,7 +19,7 @@ export async function selectImport(word?: string | undefined | null) {
     if (word) items = items.filter((item: RichQuickPickItem) => item.label === word)
 
     const item =
-      !word || items.length > 1 || !workspace.getConfiguration('vandelay', null).autoImportSingleResult
+      !word || items.length > 1 || !getConfiguration().autoImportSingleResult
         ? await window.showQuickPick(items, { matchOnDescription: true })
         : items[0]
 

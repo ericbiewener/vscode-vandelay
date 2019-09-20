@@ -1,6 +1,8 @@
-import { CompletionItem, CompletionItemKind, Position, TextDocument, TextEdit } from 'vscode'
+import { CompletionItem, CompletionItemKind, ExtensionContext, languages, Position, TextDocument,
+  TextEdit } from 'vscode'
+import { DisposableKey, DisposableManager } from './DisposableManager'
 import { cacheFileManager } from './cacheFileManager'
-import { Plugin, PluginConfig, RichQuickPickItem } from './types'
+import { Plugin, RichQuickPickItem } from './types'
 
 /**
  * Although we are not supposed to modify `CompletionItem.additionalTextEdits` inside
@@ -29,11 +31,13 @@ type RichCompletionItem<Q = RichQuickPickItem> = CompletionItem & {
   position: Position
 }
 
-export function createCompletionItemProvider(
+export function registerCompletionItemProvider(
+  context: ExtensionContext,
   plugin: Plugin,
-  insertImport: PluginConfig['insertImport']
 ) {
-  return {
+  const { includePaths, extensions, insertImport } = plugin
+
+  const provider = {
     async provideCompletionItems(document: TextDocument, position: Position) {
       return await cacheFileManager(plugin, async exportData => {
         if (!exportData) return []
@@ -62,4 +66,17 @@ export function createCompletionItemProvider(
       return completionItem
     },
   }
+
+  const pattern = `${maybeCreateGlobOr(includePaths)}/**/*.${maybeCreateGlobOr(extensions)}}`
+
+  const disposable = languages.registerCompletionItemProvider(
+    { pattern, scheme: 'file' },
+    provider
+  )
+  context.subscriptions.push(disposable)
+  DisposableManager.add(DisposableKey.PROVIDE_COMPLETIONS, disposable)
+}
+
+function maybeCreateGlobOr(options: string[]) {
+  return options.length > 1 ? `{${options.join(',')}}` : options[0]
 }

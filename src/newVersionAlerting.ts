@@ -2,6 +2,7 @@ import _ from 'lodash'
 import { extensions, window, workspace, ExtensionContext, env, Uri } from 'vscode'
 import { alertWithActions } from './alertWithActions'
 import { Plugin } from './types'
+import { getConfiguration } from './utils'
 
 const SUPPRESS_ALERT = false
 
@@ -30,7 +31,7 @@ export async function alertNewVersion(context: ExtensionContext) {
 
   const isMajor = newSemver[0] > oldSemver[0]
 
-  const config = workspace.getConfiguration('vandelay', null)
+  const config = getConfiguration()
   if (!isMajor && !config.showNewVersionAlert) return
 
   alertWithActions({

@@ -2,18 +2,8 @@ import fs from 'fs'
 import makeDir from 'make-dir'
 import path from 'path'
 import _ from 'lodash'
-import {
-  Diagnostic,
-  languages,
-  Position,
-  TextEditorEdit,
-  TextEdit,
-  Range,
-  TextDocument,
-  TextEditor,
-  window,
-  WorkspaceFolder,
-} from 'vscode'
+import { Diagnostic, languages, Position, Range, TextDocument, TextEdit, TextEditor, TextEditorEdit,
+  window, workspace, WorkspaceFolder, WorkspaceConfiguration } from 'vscode'
 import { VANDELAY_CONFIG_DIR } from './constants'
 import { JS_EXTENSIONS } from './plugins/javascript/config'
 import { Plugin, CachingData, ImportPosition } from './types'
@@ -221,4 +211,14 @@ export function isObject(obj: any) {
 export function getWordAtPosition(document: TextDocument, position: Position) {
   const range = document.getWordRangeAtPosition(position)
   return range ? document.getText(range) : null
+}
+
+type VandelayConfiguration = WorkspaceConfiguration & {
+  autoImportSingleResult: boolean,
+  showNewVersionAlert: boolean,
+  provideCompletions: boolean,
+}
+
+export function getConfiguration(): VandelayConfiguration {
+  return workspace.getConfiguration('vandelay', null) as VandelayConfiguration
 }

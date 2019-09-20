@@ -1,17 +1,15 @@
-import fs from 'fs-extra'
 import _ from 'lodash'
-import { ExtensionContext, languages, window, workspace } from 'vscode'
+import { ExtensionContext, window, workspace } from 'vscode'
 import path from 'path'
-import { createCompletionItemProvider } from './createCompletionItemProvider'
+import { registerCompletionItemProvider } from './createCompletionItemProvider'
 import { alertNewVersionConfig } from './newVersionAlerting'
-import { cacheNodeModules } from './plugins/javascript/cacheNodeModules/cacheNodeModules'
 import { pluginConfigs } from './registerPluginConfig'
-import { findVandelayConfigDir, isFile, isObject } from './utils'
+import { findVandelayConfigDir, getConfiguration, isFile, isObject } from './utils'
 import { Language, Plugin, PluginConfig, RuntimePluginConfig, UserConfig } from './types'
 import { cacheProjectLanguage } from './cacher'
 
 // & { [key: string]: undefined } is just to quiet unneeded TS errors
-export const PLUGINS: { [key in Language]?: Plugin } & { [key: string]: undefined } = {}
+export const PLUGINS: { [key in Language]?: Plugin } & Record<string, undefined> = {}
 
 const HIDDEN_FOLDERS_REGEX = /.*\/\..*/
 
@@ -49,15 +47,9 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
 
   PLUGINS[language] = plugin
 
-  // CompletionItemProvider
-  const { includePaths, extensions, insertImport } = plugin
-  const pattern = `${maybeCreateGlobOr(includePaths)}/**/*.${maybeCreateGlobOr(extensions)}}`
-  context.subscriptions.push(
-    languages.registerCompletionItemProvider(
-      { pattern, scheme: 'file' },
-      createCompletionItemProvider(plugin, insertImport)
-    )
-  )
+  if (getConfiguration().provideCompletions) {
+    registerCompletionItemProvider(context, plugin)
+  }
 
   alertNewVersionConfig(plugin)
 
@@ -103,8 +95,4 @@ async function getUserConfig(configFilepath: string) {
 export async function initializePluginForLang(context: ExtensionContext, lang: string) {
   const config = pluginConfigs[lang]
   if (config) return initializePlugin(context, config)
-}
-
-function maybeCreateGlobOr(options: string[]) {
-  return options.length > 1 ? `{${options.join(',')}}` : options[0]
 }
