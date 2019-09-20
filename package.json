@@ -2,7 +2,7 @@
   "name": "vandelay",
   "displayName": "Vandelay",
   "description": "Automatically generate import statements for JavaScript and Python.",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "publisher": "edb",
   "author": "Eric Biewener",
   "license": "MIT",
@@ -85,6 +85,11 @@
           "type": "boolean",
           "default": true,
           "description": "Get notified when a new version has been installed so that you can see what has changed."
+        },
+        "vandelay.provideCompletions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Provide autocomplete suggestions as you type."
         }
       }
     }
