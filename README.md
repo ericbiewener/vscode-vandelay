@@ -361,8 +361,11 @@ module.exports = {
 ```
 
 ## Settings
-Vandelay has one setting that may be specified in your VS Code user settings:
+The following settings are available through the VS Code settings interface:
 
 ### `autoImportSingleResult: boolean`
 Defaults to `true`. When the `Import active word` command is used, the import will be automatically
 written to the file if only a single result is found.
+
+### `provideCompletions: boolean`
+Defaults to `true`. Provide autocomplete suggestions as you type.
