@@ -1,7 +1,6 @@
 import path from 'path'
 import { commands, ExtensionContext, window, workspace } from 'vscode'
 import _ from 'lodash'
-import { cacheProjectLanguage } from './cacher'
 import * as globals from './globals'
 import { catchError } from './initialization/catchError'
 import { finalizeExtensionActivation } from './initialization/finalizeExtensionActivation'
@@ -13,6 +12,8 @@ import { Language } from './types'
 import { findVandelayConfigDir, showProjectExportsCachedMessage } from './utils'
 
 export const activate = async function activate(context: ExtensionContext) {
+  console.log('Vandelay activating')
+  console.log(context)
   globals.context(context)
   alertNewVersion(context)
 

@@ -1,3 +1,4 @@
 test-workspaces/
 tests/**/src
 tests/**/src?
+dist

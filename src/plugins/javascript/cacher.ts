@@ -4,7 +4,12 @@ import _ from 'lodash'
 import { basenameNoExt, getFilepathKey, last } from '../../utils'
 import { isPathNodeModule, isIndexFile } from './utils'
 import { parseImports, exportRegex } from './regex'
-import { CachingDataJs, NonFinalExportDataJs, NonFinalExportDatumJs, PluginJs, ReexportsToProcess
+import {
+  CachingDataJs,
+  NonFinalExportDataJs,
+  NonFinalExportDatumJs,
+  PluginJs,
+  ReexportsToProcess,
 } from './types'
 
 // TODO: Break this function up
@@ -190,7 +195,7 @@ export function processCachedData(data: CachingDataJs) {
     if (fullModules) {
       for (const subfilePath of fullModules) {
         const subfileExports = getSubfileExports(mainFilepath, subfilePath, exp)
-        if (!subfileExports || !subfileExports.named) return
+        if (!subfileExports || !subfileExports.named) continue
         if (fileExports.named) {
           fileExports.named.push(...subfileExports.named)
         } else {
@@ -219,4 +224,3 @@ function getSubfileExports(mainFilepath: string, filename: string, exp: NonFinal
     if (subfileExports) return subfileExports
   }
 }
-

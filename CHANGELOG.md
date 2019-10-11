@@ -1,3 +1,6 @@
+### Version 4.1.3
+- Fixed bug when caching JavaScript re-exports
+
 ### Version 4.1.0
 - Added configuration option for turning autocomplete suggestions on/off.
 
