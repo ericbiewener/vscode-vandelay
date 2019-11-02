@@ -52,9 +52,15 @@ function getFinalImportPath(
   absImportPath: string,
   isExtraImport: boolean | undefined
 ) {
-  if (isExtraImport) return importPath
-
   const activeFilepath = (window.activeTextEditor as TextEditor).document.fileName
+
+  if (isExtraImport) {
+    const processedPath = plugin.processImportPath
+      ? plugin.processImportPath(importPath, importPath, activeFilepath, plugin.projectRoot)
+      : null
+    return processedPath || importPath
+  }
+
   importPath = getRelativeImportPath(activeFilepath, absImportPath)
 
   if (plugin.processImportPath) {
