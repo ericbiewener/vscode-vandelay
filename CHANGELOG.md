@@ -1,3 +1,6 @@
+### Version 4.2.0
+- Run node_module import paths through `processImportPath`.
+
 ### Version 4.1.3
 - Fixed bug when caching JavaScript re-exports
 
