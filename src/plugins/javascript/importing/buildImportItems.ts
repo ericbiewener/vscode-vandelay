@@ -29,10 +29,11 @@ export function buildImportItems(
     if (
       // If the current file has imports that were reexported
       data.reexported &&
-      // Only import from index.js if active file not adjacent to nor in a subdirectory relative to the import's
-      // reexport path. Can't simply test to make sure it's in a subdirectory relative to the import's true path,
-      // because the import might be getting reexported multiple directories higher up, in which case it should not be
-      // imported from that reexport location if the active file is adjacent/in a subdirectory.
+      // Only import from index.js if active file not adjacent to nor in a subdirectory relative to
+      // the import's reexport path. Can't simply test to make sure it's in a subdirectory relative
+      // to the import's true path, because the import might be getting reexported multiple
+      // directories higher up, in which case it should not be imported from that reexport location
+      // if the active file is adjacent/in a subdirectory.
       !activeFilepath.startsWith(
         path.join(plugin.projectRoot, path.dirname(data.reexported.reexportPath))
       )
@@ -45,9 +46,9 @@ export function buildImportItems(
       defaultExport = data.default
       const { reexports } = data
 
-      // If some of the names are reexports from other files (e.g. it's an index.js file) and the active file is
-      // adjacent to or in a subdirectory of the import file, eliminate the reexports because they'll just be imported
-      // from their original locations
+      // If some of the names are reexports from other files (e.g. it's an index.js file) and the
+      // active file is adjacent to or in a subdirectory of the import file, eliminate the reexports
+      // because they'll just be imported from their original locations
       if (reexports && activeFilepath.startsWith(path.dirname(absImportPath))) {
         namedExports = data.named.filter(n => !reexports.includes(n))
         typeExports = data.types.filter(n => !reexports.includes(n))
@@ -58,7 +59,7 @@ export function buildImportItems(
     }
 
     const ext = path.extname(importPath)
-    const importPathNoExt = ext ? importPath.slice(0, -ext.length) : importPath
+    const importPathNoExt = ext && ext !== '.macro' ? importPath.slice(0, -ext.length) : importPath
 
     if (isIndexFile(absImportPath)) absImportPath = path.dirname(absImportPath)
 

@@ -5,6 +5,7 @@
 {
   "version": "0.2.0",
   "configurations": [
+  
     {
       "name": "Mumbai",
       "type": "extensionHost",
@@ -33,6 +34,16 @@
       "args": [
         "/Users/vn0dimt/Repos/Walmart/rise",
         "--extensionDevelopmentPath=${workspaceFolder}"
+      ]
+    },
+    {
+      "name": "Single Root",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "${workspaceFolder}/tests/js/single-root",
+        "--extensionDevelopmentPath=${workspaceFolder}",
       ]
     },
     {

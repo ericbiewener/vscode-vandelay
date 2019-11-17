@@ -1,5 +1,6 @@
 export const src1_file3_1 = 'foo'
 export const src1_file3_2 = "bar";
+import gql from "graphql-tag.macro";
 
 src1_file3_3 = 7
 export src1_file3_3
