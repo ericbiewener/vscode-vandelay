@@ -1,3 +1,6 @@
+### Version 4.2.1
+- Preserve `.macro` file extension when writing import paths ([#26](https://github.com/ericbiewener/vscode-vandelay/issues/26)).
+
 ### Version 4.2.0
 - Run node_module import paths through `processImportPath`.
 
