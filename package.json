@@ -96,8 +96,8 @@
   },
   "scripts": {
     "vscode:prepublish": "yarn run build",
-    "start": "NODE_ENV=development ./node_modules/.bin/webpack --config webpack.config.ts -w",
-    "build": "NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.ts",
+    "start": "NODE_ENV=development webpack -w",
+    "build": "NODE_ENV=production webpack",
     "test": "yarn run compile && node ./node_modules/vscode/bin/test",
     "tw": "tsc -w --noEmit",
     "postinstall": "node ./node_modules/vscode/bin/install; cd ./tests/js/single-root && yarn install; cd ../es5 && yarn install; cd ../../../",
