@@ -1,5 +1,6 @@
 import fs from 'fs-extra'
 import path from 'path'
+import { isFile } from 'utlz'
 import { ExportDataNodeModulesJs, NodeModuleExports } from '../types'
 import { Dep } from './cacheNodeModules'
 
@@ -23,10 +24,7 @@ async function main() {
   process.stdout.write(`__vandelay__stdout__${JSON.stringify(data)}__vandelay__stdout__`)
 }
 
-async function cacheDependencies(
-  packageJson: PackageJson,
-  data: ExportDataNodeModulesJs
-) {
+async function cacheDependencies(packageJson: PackageJson, data: ExportDataNodeModulesJs) {
   const deps = [
     ...Object.keys(packageJson.dependencies || {}),
     ...Object.keys(packageJson.devDependencies || {}),
@@ -42,14 +40,10 @@ async function cacheDependencies(
   )
 }
 
-
-
 // FIXME: possible to make `plugin` global as well, like context, so that i don't have to pass it
 // around? The difference would be that it gets set at the start of each command, whereas context
 // would never change.
-export async function cacheDependency(
-  dep: string
-): Promise<NodeModuleExports | undefined> {
+export async function cacheDependency(dep: string): Promise<NodeModuleExports | undefined> {
   const dir = path.join(projectRoot, 'node_modules', dep)
   const packageJsonPath = path.join(dir, 'package.json')
 
@@ -71,6 +65,7 @@ export async function cacheDependency(
 
   let depExports
   try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     depExports = __non_webpack_require__(mainFile)
   } catch (e) {
@@ -87,7 +82,7 @@ export async function cacheDependency(
   // letter. For example, ReactDOM exports some stuff with the name `unstable_...`.
   const named = Object.keys(rest).filter(k => !k.includes('_'))
   if (!named.length) return
-  
+
   return {
     default: defaultExport ? getDefaultName(dep) : null,
     named,
@@ -98,7 +93,7 @@ export async function cacheDependency(
 
 function getDefaultName(dep: string) {
   const pathParts = dep.split('/')
-  const packageName = pathParts[pathParts.length -1]
+  const packageName = pathParts[pathParts.length - 1]
   const parts = packageName.split('-')
   const capitalized = parts
     .slice(1)
@@ -106,15 +101,6 @@ function getDefaultName(dep: string) {
     .join('')
 
   return `${parts[0]}${capitalized}`
-}
-
-function isFile(file: string) {
-  try {
-    return fs.statSync(file).isFile()
-  } catch (e) {
-    if (e.code !== 'ENOENT') throw e // File might exist, but something else went wrong (e.g. permissions error)
-    return false
-  }
 }
 
 main()

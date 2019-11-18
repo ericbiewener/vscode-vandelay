@@ -1,17 +1,42 @@
+import { isFile } from 'utlz'
 import { window, TextEditor } from 'vscode'
 import path from 'path'
 import { PluginJs, MergedExportDataJs, RichQuickPickItemJs, ExportType } from '../types'
 import { isIndexFile } from '../utils'
+
+const CSS_EXTENSIONS = ['css', 'pcss']
+
+// TODO: import findFileForExtensions from utlz
+
+function findFileForExtensions(filepath: string, extensions: string[]) {
+  const filepathRoot = filepath.slice(0, filepath.lastIndexOf('.'))
+  for (const ext of extensions) {
+    const newPath = `${filepathRoot}.${ext}`
+    if (isFile(newPath)) return newPath
+  }
+}
 
 export function buildImportItems(
   plugin: PluginJs,
   exportData: MergedExportDataJs,
   sortedKeys: string[]
 ): RichQuickPickItemJs[] {
-  const { projectRoot, shouldIncludeImport } = plugin
+  const { projectRoot, shouldIncludeImport, cssExtensions } = plugin
   const editor = window.activeTextEditor as TextEditor
   const activeFilepath = editor.document.fileName
   const items = []
+
+  const cssModulePath = findFileForExtensions(activeFilepath, cssExtensions || CSS_EXTENSIONS)
+
+  if (cssModulePath) {
+    items.push({
+      label: 'styles',
+      description: path.relative(projectRoot, cssModulePath),
+      exportType: ExportType.default,
+      isExtraImport: false,
+      absImportPath: cssModulePath,
+    })
+  }
 
   for (const importPath of sortedKeys) {
     let absImportPath = path.join(projectRoot, importPath)

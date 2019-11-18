@@ -1,11 +1,10 @@
-import { DefaultPluginConfig, Plugin, PluginConfig, RichQuickPickItem, RuntimePluginConfig,
-  UserConfig } from '../../types'
+import { Plugin, PluginConfig, RichQuickPickItem, UserConfig } from '../../types'
 
 // TODO: uppercase
 export enum ExportType {
   default = 0,
   named = 1,
-  type = 2,
+  type = 2
 }
 
 export type RichQuickPickItemJs = RichQuickPickItem & {
@@ -99,6 +98,7 @@ export type UserConfigJs = UserConfig & {
   trailingComma?: boolean
   importGroups?: string[]
   typescript?: boolean
+  cssExtensions?: string[]
   processImportName?(
     importName: string,
     importPath: string,

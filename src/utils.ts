@@ -2,8 +2,20 @@ import fs from 'fs'
 import makeDir from 'make-dir'
 import path from 'path'
 import _ from 'lodash'
-import { Diagnostic, languages, Position, Range, TextDocument, TextEdit, TextEditor, TextEditorEdit,
-  window, workspace, WorkspaceFolder, WorkspaceConfiguration } from 'vscode'
+import {
+  Diagnostic,
+  languages,
+  Position,
+  Range,
+  TextDocument,
+  TextEdit,
+  TextEditor,
+  TextEditorEdit,
+  window,
+  workspace,
+  WorkspaceFolder,
+  WorkspaceConfiguration,
+} from 'vscode'
 import { VANDELAY_CONFIG_DIR } from './constants'
 import { JS_EXTENSIONS } from './plugins/javascript/config'
 import { Plugin, CachingData, ImportPosition } from './types'
@@ -15,15 +27,6 @@ for (const ext of JS_EXTENSIONS) extensionToLang[ext] = 'js'
 export async function writeCacheFile(plugin: Plugin, data: CachingData) {
   await makeDir(plugin.cacheDirPath)
   fs.writeFileSync(plugin.cacheFilepath, JSON.stringify(data))
-}
-
-export function isFile(file: string) {
-  try {
-    return fs.statSync(file).isFile()
-  } catch (e) {
-    if (e.code !== 'ENOENT') throw e // File might exist, but something else went wrong (e.g. permissions error)
-    return false
-  }
 }
 
 export function getLangFromFilePath(filePath: string) {
@@ -59,7 +62,8 @@ export function insertLine(
   const editor = window.activeTextEditor as TextEditor
   const { document } = editor
 
-  // If this is the first import and the line after where we're inserting it has content, add an extra line break
+  // If this is the first import and the line after where we're inserting it has content, add an
+  // extra line break
   if (isFirstImport && document.lineAt(document.positionAt(match ? match.end + 1 : 0)).text) {
     newLine += '\n'
   }
@@ -102,14 +106,18 @@ export function strUntil(str: string, endChar: string | RegExp) {
   return index < 0 ? str : str.slice(0, index)
 }
 
-export function removeExt(filepath: string) {
+export function removeExt(filepath: string, extensions?: string[]) {
+  // TODO: use filename util from utlz
   const ext = path.extname(filepath)
-  return ext ? filepath.slice(0, -ext.length) : filepath
+  if (!ext) return filepath
+  return !extensions || extensions.includes(ext.slice(1))
+    ? filepath.slice(0, -ext.length)
+    : filepath
 }
 
 export function getLastInitialComment(text: string, commentRegex: RegExp) {
-  // Iterates over comment line matches. If one doesn't begin where the previous one left off, this means
-  // a non comment line came between them.
+  // Iterates over comment line matches. If one doesn't begin where the previous one left off, this
+  // means a non comment line came between them.
   let expectedNextIndex = 0
   let match
   let lastMatch
@@ -200,11 +208,11 @@ export function showProjectExportsCachedMessage() {
 // TODO: figure out why the lodash fns aren't working
 
 // _.last always makes TS think the value could be undefeind
-export function last(arr: any[]) {
+export function last<V>(arr: V[]) {
   return arr[arr.length - 1]
 }
 
-export function isObject(obj: any) {
+export function isObject(obj: unknown) {
   return obj && typeof obj === 'object'
 }
 
@@ -214,9 +222,9 @@ export function getWordAtPosition(document: TextDocument, position: Position) {
 }
 
 type VandelayConfiguration = WorkspaceConfiguration & {
-  autoImportSingleResult: boolean,
-  showNewVersionAlert: boolean,
-  provideCompletions: boolean,
+  autoImportSingleResult: boolean
+  showNewVersionAlert: boolean
+  provideCompletions: boolean
 }
 
 export function getConfiguration(): VandelayConfiguration {

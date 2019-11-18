@@ -1,10 +1,10 @@
-import _ from 'lodash'
+import { isFile } from 'utlz'
 import { ExtensionContext, window, workspace } from 'vscode'
 import path from 'path'
 import { registerCompletionItemProvider } from './createCompletionItemProvider'
 import { alertNewVersionConfig } from './newVersionAlerting'
 import { pluginConfigs } from './registerPluginConfig'
-import { findVandelayConfigDir, getConfiguration, isFile, isObject } from './utils'
+import { findVandelayConfigDir, getConfiguration, isObject } from './utils'
 import { Language, Plugin, PluginConfig, RuntimePluginConfig, UserConfig } from './types'
 import { cacheProjectLanguage } from './cacher'
 
@@ -65,8 +65,10 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
 async function getUserConfig(configFilepath: string) {
   try {
     console.log(`Loading vandelay config file from ${configFilepath}`)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
-    delete __non_webpack_require__.cache[configFilepath]
+    delete __non_webpack_require__.cache[configFilepath] // eslint-disable-line @typescript-eslint/camelcase
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     const userConfig = __non_webpack_require__(configFilepath)
 

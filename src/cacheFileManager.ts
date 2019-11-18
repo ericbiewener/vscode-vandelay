@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { isFile } from './utils'
+import { isFile } from 'utlz'
 import { ExportData, Plugin } from './types'
 
 function parseCacheFile(plugin: Plugin) {
@@ -9,11 +9,11 @@ function parseCacheFile(plugin: Plugin) {
 }
 
 /**
- * Block access to the cache file until a previous accessor has finished its operations.
- * This prevents race conditions resulting in the last accessor overwriting prior ones' data.
+ * Block access to the cache file until a previous accessor has finished its operations. This
+ * prevents race conditions resulting in the last accessor overwriting prior ones' data.
  *
- * `cb` should return a promise (e.g. any file writing operations) so that it completes before the next call
- * to the cacheFileManager
+ * `cb` should return a promise (e.g. any file writing operations) so that it completes before the
+ * next call to the cacheFileManager
  */
 let fileAccess: Promise<any>
 

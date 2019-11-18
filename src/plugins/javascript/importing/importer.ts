@@ -8,6 +8,7 @@ import {
   Renamed,
   preserveRenamedImports,
 } from '../../../utils'
+import { JS_EXTENSIONS } from '../config'
 import { parseImports, ParsedImportJs } from '../regex'
 import { FileExportsJs, PluginJs, RichQuickPickItemJs, ExportType } from '../types'
 import { getImportPosition, ImportPositionJs } from './getImportPosition'
@@ -70,10 +71,12 @@ function getFinalImportPath(
       activeFilepath,
       plugin.projectRoot
     )
-    return removeExt(processedPath || importPath)
+    return removeExt(processedPath || importPath, JS_EXTENSIONS)
   }
 
-  return path.basename(importPath) === 'index.js' ? path.dirname(importPath) : removeExt(importPath)
+  return path.basename(importPath) === 'index.js'
+    ? path.dirname(importPath)
+    : removeExt(importPath, JS_EXTENSIONS)
 }
 
 function getNewLineImports(

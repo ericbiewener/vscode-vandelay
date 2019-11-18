@@ -1,3 +1,6 @@
+### Version 4.3.0
+- Provide CSS Module import options. See `cssExtensions` in the readme.
+
 ### Version 4.2.1
 - Preserve `.macro` file extension when writing import paths ([#26](https://github.com/ericbiewener/vscode-vandelay/issues/26)).
 
