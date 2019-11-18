@@ -22,14 +22,17 @@ export function finalizeExtensionActivation(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand('vandelay.cacheProject', catchError(cacheProject)),
-    commands.registerCommand('vandelay.selectImport', catchError(() => selectImport())),
+    commands.registerCommand(
+      'vandelay.selectImport',
+      catchError(() => selectImport()),
+    ),
     commands.registerCommand(
       'vandelay.selectImportForActiveWord',
-      catchError(() => selectImportForActiveWord())
+      catchError(() => selectImportForActiveWord()),
     ),
     commands.registerCommand(
       'vandelay.importUndefinedVariables',
-      catchError(() => importUndefinedVariables())
+      catchError(() => importUndefinedVariables()),
     ),
     commands.registerCommand('vandelay.removeUnusedImports', catchError(removeUnusedImports)),
     commands.registerCommand(
@@ -37,7 +40,7 @@ export function finalizeExtensionActivation(context: ExtensionContext) {
       catchError(async () => {
         await removeUnusedImports()
         await importUndefinedVariables()
-      })
+      }),
     ),
 
     workspace.onDidChangeConfiguration(e => {
@@ -53,15 +56,13 @@ export function finalizeExtensionActivation(context: ExtensionContext) {
           DisposableManager.dispose(DisposableKey.PROVIDE_COMPLETIONS)
         } else {
           for (const k in PLUGINS) {
-            const plugin = PLUGINS[k] as unknown as Plugin
+            const plugin = (PLUGINS[k] as unknown) as Plugin
             registerCompletionItemProvider(context, plugin)
           }
         }
       }
-
-      
     }),
 
-    watchForChanges()
+    watchForChanges(),
   )
 }

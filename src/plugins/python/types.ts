@@ -1,5 +1,4 @@
-import { DefaultPluginConfig, Plugin, PluginConfig, RichQuickPickItem, RuntimePluginConfig,
-  UserConfig } from '../../types'
+import { Plugin, PluginConfig, RichQuickPickItem, UserConfig } from '../../types'
 
 /**
  * Cached Data Structures

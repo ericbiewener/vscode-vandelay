@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import { addNamesAndRenames, Renamed, strUntil } from '../../utils'
-import { Plugin } from '../../types'
 import { PluginJs } from './types'
 
 export const commentRegex = /^(?:[ \t]*\/\/.*|[ \t]*\/\*[^]*?\*\/)/gm
@@ -44,7 +43,7 @@ export function parseImports(plugin: PluginJs, text: string) {
   let match
   while ((match = regex.exec(text))) {
     // unassigned import: `import "something"`
-    if (match[1] && (match[1].startsWith("'") || match[1].startsWith('"'))) {
+    if (match[1] && (match[1].startsWith('\'') || match[1].startsWith('"'))) {
       // Must reset `lastIndex` to the end of the unassigned import statement because the match will
       // have gone beyond it
       const unassignedImportEnd = match[0].indexOf('\n')
@@ -74,7 +73,11 @@ export function parseImports(plugin: PluginJs, text: string) {
       } else {
         const groups = _.partition(namedAndTypes, i => i.startsWith('type '))
         if (groups[0].length) {
-          addNamesAndRenames(groups[0].map(i => i.slice(5)), importData.types, importData.renamed)
+          addNamesAndRenames(
+            groups[0].map(i => i.slice(5)),
+            importData.types,
+            importData.renamed,
+          )
         }
         if (groups[1].length) {
           addNamesAndRenames(groups[1], importData.named, importData.renamed)

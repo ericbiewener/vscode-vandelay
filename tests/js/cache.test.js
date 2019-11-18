@@ -1,13 +1,7 @@
 const _ = require('lodash')
 const path = require('path')
 const { cacheTests } = require('../shared-tests')
-const {
-  getPlugin,
-  openFile,
-  testSpyCall,
-  cacheTest,
-  cacheDiffTest,
-} = require('../utils')
+const { getPlugin, openFile, testSpyCall, cacheTest, cacheDiffTest } = require('../utils')
 
 describe('Cache Tests', function() {
   cacheTests()

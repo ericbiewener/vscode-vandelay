@@ -4,7 +4,7 @@ import { Plugin, PluginConfig, RichQuickPickItem, UserConfig } from '../../types
 export enum ExportType {
   default = 0,
   named = 1,
-  type = 2
+  type = 2,
 }
 
 export type RichQuickPickItemJs = RichQuickPickItem & {

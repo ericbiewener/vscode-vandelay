@@ -1,16 +1,17 @@
-/* eslint-ignore */
 const path = require('path')
-import { Configuration } from 'webpack'
 
 const SRC = path.join(__dirname, 'src')
 const DIST = path.join(__dirname, 'dist')
 
-const config: Configuration = {
-  mode: process.env.NODE_ENV as 'development' | 'production',
+module.exports = {
+  mode: process.env.NODE_ENV,
   target: 'node',
   entry: {
     extension: path.join(SRC, 'main.ts'),
-    cacheNodeModulesSandbox: path.join(SRC, 'plugins/javascript/cacheNodeModules/cacheNodeModulesSandbox.ts')
+    cacheNodeModulesSandbox: path.join(
+      SRC,
+      'plugins/javascript/cacheNodeModules/cacheNodeModulesSandbox.ts',
+    ),
   },
   output: {
     path: DIST,
@@ -39,5 +40,3 @@ const config: Configuration = {
     ],
   },
 }
-
-module.exports = config

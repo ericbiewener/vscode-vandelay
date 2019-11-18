@@ -1,7 +1,7 @@
 import { Disposable } from 'vscode'
 
 export enum DisposableKey {
-  PROVIDE_COMPLETIONS
+  PROVIDE_COMPLETIONS,
 }
 
 const disposables: { [K in DisposableKey]?: Disposable[] } = {}
@@ -18,5 +18,5 @@ export const DisposableManager = {
     if (arr) {
       for (const disposable of arr) disposable.dispose()
     }
-  }
+  },
 }

@@ -2,14 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const _ = require('lodash')
 const { sleep } = require('utlz')
-const {
-  window,
-  Range,
-  workspace,
-  extensions,
-  Uri,
-  commands,
-} = require('vscode')
+const { window, Range, workspace, extensions, Uri, commands } = require('vscode')
 const snapshotDiff = require('snapshot-diff')
 
 function diff(context, a, b, options) {
@@ -45,9 +38,7 @@ async function getExportData() {
 }
 
 function testSpyCall(context, call) {
-  expect(call.args.map(p => p.replace(TEST_ROOT, 'absRoot'))).toMatchSnapshot(
-    context
-  )
+  expect(call.args.map(p => p.replace(TEST_ROOT, 'absRoot'))).toMatchSnapshot(context)
 }
 
 async function cacheTest(context, config) {
@@ -86,10 +77,7 @@ async function saveFile(filepath) {
 function replaceFileContents(newText = '') {
   const editor = window.activeTextEditor
   return editor.edit(builder => {
-    builder.replace(
-      editor.document.validateRange(new Range(0, 0, 9999999999, 0)),
-      newText
-    )
+    builder.replace(editor.document.validateRange(new Range(0, 0, 9999999999, 0)), newText)
   })
 }
 
@@ -103,12 +91,7 @@ async function insertItems(plugin, importItems) {
   return window.activeTextEditor.document.getText()
 }
 
-async function insertTest(
-  context,
-  startingText,
-  filepath,
-  preserveFileContents
-) {
+async function insertTest(context, startingText, filepath, preserveFileContents) {
   const open = () => (filepath ? openFile(filepath) : openFile())
 
   const [plugin] = await Promise.all([getPlugin(), open()])
@@ -132,12 +115,7 @@ async function insertTest(
   }
 }
 
-async function insertDiffTest(
-  context,
-  startingText,
-  filepath,
-  preserveFileContents
-) {
+async function insertDiffTest(context, startingText, filepath, preserveFileContents) {
   const open = () => (filepath ? openFile(filepath) : openFile())
 
   const [plugin] = await Promise.all([getPlugin(), open()])

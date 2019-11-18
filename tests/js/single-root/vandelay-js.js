@@ -8,5 +8,5 @@ const src3 = path.join(__dirname, 'src3')
 module.exports = {
   includePaths: [src1, src2, src3],
   nonModulePaths: ['src3'],
-  cssExtensions: ['foo', 'css']
+  cssExtensions: ['foo', 'css'],
 }

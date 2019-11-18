@@ -19,17 +19,16 @@ const file1 = `src1/file1.${global.lang}`
 const file2 = `src1/file2.${global.lang}`
 
 function basenameNoExt(filepath) {
-  return path.basename(filepath, path.extname(filepath));
+  return path.basename(filepath, path.extname(filepath))
 }
 
-describe("Import Tests", function() {
-
+describe('Import Tests', function() {
   importTests()
 
   it('import - has code', async function() {
     await insertDiffTest(
       this,
-    `const foo = 1
+      `const foo = 1
 `
     )
   })
@@ -37,7 +36,7 @@ describe("Import Tests", function() {
   it('import - single line comment', async function() {
     await insertDiffTest(
       this,
-    `// I'm a comment
+      `// I'm a comment
 `
     )
   })
@@ -45,7 +44,7 @@ describe("Import Tests", function() {
   it('import - multiline comment', async function() {
     await insertDiffTest(
       this,
-    `/*
+      `/*
 I'm a comment
 With multiple lines
 */
@@ -56,7 +55,7 @@ With multiple lines
   it('import - comment with code right after', async function() {
     await insertDiffTest(
       this,
-    `// I'm a comment
+      `// I'm a comment
 const foo = 1
 `
     )
@@ -65,7 +64,7 @@ const foo = 1
   it('import - comment with linebreak and code', async function() {
     await insertDiffTest(
       this,
-    `// I'm a comment
+      `// I'm a comment
 
 const foo = 1
 `
@@ -117,11 +116,8 @@ const foo = 1
   })
 
   it('import - processImportPath', async function() {
-    const processImportPath = sinon.fake(
-      importPath =>
-        importPath.endsWith('file1.js')
-          ? importPath.replace('file', 'FILE')
-          : null
+    const processImportPath = sinon.fake(importPath =>
+      importPath.endsWith('file1.js') ? importPath.replace('file', 'FILE') : null
     )
     await configInsertTest(this, { processImportPath })
     testSpyCall(this, processImportPath.getCall(0))
@@ -130,9 +126,7 @@ const foo = 1
   it('import - processImportName - default import', async function() {
     await configInsertDiffTest(this, file1, {
       processImportName: importName => {
-        return importName === 'defaultModule1'
-          ? 'defaultModule1_renamed'
-          : null
+        return importName === 'defaultModule1' ? 'defaultModule1_renamed' : null
       },
     })
   })
@@ -162,9 +156,7 @@ const foo = 1
   })
 
   it('import - shouldIncludeImport', async function() {
-    const shouldIncludeImport = sinon.fake(absImportPath =>
-      absImportPath.endsWith('file1.js')
-    )
+    const shouldIncludeImport = sinon.fake(absImportPath => absImportPath.endsWith('file1.js'))
     await configInsertTest(this, { shouldIncludeImport })
     testSpyCall(this, _.last(shouldIncludeImport.getCalls()))
   })
@@ -187,7 +179,7 @@ const foo = 1
     window.showWarningMessage.resetHistory()
     await insertItem({ label: 'module2_1', ...itemProps })
     expect(window.showWarningMessage.callCount).toBe(0)
-    
+
     window.showWarningMessage.resetHistory()
     await insertItem({ label: 'module2_2 as module2_2_renamed', ...itemProps })
     expect(window.showWarningMessage.callCount).toBe(0)
