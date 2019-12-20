@@ -3,14 +3,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const expect = require('expect')
 const { buildImportItems, insertImport } = require('../src/importing/importer')
-const {
-  commands,
-  workspace,
-  extensions,
-  window,
-  Uri,
-  Range,
-} = require('vscode')
+const { commands, workspace, extensions, window, Uri, Range } = require('vscode')
 
 afterEach(async function() {
   await commands.executeCommand('workbench.action.closeAllEditors')
@@ -25,25 +18,17 @@ const getPlugin = async () => {
   return api.plugin
 }
 
-const getExportData = plugin =>
-  JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf8'))
+const getExportData = plugin => JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf8'))
 
 const openFile = (...fileParts) =>
   window.showTextDocument(
-    Uri.file(
-      fileParts.length
-        ? path.join(...fileParts)
-        : path.join(testRoot, 'src1/file1.py')
-    )
+    Uri.file(fileParts.length ? path.join(...fileParts) : path.join(testRoot, 'src1/file1.py'))
   )
 
 const replaceFileContents = (newText = '') => {
   const editor = window.activeTextEditor
   return editor.edit(builder => {
-    builder.replace(
-      editor.document.validateRange(new Range(0, 0, 9999999999, 0)),
-      newText
-    )
+    builder.replace(editor.document.validateRange(new Range(0, 0, 9999999999, 0)), newText)
   })
 }
 
@@ -97,9 +82,7 @@ const cacheTest = async (context, config) => {
 }
 
 const testSpyCall = (context, call) =>
-  expect(call.args.map(p => p.replace(testRoot, 'absRoot'))).toMatchSnapshot(
-    context
-  )
+  expect(call.args.map(p => p.replace(testRoot, 'absRoot'))).toMatchSnapshot(context)
 
 module.exports = {
   testRoot,

@@ -103,9 +103,7 @@ def foo():
   it('import - processImportName - full module import', async function() {
     await configInsertDiffTest(this, file2, {
       processImportName: importName => {
-        return importName === 'full_package1'
-          ? 'full_package1 as full_package1_renamed'
-          : null
+        return importName === 'full_package1' ? 'full_package1 as full_package1_renamed' : null
       },
     })
   })

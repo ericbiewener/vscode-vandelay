@@ -1,11 +1,11 @@
 module.exports = {
-  extends: "ericbiewener-typescript",
+  extends: 'ericbiewener-typescript',
   env: {
     browser: false,
     es6: true,
-    node: true
+    node: true,
   },
   globals: {
-    __non_webpack_require__: false
-  }
-};
+    __non_webpack_require__: false,
+  },
+}

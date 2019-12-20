@@ -1,5 +1,12 @@
-import { CompletionItem, CompletionItemKind, ExtensionContext, languages, Position, TextDocument,
-  TextEdit } from 'vscode'
+import {
+  CompletionItem,
+  CompletionItemKind,
+  ExtensionContext,
+  languages,
+  Position,
+  TextDocument,
+  TextEdit,
+} from 'vscode'
 import { DisposableKey, DisposableManager } from './DisposableManager'
 import { cacheFileManager } from './cacheFileManager'
 import { Plugin, RichQuickPickItem } from './types'
@@ -31,10 +38,7 @@ type RichCompletionItem<Q = RichQuickPickItem> = CompletionItem & {
   position: Position
 }
 
-export function registerCompletionItemProvider(
-  context: ExtensionContext,
-  plugin: Plugin,
-) {
+export function registerCompletionItemProvider(context: ExtensionContext, plugin: Plugin) {
   const { includePaths, extensions, insertImport } = plugin
 
   const provider = {
@@ -48,7 +52,7 @@ export function registerCompletionItemProvider(
         return items.map(item => {
           const completionItem = new CompletionItem(
             item.label,
-            CompletionItemKind.Event
+            CompletionItemKind.Event,
           ) as RichCompletionItem
           // Caching for use in `resolveCompletionItem`
           completionItem.importItem = item
@@ -69,10 +73,7 @@ export function registerCompletionItemProvider(
 
   const pattern = `${maybeCreateGlobOr(includePaths)}/**/*.${maybeCreateGlobOr(extensions)}}`
 
-  const disposable = languages.registerCompletionItemProvider(
-    { pattern, scheme: 'file' },
-    provider
-  )
+  const disposable = languages.registerCompletionItemProvider({ pattern, scheme: 'file' }, provider)
   context.subscriptions.push(disposable)
   DisposableManager.add(DisposableKey.PROVIDE_COMPLETIONS, disposable)
 }

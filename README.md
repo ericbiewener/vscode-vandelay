@@ -237,6 +237,9 @@ Defaults to `true`. Whether import statements should be writting with single or 
 ### `useSemicolons: boolean` (JS only)
 Defaults to `true`. Whether import statements should be writting with semicolons.
 
+### `cssExtensions: string[]` (JS only)
+Defaults to `['css', 'pcss']`. Vandelay will offer a CSS Module import option if an adjacent file to the active one exists with the same name and one of the defined CSS extensions. For example, if the same directory contains `MyComponent.ts` and `MyComponent.css`, then Vandelay will let you automatically import the CSS Module styles into `MyComponent.ts`, i.e. `import styles from './MyComponent.css'`
+
 ### `multilineImportStyle: 'multiple' | 'single'` (JS only)
 Defaults to `multiple`. Whether to allow multiple imports on a line when the import needs to span
 multiple lines because it has gone over the [allowed line length](#maximportlinelength-number).

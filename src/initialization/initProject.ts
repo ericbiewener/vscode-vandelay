@@ -26,7 +26,7 @@ export async function initProject(context: ExtensionContext) {
 
   if (!workspaceFolders) {
     window.showErrorMessage(
-      'You must add a workspace folder before initializing a Vandelay configuration file.'
+      'You must add a workspace folder before initializing a Vandelay configuration file.',
     )
     return
   }
@@ -38,7 +38,7 @@ export async function initProject(context: ExtensionContext) {
 
 async function initProjectSingleRoot(
   context: ExtensionContext,
-  workspaceFolders: WorkspaceFolder[]
+  workspaceFolders: WorkspaceFolder[],
 ) {
   const selection = await getLanguageSelection()
   if (!selection) return
@@ -58,20 +58,20 @@ async function initProjectSingleRoot(
   const includePaths = await getIncludePathSelections(includePathOptions)
   if (!includePaths) return
 
-  const text = buildText("const path = require('path')\n\n", buildIncludePathText(includePaths))
+  const text = buildText('const path = require(\'path\')\n\n', buildIncludePathText(includePaths))
   await createAndOpenFile(context, configFilepath, text, !!includePaths.length)
 }
 
 // FIXME: make context a globally importable constant, stop passing it around
 async function initProjectMultiRoot(
   context: ExtensionContext,
-  workspaceFolders: WorkspaceFolder[]
+  workspaceFolders: WorkspaceFolder[],
 ) {
   const configDir = findVandelayConfigDir(workspaceFolders)
   if (!configDir) {
     window.showErrorMessage(
       'You must create a folder named `.vandelay` and add that to your workspace before you can initialize a new Vandelay project.',
-      { modal: true }
+      { modal: true },
     )
     return
   }
@@ -118,8 +118,11 @@ async function initProjectMultiRoot(
 
 async function getLanguageSelection() {
   const selection = await window.showQuickPick(
-    [{ label: 'JavaScript / TypeScript', language: 'js' }, { label: 'Python', language: 'py' }],
-    { placeHolder: 'Which language?' }
+    [
+      { label: 'JavaScript / TypeScript', language: 'js' },
+      { label: 'Python', language: 'py' },
+    ],
+    { placeHolder: 'Which language?' },
   )
   if (!selection) return
 
@@ -134,10 +137,13 @@ function openExistingConfigFile(configFilepath: string) {
 }
 
 function getIncludePathSelections(includePathOptions: IncludePathQuickPickItem[]) {
-  return window.showQuickPick(includePathOptions.filter(f => !f.label.startsWith('.')), {
-    canPickMany: true,
-    placeHolder: 'Which paths contain your source files? Leave empty to enter manually.',
-  })
+  return window.showQuickPick(
+    includePathOptions.filter(f => !f.label.startsWith('.')),
+    {
+      canPickMany: true,
+      placeHolder: 'Which paths contain your source files? Leave empty to enter manually.',
+    },
+  )
 }
 
 function buildIncludePathText(includePaths: IncludePathQuickPickItem[]) {
@@ -182,7 +188,7 @@ async function createAndOpenFile(
   context: ExtensionContext,
   filepath: string,
   text: string,
-  hasIncludePaths: boolean
+  hasIncludePaths: boolean,
 ) {
   await fs.writeFile(filepath, text)
   await window.showTextDocument(Uri.file(filepath))

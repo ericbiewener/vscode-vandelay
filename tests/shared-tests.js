@@ -28,8 +28,7 @@ function importTests() {
     const items = await buildImportItems()
 
     if (global.lang === 'js') {
-      for (const i of items)
-        i.absImportPath = i.absImportPath.replace(TEST_ROOT, 'absRoot')
+      for (const i of items) i.absImportPath = i.absImportPath.replace(TEST_ROOT, 'absRoot')
     }
     expect(items).toMatchSnapshot(this)
   })

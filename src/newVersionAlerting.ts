@@ -1,5 +1,4 @@
-import _ from 'lodash'
-import { extensions, window, workspace, ExtensionContext, env, Uri } from 'vscode'
+import { env, ExtensionContext, extensions, Uri } from 'vscode'
 import { alertWithActions } from './alertWithActions'
 import { Plugin } from './types'
 import { getConfiguration } from './utils'
@@ -39,7 +38,7 @@ export async function alertNewVersion(context: ExtensionContext) {
     actions: [
       CHANGELOG_BUTTON_CONFIG,
       {
-        title: "Don't show this again",
+        title: 'Don\'t show this again',
         action: () => config.update('showNewVersionAlert', false, true),
       },
     ],
@@ -49,16 +48,14 @@ export async function alertNewVersion(context: ExtensionContext) {
 export async function alertNewVersionConfig(plugin: Plugin) {
   if (plugin.hasOwnProperty('processDefaultName')) {
     alertWithActions({
-      msg: `The Vandelay configuration option \`processDefaultName\` has been removed.\n\nPlease use the new \`processImportName\` option instead in your vandelay-${
-        plugin.language
-      }.js file.`,
+      msg: `The Vandelay configuration option \`processDefaultName\` has been removed.\n\nPlease use the new \`processImportName\` option instead in your vandelay-${plugin.language}.js file.`,
       modal: true,
       actions: [
         {
           title: 'View README',
           action: () =>
             openUri(
-              `${REPO_MASTER}README.md#processimportnameimportpath-string-absimportpath-string-activefilepath-string-projectroot-string-string`
+              `${REPO_MASTER}README.md#processimportnameimportpath-string-absimportpath-string-activefilepath-string-projectroot-string-string`,
             ),
         },
         CHANGELOG_BUTTON_CONFIG,

@@ -1,17 +1,32 @@
+import { findFileForExtensions } from 'utlz'
 import { window, TextEditor } from 'vscode'
 import path from 'path'
 import { PluginJs, MergedExportDataJs, RichQuickPickItemJs, ExportType } from '../types'
 import { isIndexFile } from '../utils'
 
+const CSS_EXTENSIONS = ['css', 'pcss']
+
 export function buildImportItems(
   plugin: PluginJs,
   exportData: MergedExportDataJs,
-  sortedKeys: string[]
+  sortedKeys: string[],
 ): RichQuickPickItemJs[] {
-  const { projectRoot, shouldIncludeImport } = plugin
+  const { projectRoot, shouldIncludeImport, cssExtensions } = plugin
   const editor = window.activeTextEditor as TextEditor
   const activeFilepath = editor.document.fileName
   const items = []
+
+  const cssModulePath = findFileForExtensions(activeFilepath, cssExtensions || CSS_EXTENSIONS)
+
+  if (cssModulePath) {
+    items.push({
+      label: 'styles',
+      description: path.relative(projectRoot, cssModulePath),
+      exportType: ExportType.default,
+      isExtraImport: false,
+      absImportPath: cssModulePath,
+    })
+  }
 
   for (const importPath of sortedKeys) {
     let absImportPath = path.join(projectRoot, importPath)
@@ -35,7 +50,7 @@ export function buildImportItems(
       // directories higher up, in which case it should not be imported from that reexport location
       // if the active file is adjacent/in a subdirectory.
       !activeFilepath.startsWith(
-        path.join(plugin.projectRoot, path.dirname(data.reexported.reexportPath))
+        path.join(plugin.projectRoot, path.dirname(data.reexported.reexportPath)),
       )
     ) {
       const { reexports } = data.reexported
@@ -71,7 +86,7 @@ export function buildImportItems(
           importPath,
           absImportPath,
           activeFilepath,
-          true
+          true,
         ),
         description: importPathNoExt,
         exportType: ExportType.default,
@@ -89,7 +104,7 @@ export function buildImportItems(
             importPath,
             absImportPath,
             activeFilepath,
-            false
+            false,
           ),
           description: importPathNoExt,
           exportType: ExportType.named,
@@ -108,7 +123,7 @@ export function buildImportItems(
             importPath,
             absImportPath,
             activeFilepath,
-            false
+            false,
           ),
           description: importPathNoExt,
           exportType: ExportType.type,
@@ -128,7 +143,7 @@ function processImportName(
   importPath: string,
   absImportPath: string,
   activeFilepath: string,
-  isDefault: boolean
+  isDefault: boolean,
 ) {
   if (!plugin.processImportName) return importName
   return (
@@ -138,7 +153,7 @@ function processImportName(
       absImportPath,
       activeFilepath,
       plugin.projectRoot,
-      isDefault
+      isDefault,
     ) || importName
   )
 }

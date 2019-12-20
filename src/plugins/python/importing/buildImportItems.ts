@@ -1,13 +1,13 @@
 import path from 'path'
+import { removeFileExt } from 'utlz'
 import { window, TextEditor } from 'vscode'
 import { PluginPy, MergedExportDataPy } from '../types'
-import { removeExt } from '../../../utils'
 import { RichQuickPickItem } from '../../../types'
 
 export function buildImportItems(
   plugin: PluginPy,
   exportData: MergedExportDataPy,
-  sortedKeys: string[]
+  sortedKeys: string[],
 ): RichQuickPickItem[] {
   const { projectRoot, shouldIncludeImport } = plugin
   const editor = window.activeTextEditor as TextEditor
@@ -26,7 +26,7 @@ export function buildImportItems(
     if (data.isExtraImport) {
       dotPath = importPath
     } else {
-      dotPath = removeExt(importPath).replace(/\//g, '.')
+      dotPath = removeFileExt(importPath).replace(/\//g, '.')
       if (plugin.processImportPath) {
         dotPath =
           plugin.processImportPath(dotPath, absImportPath, activeFilepath, plugin.projectRoot) ||
@@ -61,7 +61,7 @@ function processImportName(
   importName: string,
   importPath: string,
   absImportPath: string,
-  activeFilepath: string
+  activeFilepath: string,
 ) {
   if (!plugin.processImportName) return importName
   return (
@@ -70,7 +70,7 @@ function processImportName(
       importPath,
       absImportPath,
       activeFilepath,
-      plugin.projectRoot
+      plugin.projectRoot,
     ) || importName
   )
 }

@@ -1,59 +1,55 @@
-const path = require("path");
-const jest = require("jest-snapshot");
+const path = require('path')
+const jest = require('jest-snapshot')
 
-let snapshotState;
-let matcher;
+let snapshotState
+let matcher
 
 afterEach(() => {
-  if (!snapshotState) return;
-  snapshotState.save();
-  snapshotState = null;
-  matcher = null;
-});
+  if (!snapshotState) return
+  snapshotState.save()
+  snapshotState = null
+  matcher = null
+})
 
 function toMatchSnapshot(received, { test }, currentTestName) {
   if (!snapshotState) {
     const snapshotPath = path.join(
       path.dirname(test.file),
       process.env.TEST_PROJECT,
-      "__snapshots__",
-      path.basename(test.file) + ".snap"
-    );
+      '__snapshots__',
+      path.basename(test.file) + '.snap'
+    )
 
     snapshotState = new jest.SnapshotState(snapshotPath, {
-      updateSnapshot: process.env.UPDATE_SNAPSHOT ? "all" : "new"
-    });
+      updateSnapshot: process.env.UPDATE_SNAPSHOT ? 'all' : 'new',
+    })
   }
 
   // bind because toMatchSnapshot accesses snapshotState & currentTestName via `this`
   matcher = jest.toMatchSnapshot.bind({
     snapshotState,
-    currentTestName
-  });
+    currentTestName,
+  })
 
-  const result = matcher(received);
+  const result = matcher(received)
 
-  return { result, snapshotState };
+  return { result, snapshotState }
 }
 
 expect.extend({
   toMatchSnapshot(received, context, title) {
-    const { parent } = context.test;
-    let currentTestName = parent && parent.title ? `${parent.title} | ` : "";
-    currentTestName += context.test.title;
-    if (title) currentTestName += ` - ${title}`;
-    const { result, snapshotState } = toMatchSnapshot(
-      received,
-      context,
-      currentTestName
-    );
+    const { parent } = context.test
+    let currentTestName = parent && parent.title ? `${parent.title} | ` : ''
+    currentTestName += context.test.title
+    if (title) currentTestName += ` - ${title}`
+    const { result, snapshotState } = toMatchSnapshot(received, context, currentTestName)
 
     if (!result.pass) {
-      console.log(result.report());
+      console.log(result.report())
     } else if (snapshotState.updated) {
-      console.log(`Updated ${currentTestName}`);
+      console.log(`Updated ${currentTestName}`)
     }
-    expect(result.pass).toBe(true);
-    return result;
-  }
-});
+    expect(result.pass).toBe(true)
+    return result
+  },
+})

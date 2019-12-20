@@ -2,8 +2,20 @@ import fs from 'fs'
 import makeDir from 'make-dir'
 import path from 'path'
 import _ from 'lodash'
-import { Diagnostic, languages, Position, Range, TextDocument, TextEdit, TextEditor, TextEditorEdit,
-  window, workspace, WorkspaceFolder, WorkspaceConfiguration } from 'vscode'
+import {
+  Diagnostic,
+  languages,
+  Position,
+  Range,
+  TextDocument,
+  TextEdit,
+  TextEditor,
+  TextEditorEdit,
+  window,
+  workspace,
+  WorkspaceFolder,
+  WorkspaceConfiguration,
+} from 'vscode'
 import { VANDELAY_CONFIG_DIR } from './constants'
 import { JS_EXTENSIONS } from './plugins/javascript/config'
 import { Plugin, CachingData, ImportPosition } from './types'
@@ -15,15 +27,6 @@ for (const ext of JS_EXTENSIONS) extensionToLang[ext] = 'js'
 export async function writeCacheFile(plugin: Plugin, data: CachingData) {
   await makeDir(plugin.cacheDirPath)
   fs.writeFileSync(plugin.cacheFilepath, JSON.stringify(data))
-}
-
-export function isFile(file: string) {
-  try {
-    return fs.statSync(file).isFile()
-  } catch (e) {
-    if (e.code !== 'ENOENT') throw e // File might exist, but something else went wrong (e.g. permissions error)
-    return false
-  }
 }
 
 export function getLangFromFilePath(filePath: string) {
@@ -38,7 +41,7 @@ export function getPluginForFile(filePath: string): Plugin | undefined {
 export function getPluginForActiveFile(silent = false) {
   if (!window.activeTextEditor) return
   const plugin = getPluginForFile(window.activeTextEditor.document.fileName)
-  if (!plugin && !silent) window.showErrorMessage("Vandelay doesn't support the current language.")
+  if (!plugin && !silent) window.showErrorMessage('Vandelay doesn\'t support the current language.')
   return plugin
 }
 
@@ -53,13 +56,14 @@ export function basenameNoExt(filepath: string) {
 export function insertLine(
   newLine: string,
   importPosition: ImportPosition,
-  shouldApplyEdit = true
+  shouldApplyEdit = true,
 ) {
   const { match, isFirstImport } = importPosition
   const editor = window.activeTextEditor as TextEditor
   const { document } = editor
 
-  // If this is the first import and the line after where we're inserting it has content, add an extra line break
+  // If this is the first import and the line after where we're inserting it has content, add an
+  // extra line break
   if (isFirstImport && document.lineAt(document.positionAt(match ? match.end + 1 : 0)).text) {
     newLine += '\n'
   }
@@ -73,7 +77,7 @@ function createEdit(
   edit: TextEditorEdit | typeof TextEdit,
   document: TextDocument,
   newLine: string,
-  importPosition: ImportPosition
+  importPosition: ImportPosition,
 ) {
   const { match, indexModifier } = importPosition
 
@@ -82,7 +86,7 @@ function createEdit(
   } else if (!indexModifier) {
     return edit.replace(
       new Range(document.positionAt(match.start), document.positionAt(match.end)),
-      newLine
+      newLine,
     )
   } else if (indexModifier === 1) {
     return edit.insert(document.positionAt(match.end), '\n' + newLine)
@@ -102,14 +106,9 @@ export function strUntil(str: string, endChar: string | RegExp) {
   return index < 0 ? str : str.slice(0, index)
 }
 
-export function removeExt(filepath: string) {
-  const ext = path.extname(filepath)
-  return ext ? filepath.slice(0, -ext.length) : filepath
-}
-
 export function getLastInitialComment(text: string, commentRegex: RegExp) {
-  // Iterates over comment line matches. If one doesn't begin where the previous one left off, this means
-  // a non comment line came between them.
+  // Iterates over comment line matches. If one doesn't begin where the previous one left off, this
+  // means a non comment line came between them.
   let expectedNextIndex = 0
   let match
   let lastMatch
@@ -200,11 +199,11 @@ export function showProjectExportsCachedMessage() {
 // TODO: figure out why the lodash fns aren't working
 
 // _.last always makes TS think the value could be undefeind
-export function last(arr: any[]) {
+export function last<V>(arr: V[]) {
   return arr[arr.length - 1]
 }
 
-export function isObject(obj: any) {
+export function isObject(obj: unknown) {
   return obj && typeof obj === 'object'
 }
 
@@ -214,9 +213,9 @@ export function getWordAtPosition(document: TextDocument, position: Position) {
 }
 
 type VandelayConfiguration = WorkspaceConfiguration & {
-  autoImportSingleResult: boolean,
-  showNewVersionAlert: boolean,
-  provideCompletions: boolean,
+  autoImportSingleResult: boolean
+  showNewVersionAlert: boolean
+  provideCompletions: boolean
 }
 
 export function getConfiguration(): VandelayConfiguration {

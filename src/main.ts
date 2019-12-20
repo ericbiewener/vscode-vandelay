@@ -19,7 +19,10 @@ export const activate = async function activate(context: ExtensionContext) {
 
   // We need these commands active regardless of whether any plugins exist
   context.subscriptions.push(
-    commands.registerCommand('vandelay.initProject', catchError(() => initProject(context)))
+    commands.registerCommand(
+      'vandelay.initProject',
+      catchError(() => initProject(context)),
+    ),
   )
 
   // Watch for config changes.
@@ -47,7 +50,7 @@ export const activate = async function activate(context: ExtensionContext) {
   return {
     registerPlugin: async ({ language }: { language: string }) => {
       window.showErrorMessage(
-        `Please uninstall extension Vandelay ${language.toUpperCase()}. Vandelay no longer requires langauge extensions to be installed separately.`
+        `Please uninstall extension Vandelay ${language.toUpperCase()}. Vandelay no longer requires langauge extensions to be installed separately.`,
       )
       await commands.executeCommand('workbench.extensions.action.showEnabledExtensions')
     },
