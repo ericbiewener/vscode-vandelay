@@ -22,22 +22,13 @@ export function buildImportItems(
       continue
     }
 
-    let dotPath
-    if (data.isExtraImport) {
-      dotPath = importPath
-    } else {
-      dotPath = removeFileExt(importPath).replace(/\//g, '.')
-      if (plugin.processImportPath) {
-        dotPath =
-          plugin.processImportPath(dotPath, absImportPath, activeFilepath, plugin.projectRoot) ||
-          dotPath
-      }
-    }
+    const dotPath = data.isExtraImport ? importPath : removeFileExt(importPath).replace(/\//g, '.')
 
     if (data.importEntirePackage) {
       items.push({
         label: processImportName(plugin, importPath, dotPath, absImportPath, activeFilepath),
         isExtraImport: data.isExtraImport,
+        absImportPath,
       })
     }
 
@@ -49,6 +40,7 @@ export function buildImportItems(
         label: processImportName(plugin, exportName, dotPath, absImportPath, activeFilepath),
         description: dotPath,
         isExtraImport: data.isExtraImport,
+        absImportPath,
       })
     }
   }

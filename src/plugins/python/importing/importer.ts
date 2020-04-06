@@ -1,10 +1,7 @@
-import _ from 'lodash'
 import { window, Range, TextEditor } from 'vscode'
-import path from 'path'
 import {
   doesImportExist,
   getLastInitialComment,
-  getTabChar,
   insertLine,
   preserveRenamedImports,
   strUntil,
@@ -18,32 +15,44 @@ import { getNewLine } from './getNewLine'
 export function insertImport(
   plugin: PluginPy,
   importSelection: RichQuickPickItem,
-  shouldApplyEdit = true
+  shouldApplyEdit = true,
 ) {
-  const { label: exportName, isExtraImport } = importSelection
-  const isPackageImport = !importSelection.description
-  const importPath = importSelection.description || exportName
   const editor = window.activeTextEditor as TextEditor
+  const { label: exportName, isExtraImport, absImportPath } = importSelection
+  const isPackageImport = !importSelection.description
+
+  let importPath = importSelection.description || exportName
+  if (plugin.processImportPath) {
+    importPath =
+      plugin.processImportPath(
+        importPath,
+        absImportPath as string,
+        editor.document.fileName,
+        plugin.projectRoot,
+        exportName,
+      ) || importPath
+  }
 
   const fileText = editor.document.getText()
   const imports = parseImports(fileText)
   const importPosition = getImportPosition(plugin, importPath, isExtraImport, imports, fileText)
 
-  // Make sure we aren't importing a full package when it already has a partial import, or vice versa
+  // Make sure we aren't importing a full package when it already has a partial import,
+  // or vice versa
   if (!importPosition.indexModifier && !importPosition.isFirstImport) {
     // We have an exact line match for position
     if (isPackageImport) {
       if (!importPosition.match.isEntirePackage) {
         // partial imports exist
         window.showErrorMessage(
-          "Can't import entire package when parts of the package are already being imported."
+          "Can't import entire package when parts of the package are already being imported.",
         )
       }
       return
     } else if (importPosition.match.isEntirePackage) {
       // partial imports don't exist
       window.showErrorMessage(
-        "Can't import part of a package when the entire package is already being imported."
+        "Can't import part of a package when the entire package is already being imported.",
       )
       return
     }
@@ -56,11 +65,13 @@ export function insertImport(
   if (isPackageImport) {
     newLine = `import ${exportName}`
   } else {
-    // If we're adding to an existing line, re-use its path from `importPosition.match.path` in case it is a relative one
+    // If we're adding to an existing line, re-use its path from
+    // `importPosition.match.path` in case it is a relative one
     const lineImportPath =
       importPosition.indexModifier || !importPosition.match.path
         ? importPath
         : importPosition.match.path
+
     newLine = getNewLine(plugin, lineImportPath, lineImports)
   }
 
@@ -71,7 +82,7 @@ export function insertImport(
   if (indexModifier && !isFirstImport && plugin.importGroups) {
     const { before, after } = getSurroundingImportPaths(
       imports,
-      importPosition as ImportPositionMatch
+      importPosition as ImportPositionMatch,
     )
 
     if (before || after) {
@@ -85,7 +96,7 @@ export function insertImport(
       const beforeLine = before ? `${fileText.slice(before.start, before.end)}\n` : ''
       const afterLine = after ? `\n${fileText.slice(after.start, after.end)}` : ''
 
-      return editor.edit(builder => {
+      return editor.edit((builder) => {
         const beforeMatch = before || getLastInitialComment(fileText, commentRegex)
 
         builder.replace(
@@ -93,11 +104,11 @@ export function insertImport(
             // If !before but beforeMatch exists, then beforeMatch is the comment match.
             // Use beforeMatch.end + 1 so that we don't overwrite the comment
             editor.document.positionAt(
-              before ? beforeMatch.start : beforeMatch ? beforeMatch.end + 1 : 0
+              before ? beforeMatch.start : beforeMatch ? beforeMatch.end + 1 : 0,
             ),
-            editor.document.positionAt(after ? after.end : before.end)
+            editor.document.positionAt(after ? after.end : before.end),
           ),
-          `${beforeLine}${newLine}${afterLine}`
+          `${beforeLine}${newLine}${afterLine}`,
         )
       })
     }

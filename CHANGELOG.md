@@ -1,3 +1,6 @@
+### Version 4.4.0
+- Pass the selected import name to `processImportPath`.
+
 ### Version 4.3.0
 - Provide CSS Module import options. See `cssExtensions` in the readme.
 

@@ -21,9 +21,10 @@
 - [Importing external and environment packages](#importing-external-and-environment-packages)
 - [How to Use](#how-to-use)
 - [Configuration](#configuration)
+- [JavaScript Only Options](#javascript-only-options)
 - [Multi-Root Workspace](#multi-root-workspace)
-- [Example of a Complex Configuration File for a JavaScript Project](#example-configuration-file-for-a-javascript-project)
-- [Example of a Complex Configuration File for a Python Project](#example-configuration-file-for-a-python-project)
+- [Example Configuration File for a JavaScript Project](#example-configuration-file-for-a-javascript-project)
+- [Example Configuration File for a Python Project](#example-configuration-file-for-a-python-project)
 - [Settings](#settings)
 
 ## Overview
@@ -149,7 +150,7 @@ import src3 # ungrouped non-package import sorts after grouped
 ### `maxImportLineLength: number`
 Defaults to 100. Used to determine when to wrap import statements onto multiple lines.
 
-### `processImportPath(importPath: string, absImportPath: string, activeFilepath: string, projectRoot: string): ?string`
+### `processImportPath(importPath: string, absImportPath: string, activeFilepath: string, projectRoot: string, importName: string): ?string`
 When inserting a new import, this setting allows you to modify the import path that gets written to
 the file. Useful if you have your build tool configured in a way that allows it to process
 non-relative paths (for example, all your imports are written relative to the project root). Returning a
@@ -161,6 +162,7 @@ falsey value will cause the standard relative path to be used.
 * `absImportPath`: Absolute path of the import file
 * `activeFilepath`: Absolute path to the active file open in your editor
 * `projectRoot`: Absolute path to the root of your project
+* `importName`: The name of the selected import
 
 **JavaScript Example**
 

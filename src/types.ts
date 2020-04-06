@@ -1,19 +1,16 @@
-import { CompletionItemProvider, Disposable, ExtensionContext, TextEdit } from 'vscode'
+import { ExtensionContext, TextEdit } from 'vscode'
 import {
-  FileExportsJs,
-  PluginJs,
-  MergedExportDataJs,
   CachingDataJs,
   ExportDataJs,
-  RichQuickPickItemJs,
+  FileExportsJs,
+  MergedExportDataJs,
 } from './plugins/javascript/types'
 import { DiagnosticFilter } from './utils'
 import {
-  PluginPy,
   CachingDataPy,
+  ExportDataPy,
   FileExportsPy,
   MergedExportDataPy,
-  ExportDataPy,
 } from './plugins/python/types'
 import { ImportPositionPy } from './plugins/python/importing/getImportPosition'
 import { ImportPositionJs } from './plugins/javascript/importing/getImportPosition'
@@ -24,6 +21,7 @@ export type RichQuickPickItem = {
   label: string
   description?: string | undefined
   isExtraImport: boolean | undefined
+  absImportPath?: string
 }
 
 export type ImportPosition = ImportPositionJs | ImportPositionPy
@@ -85,7 +83,8 @@ export type UserConfig = {
     importPath: string,
     absImportPath: string,
     activeFilepath: string,
-    projectRoot: string
+    projectRoot: string,
+    importName?: string
   ): string | undefined
   excludePatterns?: ExcludePattern[]
   shouldIncludeImport?(absImportPath: string, activeFilepath: string): boolean
