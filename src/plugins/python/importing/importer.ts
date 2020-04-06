@@ -17,10 +17,21 @@ export function insertImport(
   importSelection: RichQuickPickItem,
   shouldApplyEdit = true,
 ) {
+  const editor = window.activeTextEditor as TextEditor
   const { label: exportName, isExtraImport, absImportPath } = importSelection
   const isPackageImport = !importSelection.description
-  const importPath = importSelection.description || exportName
-  const editor = window.activeTextEditor as TextEditor
+
+  let importPath = importSelection.description || exportName
+  if (plugin.processImportPath) {
+    importPath =
+      plugin.processImportPath(
+        importPath,
+        absImportPath as string,
+        editor.document.fileName,
+        plugin.projectRoot,
+        exportName,
+      ) || importPath
+  }
 
   const fileText = editor.document.getText()
   const imports = parseImports(fileText)
@@ -56,21 +67,10 @@ export function insertImport(
   } else {
     // If we're adding to an existing line, re-use its path from
     // `importPosition.match.path` in case it is a relative one
-    let lineImportPath =
+    const lineImportPath =
       importPosition.indexModifier || !importPosition.match.path
         ? importPath
         : importPosition.match.path
-
-    if (plugin.processImportPath) {
-      lineImportPath =
-        plugin.processImportPath(
-          lineImportPath,
-          absImportPath as string,
-          editor.document.fileName,
-          plugin.projectRoot,
-          exportName,
-        ) || lineImportPath
-    }
 
     newLine = getNewLine(plugin, lineImportPath, lineImports)
   }
