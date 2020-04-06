@@ -23,6 +23,14 @@ export function buildImportItems(
     }
 
     if (data.importEntirePackage) {
+      const dotPath = getImportDotPath({
+        plugin,
+        data,
+        importPath,
+        absImportPath,
+        activeFilepath,
+      })
+
       items.push({
         label: processImportName(plugin, importPath, dotPath, absImportPath, activeFilepath),
         isExtraImport: data.isExtraImport,
@@ -33,10 +41,32 @@ export function buildImportItems(
 
     // Don't sort data.exports because they were already sorted when caching. See python `cacheFile`
     for (const exportName of data.exports) {
-      const importName = processImportName(plugin, exportName, dotPath, absImportPath, activeFilepath)
+      const dotPath = getImportDotPath({
+        plugin,
+        data,
+        importPath,
+        absImportPath,
+        activeFilepath,
+        importName: exportName,
+      })
+
+      const importName = processImportName(
+        plugin,
+        exportName,
+        dotPath,
+        absImportPath,
+        activeFilepath,
+      )
       items.push({
         label: importName,
-        description: getImportDotPath({ plugin, data, importPath, absImportPath, activeFilepath, importName }),
+        description: getImportDotPath({
+          plugin,
+          data,
+          importPath,
+          absImportPath,
+          activeFilepath,
+          importName,
+        }),
         isExtraImport: data.isExtraImport,
       })
     }
@@ -46,23 +76,36 @@ export function buildImportItems(
 }
 
 type GetImportDotPath = {
-  plugin: PluginPy,
-  data: MergedExportDatumPy,
-  importPath: string,
-  absImportPath: string,
-  activeFilepath: string,
-  importName: string,
+  plugin: PluginPy
+  data: MergedExportDatumPy
+  importPath: string
+  absImportPath: string
+  activeFilepath: string
+  importName?: string
 }
 
-function getImportDotPath({ data, importPath }: GetImportDotPath) {
+function getImportDotPath({
+  plugin,
+  data,
+  importPath,
+  absImportPath,
+  activeFilepath,
+  importName,
+}: GetImportDotPath) {
   if (data.isExtraImport) return importPath
-  
-  let dotPath = removeFileExt(importPath).replace(/\//g, '.')
-  if (plugin.processImportPath) {
-    dotPath =
-      plugin.processImportPath(dotPath, absImportPath, activeFilepath, plugin.projectRoot, importName) ||
-      dotPath
-  }
+
+  const dotPath = removeFileExt(importPath).replace(/\//g, '.')
+  if (!plugin.processImportPath) return dotPath
+
+  return (
+    plugin.processImportPath(
+      dotPath,
+      absImportPath,
+      activeFilepath,
+      plugin.projectRoot,
+      importName,
+    ) || dotPath
+  )
 }
 
 function processImportName(
