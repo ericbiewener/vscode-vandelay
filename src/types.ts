@@ -21,6 +21,7 @@ export type RichQuickPickItem = {
   label: string
   description?: string | undefined
   isExtraImport: boolean | undefined
+  absImportPath?: string
 }
 
 export type ImportPosition = ImportPositionJs | ImportPositionPy

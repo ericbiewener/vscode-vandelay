@@ -150,7 +150,7 @@ import src3 # ungrouped non-package import sorts after grouped
 ### `maxImportLineLength: number`
 Defaults to 100. Used to determine when to wrap import statements onto multiple lines.
 
-### `processImportPath(importPath: string, absImportPath: string, activeFilepath: string, projectRoot: string, importName?: string): ?string`
+### `processImportPath(importPath: string, absImportPath: string, activeFilepath: string, projectRoot: string, importName: string): ?string`
 When inserting a new import, this setting allows you to modify the import path that gets written to
 the file. Useful if you have your build tool configured in a way that allows it to process
 non-relative paths (for example, all your imports are written relative to the project root). Returning a
@@ -162,7 +162,7 @@ falsey value will cause the standard relative path to be used.
 * `absImportPath`: Absolute path of the import file
 * `activeFilepath`: Absolute path to the active file open in your editor
 * `projectRoot`: Absolute path to the root of your project
-* `importName`: The name of the selected import, if there is one (if you're importing an entire package, this argument will be undefined).
+* `importName`: The name of the selected import
 
 **JavaScript Example**
 

@@ -1,7 +1,7 @@
 import path from 'path'
 import { removeFileExt } from 'utlz'
 import { window, TextEditor } from 'vscode'
-import { MergedExportDataPy, MergedExportDatumPy, PluginPy } from '../types'
+import { PluginPy, MergedExportDataPy } from '../types'
 import { RichQuickPickItem } from '../../../types'
 
 export function buildImportItems(
@@ -22,18 +22,13 @@ export function buildImportItems(
       continue
     }
 
-    if (data.importEntirePackage) {
-      const dotPath = getImportDotPath({
-        plugin,
-        data,
-        importPath,
-        absImportPath,
-        activeFilepath,
-      })
+    const dotPath = data.isExtraImport ? importPath : removeFileExt(importPath).replace(/\//g, '.')
 
+    if (data.importEntirePackage) {
       items.push({
         label: processImportName(plugin, importPath, dotPath, absImportPath, activeFilepath),
         isExtraImport: data.isExtraImport,
+        absImportPath,
       })
     }
 
@@ -41,71 +36,16 @@ export function buildImportItems(
 
     // Don't sort data.exports because they were already sorted when caching. See python `cacheFile`
     for (const exportName of data.exports) {
-      const dotPath = getImportDotPath({
-        plugin,
-        data,
-        importPath,
-        absImportPath,
-        activeFilepath,
-        importName: exportName,
-      })
-
-      const importName = processImportName(
-        plugin,
-        exportName,
-        dotPath,
-        absImportPath,
-        activeFilepath,
-      )
       items.push({
-        label: importName,
-        description: getImportDotPath({
-          plugin,
-          data,
-          importPath,
-          absImportPath,
-          activeFilepath,
-          importName,
-        }),
+        label: processImportName(plugin, exportName, dotPath, absImportPath, activeFilepath),
+        description: dotPath,
         isExtraImport: data.isExtraImport,
+        absImportPath,
       })
     }
   }
 
   return items
-}
-
-type GetImportDotPath = {
-  plugin: PluginPy
-  data: MergedExportDatumPy
-  importPath: string
-  absImportPath: string
-  activeFilepath: string
-  importName?: string
-}
-
-function getImportDotPath({
-  plugin,
-  data,
-  importPath,
-  absImportPath,
-  activeFilepath,
-  importName,
-}: GetImportDotPath) {
-  if (data.isExtraImport) return importPath
-
-  const dotPath = removeFileExt(importPath).replace(/\//g, '.')
-  if (!plugin.processImportPath) return dotPath
-
-  return (
-    plugin.processImportPath(
-      dotPath,
-      absImportPath,
-      activeFilepath,
-      plugin.projectRoot,
-      importName,
-    ) || dotPath
-  )
 }
 
 function processImportName(
