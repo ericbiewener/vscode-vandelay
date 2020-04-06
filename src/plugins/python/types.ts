@@ -15,18 +15,13 @@ export type ExportDatumPy = FileExportsPy & {
 
 export type ReexportsToProcess = {
   fullModules: string[]
-  selective: { [path: string]: string[] }
+  selective: Record<string, string[]>
 }
 
-export type ExportDataImportsPy = {
-  [path: string]: FileExportsPy
-}
-export type ExportDataExportsPy = {
-  [path: string]: ExportDatumPy
-}
-export type MergedExportDataPy = {
-  [path: string]: ExportDatumPy & { isExtraImport?: true }
-}
+export type ExportDataImportsPy = Record<string, FileExportsPy>
+export type ExportDataExportsPy = Record<string, ExportDatumPy>
+export type MergedExportDatumPy = ExportDatumPy & { isExtraImport?: true }
+export type MergedExportDataPy = Record<string, MergedExportDatumPy>
 
 export type ExportDataPy = {
   imp: ExportDataImportsPy
@@ -35,9 +30,7 @@ export type ExportDataPy = {
 
 export type CachingDataPy = {
   exp: ExportDataExportsPy
-  imp: {
-    [path: string]: FileExportsPy & { isExtraImport?: true }
-  }
+  imp: Record<string, FileExportsPy & { isExtraImport?: true }>
 }
 
 /**

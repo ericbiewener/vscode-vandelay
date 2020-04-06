@@ -11,10 +11,10 @@ import { getNewLine } from './getNewLine'
 export function insertImport(
   plugin: PluginJs,
   selection: RichQuickPickItemJs,
-  shouldApplyEdit = true,
+  shouldApplyEdit = true
 ) {
   const {
-    label: exportName,
+    label: importName,
     description: importPath,
     absImportPath,
     exportType,
@@ -22,7 +22,13 @@ export function insertImport(
   } = selection
   const editor = window.activeTextEditor
 
-  const finalImportPath = getFinalImportPath(plugin, importPath, absImportPath, isExtraImport)
+  const finalImportPath = getFinalImportPath({
+    plugin,
+    importPath,
+    absImportPath,
+    isExtraImport,
+    importName,
+  })
   const fileText = (editor as TextEditor).document.getText()
   const imports = parseImports(plugin, fileText)
 
@@ -32,26 +38,35 @@ export function insertImport(
     finalImportPath,
     isExtraImport,
     imports,
-    fileText,
+    fileText
   )
-  const lineImports = getNewLineImports(importPosition, exportName, exportType)
+  const lineImports = getNewLineImports(importPosition, importName, exportType)
   if (!lineImports) return
   const newLine = getNewLine(plugin, finalImportPath, lineImports)
 
   return insertLine(newLine, importPosition, shouldApplyEdit)
 }
 
-function getFinalImportPath(
-  plugin: PluginJs,
-  importPath: string,
-  absImportPath: string,
-  isExtraImport: boolean | undefined,
-) {
+type GetFinalImportPath = {
+  plugin: PluginJs
+  importPath: string
+  absImportPath: string
+  isExtraImport: boolean | undefined
+  importName: string
+}
+
+function getFinalImportPath({ plugin, importPath, absImportPath, isExtraImport, importName }: GetFinalImportPath) {
   const activeFilepath = (window.activeTextEditor as TextEditor).document.fileName
 
   if (isExtraImport) {
     const processedPath = plugin.processImportPath
-      ? plugin.processImportPath(importPath, importPath, activeFilepath, plugin.projectRoot)
+      ? plugin.processImportPath(
+          importPath,
+          importPath,
+          activeFilepath,
+          plugin.projectRoot,
+          importName
+        )
       : null
     return processedPath || importPath
   }
@@ -64,6 +79,7 @@ function getFinalImportPath(
       absImportPath,
       activeFilepath,
       plugin.projectRoot,
+      importName
     )
     return removeFileExt(processedPath || importPath, JS_EXTENSIONS)
   }
@@ -76,7 +92,7 @@ function getFinalImportPath(
 function getNewLineImports(
   importPosition: ImportPositionJs,
   exportName: string,
-  exportType: ExportType,
+  exportType: ExportType
 ) {
   const { match, indexModifier, isFirstImport } = importPosition
 

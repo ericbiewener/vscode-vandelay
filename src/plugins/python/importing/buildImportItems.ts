@@ -1,7 +1,7 @@
 import path from 'path'
 import { removeFileExt } from 'utlz'
 import { window, TextEditor } from 'vscode'
-import { PluginPy, MergedExportDataPy } from '../types'
+import { MergedExportDataPy, MergedExportDatumPy, PluginPy } from '../types'
 import { RichQuickPickItem } from '../../../types'
 
 export function buildImportItems(
@@ -22,18 +22,6 @@ export function buildImportItems(
       continue
     }
 
-    let dotPath
-    if (data.isExtraImport) {
-      dotPath = importPath
-    } else {
-      dotPath = removeFileExt(importPath).replace(/\//g, '.')
-      if (plugin.processImportPath) {
-        dotPath =
-          plugin.processImportPath(dotPath, absImportPath, activeFilepath, plugin.projectRoot) ||
-          dotPath
-      }
-    }
-
     if (data.importEntirePackage) {
       items.push({
         label: processImportName(plugin, importPath, dotPath, absImportPath, activeFilepath),
@@ -45,15 +33,36 @@ export function buildImportItems(
 
     // Don't sort data.exports because they were already sorted when caching. See python `cacheFile`
     for (const exportName of data.exports) {
+      const importName = processImportName(plugin, exportName, dotPath, absImportPath, activeFilepath)
       items.push({
-        label: processImportName(plugin, exportName, dotPath, absImportPath, activeFilepath),
-        description: dotPath,
+        label: importName,
+        description: getImportDotPath({ plugin, data, importPath, absImportPath, activeFilepath, importName }),
         isExtraImport: data.isExtraImport,
       })
     }
   }
 
   return items
+}
+
+type GetImportDotPath = {
+  plugin: PluginPy,
+  data: MergedExportDatumPy,
+  importPath: string,
+  absImportPath: string,
+  activeFilepath: string,
+  importName: string,
+}
+
+function getImportDotPath({ data, importPath }: GetImportDotPath) {
+  if (data.isExtraImport) return importPath
+  
+  let dotPath = removeFileExt(importPath).replace(/\//g, '.')
+  if (plugin.processImportPath) {
+    dotPath =
+      plugin.processImportPath(dotPath, absImportPath, activeFilepath, plugin.projectRoot, importName) ||
+      dotPath
+  }
 }
 
 function processImportName(

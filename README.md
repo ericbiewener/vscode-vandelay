@@ -18,13 +18,40 @@
 - [Quick Start](#quick-start)
 - [Typescript & Flow Support](#typescript--flow-support)
 - [Commands](#commands)
+  - [Initialize Project](#initialize-project)
+  - [Cache Project Exports](#cache-project-exports)
+  - [Import](#import)
+  - [Import active word](#import-active-word)
+  - [Import undefined variables](#import-undefined-variables)
+  - [Remove Unused Imports](#remove-unused-imports)
+  - [Fix Imports](#fix-imports)
 - [Importing external and environment packages](#importing-external-and-environment-packages)
 - [How to Use](#how-to-use)
 - [Configuration](#configuration)
+  - [`includePaths: Array<string>`](#includepaths-arraystring)
+  - [`excludePatterns: Array<string | RegExp>`](#excludepatterns-arraystring--regexp)
+  - [`importGroups: Array<string> (JS) | Array<Array<string>> (PY)`](#importgroups-arraystring-js--arrayarraystring-py)
+  - [`maxImportLineLength: number`](#maximportlinelength-number)
+  - [`processImportPath(importPath: string, absImportPath: string, activeFilepath: string, projectRoot: string, importName: string): ?string`](#processimportpathimportpath-string-absimportpath-string-activefilepath-string-projectroot-string-importname-string-string)
+  - [`processImportName(importName: string, importPath: string, absImportPath: string, activeFilepath: string, projectRoot: string, isDefault: boolean): ?string`](#processimportnameimportname-string-importpath-string-absimportpath-string-activefilepath-string-projectroot-string-isdefault-boolean-string)
+  - [`shouldIncludeImport(absImportPath: string, activeFilepath: string): boolean`](#shouldincludeimportabsimportpath-string-activefilepath-string-boolean)
+- [JavaScript Only Options](#javascript-only-options)
+  - [`padCurlyBraces: boolean` (JS only)](#padcurlybraces-boolean-js-only)
+  - [`useSingleQuotes: boolean` (JS only)](#usesinglequotes-boolean-js-only)
+  - [`useSemicolons: boolean` (JS only)](#usesemicolons-boolean-js-only)
+  - [`cssExtensions: string[]` (JS only)](#cssextensions-string-js-only)
+  - [`multilineImportStyle: 'multiple' | 'single'` (JS only)](#multilineimportstyle-multiple--single-js-only)
+  - [`trailingComma: boolean` (JS only)](#trailingcomma-boolean-js-only)
+  - [`nonModulePaths: Array<string>` (JS Only)](#nonmodulepaths-arraystring-js-only)
+  - [`preferTypeOutside: boolean` (JS Only)](#prefertypeoutside-boolean-js-only)
+  - [`useES5: boolean` (JS only)](#usees5-boolean-js-only)
+  - [`typescript: boolean` (JS only)](#typescript-boolean-js-only)
 - [Multi-Root Workspace](#multi-root-workspace)
-- [Example of a Complex Configuration File for a JavaScript Project](#example-configuration-file-for-a-javascript-project)
-- [Example of a Complex Configuration File for a Python Project](#example-configuration-file-for-a-python-project)
+- [Example Configuration File for a JavaScript Project](#example-configuration-file-for-a-javascript-project)
+- [Example Configuration File for a Python Project](#example-configuration-file-for-a-python-project)
 - [Settings](#settings)
+  - [`autoImportSingleResult: boolean`](#autoimportsingleresult-boolean)
+  - [`provideCompletions: boolean`](#providecompletions-boolean)
 
 ## Overview
 <a href="https://www.youtube.com/watch?v=W4AN8Eb2LL0&t=2m10s" target="_blank"><img src="https://raw.githubusercontent.com/ericbiewener/vscode-vandelay/master/artwork/video.jpg" alt="He's an importer exporter" width="240" align="right" /></a>
@@ -149,7 +176,7 @@ import src3 # ungrouped non-package import sorts after grouped
 ### `maxImportLineLength: number`
 Defaults to 100. Used to determine when to wrap import statements onto multiple lines.
 
-### `processImportPath(importPath: string, absImportPath: string, activeFilepath: string, projectRoot: string): ?string`
+### `processImportPath(importPath: string, absImportPath: string, activeFilepath: string, projectRoot: string, importName: string): ?string`
 When inserting a new import, this setting allows you to modify the import path that gets written to
 the file. Useful if you have your build tool configured in a way that allows it to process
 non-relative paths (for example, all your imports are written relative to the project root). Returning a
@@ -161,6 +188,7 @@ falsey value will cause the standard relative path to be used.
 * `absImportPath`: Absolute path of the import file
 * `activeFilepath`: Absolute path to the active file open in your editor
 * `projectRoot`: Absolute path to the root of your project
+* `importName`: The name of the selected import
 
 **JavaScript Example**
 

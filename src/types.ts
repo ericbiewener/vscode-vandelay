@@ -85,7 +85,8 @@ export type UserConfig = {
     importPath: string,
     absImportPath: string,
     activeFilepath: string,
-    projectRoot: string
+    projectRoot: string,
+    importName: string
   ): string | undefined
   excludePatterns?: ExcludePattern[]
   shouldIncludeImport?(absImportPath: string, activeFilepath: string): boolean
