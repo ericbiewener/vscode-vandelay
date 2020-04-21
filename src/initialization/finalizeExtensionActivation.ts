@@ -5,6 +5,7 @@ import { registerCompletionItemProvider } from '../createCompletionItemProvider'
 import { importUndefinedVariables, selectImport, selectImportForActiveWord } from '../importer'
 import { initializePlugins } from '../main'
 import { PLUGINS } from '../plugins'
+import { fixAllImportPaths } from '../plugins/javascript/fixImportPaths'
 import { removeUnusedImports } from '../removeUnusedImports'
 import { Plugin } from '../types'
 import { getConfiguration } from '../utils'
@@ -43,7 +44,9 @@ export function finalizeExtensionActivation(context: ExtensionContext) {
       }),
     ),
 
-    workspace.onDidChangeConfiguration(e => {
+    commands.registerCommand('vandelay.fixAllImportPaths', catchError(fixAllImportPaths)),
+
+    workspace.onDidChangeConfiguration((e) => {
       if (
         e.affectsConfiguration('vandelay.configLocation') ||
         e.affectsConfiguration('vandelay.projectRoot')

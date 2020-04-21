@@ -1,3 +1,6 @@
+### Version 4.4.0
+- Added `Fix All Import Paths` command for Typescript files.
+
 ### Version 4.3.0
 - Provide CSS Module import options. See `cssExtensions` in the readme.
 

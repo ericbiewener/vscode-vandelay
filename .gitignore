@@ -4,6 +4,5 @@ node_modules
 *.vsix
 yarn-error.log
 dist/
-.vscode
 archetype-exceptions.log
 archetype-debug.log

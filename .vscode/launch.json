@@ -27,16 +27,6 @@
       ]
     },
     {
-      "name": "Rise",
-      "type": "extensionHost",
-      "request": "launch",
-      "runtimeExecutable": "${execPath}",
-      "args": [
-        "/Users/vn0dimt/Repos/Walmart/rise",
-        "--extensionDevelopmentPath=${workspaceFolder}"
-      ]
-    },
-    {
       "name": "Single Root",
       "type": "extensionHost",
       "request": "launch",

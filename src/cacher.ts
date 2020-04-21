@@ -23,7 +23,7 @@ async function cacheDir(
   plugin: Plugin,
   dir: string,
   recursive: boolean,
-  data: CachingData
+  data: CachingData,
 ): Promise<CachingData> {
   const items = await fs.readdir(dir)
   const readDirPromises: Promise<any>[] = []
@@ -33,7 +33,7 @@ async function cacheDir(
     if (item === plugin.configFile || shouldIgnore(plugin, fullPath)) continue
 
     readDirPromises.push(
-      fs.stat(fullPath).then(async stats => {
+      fs.stat(fullPath).then(async (stats) => {
         if (stats.isFile()) {
           if (plugin.language === getLangFromFilePath(item)) {
             await plugin.cacheFile(plugin, fullPath, data)
@@ -43,7 +43,7 @@ async function cacheDir(
         }
 
         return Promise.resolve()
-      })
+      }),
     )
   }
 
@@ -55,8 +55,8 @@ export async function cacheProjectLanguage(plugin: Plugin) {
   if (!plugin.includePaths.length) return
 
   let cacher = Promise.all(
-    plugin.includePaths.map(p => cacheDir(plugin, p, true, { imp: {}, exp: {} }))
-  ).then(cachedDirTrees => {
+    plugin.includePaths.map((p) => cacheDir(plugin, p, true, { imp: {}, exp: {} })),
+  ).then((cachedDirTrees) => {
     const finalData = { exp: {}, imp: {} }
     for (const { exp, imp } of cachedDirTrees) {
       Object.assign(finalData.exp, exp)
@@ -81,12 +81,12 @@ function onChangeOrCreate(doc: Uri) {
   if (
     !plugin ||
     shouldIgnore(plugin, doc.fsPath) ||
-    // TODO: Since we are watching all files in the workspace, not just those in plugin.includePaths,
-    // we need to make sure that it is actually in that array. Can this be changed so that we only
-    // watch files in plugin.includePaths to begin with? Not sure if this can be accomplished with
-    // a single glob. If not, we'd need multiple watchers. Would either case be more efficient than
-    // what we're currently doing?
-    !plugin.includePaths.some(p => doc.fsPath.startsWith(p))
+    // TODO: Since we are watching all files in the workspace, not just those in
+    // plugin.includePaths, we need to make sure that it is actually in that array. Can this be
+    // changed so that we only watch files in plugin.includePaths to begin with? Not sure if this
+    // can be accomplished with a single glob. If not, we'd need multiple watchers. Would either
+    // case be more efficient than what we're currently doing?
+    !plugin.includePaths.some((p) => doc.fsPath.startsWith(p))
   )
     return
 
@@ -98,9 +98,9 @@ function onChangeOrCreate(doc: Uri) {
 
   for (const k in exp) exp[k].cached = Date.now()
 
-  return cacheFileManager(plugin, cachedData => {
-    // Concatenate & dedupe named/types arrays. Merge them into extraImports since that will in turn get
-    // merged back into cachedData
+  return cacheFileManager(plugin, (cachedData) => {
+    // Concatenate & dedupe named/types arrays. Merge them into extraImports since that will in turn
+    // get merged back into cachedData
     mergeObjectsWithArrays(cachedData.imp, imp)
     Object.assign(cachedData.exp, exp)
 
@@ -114,11 +114,11 @@ export function watchForChanges() {
   watcher.onDidChange(onChangeOrCreate)
   watcher.onDidCreate(onChangeOrCreate)
 
-  watcher.onDidDelete(doc => {
+  watcher.onDidDelete((doc) => {
     const plugin = getPluginForFile(doc.fsPath)
     if (!plugin) return
 
-    cacheFileManager(plugin, cachedData => {
+    cacheFileManager(plugin, (cachedData) => {
       const key = getFilepathKey(plugin, doc.fsPath)
       const { exp } = cachedData
       if (!exp[key]) return

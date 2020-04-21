@@ -1,25 +1,32 @@
 import _ from 'lodash'
-import { Diagnostic, Range, Selection, TextEditor, window, workspace, TextDocument } from 'vscode'
+import { Diagnostic, Range, TextDocument, TextEditor, window } from 'vscode'
 import { getConfiguration, getDiagnosticsForActiveEditor, getWordAtPosition } from './utils'
 import { getPluginForActiveFile } from './utils'
 import { cacheFileManager } from './cacheFileManager'
-import { MergedExportData, Plugin, RichQuickPickItem } from './types'
+import { ExportData, MergedExportData, Plugin, RichQuickPickItem } from './types'
 
-export async function selectImport(word?: string | undefined | null) {
+export const getItemsForText = (plugin: Plugin, exportData: ExportData, text?: string | null) => {
+  const mergedData = plugin.mergeExportData(exportData)
+  const sortedKeys = getExportDataKeysByCachedDate(mergedData)
+
+  const items = plugin.buildImportItems(plugin as Plugin, mergedData, sortedKeys)
+  if (!items) return
+
+  return text ? items.filter((item: RichQuickPickItem) => item.label === text) : items
+}
+
+export async function selectImport(text?: string | null) {
   const plugin = getPluginForActiveFile()
   if (!plugin) return
 
-  return await cacheFileManager(plugin, async exportData => {
+  return await cacheFileManager(plugin, async (exportData) => {
     if (!exportData) return
 
-    const mergedData = plugin.mergeExportData(exportData)
-    const sortedKeys = getExportDataKeysByCachedDate(mergedData)
-    let items = plugin.buildImportItems(plugin as Plugin, mergedData, sortedKeys)
+    const items = getItemsForText(plugin, exportData, text)
     if (!items) return
-    if (word) items = items.filter((item: RichQuickPickItem) => item.label === word)
 
     const item =
-      !word || items.length > 1 || !getConfiguration().autoImportSingleResult
+      !text || items.length > 1 || !getConfiguration().autoImportSingleResult
         ? await window.showQuickPick(items, { matchOnDescription: true })
         : items[0]
 
@@ -62,12 +69,12 @@ function getExportDataKeysByCachedDate(exportData: MergedExportData) {
 export function getUndefinedWords(
   document: TextDocument,
   diagnostics: Diagnostic[],
-  ignoreRanges: Range[] = []
+  ignoreRanges: Range[] = [],
 ) {
   // Must collect all words before inserting any because insertions will cause the diagnostic ranges
   // to no longer be correct, thus not allowing us to get subsequent words
   const words = diagnostics
-    .map(d => {
+    .map((d) => {
       // Flake8 is returning a collapsed range, so expand it to the entire word
       const range = _.isEqual(d.range.start, d.range.end)
         ? document.getWordRangeAtPosition(d.range.start)
