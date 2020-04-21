@@ -157,8 +157,7 @@
   "lint-staged": {
     "**/*.{ts,tsx,js}": [
       "prettier --write",
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   },
   "husky": {
