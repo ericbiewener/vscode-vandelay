@@ -41,7 +41,7 @@ export function getPluginForFile(filePath: string): Plugin | undefined {
 export function getPluginForActiveFile(silent = false) {
   if (!window.activeTextEditor) return
   const plugin = getPluginForFile(window.activeTextEditor.document.fileName)
-  if (!plugin && !silent) window.showErrorMessage('Vandelay doesn\'t support the current language.')
+  if (!plugin && !silent) window.showErrorMessage("Vandelay doesn't support the current language.")
   return plugin
 }
 
@@ -56,7 +56,7 @@ export function basenameNoExt(filepath: string) {
 export function insertLine(
   newLine: string,
   importPosition: ImportPosition,
-  shouldApplyEdit = true,
+  shouldApplyEdit = true
 ) {
   const { match, isFirstImport } = importPosition
   const editor = window.activeTextEditor as TextEditor
@@ -69,7 +69,7 @@ export function insertLine(
   }
 
   return shouldApplyEdit
-    ? editor.edit(builder => createEdit(builder, document, newLine, importPosition))
+    ? editor.edit((builder) => createEdit(builder, document, newLine, importPosition))
     : createEdit(TextEdit, document, newLine, importPosition)
 }
 
@@ -77,7 +77,7 @@ function createEdit(
   edit: TextEditorEdit | typeof TextEdit,
   document: TextDocument,
   newLine: string,
-  importPosition: ImportPosition,
+  importPosition: ImportPosition
 ) {
   const { match, indexModifier } = importPosition
 
@@ -86,7 +86,7 @@ function createEdit(
   } else if (!indexModifier) {
     return edit.replace(
       new Range(document.positionAt(match.start), document.positionAt(match.end)),
-      newLine,
+      newLine
     )
   } else if (indexModifier === 1) {
     return edit.insert(document.positionAt(match.end), '\n' + newLine)
@@ -120,9 +120,9 @@ export function getLastInitialComment(text: string, commentRegex: RegExp) {
 
   return lastMatch
     ? {
-      start: lastMatch.index,
-      end: lastMatch.index + lastMatch[0].length,
-    }
+        start: lastMatch.index,
+        end: lastMatch.index + lastMatch[0].length,
+      }
     : null
 }
 
@@ -143,7 +143,7 @@ export type DiagnosticsByFile = {
   [path: string]: Diagnostic[]
 }
 
-export function mergeObjectsWithArrays(obj1: {}, obj2: {}) {
+export function mergeObjectsWithArrays(obj1: Record<string, any>, obj2: Record<string, any>) {
   return _.mergeWith(obj1, obj2, (obj, src) => {
     if (Array.isArray(obj)) return _.union(obj, src)
   })
@@ -181,14 +181,14 @@ export function doesImportExist(imports: string[], newImport: string, renamed: R
 export function preserveRenamedImports(imports: string[], renamed: Renamed) {
   if (_.isEmpty(renamed)) return [...imports]
 
-  return imports.map(name => {
+  return imports.map((name) => {
     const renaming = renamed[name]
     return renaming ? `${name} as ${renaming}` : name
   })
 }
 
 export function findVandelayConfigDir(workspaceFolders: WorkspaceFolder[]) {
-  return workspaceFolders.find(f => f.name === VANDELAY_CONFIG_DIR)
+  return workspaceFolders.find((f) => f.name === VANDELAY_CONFIG_DIR)
 }
 
 export function showProjectExportsCachedMessage() {

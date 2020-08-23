@@ -13,7 +13,12 @@ import {
 } from './types'
 
 // TODO: Break this function up
-export function cacheFile(plugin: PluginJs, filepath: string, data: CachingDataJs) {
+export function cacheFile(
+  plugin: PluginJs,
+  filepath: string,
+  data: CachingDataJs,
+  cacheImports = true
+) {
   const { imp, exp } = data
   const reexportsToProcess: ReexportsToProcess = {
     fullModules: [],
@@ -25,26 +30,29 @@ export function cacheFile(plugin: PluginJs, filepath: string, data: CachingDataJ
     reexportsToProcess,
   }
   const fileText = fs.readFileSync(filepath, 'utf8')
-  const fileImports = parseImports(plugin, fileText)
 
-  for (const importData of fileImports) {
-    if (isPathNodeModule(plugin, importData.path)) {
-      const existing = imp[importData.path] || {}
-      imp[importData.path] = existing
-      if (importData.default) existing.default = importData.default
-      existing.named = _.union(existing.named, importData.named)
-      existing.types = _.union(existing.types, importData.types)
-      existing.isExtraImport = true
-    } else if (importData.default && importData.default.startsWith('* as')) {
-      // import * as Foo from...
-      const pathKey = getFilepathKey(
-        plugin,
-        path.resolve(path.dirname(filepath), `${importData.path}.js`) // Just guess at the file extension. Doesn't actually matter if it's right.
-      )
-      const existing = exp[pathKey] || {}
-      if (existing.default) continue // don't overwrite default if it already exists
-      exp[pathKey] = existing
-      existing.default = importData.default
+  if (cacheImports) {
+    const fileImports = parseImports(plugin, fileText)
+
+    for (const importData of fileImports) {
+      if (isPathNodeModule(plugin, importData.path)) {
+        const existing = imp[importData.path] || {}
+        imp[importData.path] = existing
+        if (importData.default) existing.default = importData.default
+        existing.named = _.union(existing.named, importData.named)
+        existing.types = _.union(existing.types, importData.types)
+        existing.isExtraImport = true
+      } else if (importData.default && importData.default.startsWith('* as')) {
+        // import * as Foo from...
+        const pathKey = getFilepathKey(
+          plugin,
+          path.resolve(path.dirname(filepath), `${importData.path}.js`) // Just guess at the file extension. Doesn't actually matter if it's right.
+        )
+        const existing = exp[pathKey] || {}
+        if (existing.default) continue // don't overwrite default if it already exists
+        exp[pathKey] = existing
+        existing.default = importData.default
+      }
     }
   }
 
@@ -79,7 +87,7 @@ export function cacheFile(plugin: PluginJs, filepath: string, data: CachingDataJ
         ...text
           .split(',')
           .filter(Boolean)
-          .map(exp => exp.split(':')[0])
+          .map((exp) => exp.split(':')[0])
       )
     } else if (match[2] && match[2] !== 'from') {
       // from — it's actually a reexport

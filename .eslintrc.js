@@ -1,5 +1,5 @@
 module.exports = {
-  extends: 'ericbiewener-typescript',
+  extends: '@ericbiewener/eslint-config-typescript',
   env: {
     browser: false,
     es6: true,

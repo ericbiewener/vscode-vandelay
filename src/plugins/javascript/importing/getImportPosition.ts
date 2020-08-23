@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { getImportOrderPosition, getLastInitialComment, last } from '../../../utils'
 import { commentRegex } from '../regex'
 import { isPathNodeModule } from '../utils'
@@ -44,13 +43,13 @@ export function getImportPosition(
 
   // First look for an exact match. This is done outside the main sorting loop because we don't care
   // where the exact match is located if it exists.
-  const pathMatches = imports.filter(i => i.path === importPath)
+  const pathMatches = imports.filter((i) => i.path === importPath)
   if (pathMatches.length) {
     return {
       match:
         (exportType === ExportType.type
-          ? pathMatches.find(p => p.isTypeOutside)
-          : pathMatches.find(p => !p.isTypeOutside)) || pathMatches[0],
+          ? pathMatches.find((p) => p.isTypeOutside)
+          : pathMatches.find((p) => !p.isTypeOutside)) || pathMatches[0],
       indexModifier: 0,
       isFirstImport: false,
     }

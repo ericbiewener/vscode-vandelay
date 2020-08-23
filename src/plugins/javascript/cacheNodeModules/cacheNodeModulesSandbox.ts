@@ -1,8 +1,9 @@
+import { isFile } from '@ericbiewener/utils/src/isFile'
 import fs from 'fs-extra'
 import path from 'path'
-import { isFile } from 'utlz'
 import { ExportDataNodeModulesJs, NodeModuleExports } from '../types'
 import { Dep } from './cacheNodeModules'
+import { parsePackageJson } from './parsePackageJson'
 
 type PackageJson = { dependencies?: Dep; devDependencies?: Dep; peerDependencies?: Dep }
 
@@ -20,7 +21,7 @@ async function main() {
   }
 
   const data: ExportDataNodeModulesJs = {}
-  await Promise.all(jsons.map(j => cacheDependencies(j, data)))
+  await Promise.all(jsons.map((j) => cacheDependencies(j, data)))
   process.stdout.write(`__vandelay__stdout__${JSON.stringify(data)}__vandelay__stdout__`)
 }
 
@@ -32,7 +33,7 @@ async function cacheDependencies(packageJson: PackageJson, data: ExportDataNodeM
   ]
 
   await Promise.all(
-    deps.map(async d => {
+    deps.map(async (d) => {
       if (d.startsWith('@types')) return
       const fileExports = await cacheDependency(d)
       if (fileExports) data[d] = fileExports
@@ -40,32 +41,19 @@ async function cacheDependencies(packageJson: PackageJson, data: ExportDataNodeM
   )
 }
 
-// FIXME: possible to make `plugin` global as well, like context, so that i don't have to pass it
-// around? The difference would be that it gets set at the start of each command, whereas context
-// would never change.
-export async function cacheDependency(dep: string): Promise<NodeModuleExports | undefined> {
-  const dir = path.join(projectRoot, 'node_modules', dep)
-  const packageJsonPath = path.join(dir, 'package.json')
+export async function cacheDependency(depName: string): Promise<NodeModuleExports | undefined> {
+  const packageJson = await parsePackageJson(projectRoot, depName)
+  if (!packageJson) return
 
-  let packageJson
-  try {
-    const fileText = await fs.readFile(packageJsonPath, 'utf8')
-    packageJson = JSON.parse(fileText)
-  } catch (e) {
-    console.info(`Vandelay: Failed to parse dependency package.json file: ${dep}`)
-    return
-  }
-
-  const mainFile = path.join(dir, packageJson.main || 'index.js')
+  const mainFile = path.join(depName, packageJson.main || 'index.js')
 
   if (!isFile(mainFile)) {
-    console.info(`Vandelay: Couldn't determine entry point for node module: ${dep}`)
+    console.info(`Vandelay: Couldn't determine entry point for node module: ${depName}`)
     return
   }
 
   let depExports
   try {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     depExports = __non_webpack_require__(mainFile)
   } catch (e) {
@@ -74,17 +62,17 @@ export async function cacheDependency(dep: string): Promise<NodeModuleExports | 
   }
 
   if (!depExports.__esModule) {
-    return { default: getDefaultName(dep), named: [], types: [], isExtraImport: true }
+    return { default: getDefaultName(depName), named: [], types: [], isExtraImport: true }
   }
 
   const { default: defaultExport, ...rest } = depExports
   // Assume anything with an underscore is not desired, even if the underscore isn't the first
   // letter. For example, ReactDOM exports some stuff with the name `unstable_...`.
-  const named = Object.keys(rest).filter(k => !k.includes('_'))
+  const named = Object.keys(rest).filter((k) => !k.includes('_'))
   if (!named.length) return
 
   return {
-    default: defaultExport ? getDefaultName(dep) : null,
+    default: defaultExport ? getDefaultName(depName) : null,
     named,
     types: [],
     isExtraImport: true,
@@ -97,7 +85,7 @@ function getDefaultName(dep: string) {
   const parts = packageName.split('-')
   const capitalized = parts
     .slice(1)
-    .map(s => `${s[0].toUpperCase()}${s.slice(1)}`)
+    .map((s) => `${s[0].toUpperCase()}${s.slice(1)}`)
     .join('')
 
   return `${parts[0]}${capitalized}`

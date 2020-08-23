@@ -1,4 +1,4 @@
-import { isFile } from 'utlz'
+import { isFile } from '@ericbiewener/utils/src/isFile'
 import { ExtensionContext, window, workspace } from 'vscode'
 import path from 'path'
 import { registerCompletionItemProvider } from './createCompletionItemProvider'
@@ -65,10 +65,8 @@ export async function initializePlugin(context: ExtensionContext, pluginConfig: 
 async function getUserConfig(configFilepath: string) {
   try {
     console.log(`Loading vandelay config file from ${configFilepath}`)
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
-    delete __non_webpack_require__.cache[configFilepath] // eslint-disable-line @typescript-eslint/camelcase
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    delete __non_webpack_require__.cache[configFilepath]
     // @ts-ignore
     const userConfig = __non_webpack_require__(configFilepath)
 

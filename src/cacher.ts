@@ -15,35 +15,41 @@ import { cacheFileManager } from './cacheFileManager'
 import { PLUGINS } from './plugins'
 import { Plugin, CachingData } from './types'
 
-function shouldIgnore(plugin: Plugin, filePath: string) {
-  return anymatch(plugin.excludePatterns, filePath)
+const NODE_MODULES_REGEX = /.*\/node_modules(\/.*)?/
+
+const shouldIgnore = (plugin: Plugin, filePath: string, excludeNodeModules = true) => {
+  const patterns = excludeNodeModules
+    ? [NODE_MODULES_REGEX, ...plugin.excludePatterns]
+    : plugin.excludePatterns
+
+  return anymatch(patterns, filePath)
 }
 
-async function cacheDir(
+export const cacheDir = async (
   plugin: Plugin,
   dir: string,
-  recursive: boolean,
   data: CachingData,
-): Promise<CachingData> {
+  excludeNodeModules = true
+): Promise<CachingData> => {
   const items = await fs.readdir(dir)
   const readDirPromises: Promise<any>[] = []
 
   for (const item of items) {
     const fullPath = path.join(dir, item)
-    if (item === plugin.configFile || shouldIgnore(plugin, fullPath)) continue
+    if (item === plugin.configFile || shouldIgnore(plugin, fullPath, excludeNodeModules)) continue
 
     readDirPromises.push(
       fs.stat(fullPath).then(async (stats) => {
         if (stats.isFile()) {
           if (plugin.language === getLangFromFilePath(item)) {
-            await plugin.cacheFile(plugin, fullPath, data)
+            await plugin.cacheFile(plugin, fullPath, data, false)
           }
-        } else if (recursive) {
-          await cacheDir(plugin, fullPath, true, data)
+        } else {
+          await cacheDir(plugin, fullPath, data, excludeNodeModules)
         }
 
         return Promise.resolve()
-      }),
+      })
     )
   }
 
@@ -55,7 +61,7 @@ export async function cacheProjectLanguage(plugin: Plugin) {
   if (!plugin.includePaths.length) return
 
   let cacher = Promise.all(
-    plugin.includePaths.map((p) => cacheDir(plugin, p, true, { imp: {}, exp: {} })),
+    plugin.includePaths.map((p) => cacheDir(plugin, p, { imp: {}, exp: {} }))
   ).then((cachedDirTrees) => {
     const finalData = { exp: {}, imp: {} }
     for (const { exp, imp } of cachedDirTrees) {

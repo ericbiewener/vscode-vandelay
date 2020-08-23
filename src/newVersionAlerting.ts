@@ -38,7 +38,7 @@ export async function alertNewVersion(context: ExtensionContext) {
     actions: [
       CHANGELOG_BUTTON_CONFIG,
       {
-        title: 'Don\'t show this again',
+        title: "Don't show this again",
         action: () => config.update('showNewVersionAlert', false, true),
       },
     ],
@@ -55,7 +55,7 @@ export async function alertNewVersionConfig(plugin: Plugin) {
           title: 'View README',
           action: () =>
             openUri(
-              `${REPO_MASTER}README.md#processimportnameimportpath-string-absimportpath-string-activefilepath-string-projectroot-string-string`,
+              `${REPO_MASTER}README.md#processimportnameimportpath-string-absimportpath-string-activefilepath-string-projectroot-string-string`
             ),
         },
         CHANGELOG_BUTTON_CONFIG,

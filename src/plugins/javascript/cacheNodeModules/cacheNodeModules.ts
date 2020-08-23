@@ -1,14 +1,42 @@
 import fs from 'fs-extra'
-import _ from 'lodash'
 import path from 'path'
 import { spawnSync } from 'child_process'
-import { isFile } from 'utlz'
+import { isFile } from '@ericbiewener/utils/src/isFile'
+import { isDirectory } from '@ericbiewener/utils/src/isDirectory'
 import { cacheFileManager } from '../../../cacheFileManager'
+import { cacheDir } from '../../../cacher'
 import { context } from '../../../globals'
 import { writeCacheFile } from '../../../utils'
-import { ExportDataJs, PluginJs } from '../types'
+import { CachingDataJs, ExportDataJs, ExportDataNodeModulesJs, PluginJs } from '../types'
 
 export type Dep = Record<string, string>
+
+const cacheNodeModulesBasedOnConfig = async (plugin: PluginJs) => {
+  if (!plugin.dependencies) return
+
+  const cachedData: Omit<CachingDataJs, 'nodeModules'> = { imp: {}, exp: {} }
+
+  await Promise.all(
+    Object.entries(plugin.dependencies).map(([depName, depDir]) => {
+      const dir = path.join(plugin.projectRoot, 'node_modules', depName, depDir)
+      if (isDirectory(dir)) return cacheDir(plugin, dir, cachedData, false)
+    })
+  )
+
+  plugin.processCachedData(cachedData)
+
+  const finalData: ExportDataNodeModulesJs = {}
+
+  for (const k in cachedData.exp) {
+    // Strip off `node_modules/` from key
+    finalData[k.slice(13)] = {
+      ...cachedData.exp[k],
+      isExtraImport: true,
+    }
+  }
+
+  return finalData
+}
 
 export async function cacheNodeModules(plugin: PluginJs) {
   const packageJsonPaths = findPackageJsonFiles(plugin)
@@ -22,9 +50,14 @@ export async function cacheNodeModules(plugin: PluginJs) {
   ])
   if (error) throw error
 
-  await cacheFileManager(plugin, async cachedData => {
+  const nodeModules = JSON.parse(stdout.toString().split('__vandelay__stdout__')[1])
+  const configNodeModules = await cacheNodeModulesBasedOnConfig(plugin)
+
+  Object.assign(nodeModules, configNodeModules)
+
+  await cacheFileManager(plugin, async (cachedData) => {
     const newData = cachedData as ExportDataJs
-    newData.nodeModules = JSON.parse(stdout.toString().split('__vandelay__stdout__')[1])
+    newData.nodeModules = nodeModules
     await writeCacheFile(plugin, newData)
   })
 }

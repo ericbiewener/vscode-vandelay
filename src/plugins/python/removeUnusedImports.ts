@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { languages, TextDocument, window } from 'vscode'
 import { findImportMatch, removeUnusedImportChanges } from '../../removeUnusedImports'
 import { getDiagnosticsForActiveEditor, last, strUntil } from '../../utils'
@@ -37,7 +36,7 @@ async function removeUnusedImportsOnDidChangeDiagnostics(plugin: PluginPy, docum
   const editor = window.activeTextEditor
   if (!editor || editor.document !== document) return
 
-  const diagnostics = getDiagnosticsForActiveEditor(d => d.code === 'F401')
+  const diagnostics = getDiagnosticsForActiveEditor((d) => d.code === 'F401')
 
   const fullText = document.getText()
   const fileImports = parseImports(fullText)
@@ -55,7 +54,7 @@ async function removeUnusedImportsOnDidChangeDiagnostics(plugin: PluginPy, docum
 
     const existingChange = changesByMatch.get(importMatch)
     const currentImports = existingChange ? existingChange.imports : importMatch.imports
-    const imports = currentImports.filter(i => i !== unusedImport)
+    const imports = currentImports.filter((i) => i !== unusedImport)
 
     if (existingChange) {
       existingChange.imports = imports

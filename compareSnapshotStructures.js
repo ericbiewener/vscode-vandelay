@@ -1,5 +1,4 @@
 const _ = require('lodash')
-const chalk = require('chalk')
 const path = require('path')
 const fs = require('fs')
 const log = require('log-all-the-things')
@@ -100,8 +99,8 @@ function compareAll(newPath) {
 
     if (Array.isArray(newObj)) {
       // buildImports tests
-      newObj = newObj.map(o => JSON.stringify(o, null, 2)).sort()
-      oldObj = oldObj.map(o => JSON.stringify(o, null, 2)).sort()
+      newObj = newObj.map((o) => JSON.stringify(o, null, 2)).sort()
+      oldObj = oldObj.map((o) => JSON.stringify(o, null, 2)).sort()
       if (_.isEqual(oldObj, newObj)) continue
       const missingFromOld = _.difference(oldObj, newObj)
       const missingFromNew = _.difference(newObj, oldObj)

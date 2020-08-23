@@ -5,10 +5,10 @@ const expect = require('expect')
 const { buildImportItems, insertImport } = require('../src/importing/importer')
 const { commands, workspace, extensions, window, Uri, Range } = require('vscode')
 
-afterEach(async function() {
+afterEach(async function () {
   await commands.executeCommand('workbench.action.closeAllEditors')
   // Prevents test failures caused by text editors not being in expected open or closed state
-  return new Promise(resolve => setTimeout(resolve, 100))
+  return new Promise((resolve) => setTimeout(resolve, 100))
 })
 
 const testRoot = workspace.workspaceFolders[0].uri.path
@@ -18,7 +18,7 @@ const getPlugin = async () => {
   return api.plugin
 }
 
-const getExportData = plugin => JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf8'))
+const getExportData = (plugin) => JSON.parse(fs.readFileSync(plugin.cacheFilePath, 'utf8'))
 
 const openFile = (...fileParts) =>
   window.showTextDocument(
@@ -27,12 +27,12 @@ const openFile = (...fileParts) =>
 
 const replaceFileContents = (newText = '') => {
   const editor = window.activeTextEditor
-  return editor.edit(builder => {
+  return editor.edit((builder) => {
     builder.replace(editor.document.validateRange(new Range(0, 0, 9999999999, 0)), newText)
   })
 }
 
-const getImportItems = plugin =>
+const getImportItems = (plugin) =>
   plugin._test.getImportItems(plugin, getExportData(plugin), buildImportItems)
 
 const insertItems = async (plugin, importItems) => {
@@ -82,7 +82,7 @@ const cacheTest = async (context, config) => {
 }
 
 const testSpyCall = (context, call) =>
-  expect(call.args.map(p => p.replace(testRoot, 'absRoot'))).toMatchSnapshot(context)
+  expect(call.args.map((p) => p.replace(testRoot, 'absRoot'))).toMatchSnapshot(context)
 
 module.exports = {
   testRoot,

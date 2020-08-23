@@ -19,7 +19,7 @@ export function getNewLine(plugin: PluginJs, importPath: string, lineImports: Fi
     plugin.preferTypeOutside && !lineImports.default && !lineImports.named.length
   const nonDefaultImports = putTypeOutside
     ? lineImports.types
-    : lineImports.named.concat(lineImports.types.map(t => 'type ' + t))
+    : lineImports.named.concat(lineImports.types.map((t) => 'type ' + t))
 
   let newLineStart = plugin.useES5 ? 'const' : 'import'
   if (lineImports.default) newLineStart += ' ' + lineImports.default

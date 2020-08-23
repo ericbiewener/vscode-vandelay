@@ -1,5 +1,5 @@
 const { importTests } = require('../shared-tests')
 
-describe('Import Tests', function() {
+describe('Import Tests', function () {
   importTests()
 })

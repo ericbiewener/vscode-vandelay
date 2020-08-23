@@ -1,6 +1,5 @@
 // TODO: use lodash-es fix in webpack
-import _ from 'lodash'
-import { addNamesAndRenames, Renamed } from '../../utils'
+import { addNamesAndRenames } from '../../utils'
 
 export const commentRegex = /^(?:[ \t]*#|[ \t]*"""[^]*?""").*/gm
 

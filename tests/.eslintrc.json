@@ -1,5 +1,5 @@
 {
-  "extends": "ericbiewener",
+  "extends": "@ericbiewener/eslint-config",
   "env": {
     "browser": false,
     "es6": true,

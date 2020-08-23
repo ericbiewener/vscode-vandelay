@@ -99,6 +99,7 @@ export type UserConfigJs = UserConfig & {
   importGroups?: string[]
   typescript?: boolean
   cssExtensions?: string[]
+  dependencies?: Record<string, string>
   processImportName?(
     importName: string,
     importPath: string,
@@ -109,4 +110,8 @@ export type UserConfigJs = UserConfig & {
   ): string | undefined
 }
 
-export type PluginJs = Plugin<RichQuickPickItemJs> & PluginConfigJs & UserConfigJs
+export type PluginJs = Plugin<RichQuickPickItemJs> &
+  PluginConfigJs &
+  UserConfigJs & {
+    processCachedData: NonNullable<Plugin<any>['processCachedData']>
+  }

@@ -10,7 +10,7 @@ module.exports = {
     extension: path.join(SRC, 'main.ts'),
     cacheNodeModulesSandbox: path.join(
       SRC,
-      'plugins/javascript/cacheNodeModules/cacheNodeModulesSandbox.ts',
+      'plugins/javascript/cacheNodeModules/cacheNodeModulesSandbox.ts'
     ),
   },
   output: {
@@ -30,7 +30,7 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        exclude: /node_modules/,
+        exclude: /node_modules\/(?!@ericbiewener).*/,
         use: [
           {
             loader: 'babel-loader',

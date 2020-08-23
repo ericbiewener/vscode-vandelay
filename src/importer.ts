@@ -69,7 +69,7 @@ function getExportDataKeysByCachedDate(exportData: MergedExportData) {
 export function getUndefinedWords(
   document: TextDocument,
   diagnostics: Diagnostic[],
-  ignoreRanges: Range[] = [],
+  ignoreRanges: Range[] = []
 ) {
   // Must collect all words before inserting any because insertions will cause the diagnostic ranges
   // to no longer be correct, thus not allowing us to get subsequent words

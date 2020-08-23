@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { isFile } from 'utlz'
+import { isFile } from '@ericbiewener/utils/src/isFile'
 import { ExportData, Plugin } from './types'
 
 function parseCacheFile(plugin: Plugin) {

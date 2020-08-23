@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const _ = require('lodash')
-const { sleep } = require('utlz')
+const { sleep } = require('@ericbiewener/utils/src/sleep')
 const { window, Range, workspace, extensions, Uri, commands } = require('vscode')
 const snapshotDiff = require('snapshot-diff')
 
@@ -38,7 +38,7 @@ async function getExportData() {
 }
 
 function testSpyCall(context, call) {
-  expect(call.args.map(p => p.replace(TEST_ROOT, 'absRoot'))).toMatchSnapshot(context)
+  expect(call.args.map((p) => p.replace(TEST_ROOT, 'absRoot'))).toMatchSnapshot(context)
 }
 
 async function cacheTest(context, config) {
@@ -76,7 +76,7 @@ async function saveFile(filepath) {
 
 function replaceFileContents(newText = '') {
   const editor = window.activeTextEditor
-  return editor.edit(builder => {
+  return editor.edit((builder) => {
     builder.replace(editor.document.validateRange(new Range(0, 0, 9999999999, 0)), newText)
   })
 }
