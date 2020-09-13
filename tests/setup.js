@@ -1,6 +1,6 @@
 const { window, commands, workspace } = require('vscode')
 const sinon = require('sinon')
-const { sleep } = require('utlz')
+const { sleep } = require('@ericbiewener/utils/src/sleep')
 const { getPlugin } = require('./utils')
 require('./toMatchSnapshot')
 

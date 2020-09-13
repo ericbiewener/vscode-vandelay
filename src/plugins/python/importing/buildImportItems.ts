@@ -1,5 +1,5 @@
 import path from 'path'
-import { removeFileExt } from 'utlz'
+import { removeFileExt } from '@ericbiewener/utils/src/removeFileExt'
 import { window, TextEditor } from 'vscode'
 import { PluginPy, MergedExportDataPy } from '../types'
 import { RichQuickPickItem } from '../../../types'
@@ -7,7 +7,7 @@ import { RichQuickPickItem } from '../../../types'
 export function buildImportItems(
   plugin: PluginPy,
   exportData: MergedExportDataPy,
-  sortedKeys: string[],
+  sortedKeys: string[]
 ): RichQuickPickItem[] {
   const { projectRoot, shouldIncludeImport } = plugin
   const editor = window.activeTextEditor as TextEditor
@@ -61,7 +61,7 @@ function processImportName(
   importName: string,
   importPath: string,
   absImportPath: string,
-  activeFilepath: string,
+  activeFilepath: string
 ) {
   if (!plugin.processImportName) return importName
   return (
@@ -70,7 +70,7 @@ function processImportName(
       importPath,
       absImportPath,
       activeFilepath,
-      plugin.projectRoot,
+      plugin.projectRoot
     ) || importName
   )
 }

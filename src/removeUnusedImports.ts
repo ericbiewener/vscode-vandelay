@@ -17,7 +17,7 @@ export function findImportMatch<P extends { start: number; end: number }>(
   fileImports: P[]
 ) {
   const offset = document.offsetAt(diagnostic.range.start)
-  return fileImports.find(i => i.start <= offset && i.end >= offset)
+  return fileImports.find((i) => i.start <= offset && i.end >= offset)
 }
 
 export async function removeUnusedImportChanges<C extends Change, P>(
@@ -47,7 +47,7 @@ export async function removeUnusedImportChanges<C extends Change, P>(
     newText = newText.slice(0, match.start) + newLine + newText.slice(end)
   }
 
-  await editor.edit(builder => {
+  await editor.edit((builder) => {
     const endOffsetModifier = isFinalLineBlank && fullText[oldTextEnd] === '\n' ? 1 : 0
     builder.replace(
       new Range(document.positionAt(0), document.positionAt(oldTextEnd + endOffsetModifier)),

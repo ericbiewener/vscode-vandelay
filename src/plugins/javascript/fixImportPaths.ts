@@ -57,8 +57,8 @@ export const fixAllImportPaths = async () => {
         builder.delete(
           new vsc.Range(
             document.positionAt(badImport.start),
-            document.positionAt(badImport.end + 1), // +1 for new line
-          ),
+            document.positionAt(badImport.end + 1) // +1 for new line
+          )
         )
       }
     })

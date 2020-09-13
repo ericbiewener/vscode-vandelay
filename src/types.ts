@@ -1,19 +1,16 @@
-import { CompletionItemProvider, Disposable, ExtensionContext, TextEdit } from 'vscode'
+import { ExtensionContext, TextEdit } from 'vscode'
 import {
-  FileExportsJs,
-  PluginJs,
-  MergedExportDataJs,
   CachingDataJs,
   ExportDataJs,
-  RichQuickPickItemJs,
+  FileExportsJs,
+  MergedExportDataJs,
 } from './plugins/javascript/types'
 import { DiagnosticFilter } from './utils'
 import {
-  PluginPy,
   CachingDataPy,
+  ExportDataPy,
   FileExportsPy,
   MergedExportDataPy,
-  ExportDataPy,
 } from './plugins/python/types'
 import { ImportPositionPy } from './plugins/python/importing/getImportPosition'
 import { ImportPositionJs } from './plugins/javascript/importing/getImportPosition'
@@ -59,7 +56,7 @@ export type RuntimePluginConfig = {
 export interface PluginConfig<Q extends RichQuickPickItem = RichQuickPickItem> {
   language: Language
   shouldIncludeDisgnostic: DiagnosticFilter
-  cacheFile(plugin: this, path: string, data: CachingData): CachingData
+  cacheFile(plugin: this, path: string, data: CachingData, cacheImports?: boolean): CachingData
   processCachedData?(data: any): any
   removeUnusedImports(plugin: this): Promise<any>
   insertImport(

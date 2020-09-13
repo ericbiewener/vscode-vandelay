@@ -43,7 +43,7 @@ export function parseImports(plugin: PluginJs, text: string) {
   let match
   while ((match = regex.exec(text))) {
     // unassigned import: `import "something"`
-    if (match[1] && (match[1].startsWith('\'') || match[1].startsWith('"'))) {
+    if (match[1] && (match[1].startsWith("'") || match[1].startsWith('"'))) {
       // Must reset `lastIndex` to the end of the unassigned import statement because the match will
       // have gone beyond it
       const unassignedImportEnd = match[0].indexOf('\n')
@@ -65,18 +65,18 @@ export function parseImports(plugin: PluginJs, text: string) {
       const namedAndTypes = match[2]
         .replace(/{}]/g, '')
         .split(',')
-        .map(i => i.trim())
+        .map((i) => i.trim())
         .filter(Boolean)
 
       if (isTypeOutside) {
         addNamesAndRenames(namedAndTypes, importData.types, importData.renamed)
       } else {
-        const groups = _.partition(namedAndTypes, i => i.startsWith('type '))
+        const groups = _.partition(namedAndTypes, (i) => i.startsWith('type '))
         if (groups[0].length) {
           addNamesAndRenames(
-            groups[0].map(i => i.slice(5)),
+            groups[0].map((i) => i.slice(5)),
             importData.types,
-            importData.renamed,
+            importData.renamed
           )
         }
         if (groups[1].length) {

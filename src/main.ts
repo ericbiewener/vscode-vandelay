@@ -21,12 +21,12 @@ export const activate = async function activate(context: ExtensionContext) {
   context.subscriptions.push(
     commands.registerCommand(
       'vandelay.initProject',
-      catchError(() => initProject(context)),
-    ),
+      catchError(() => initProject(context))
+    )
   )
 
   // Watch for config changes.
-  workspace.onDidSaveTextDocument(async doc => {
+  workspace.onDidSaveTextDocument(async (doc) => {
     const file = path.basename(doc.fileName, '.js')
     if (!file.startsWith('vandelay-')) return
 
@@ -50,7 +50,7 @@ export const activate = async function activate(context: ExtensionContext) {
   return {
     registerPlugin: async ({ language }: { language: string }) => {
       window.showErrorMessage(
-        `Please uninstall extension Vandelay ${language.toUpperCase()}. Vandelay no longer requires langauge extensions to be installed separately.`,
+        `Please uninstall extension Vandelay ${language.toUpperCase()}. Vandelay no longer requires langauge extensions to be installed separately.`
       )
       await commands.executeCommand('workbench.extensions.action.showEnabledExtensions')
     },
@@ -64,5 +64,5 @@ export const activate = async function activate(context: ExtensionContext) {
 
 export function initializePlugins(context: ExtensionContext) {
   const configs = Object.values(pluginConfigs)
-  return Promise.all(configs.map(c => initializePlugin(context, c)))
+  return Promise.all(configs.map((c) => initializePlugin(context, c)))
 }

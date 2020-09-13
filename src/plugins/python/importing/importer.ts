@@ -1,10 +1,7 @@
-import _ from 'lodash'
 import { window, Range, TextEditor } from 'vscode'
-import path from 'path'
 import {
   doesImportExist,
   getLastInitialComment,
-  getTabChar,
   insertLine,
   preserveRenamedImports,
   strUntil,
@@ -85,7 +82,7 @@ export function insertImport(
       const beforeLine = before ? `${fileText.slice(before.start, before.end)}\n` : ''
       const afterLine = after ? `\n${fileText.slice(after.start, after.end)}` : ''
 
-      return editor.edit(builder => {
+      return editor.edit((builder) => {
         const beforeMatch = before || getLastInitialComment(fileText, commentRegex)
 
         builder.replace(

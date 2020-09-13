@@ -43,16 +43,16 @@ export function registerCompletionItemProvider(context: ExtensionContext, plugin
 
   const provider = {
     async provideCompletionItems(document: TextDocument, position: Position) {
-      return await cacheFileManager(plugin, async exportData => {
+      return await cacheFileManager(plugin, async (exportData) => {
         if (!exportData) return []
 
         const mergedData = plugin.mergeExportData(exportData)
         const items = plugin.buildImportItems(plugin as any, mergedData, Object.keys(mergedData))
 
-        return items.map(item => {
+        return items.map((item) => {
           const completionItem = new CompletionItem(
             item.label,
-            CompletionItemKind.Event,
+            CompletionItemKind.Event
           ) as RichCompletionItem
           // Caching for use in `resolveCompletionItem`
           completionItem.importItem = item

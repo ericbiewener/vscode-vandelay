@@ -32,13 +32,13 @@ function watchForPackageJsonChanges(context: ExtensionContext, plugin: PluginJs)
   watcher.onDidChange(() => cacheNodeModules(plugin))
 }
 
-function turnOfDefaultAutoImports(context: ExtensionContext, plugin: PluginJs) {
+function turnOfDefaultAutoImports() {
   const languages = ['javascript', 'typescript']
-  const configs = languages.map(l => workspace.getConfiguration(l, null))
+  const configs = languages.map((l) => workspace.getConfiguration(l, null))
   const configKey = 'suggest.autoImports'
-  if (!configs.some(c => c.get(configKey))) return
+  if (!configs.some((c) => c.get(configKey))) return
 
-  const fullConfigKeys = languages.map(l => `${l}.${configKey}`)
+  const fullConfigKeys = languages.map((l) => `${l}.${configKey}`)
 
   alertWithActions({
     msg: `Vandelay now supports auto import suggestions as you type. We recommend you turn off VS Code's version of this so that you don't get duplicate suggestions.\n\nFor reference, the VS Code settings are named "${fullConfigKeys.join(
@@ -58,7 +58,7 @@ function turnOfDefaultAutoImports(context: ExtensionContext, plugin: PluginJs) {
 
 async function finalizeInit(context: ExtensionContext, plugin: PluginJs) {
   watchForPackageJsonChanges(context, plugin)
-  turnOfDefaultAutoImports(context, plugin)
+  turnOfDefaultAutoImports()
 }
 
 function mergeExportData(exportData: ExportDataJs) {
@@ -90,7 +90,7 @@ export const jsConfig: PluginConfigJs = {
   useSemicolons: true,
   trailingComma: true,
   multilineImportStyle: 'multiple',
-  excludePatterns: [/.*\/node_modules(\/.*)?/],
+  excludePatterns: [],
   extensions: JS_EXTENSIONS,
   finalizeInit,
   finalizeCacheLanguage,

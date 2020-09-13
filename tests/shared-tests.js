@@ -9,11 +9,11 @@ const {
 } = require('./utils')
 
 function cacheTests() {
-  it('cacheProject', async function() {
+  it('cacheProject', async function () {
     await cacheTest(this)
   })
 
-  it('cacheFile', async function() {
+  it('cacheFile', async function () {
     const filepath = `src1/file2.${global.lang}`
     await saveFile(filepath)
     const data = await getExportData()
@@ -22,7 +22,7 @@ function cacheTests() {
 }
 
 function importTests() {
-  it('buildImportItems', async function() {
+  it('buildImportItems', async function () {
     await saveFile(`src1/file2.${global.lang}`) // Set .cached on one file's exports
     await openFile()
     const items = await buildImportItems()
@@ -33,7 +33,7 @@ function importTests() {
     expect(items).toMatchSnapshot(this)
   })
 
-  it('import - empty', async function() {
+  it('import - empty', async function () {
     await insertTest(this)
   })
 }

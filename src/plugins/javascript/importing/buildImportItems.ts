@@ -1,4 +1,4 @@
-import { findFileForExtensions } from 'utlz'
+import { findFileForExtensions } from '@ericbiewener/utils/src/findFileForExtensions'
 import { window, TextEditor } from 'vscode'
 import path from 'path'
 import { PluginJs, MergedExportDataJs, RichQuickPickItemJs, ExportType } from '../types'
@@ -9,7 +9,7 @@ const CSS_EXTENSIONS = ['css', 'pcss']
 export function buildImportItems(
   plugin: PluginJs,
   exportData: MergedExportDataJs,
-  sortedKeys: string[],
+  sortedKeys: string[]
 ): RichQuickPickItemJs[] {
   const { projectRoot, shouldIncludeImport, cssExtensions } = plugin
   const editor = window.activeTextEditor as TextEditor
@@ -50,13 +50,13 @@ export function buildImportItems(
       // directories higher up, in which case it should not be imported from that reexport location
       // if the active file is adjacent/in a subdirectory.
       !activeFilepath.startsWith(
-        path.join(plugin.projectRoot, path.dirname(data.reexported.reexportPath)),
+        path.join(plugin.projectRoot, path.dirname(data.reexported.reexportPath))
       )
     ) {
       const { reexports } = data.reexported
       if (data.default && !reexports.includes('default')) defaultExport = data.default
-      namedExports = data.named.filter(exp => !reexports.includes(exp))
-      typeExports = data.types.filter(exp => !reexports.includes(exp))
+      namedExports = data.named.filter((exp) => !reexports.includes(exp))
+      typeExports = data.types.filter((exp) => !reexports.includes(exp))
     } else {
       defaultExport = data.default
       const { reexports } = data
@@ -65,8 +65,8 @@ export function buildImportItems(
       // active file is adjacent to or in a subdirectory of the import file, eliminate the reexports
       // because they'll just be imported from their original locations
       if (reexports && activeFilepath.startsWith(path.dirname(absImportPath))) {
-        namedExports = data.named.filter(n => !reexports.includes(n))
-        typeExports = data.types.filter(n => !reexports.includes(n))
+        namedExports = data.named.filter((n) => !reexports.includes(n))
+        typeExports = data.types.filter((n) => !reexports.includes(n))
       } else {
         namedExports = data.named
         typeExports = data.types
@@ -86,7 +86,7 @@ export function buildImportItems(
           importPath,
           absImportPath,
           activeFilepath,
-          true,
+          true
         ),
         description: importPathNoExt,
         exportType: ExportType.default,
@@ -96,7 +96,7 @@ export function buildImportItems(
     }
 
     if (namedExports) {
-      namedExports.forEach(exportName => {
+      namedExports.forEach((exportName) => {
         items.push({
           label: processImportName(
             plugin,
@@ -104,7 +104,7 @@ export function buildImportItems(
             importPath,
             absImportPath,
             activeFilepath,
-            false,
+            false
           ),
           description: importPathNoExt,
           exportType: ExportType.named,
@@ -115,7 +115,7 @@ export function buildImportItems(
     }
 
     if (typeExports) {
-      typeExports.forEach(exportName => {
+      typeExports.forEach((exportName) => {
         items.push({
           label: processImportName(
             plugin,
@@ -123,7 +123,7 @@ export function buildImportItems(
             importPath,
             absImportPath,
             activeFilepath,
-            false,
+            false
           ),
           description: importPathNoExt,
           exportType: ExportType.type,
@@ -143,7 +143,7 @@ function processImportName(
   importPath: string,
   absImportPath: string,
   activeFilepath: string,
-  isDefault: boolean,
+  isDefault: boolean
 ) {
   if (!plugin.processImportName) return importName
   return (
@@ -153,7 +153,7 @@ function processImportName(
       absImportPath,
       activeFilepath,
       plugin.projectRoot,
-      isDefault,
+      isDefault
     ) || importName
   )
 }

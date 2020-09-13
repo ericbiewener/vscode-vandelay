@@ -1,6 +1,6 @@
 import { window, TextEditor } from 'vscode'
 import path from 'path'
-import { removeFileExt } from 'utlz'
+import { removeFileExt } from '@ericbiewener/utils/src/removeFileExt'
 import { doesImportExist, insertLine, preserveRenamedImports, Renamed } from '../../../utils'
 import { JS_EXTENSIONS } from '../config'
 import { parseImports, ParsedImportJs } from '../regex'
@@ -11,7 +11,7 @@ import { getNewLine } from './getNewLine'
 export function insertImport(
   plugin: PluginJs,
   selection: RichQuickPickItemJs,
-  shouldApplyEdit = true,
+  shouldApplyEdit = true
 ) {
   const {
     label: exportName,
@@ -32,7 +32,7 @@ export function insertImport(
     finalImportPath,
     isExtraImport,
     imports,
-    fileText,
+    fileText
   )
   const lineImports = getNewLineImports(importPosition, exportName, exportType)
   if (!lineImports) return
@@ -45,7 +45,7 @@ function getFinalImportPath(
   plugin: PluginJs,
   importPath: string,
   absImportPath: string,
-  isExtraImport: boolean | undefined,
+  isExtraImport: boolean | undefined
 ) {
   const activeFilepath = (window.activeTextEditor as TextEditor).document.fileName
 
@@ -63,7 +63,7 @@ function getFinalImportPath(
       importPath,
       absImportPath,
       activeFilepath,
-      plugin.projectRoot,
+      plugin.projectRoot
     )
     return removeFileExt(processedPath || importPath, JS_EXTENSIONS)
   }
@@ -76,7 +76,7 @@ function getFinalImportPath(
 function getNewLineImports(
   importPosition: ImportPositionJs,
   exportName: string,
-  exportType: ExportType,
+  exportType: ExportType
 ) {
   const { match, indexModifier, isFirstImport } = importPosition
 

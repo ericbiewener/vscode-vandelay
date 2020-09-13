@@ -5,7 +5,16 @@
 {
   "version": "0.2.0",
   "configurations": [
-  
+    {
+      "name": "Omni",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "${workspaceFolder}/../_test_workspaces/omni",
+        "--extensionDevelopmentPath=${workspaceFolder}"
+      ]
+    },
     {
       "name": "Mumbai",
       "type": "extensionHost",

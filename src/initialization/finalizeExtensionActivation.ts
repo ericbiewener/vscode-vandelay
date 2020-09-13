@@ -25,15 +25,15 @@ export function finalizeExtensionActivation(context: ExtensionContext) {
     commands.registerCommand('vandelay.cacheProject', catchError(cacheProject)),
     commands.registerCommand(
       'vandelay.selectImport',
-      catchError(() => selectImport()),
+      catchError(() => selectImport())
     ),
     commands.registerCommand(
       'vandelay.selectImportForActiveWord',
-      catchError(() => selectImportForActiveWord()),
+      catchError(() => selectImportForActiveWord())
     ),
     commands.registerCommand(
       'vandelay.importUndefinedVariables',
-      catchError(() => importUndefinedVariables()),
+      catchError(() => importUndefinedVariables())
     ),
     commands.registerCommand('vandelay.removeUnusedImports', catchError(removeUnusedImports)),
     commands.registerCommand(
@@ -41,7 +41,7 @@ export function finalizeExtensionActivation(context: ExtensionContext) {
       catchError(async () => {
         await removeUnusedImports()
         await importUndefinedVariables()
-      }),
+      })
     ),
 
     commands.registerCommand('vandelay.fixAllImportPaths', catchError(fixAllImportPaths)),
@@ -66,6 +66,6 @@ export function finalizeExtensionActivation(context: ExtensionContext) {
       }
     }),
 
-    watchForChanges(),
+    watchForChanges()
   )
 }

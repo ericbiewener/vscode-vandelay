@@ -22,10 +22,10 @@ function basenameNoExt(filepath) {
   return path.basename(filepath, path.extname(filepath))
 }
 
-describe('Import Tests', function() {
+describe('Import Tests', function () {
   importTests()
 
-  it('import - has code', async function() {
+  it('import - has code', async function () {
     await insertDiffTest(
       this,
       `const foo = 1
@@ -33,7 +33,7 @@ describe('Import Tests', function() {
     )
   })
 
-  it('import - single line comment', async function() {
+  it('import - single line comment', async function () {
     await insertDiffTest(
       this,
       `// I'm a comment
@@ -41,7 +41,7 @@ describe('Import Tests', function() {
     )
   })
 
-  it('import - multiline comment', async function() {
+  it('import - multiline comment', async function () {
     await insertDiffTest(
       this,
       `/*
@@ -52,7 +52,7 @@ With multiple lines
     )
   })
 
-  it('import - comment with code right after', async function() {
+  it('import - comment with code right after', async function () {
     await insertDiffTest(
       this,
       `// I'm a comment
@@ -61,7 +61,7 @@ const foo = 1
     )
   })
 
-  it('import - comment with linebreak and code', async function() {
+  it('import - comment with linebreak and code', async function () {
     await insertDiffTest(
       this,
       `// I'm a comment
@@ -71,69 +71,69 @@ const foo = 1
     )
   })
 
-  it('import - src1/file1.js - preserve file', async function() {
+  it('import - src1/file1.js - preserve file', async function () {
     await insertTest(this, '', 'src1/file1.js', true)
   })
 
-  it('import - src1/subdir/file1.js', async function() {
+  it('import - src1/subdir/file1.js', async function () {
     await insertTest(this, '', 'src1/subdir/file1.js')
   })
 
-  it('import - src2/file1.js', async function() {
+  it('import - src2/file1.js', async function () {
     await insertTest(this, '', 'src2/file1.js')
   })
 
-  it('import - importGroups', async function() {
+  it('import - importGroups', async function () {
     await configInsertTest(this, { importGroups: ['module4', 'module2'] })
   })
 
-  it('import - maxImportLineLength', async function() {
+  it('import - maxImportLineLength', async function () {
     // Length of 45 needed to test lines that come up right against the limit
     await configInsertTest(this, { maxImportLineLength: 45 })
   })
 
-  it('import - padCurlyBraces = false', async function() {
+  it('import - padCurlyBraces = false', async function () {
     await configInsertTest(this, { padCurlyBraces: false })
   })
 
-  it('import - useSingleQuotes = false', async function() {
+  it('import - useSingleQuotes = false', async function () {
     await configInsertTest(this, { useSingleQuotes: false })
   })
 
-  it('import - useSemicolons = false', async function() {
+  it('import - useSemicolons = false', async function () {
     await configInsertTest(this, { useSemicolons: false })
   })
 
-  it('import - multilineImportStyle = single', async function() {
+  it('import - multilineImportStyle = single', async function () {
     await configInsertTest(this, { multilineImportStyle: 'single' })
   })
 
-  it('import - trailingComma = false', async function() {
+  it('import - trailingComma = false', async function () {
     await configInsertTest(this, {
       multilineImportStyle: 'single',
       trailingComma: false,
     })
   })
 
-  it('import - processImportPath', async function() {
-    const processImportPath = sinon.fake(importPath =>
+  it('import - processImportPath', async function () {
+    const processImportPath = sinon.fake((importPath) =>
       importPath.endsWith('file1.js') ? importPath.replace('file', 'FILE') : null
     )
     await configInsertTest(this, { processImportPath })
     testSpyCall(this, processImportPath.getCall(0))
   })
 
-  it('import - processImportName - default import', async function() {
+  it('import - processImportName - default import', async function () {
     await configInsertDiffTest(this, file1, {
-      processImportName: importName => {
+      processImportName: (importName) => {
         return importName === 'defaultModule1' ? 'defaultModule1_renamed' : null
       },
     })
   })
 
-  it('import - processImportName - named import', async function() {
+  it('import - processImportName - named import', async function () {
     await configInsertDiffTest(this, file1, {
-      processImportName: importName => {
+      processImportName: (importName) => {
         return importName === 'module3_typeOutside'
           ? 'module2_2 as module2_2_renamed_DIFFERENT'
           : null
@@ -141,11 +141,11 @@ const foo = 1
     })
   })
 
-  it('import - nonModulePaths', async function() {
+  it('import - nonModulePaths', async function () {
     await configInsertTest(
       this,
       {
-        processImportPath: importPath =>
+        processImportPath: (importPath) =>
           importPath.endsWith('file2.js') || importPath.endsWith('file3.js')
             ? basenameNoExt(importPath)
             : null,
@@ -155,8 +155,8 @@ const foo = 1
     )
   })
 
-  it('import - shouldIncludeImport', async function() {
-    const shouldIncludeImport = sinon.fake(absImportPath => absImportPath.endsWith('file1.js'))
+  it('import - shouldIncludeImport', async function () {
+    const shouldIncludeImport = sinon.fake((absImportPath) => absImportPath.endsWith('file1.js'))
     await configInsertTest(this, { shouldIncludeImport })
     testSpyCall(this, _.last(shouldIncludeImport.getCalls()))
   })
@@ -186,7 +186,7 @@ const foo = 1
   })
 
   if (process.env.TEST_PROJECT !== 'es5') {
-    it('import - preferTypeOutside = true', async function() {
+    it('import - preferTypeOutside = true', async function () {
       await configInsertTest(this, { preferTypeOutside: true })
     })
   }

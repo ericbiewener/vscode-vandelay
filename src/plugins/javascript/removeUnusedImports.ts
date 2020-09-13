@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { window } from 'vscode'
 import { findImportMatch, removeUnusedImportChanges } from '../../removeUnusedImports'
 import { getDiagnosticsForActiveEditor } from '../../utils'
@@ -18,8 +17,8 @@ function getRemainingImports(
 ): FileExportsJs {
   return {
     default: defaultImport !== unusedImport ? defaultImport : null,
-    named: named ? named.filter(n => n !== unusedImport) : [],
-    types: types ? types.filter(n => n !== unusedImport) : [],
+    named: named ? named.filter((n) => n !== unusedImport) : [],
+    types: types ? types.filter((n) => n !== unusedImport) : [],
   }
 }
 
@@ -27,7 +26,7 @@ export async function removeUnusedImports(plugin: PluginJs) {
   const editor = window.activeTextEditor
   if (!editor) return
 
-  const diagnostics = getDiagnosticsForActiveEditor(d => {
+  const diagnostics = getDiagnosticsForActiveEditor((d) => {
     if (d.code === 'no-unused-vars') return true
     if (d.source !== 'ts') return false
     return d.code === 6133 || d.code === 6192
