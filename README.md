@@ -131,7 +131,7 @@ An array of filepaths that Vandelay should watch for exports. This is the only r
 ### `excludePatterns: Array<string | RegExp>`
 
 An array of glob patterns and regular expressions that match filepaths which should be excluded from caching.
-Vandelay automatically excludes `node_modules` for JavaScript projects.
+Vandelay automatically handles `node_modules` in a special way for JavaScript projects.
 
 ### `importGroups: Array<string> (JS) | Array<Array<string>> (PY)`
 
