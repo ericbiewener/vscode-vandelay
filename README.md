@@ -318,6 +318,20 @@ true. Only `module.exports = { foo, bar }` and `module.exports = defaultExport` 
 Files ending in `*.ts` will automatically be parsed as Typescript files. You only need to set this
 configuration option to `true` if your Typescript files end in `*.js`.
 
+### `dependencies: { [nodeModuleName: string]: string }` (JS only)
+
+Customize the directory of a node module that Vandelay should look in for that module's imports.
+Vandleay will search all files and directories inside the one provided to collect all available
+imports.
+
+```js
+dependences: {
+  // For the npm module `@ericbiewener/react`,
+  // look inside that module's `src` directory
+  '@ericbiewener/react': 'src'
+}
+```
+
 ## Multi-Root Workspace
 
 You must add a `.vandelay` directory to your workspace that contains a file named `vandelay-<js|py>.js`.

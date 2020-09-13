@@ -1,3 +1,6 @@
+### Version 4.5.0
+- Added `dependencies` configuration option.
+
 ### Version 4.4.0
 - Added `Fix All Import Paths` command for Typescript files.
 
